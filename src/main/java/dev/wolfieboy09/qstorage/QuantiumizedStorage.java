@@ -1,6 +1,8 @@
 package dev.wolfieboy09.qstorage;
 
 import com.mojang.logging.LogUtils;
+import dev.wolfieboy09.qstorage.registries.QSItems;
+import dev.wolfieboy09.qstorage.registries.QSRegistrate;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,10 +19,14 @@ import org.slf4j.Logger;
 @Mod(QuantiumizedStorage.MOD_ID)
 public class QuantiumizedStorage {
     public static final String MOD_ID = "qstorage";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final QSRegistrate REGISTRATE = QSRegistrate.create(MOD_ID);
 
     public QuantiumizedStorage(IEventBus modEventBus, ModContainer modContainer) {
+        REGISTRATE.registerEventListeners(modEventBus);
         modEventBus.addListener(this::commonSetup);
+        QSItems.init();
+        QSRegistrate.REGISTRAR.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
 
