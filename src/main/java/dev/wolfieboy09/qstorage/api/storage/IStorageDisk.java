@@ -10,6 +10,8 @@ public interface IStorageDisk<T> {
 
     UUID getId();
 
+    void setId(UUID id);
+
     int getCapacity();
 
     boolean isValid();
