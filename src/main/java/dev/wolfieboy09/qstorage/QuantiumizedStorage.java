@@ -1,6 +1,9 @@
 package dev.wolfieboy09.qstorage;
 
 import com.mojang.logging.LogUtils;
+import dev.wolfieboy09.qstorage.component.QSDataComponents;
+import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
+import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSItems;
 import dev.wolfieboy09.qstorage.registries.QSRegistrate;
 import net.neoforged.api.distmarker.Dist;
@@ -24,9 +27,12 @@ public class QuantiumizedStorage {
 
     public QuantiumizedStorage(IEventBus modEventBus, ModContainer modContainer) {
         REGISTRATE.registerEventListeners(modEventBus);
+        QSDataComponents.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
         QSItems.init();
-        QSRegistrate.REGISTRAR.register(modEventBus);
+        QSBlockEntities.init();
+        QSBlocks.init();
 
         NeoForge.EVENT_BUS.register(this);
 

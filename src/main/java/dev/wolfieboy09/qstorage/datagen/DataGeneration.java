@@ -22,7 +22,7 @@ public class DataGeneration {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         QSBlockTagsProvider blockTagsProvider = new QSBlockTagsProvider(output, lookupProvider, QuantiumizedStorage.MOD_ID, existingFileHelper);
 
+        generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeServer(), new QSItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter()));
-        // generator.addProvider(event.includeServer(), blockTagsProvider);
     }
 }

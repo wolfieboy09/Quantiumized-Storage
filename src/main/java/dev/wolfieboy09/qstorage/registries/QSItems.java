@@ -12,12 +12,27 @@ import org.jetbrains.annotations.NotNull;
 import static dev.wolfieboy09.qstorage.QuantiumizedStorage.REGISTRATE;
 
 public class QSItems {
-    public static final ItemEntry<Item> SILICONE = simpleItem("silicone");
+    public static final ItemEntry<Item> SILICON = simpleItem("silicon");
+    public static final ItemEntry<Item> STEEL_CASING = simpleItem("steel_casing");
+    public static final ItemEntry<Item> DATA_CORE = simpleItem("data_core");
 
-    public static final ItemEntry<ItemStorageDisk> TEST_DISK = register("test", props -> new ItemStorageDisk(props.stacksTo(1), ItemStorageType.BASIC)).register();
+    public static final ItemEntry<Item> STEEL_SCREW = simpleItem("steel_screw");
+    public static final ItemEntry<Item> STEEL_INGOT = simpleItem("steel_ingot");
+
+    public static final ItemEntry<Item> ITEM_PORT = simpleItem("item_port");
+
+    public static final ItemEntry<ItemStorageDisk> BASIC_ITEM_DISK = registerItemStorageDisk("basic_storage_disk", ItemStorageType.BASIC);
+    public static final ItemEntry<ItemStorageDisk> ADVANCED_ITEM_DISK = registerItemStorageDisk("advanced_storage_disk", ItemStorageType.ADVANCED);
+    public static final ItemEntry<ItemStorageDisk> SUPERIOR_ITEM_DISK = registerItemStorageDisk("superior_storage_disk", ItemStorageType.SUPERIOR);
+    public static final ItemEntry<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
+    public static final ItemEntry<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
 
     public static void init() {
         QuantiumizedStorage.LOGGER.info("Item Registry Initialized");
+    }
+
+    private static @NotNull ItemEntry<ItemStorageDisk> registerItemStorageDisk(String name, ItemStorageType type) {
+        return register(name, props -> new ItemStorageDisk(type)).register();
     }
 
     private static @NotNull ItemEntry<Item> simpleItem(String name) {
@@ -25,7 +40,7 @@ public class QSItems {
     }
 
 
-    private static <T extends Item> ItemBuilder<T, QSRegistrate> register(String name, NonNullFunction<Item.Properties, T> factory) {
+    private static <T extends Item> @NotNull ItemBuilder<T, QSRegistrate> register(String name, NonNullFunction<Item.Properties, T> factory) {
         return REGISTRATE.item(name, factory);
     }
 }
