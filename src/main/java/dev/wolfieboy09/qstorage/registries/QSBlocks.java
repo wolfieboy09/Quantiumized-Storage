@@ -18,6 +18,6 @@ public class QSBlocks {
             .register();
 
     public static void init() {
-        QuantiumizedStorage.LOGGER.info("QSBlocks Initialized");
+
     }
 }

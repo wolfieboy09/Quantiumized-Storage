@@ -13,6 +13,6 @@ public class QSBlockEntities {
             .register();
 
     public static void init() {
-        LOGGER.info("QSBlockEntity Registry Initialized");
+
     }
 }

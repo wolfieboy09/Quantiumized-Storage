@@ -28,7 +28,7 @@ public class QSItems {
     public static final ItemEntry<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
 
     public static void init() {
-        QuantiumizedStorage.LOGGER.info("Item Registry Initialized");
+
     }
 
     private static @NotNull ItemEntry<ItemStorageDisk> registerItemStorageDisk(String name, ItemStorageType type) {
