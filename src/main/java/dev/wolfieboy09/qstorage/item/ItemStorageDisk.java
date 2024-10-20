@@ -89,7 +89,7 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
     }
 
     /**
-     * Returns the localized name of the item with the color style of the disk's storage type.
+     * This is for Minecraft displaying the tooltip of the item. The translatable name and its color.
      *
      * @param stack The {@link ItemStack} instance representing the storage disk.
      * @return A {@link Component} representing the localized name of the disk with the correct color style.
