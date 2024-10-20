@@ -10,5 +10,6 @@
   "item.qstorage.steel_casing": "Steel Casing",
   "item.qstorage.steel_ingot": "Steel Ingot",
   "item.qstorage.steel_screw": "Steel Screw",
-  "item.qstorage.superior_storage_disk": "Superior Storage Disk"
+  "item.qstorage.superior_storage_disk": "Superior Storage Disk",
+  "item_group.qstorage.everything": "Quantiumized Storage"
 }
