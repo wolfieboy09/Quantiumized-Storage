@@ -33,7 +33,7 @@ public class QSCreativeTab {
             CreativeModeTab.Builder tabBuilder = CreativeModeTab.builder()
                     .icon(icon)
                     .displayItems((parameters, populator) -> {
-                        populator.accept(QSItems.SILICON.asItem());
+                        populator.accept(QSItems.SILICON.get());
                     })
                     .title(Component.translatable(itemGroupId));
             return tabBuilder.build();
