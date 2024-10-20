@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
+import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
@@ -15,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@NothingNullByDefault
 public class DiskAssembelerCategory implements IRecipeCategory<DiskAssemblerRecipe> {
     public static final RecipeType<DiskAssemblerRecipe> RECIPE_TYPE = RecipeType.create(QuantiumizedStorage.MOD_ID, "disk_assembler", DiskAssemblerRecipe.class);
     private final IDrawable background;
