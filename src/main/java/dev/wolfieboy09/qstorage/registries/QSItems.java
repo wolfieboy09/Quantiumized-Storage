@@ -14,7 +14,7 @@ import static dev.wolfieboy09.qstorage.QuantiumizedStorage.REGISTRATE;
 public class QSItems {
     public static final ItemEntry<Item> SILICON = simpleItem("silicon");
     public static final ItemEntry<Item> STEEL_CASING = simpleItem("steel_casing");
-    public static final ItemEntry<Item> DATA_CORE = simpleItem("data_core");
+    public static final ItemEntry<Item> DATA_CRYSTAL = simpleItem("data_crystal");
 
     public static final ItemEntry<Item> STEEL_SCREW = simpleItem("steel_screw");
     public static final ItemEntry<Item> STEEL_INGOT = simpleItem("steel_ingot");

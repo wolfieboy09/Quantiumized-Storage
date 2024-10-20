@@ -20,8 +20,8 @@ public class QSItemTagsProvider extends ItemTagsProvider {
       tag(QSItemTags.SILICON)
               .add(QSItems.SILICON.get());
 
-      tag(QSItemTags.DATA_CORE)
-              .add(QSItems.DATA_CORE.get());
+      tag(QSItemTags.DATA_CRYSTAL)
+              .add(QSItems.DATA_CRYSTAL.get());
 
       tag(QSItemTags.STEEL_INGOT)
               .add(QSItems.STEEL_INGOT.get());

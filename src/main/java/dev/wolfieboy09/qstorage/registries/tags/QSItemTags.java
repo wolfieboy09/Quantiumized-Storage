@@ -12,6 +12,6 @@ public class QSItemTags {
     public static final TagKey<Item> SILICON = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "silicon"));
 
     // Mod Tags
-    public static final TagKey<Item> DATA_CORE = ItemTags.create(ResourceHelper.asResource("data_cores"));
+    public static final TagKey<Item> DATA_CRYSTAL = ItemTags.create(ResourceHelper.asResource("data_crystals"));
     public static final TagKey<Item> ITEM_PORT = ItemTags.create(ResourceHelper.asResource("item_ports"));
 }
