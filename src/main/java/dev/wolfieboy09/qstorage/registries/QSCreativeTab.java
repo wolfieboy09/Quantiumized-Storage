@@ -18,7 +18,7 @@ import static dev.wolfieboy09.qstorage.QuantiumizedStorage.REGISTRATE;
 public class QSCreativeTab {
     private static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, QuantiumizedStorage.MOD_ID);
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EVERYTHING_TAB = addTab("everything", "Quantiumized Storage", QSItems.SILICON::asStack);
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_CREATIVE_TAB = addTab("main_creative_tab", "Quantiumized Storage", QSItems.SILICON::asStack);
 
     public static @NotNull DeferredHolder<CreativeModeTab, CreativeModeTab> addTab(String id, String name, Supplier<ItemStack> icon) {
         String itemGroupId = "item_group." + QuantiumizedStorage.MOD_ID + "." + id;
