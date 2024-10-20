@@ -17,12 +17,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @NothingNullByDefault
-public class DiskAssembelerCategory implements IRecipeCategory<DiskAssemblerRecipe> {
+public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecipe> {
     public static final RecipeType<DiskAssemblerRecipe> RECIPE_TYPE = RecipeType.create(QuantiumizedStorage.MOD_ID, "disk_assembler", DiskAssemblerRecipe.class);
     private final IDrawable background;
     private final IDrawable icon;
 
-    public DiskAssembelerCategory(@NotNull IGuiHelper guiHelper) {
+    public DiskAssemblerCategory(@NotNull IGuiHelper guiHelper) {
         ResourceLocation location = ResourceHelper.asResource("disk_assembler");
         background = guiHelper.createDrawable(location, 0, 0, 100, 100);
         icon = guiHelper.createDrawableItemStack(QSBlocks.DISK_ASSEMBLER.asStack());
