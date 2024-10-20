@@ -3,7 +3,6 @@ package dev.wolfieboy09.qstorage.registries;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
-import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.storage.ItemStorageType;
 import dev.wolfieboy09.qstorage.item.ItemStorageDisk;
 import net.minecraft.world.item.Item;
@@ -27,9 +26,7 @@ public class QSItems {
     public static final ItemEntry<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
     public static final ItemEntry<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
 
-    public static void init() {
-
-    }
+    public static void init() {}
 
     private static @NotNull ItemEntry<ItemStorageDisk> registerItemStorageDisk(String name, ItemStorageType type) {
         return register(name, props -> new ItemStorageDisk(type)).register();
