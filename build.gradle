@@ -93,7 +93,7 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
-    jarJar(implementation("com.tterrag.registrate:Registrate:MC1.21-${registrate_version}"))
+    jarJar(implementation("com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"))
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
