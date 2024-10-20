@@ -9,11 +9,11 @@ public enum ItemStorageType implements StringRepresentable {
     ADVANCED(512, ChatFormatting.YELLOW),
     SUPERIOR(2048, ChatFormatting.AQUA),
     QUANTUM(8192, ChatFormatting.LIGHT_PURPLE),
-    MULTI_DIMENSIONAL(16384, ChatFormatting.DARK_RED);
+    MULTI_DIMENSIONAL(16384, ChatFormatting.DARK_RED),
+    CUSTOM(1, ChatFormatting.GRAY);
 
-
-    private final int capacity;
-    private final ChatFormatting color;
+    private int capacity;
+    private ChatFormatting color;
 
     ItemStorageType(int capacity, ChatFormatting color) {
         this.capacity = capacity;
@@ -22,6 +22,14 @@ public enum ItemStorageType implements StringRepresentable {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setColor(ChatFormatting color) {
+        this.color = color;
     }
 
     public ChatFormatting getColor() {
