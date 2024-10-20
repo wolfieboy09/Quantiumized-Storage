@@ -17,6 +17,7 @@ public class QSRecipes {
     public static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, QuantiumizedStorage.MOD_ID);
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<DiskAssemblerRecipe>> DISK_ASSEMBLER_TYPE = registerRecipeType("disk_assembler");
+    public static final DeferredHolder<RecipeSerializer<?>, DiskAssemblerRecipe.Serializer> DISK_ASSEMBLER_SERIALIZER = SERALIZERS.register("disk_assembler", DiskAssemblerRecipe.Serializer::new);
 
     public static void init(IEventBus bus) {
         SERALIZERS.register(bus);
