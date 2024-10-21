@@ -82,11 +82,7 @@ public record DiskAssemblerRecipe(
                 Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::diskPort,
                 Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::diskCasing,
                 Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::screws,
-                ByteBufCodecs.collection(
-                                NonNullList::createWithCapacity,
-                                ByteBufCodecs.holderRegistry(Registries.ITEM),
-                                4
-                ), DiskAssemblerRecipe::extras,
+                ByteBufCodecs.holderRegistry(Registries.ITEM).apply(ByteBufCodecs.list(4)), DiskAssemblerRecipe::extras,
                 ByteBufCodecs.INT, DiskAssemblerRecipe::energyCost,
                 ByteBufCodecs.INT, DiskAssemblerRecipe::timeInTicks,
                 ItemStack.STREAM_CODEC, DiskAssemblerRecipe::result,
