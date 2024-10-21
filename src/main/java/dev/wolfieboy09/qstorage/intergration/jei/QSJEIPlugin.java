@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qstorage.intergration.jei;
 
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
-import dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler.DiskAssembelerCategory;
+import dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler.DiskAssemblerCategory;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSRecipes;
 import mezz.jei.api.IModPlugin;
@@ -29,7 +29,7 @@ public class QSJEIPlugin implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
-        registration.addRecipeCategories(new DiskAssembelerCategory(guiHelper));
+        registration.addRecipeCategories(new DiskAssemblerCategory(guiHelper));
     }
 
     @Override
@@ -37,12 +37,12 @@ public class QSJEIPlugin implements IModPlugin {
         if (Minecraft.getInstance().level == null) return;
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
-        registration.addRecipes(DiskAssembelerCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.DISK_ASSEMBLER_TYPE.get()).stream()
+        registration.addRecipes(DiskAssemblerCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.DISK_ASSEMBLER_TYPE.get()).stream()
                 .map(RecipeHolder::value).collect(Collectors.toList()));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()), DiskAssembelerCategory.RECIPE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()), DiskAssemblerCategory.RECIPE_TYPE);
     }
 }
