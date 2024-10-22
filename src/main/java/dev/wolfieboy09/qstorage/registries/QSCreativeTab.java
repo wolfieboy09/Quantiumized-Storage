@@ -9,20 +9,27 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class QSCreativeTab {
-    private static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, QuantiumizedStorage.MOD_ID);
+    public static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, QuantiumizedStorage.MOD_ID);
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_CREATIVE_TAB = addTab("main_creative_tab", "Quantiumized Storage", () -> new ItemStack(QSItems.SILICON.get()));
+    public static HashMap<String, String> nameForLangGen = new HashMap<>();
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ITEMS = addTab("item_group", "QS Items", () -> new ItemStack(QSItems.SILICON.get()));
+    public static DeferredHolder<CreativeModeTab, CreativeModeTab> BLOCKS = addTab("block_group", "QS Blocks", () -> new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
 
     public static DeferredHolder<CreativeModeTab, CreativeModeTab> addTab(String id, String name, Supplier<ItemStack> icon) {
-        String itemGroupId = "itemGroup." + QuantiumizedStorage.MOD_ID + "." + id;
+        String displayKey = "creative_tab." + QuantiumizedStorage.MOD_ID + "." + id;
+        nameForLangGen.put(displayKey, name);
 
         CreativeModeTab.Builder tabBuilder = CreativeModeTab.builder()
                 .icon(icon)
                 .displayItems((parameters, populator) -> QSItems.ITEMS.getEntries().forEach(item -> populator.accept(item.get())))
-                .title(Component.translatable(itemGroupId));
+                .title(Component.translatable(displayKey));
         return REGISTER.register(id, tabBuilder::build);
     }
 
