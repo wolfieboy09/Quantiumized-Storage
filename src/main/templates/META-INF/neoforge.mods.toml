@@ -1,38 +1,31 @@
-modLoader="javafml" #mandatory
-loaderVersion="${loader_version_range}" #mandatory
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
 license="${mod_license}"
-#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/"
+issueTrackerURL="https://github.com/wolfieboy09/Quantiumized-Storage/issues"
 [[mods]]
-modId="${mod_id}"
+modId="qstorage"
 version="${mod_version}"
 displayName="${mod_name}"
 
 #updateJSONURL="https://change.me.example.invalid/updates.json"
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
-#logoFile="examplemod.png"
-#credits="" #optional
+#logoFile="qstorage.png"
+#credits=""
 authors="${mod_authors}"
 
 description='''${mod_description}'''
 
-# The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
 #[[mixins]]
-#config="${mod_id}.mixins.json"
+#config="qstorage.mixins.json"
 
-# The [[accessTransformers]] block allows you to declare where your AT file is.
-# If this block is omitted, a fallback attempt will be made to load an AT from META-INF/accesstransformer.cfg
-#[[accessTransformers]]
-#file="META-INF/accesstransformer.cfg"
-
-
-[[dependencies.${mod_id}]] #optional
-    modId="neoforge" #mandatory
-    type="required" #mandatory
+[[dependencies.qstorage]]
+    modId="neoforge"
+    type="required"
     versionRange="${neo_version_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.qstorage]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"
