@@ -1,4 +1,6 @@
 {
+  "creative_tab.qstorage.block_group": "QS Blocks",
+  "creative_tab.qstorage.item_group": "QS Items",
   "item.qstorage.advanced_storage_disk": "Advanced Storage Disk",
   "item.qstorage.basic_storage_disk": "Basic Storage Disk",
   "item.qstorage.data_crystal": "Data Crystal",
