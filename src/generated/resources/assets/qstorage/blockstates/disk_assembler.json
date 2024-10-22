@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "qstorage:block/disk_assembler",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "qstorage:block/disk_assembler"
+    },
+    "facing=south": {
+      "model": "qstorage:block/disk_assembler",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "qstorage:block/disk_assembler",
+      "y": 270
+    }
+  }
+}
