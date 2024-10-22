@@ -24,6 +24,7 @@ public class DataGeneration {
 
         generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeClient(), new QSLangProvider(output));
+        generator.addProvider(event.includeClient(), new QSBlockStateProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new QSItemModelProvider(output, existingFileHelper));
         generator.addProvider(event.includeServer(), new QSItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter()));
     }
