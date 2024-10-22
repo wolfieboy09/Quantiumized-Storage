@@ -23,6 +23,8 @@ public class DataGeneration {
         QSBlockTagsProvider blockTagsProvider = new QSBlockTagsProvider(output, lookupProvider, QuantiumizedStorage.MOD_ID, existingFileHelper);
 
         generator.addProvider(event.includeServer(), blockTagsProvider);
+        generator.addProvider(event.includeClient(), new QSLangProvider(output, "en_us"));
+        generator.addProvider(event.includeClient(), new QSItemModelProvider(output, existingFileHelper));
         generator.addProvider(event.includeServer(), new QSItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter()));
     }
 }

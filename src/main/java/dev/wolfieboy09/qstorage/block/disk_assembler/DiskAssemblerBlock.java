@@ -30,6 +30,6 @@ public class DiskAssemblerBlock extends BaseEntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new DiskAssemblerBlockEntity(QSBlockEntities.DISK_ASSEMBLER.get(), blockPos, blockState);
+        return new DiskAssemblerBlockEntity(blockPos, blockState);
     }
 }

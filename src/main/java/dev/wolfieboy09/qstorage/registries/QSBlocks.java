@@ -1,23 +1,22 @@
 package dev.wolfieboy09.qstorage.registries;
 
-import com.tterrag.registrate.util.entry.BlockEntry;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
-import dev.wolfieboy09.qstorage.registries.util.BlockStateGen;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-import static dev.wolfieboy09.qstorage.QuantiumizedStorage.REGISTRATE;
 
 public class QSBlocks {
-    public static final BlockEntry<DiskAssemblerBlock> DISK_ASSEMBLER = REGISTRATE
-            .block("disk_assembler", DiskAssemblerBlock::new)
-            .properties(BlockBehaviour.Properties::noOcclusion)
-            .blockstate(BlockStateGen::simpleCustomModel)
-            .item()
-            .build()
-            .register();
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(QuantiumizedStorage.MOD_ID);
 
-    public static void init() {
+    public static final DeferredBlock<DiskAssemblerBlock> DISK_ASSEMBLER = BLOCKS.register(
+            "disk_assembler",
+            () -> new DiskAssemblerBlock(BlockBehaviour.Properties.of().noOcclusion())
+    );
 
+    public static void init(IEventBus bus) {
+        BLOCKS.register(bus);
     }
 }

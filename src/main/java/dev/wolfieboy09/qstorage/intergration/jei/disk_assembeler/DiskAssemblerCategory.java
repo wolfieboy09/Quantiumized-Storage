@@ -13,6 +13,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +26,7 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
     public DiskAssemblerCategory(@NotNull IGuiHelper guiHelper) {
         ResourceLocation location = ResourceHelper.asResource("disk_assembler");
         background = guiHelper.createDrawable(location, 0, 0, 100, 100);
-        icon = guiHelper.createDrawableItemStack(QSBlocks.DISK_ASSEMBLER.asStack());
+        icon = guiHelper.createDrawableItemStack(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
     }
 
     @Override

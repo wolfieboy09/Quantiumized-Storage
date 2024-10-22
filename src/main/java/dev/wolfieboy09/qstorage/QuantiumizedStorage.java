@@ -12,7 +12,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -20,16 +19,15 @@ import org.slf4j.Logger;
 public class QuantiumizedStorage {
     public static final String MOD_ID = "qstorage";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final QSRegistrate REGISTRATE = QSRegistrate.create();
 
     public QuantiumizedStorage(IEventBus modEventBus, ModContainer modContainer) {
-        REGISTRATE.registerEventListeners(modEventBus);
         QSDataComponents.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
-        QSItems.init();
-        QSBlockEntities.init();
-        QSBlocks.init();
+        QSItems.init(modEventBus);
+        QSBlockEntities.init(modEventBus);
+        QSBlocks.init(modEventBus);
+        QSRecipes.init(modEventBus);
         QSCreativeTab.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
@@ -41,10 +39,6 @@ public class QuantiumizedStorage {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("Lets dive into getting small");
-    }
-
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
     }
 
     @SubscribeEvent

@@ -1,5 +1,4 @@
 {
-  "block.qstorage.disk_assembler": "Disk Assembler",
   "item.qstorage.advanced_storage_disk": "Advanced Storage Disk",
   "item.qstorage.basic_storage_disk": "Basic Storage Disk",
   "item.qstorage.data_crystal": "Data Crystal",
@@ -10,6 +9,5 @@
   "item.qstorage.steel_casing": "Steel Casing",
   "item.qstorage.steel_ingot": "Steel Ingot",
   "item.qstorage.steel_screw": "Steel Screw",
-  "item.qstorage.superior_storage_disk": "Superior Storage Disk",
-  "item_group.qstorage.main_creative_tab": "Quantiumized Storage"
+  "item.qstorage.superior_storage_disk": "Superior Storage Disk"
 }

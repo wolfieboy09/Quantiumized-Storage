@@ -1,43 +1,42 @@
 package dev.wolfieboy09.qstorage.registries;
 
-import com.tterrag.registrate.builders.ItemBuilder;
-import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
+import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.storage.ItemStorageType;
 import dev.wolfieboy09.qstorage.item.ItemStorageDisk;
 import net.minecraft.world.item.Item;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.NotNull;
 
-import static dev.wolfieboy09.qstorage.QuantiumizedStorage.REGISTRATE;
-
 public class QSItems {
-    public static final ItemEntry<Item> SILICON = simpleItem("silicon");
-    public static final ItemEntry<Item> STEEL_CASING = simpleItem("steel_casing");
-    public static final ItemEntry<Item> DATA_CRYSTAL = simpleItem("data_crystal");
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(QuantiumizedStorage.MOD_ID);
 
-    public static final ItemEntry<Item> STEEL_SCREW = simpleItem("steel_screw");
-    public static final ItemEntry<Item> STEEL_INGOT = simpleItem("steel_ingot");
+    public static final DeferredItem<Item> SILICON = simpleItem("silicon");
+    public static final DeferredItem<Item> STEEL_CASING = simpleItem("steel_casing");
+    public static final DeferredItem<Item> DATA_CRYSTAL = simpleItem("data_crystal");
 
-    public static final ItemEntry<Item> ITEM_PORT = simpleItem("item_port");
+    public static final DeferredItem<Item> STEEL_SCREW = simpleItem("steel_screw");
+    public static final DeferredItem<Item> STEEL_INGOT = simpleItem("steel_ingot");
 
-    public static final ItemEntry<ItemStorageDisk> BASIC_ITEM_DISK = registerItemStorageDisk("basic_storage_disk", ItemStorageType.BASIC);
-    public static final ItemEntry<ItemStorageDisk> ADVANCED_ITEM_DISK = registerItemStorageDisk("advanced_storage_disk", ItemStorageType.ADVANCED);
-    public static final ItemEntry<ItemStorageDisk> SUPERIOR_ITEM_DISK = registerItemStorageDisk("superior_storage_disk", ItemStorageType.SUPERIOR);
-    public static final ItemEntry<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
-    public static final ItemEntry<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
+    public static final DeferredItem<Item> ITEM_PORT = simpleItem("item_port");
 
-    public static void init() {}
+    public static final DeferredItem<ItemStorageDisk> BASIC_ITEM_DISK = registerItemStorageDisk("basic_storage_disk", ItemStorageType.BASIC);
+    public static final DeferredItem<ItemStorageDisk> ADVANCED_ITEM_DISK = registerItemStorageDisk("advanced_storage_disk", ItemStorageType.ADVANCED);
+    public static final DeferredItem<ItemStorageDisk> SUPERIOR_ITEM_DISK = registerItemStorageDisk("superior_storage_disk", ItemStorageType.SUPERIOR);
+    public static final DeferredItem<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
+    public static final DeferredItem<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
 
-    private static @NotNull ItemEntry<ItemStorageDisk> registerItemStorageDisk(String name, ItemStorageType type) {
-        return register(name, props -> new ItemStorageDisk(type)).register();
+    public static void init(IEventBus bus) {
+        ITEMS.register(bus);
     }
 
-    private static @NotNull ItemEntry<Item> simpleItem(String name) {
-        return register(name, Item::new).register();
+    private static @NotNull DeferredItem<ItemStorageDisk> registerItemStorageDisk(String name, ItemStorageType storageType) {
+        return ITEMS.register(name, () -> new ItemStorageDisk(storageType));
     }
 
-
-    private static <T extends Item> @NotNull ItemBuilder<T, QSRegistrate> register(String name, NonNullFunction<Item.Properties, T> factory) {
-        return REGISTRATE.item(name, factory);
+    private static @NotNull DeferredItem<Item> simpleItem(String name) {
+        return ITEMS.register(name, () -> new Item(new Item.Properties()));
     }
+
 }

@@ -80,20 +80,12 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-    maven {
-        url "https://maven.tterrag.com/"
-    }
-    maven {
-        url 'https://maven.ithundxr.dev/snapshots'
-    }
 }
 
 dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-
-    jarJar(implementation("com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"))
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
