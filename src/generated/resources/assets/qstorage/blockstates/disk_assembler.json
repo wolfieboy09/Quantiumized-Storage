@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "": {
-      "model": "qstorage:block/disk_assembler"
-    }
-  }
-}
