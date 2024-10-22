@@ -24,6 +24,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     }
 
     public EnergyStorage getEnergyHandler(Direction side) {
-        return side == Direction.NORTH ? this.getEnergyStorage() : null;
+        Direction blockFacing = this.getBlockState().getValue(DiskAssemblerBlock.FACING);
+        return side == blockFacing.getOpposite() ? this.getEnergyStorage() : null;
     }
 }
