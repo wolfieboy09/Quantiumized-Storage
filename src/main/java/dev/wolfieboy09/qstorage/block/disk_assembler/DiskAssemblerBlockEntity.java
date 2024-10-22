@@ -3,7 +3,9 @@ package dev.wolfieboy09.qstorage.block.disk_assembler;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
 public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implements IEnergyStorage {
@@ -12,32 +14,16 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     }
 
     @Override
-    public int receiveEnergy(int i, boolean b) {
-        return 0;
-    }
-
-    @Override
-    public int extractEnergy(int i, boolean b) {
-        return 0;
-    }
-
-    @Override
-    public int getEnergyStored() {
-        return 0;
-    }
-
-    @Override
-    public int getMaxEnergyStored() {
-        return 0;
-    }
-
-    @Override
     public boolean canExtract() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canReceive() {
-        return false;
+        return true;
+    }
+
+    public EnergyStorage getEnergyHandler(Direction side) {
+        return side == Direction.NORTH ? this.getEnergyStorage() : null;
     }
 }

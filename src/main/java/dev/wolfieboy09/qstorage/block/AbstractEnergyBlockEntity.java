@@ -19,6 +19,34 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity {
         this.energyStorage = new ExtendedEnergyStorage(capacity, maxTransfer);
     }
 
+    public ExtendedEnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        int energyReceived = Math.min(maxReceive, this.energyStorage.getMaxReceive());
+        if (!simulate) {
+            getEnergyStorage().addEnergy(energyReceived);
+        }
+        return energyReceived;
+    }
+
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        int energyExtracted = Math.min(maxExtract, this.energyStorage.getMaxExtract());
+        if (!simulate) {
+            getEnergyStorage().removeEnergy(energyExtracted);
+        }
+        return energyExtracted;
+    }
+
+    public int getEnergyStored() {
+        return this.energyStorage.getEnergyStored();
+    }
+
+    public int getMaxEnergyStored() {
+        return this.energyStorage.getMaxEnergyStored();
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
