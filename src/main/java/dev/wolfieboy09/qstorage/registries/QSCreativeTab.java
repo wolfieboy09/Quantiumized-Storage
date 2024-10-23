@@ -17,16 +17,16 @@ public class QSCreativeTab {
 
     public static HashMap<String, String> nameForLangGen = new HashMap<>();
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ITEMS = addTab("item_group", "QS Items", () -> new ItemStack(QSItems.SILICON.get()));
-    public static DeferredHolder<CreativeModeTab, CreativeModeTab> BLOCKS = addTab("block_group", "QS Blocks", () -> new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ITEMS = addTab("item_group", "QS Items", QSItems.ITEMS, () -> new ItemStack(QSItems.SILICON.get()));
+    public static DeferredHolder<CreativeModeTab, CreativeModeTab> BLOCKS = addTab("block_group", "QS Blocks", QSBlocks.BLOCK_ITEMS, () -> new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
 
-    public static DeferredHolder<CreativeModeTab, CreativeModeTab> addTab(String id, String name, Supplier<ItemStack> icon) {
+    public static DeferredHolder<CreativeModeTab, CreativeModeTab> addTab(String id, String name, DeferredRegister.Items entries, Supplier<ItemStack> icon) {
         String displayKey = "creative_tab." + QuantiumizedStorage.MOD_ID + "." + id;
         nameForLangGen.put(displayKey, name);
 
         CreativeModeTab.Builder tabBuilder = CreativeModeTab.builder()
                 .icon(icon)
-                .displayItems((parameters, populator) -> QSItems.ITEMS.getEntries().forEach(item -> populator.accept(item.get())))
+                .displayItems((parameters, populator) -> entries.getEntries().forEach(item -> populator.accept(item.get())))
                 .title(Component.translatable(displayKey));
         return REGISTER.register(id, tabBuilder::build);
     }
