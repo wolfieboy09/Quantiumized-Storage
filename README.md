@@ -12,3 +12,5 @@ If you want a mod to be compatible built-in, just open an issue up, and I'll see
 - [ ] CC: Tweaked
 - [ ] Built-in KubeJS plugin
 
+# Credits
+PigTurtle - The disk assembler GUI
