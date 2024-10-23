@@ -15,7 +15,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
 
     @Override
     public boolean canExtract() {
-        return true;
+        return false;
     }
 
     @Override
