@@ -6,12 +6,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
-public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity {
+public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implements IEnergyStorage {
     private final ExtendedEnergyStorage energyStorage;
 
     public AbstractEnergyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState, int capacity, int maxTransfer) {
