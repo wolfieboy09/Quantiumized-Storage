@@ -4,17 +4,10 @@ import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -22,7 +15,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     private int progress = 0;
 
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
-        super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000);
+        super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
     }
 
     private final ItemStackHandler inventory = new ItemStackHandler(8) {

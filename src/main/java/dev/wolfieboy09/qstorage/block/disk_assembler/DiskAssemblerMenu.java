@@ -64,40 +64,8 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
     }
 
     @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int quickMovedSlotIndex) {
-        ItemStack quickMovedStack = ItemStack.EMPTY;
-        Slot quickMovedSlot = this.slots.get(quickMovedSlotIndex);
-        if (quickMovedSlot.hasItem()) {
-            ItemStack rawStack = quickMovedSlot.getItem();
-            quickMovedStack = rawStack.copy();
-
-            if (quickMovedSlotIndex >= 0 && quickMovedSlotIndex < 36) {
-                if (!this.moveItemStackTo(rawStack, 36,39, false)) {
-                    if (quickMovedSlotIndex < 9) {
-                        if (!this.moveItemStackTo(rawStack, 9, 36, false)) {
-                            return ItemStack.EMPTY;
-                        }
-                    }
-                    else if (!this.moveItemStackTo(rawStack, 0, 9, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-            }
-            else if (!this.moveItemStackTo(rawStack, 0, 36, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (rawStack.isEmpty()) {
-                quickMovedSlot.set(ItemStack.EMPTY);
-            } else {
-                quickMovedSlot.setChanged();
-            }
-            if (rawStack.getCount() == quickMovedStack.getCount()) {
-                return ItemStack.EMPTY;
-            }
-            quickMovedSlot.onTake(player, rawStack);
-        }
-        return quickMovedStack;
+    public ItemStack quickMoveStack(Player player, int i) {
+        return ItemStack.EMPTY;
     }
 
     @Override
