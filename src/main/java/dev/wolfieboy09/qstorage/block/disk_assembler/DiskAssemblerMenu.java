@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyContainerMenu;
+import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
 import net.minecraft.core.BlockPos;
@@ -102,18 +103,17 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
             }
             quickMovedSlot.onTake(player, rawStack);
         }
-
         return quickMovedStack;
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
     @Override
     public int getEnergy() {
-        return this.blockEntity.getEnergyStored();
+        return this.blockEntity.getEnergyStorage().getEnergyStored();
     }
 
     @Override
