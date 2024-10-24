@@ -13,4 +13,5 @@ If you want a mod to be compatible built-in, just open an issue up, and I'll see
 - [ ] Built-in KubeJS plugin
 
 # Credits
-PigTurtle - The disk assembler GUI
+PigTurtle - The disk assembler GUI \
+(I had to edit it for the energy bar to fit because bugs)

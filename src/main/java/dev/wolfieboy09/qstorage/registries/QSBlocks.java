@@ -31,7 +31,7 @@ public class QSBlocks {
         BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
-    public static void init(IEventBus bus) {
+    public static void register(IEventBus bus) {
         BLOCKS.register(bus);
         BLOCK_ITEMS.register(bus);
     }

@@ -21,14 +21,15 @@ public class QuantiumizedStorage {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public QuantiumizedStorage(IEventBus modEventBus, ModContainer modContainer) {
-        QSDataComponents.register(modEventBus);
-
         modEventBus.addListener(this::commonSetup);
-        QSItems.init(modEventBus);
-        QSBlockEntities.init(modEventBus);
-        QSBlocks.init(modEventBus);
-        QSRecipes.init(modEventBus);
+
+        QSDataComponents.register(modEventBus);
+        QSItems.register(modEventBus);
+        QSBlockEntities.register(modEventBus);
+        QSBlocks.register(modEventBus);
+        QSRecipes.register(modEventBus);
         QSCreativeTab.register(modEventBus);
+        QSMenuTypes.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
 

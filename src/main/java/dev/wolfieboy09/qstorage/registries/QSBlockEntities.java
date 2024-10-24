@@ -21,7 +21,7 @@ public class QSBlockEntities {
             ).build(null)
     );
 
-    public static void init(IEventBus bus) {
+    public static void register(IEventBus bus) {
         BLOCK_ENTITY_TYPES.register(bus);
     }
 }

@@ -27,7 +27,7 @@ public class QSItems {
     public static final DeferredItem<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
     public static final DeferredItem<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
 
-    public static void init(IEventBus bus) {
+    public static void register(IEventBus bus) {
         ITEMS.register(bus);
     }
 
