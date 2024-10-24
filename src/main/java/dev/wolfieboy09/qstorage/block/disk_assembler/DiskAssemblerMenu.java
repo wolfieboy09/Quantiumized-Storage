@@ -13,9 +13,7 @@ import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
 public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
-    private final ContainerData data;
     private DiskAssemblerBlockEntity blockEntity;
-
 
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -33,8 +31,7 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
 
     public DiskAssemblerMenu(int id, BlockPos pos, Inventory playerInventory, Player playerIn, ContainerData containerData) {
         super(QSMenuTypes.DISK_ASSEMBLER.get(), id);
-        this.data = containerData;
-        addDataSlots(data);
+        addDataSlots(containerData);
         DiskAssemblerBlockEntity blockEntity = (DiskAssemblerBlockEntity) playerIn.getCommandSenderWorld().getBlockEntity(pos);
         if (blockEntity == null) return;
         this.blockEntity = blockEntity;
@@ -55,6 +52,7 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
         for (int x = 0; x < HOTBAR_SLOT_COUNT; x++) {
             addSlot(new SlotItemHandler(playerInvWrapper, x, HOTBAR_XPOS + SLOT_X_SPACING * x, HOTBAR_YPOS));
         }
+
         for (int y = 0; y < PLAYER_INVENTORY_ROW_COUNT; y++) {
             for (int x = 0; x < PLAYER_INVENTORY_COLUMN_COUNT; x++) {
                 int slotNumber = HOTBAR_SLOT_COUNT + y * PLAYER_INVENTORY_COLUMN_COUNT + x;

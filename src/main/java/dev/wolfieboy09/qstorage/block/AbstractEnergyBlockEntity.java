@@ -76,6 +76,5 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     public void handleUpdateTag(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider lookupProvider) {
         if (level == null) return;
         this.energyStorage.deserializeNBT(lookupProvider, tag.get("Energy"));
-        // level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
     }
 }
