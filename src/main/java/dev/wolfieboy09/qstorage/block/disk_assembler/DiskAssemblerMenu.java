@@ -1,23 +1,19 @@
 package dev.wolfieboy09.qstorage.block.disk_assembler;
 
-import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
+import dev.wolfieboy09.qstorage.api.energy.ExtendedEnergyStorage;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyContainerMenu;
-import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
-import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
 public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
     private final ContainerData data;
-    private int containerId;
     private DiskAssemblerBlockEntity blockEntity;
 
 
@@ -113,7 +109,7 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
 
     @Override
     public int getEnergy() {
-        return this.blockEntity.getEnergyStorage().getEnergyStored();
+        return this.blockEntity.getEnergyStored();
     }
 
     @Override

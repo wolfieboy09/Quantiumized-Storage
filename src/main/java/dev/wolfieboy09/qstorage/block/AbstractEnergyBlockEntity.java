@@ -28,7 +28,7 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     public int receiveEnergy(int maxReceive, boolean simulate) {
         int energyReceived = Math.min(maxReceive, this.energyStorage.getMaxReceive());
         if (!simulate) {
-            getEnergyStorage().addEnergy(energyReceived);
+            energyStorage.addEnergy(energyReceived);
         }
         return energyReceived;
     }
@@ -36,7 +36,7 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     public int extractEnergy(int maxExtract, boolean simulate) {
         int energyExtracted = Math.min(maxExtract, this.energyStorage.getMaxExtract());
         if (!simulate) {
-            getEnergyStorage().removeEnergy(energyExtracted);
+            energyStorage.removeEnergy(energyExtracted);
         }
         return energyExtracted;
     }
