@@ -6,14 +6,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     private int progress = 0;
+
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000);
     }
@@ -58,4 +61,18 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
         return side == blockFacing.getOpposite() ? this.getEnergyStorage() : null;
     }
 
+    @Override
+    public void handleUpdateTag(@NotNull CompoundTag tag,@NotNull HolderLookup.Provider lookupProvider) {
+        if (level == null) return;
+        level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        int received = super.receiveEnergy(maxReceive, simulate);
+        if (!simulate && received > 0 && level != null) {
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);
+        }
+        return received;
+    }
 }
