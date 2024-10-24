@@ -11,7 +11,6 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implements IEnergyStorage {
@@ -23,13 +22,13 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     }
 
     public ExtendedEnergyStorage getEnergyStorage() {
-        return energyStorage;
+        return this.energyStorage;
     }
 
     public int receiveEnergy(int maxReceive, boolean simulate) {
         int energyReceived = Math.min(maxReceive, this.energyStorage.getMaxReceive());
         if (!simulate) {
-            energyStorage.addEnergy(energyReceived);
+            this.energyStorage.addEnergy(energyReceived);
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
         }
         return energyReceived;
@@ -38,7 +37,7 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     public int extractEnergy(int maxExtract, boolean simulate) {
         int energyExtracted = Math.min(maxExtract, this.energyStorage.getMaxExtract());
         if (!simulate) {
-            energyStorage.removeEnergy(energyExtracted);
+            this.energyStorage.removeEnergy(energyExtracted);
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
         }
         return energyExtracted;
@@ -53,17 +52,17 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        tag.put("Energy", energyStorage.serializeNBT(registries));
-    }
-
-    @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("Energy")) {
-            energyStorage.deserializeNBT(registries, Objects.requireNonNull(tag.get("Energy")));
+            this.energyStorage.deserializeNBT(registries, tag.get("Energy"));
         }
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("Energy", this.energyStorage.serializeNBT(registries));
     }
 
     @Override
@@ -71,5 +70,12 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         CompoundTag tag = super.getUpdateTag(registries);
         tag.putInt("Energy", this.energyStorage.getEnergyStored());
         return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider lookupProvider) {
+        if (level == null) return;
+        this.energyStorage.deserializeNBT(lookupProvider, tag.get("Energy"));
+        // level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
     }
 }
