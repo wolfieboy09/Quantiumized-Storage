@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.api.energy.ExtendedEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -29,6 +30,7 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         int energyReceived = Math.min(maxReceive, this.energyStorage.getMaxReceive());
         if (!simulate) {
             energyStorage.addEnergy(energyReceived);
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
         }
         return energyReceived;
     }
@@ -37,6 +39,7 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         int energyExtracted = Math.min(maxExtract, this.energyStorage.getMaxExtract());
         if (!simulate) {
             energyStorage.removeEnergy(energyExtracted);
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
         }
         return energyExtracted;
     }

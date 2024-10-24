@@ -62,17 +62,8 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     }
 
     @Override
-    public void handleUpdateTag(@NotNull CompoundTag tag,@NotNull HolderLookup.Provider lookupProvider) {
+    public void handleUpdateTag(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider lookupProvider) {
         if (level == null) return;
         level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-    }
-
-    @Override
-    public int receiveEnergy(int maxReceive, boolean simulate) {
-        int received = super.receiveEnergy(maxReceive, simulate);
-        if (!simulate && received > 0 && level != null) {
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-        }
-        return received;
     }
 }
