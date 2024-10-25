@@ -77,10 +77,12 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         return this.energyStorage;
     }
 
+    @Override
     public int getEnergyStored() {
         return this.energyStorage.getEnergyStored();
     }
 
+    @Override
     public int getMaxEnergyStored() {
         return this.energyStorage.getMaxEnergyStored();
     }

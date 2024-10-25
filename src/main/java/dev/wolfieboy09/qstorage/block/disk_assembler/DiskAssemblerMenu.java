@@ -2,8 +2,10 @@ package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import dev.wolfieboy09.qstorage.api.energy.ExtendedEnergyStorage;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyContainerMenu;
+import dev.wolfieboy09.qstorage.block.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -61,6 +63,17 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
                 addSlot(new SlotItemHandler(playerInvWrapper, slotNumber, xpos, ypos));
             }
         }
+
+        addSlot(new Slot((Container) containerData, 37, 17, 27));
+        addSlot(new Slot((Container) containerData, 38, 17, 45));
+        addSlot(new Slot((Container) containerData, 39, 35, 36));
+
+        addSlot(new Slot((Container) containerData, 40, 116, 27));
+        addSlot(new Slot((Container) containerData, 41, 134, 27));
+        addSlot(new Slot((Container) containerData, 42, 116, 45));
+        addSlot(new Slot((Container) containerData, 43, 134, 45));
+
+        addSlot(new ItemResultSlot((Container) containerData, 44, 80, 36));
     }
 
     @Override
