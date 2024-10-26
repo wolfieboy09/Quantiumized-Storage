@@ -1,21 +1,25 @@
 package dev.wolfieboy09.qstorage.block.disk_assembler;
 
-import dev.wolfieboy09.qstorage.api.energy.ExtendedEnergyStorage;
+import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyContainerMenu;
 import dev.wolfieboy09.qstorage.block.ItemResultSlot;
+import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
 public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
     private DiskAssemblerBlockEntity blockEntity;
+    private Level level;
+    private ContainerData data;
 
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -37,14 +41,13 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
         DiskAssemblerBlockEntity blockEntity = (DiskAssemblerBlockEntity) playerIn.getCommandSenderWorld().getBlockEntity(pos);
         if (blockEntity == null) return;
         this.blockEntity = blockEntity;
+        this.level = playerInventory.player.level();
+        this.data = containerData;
 
         PlayerInvWrapper playerInvWrapper = new PlayerInvWrapper(playerInventory);
 
         final int SLOT_X_SPACING = 18;
         final int SLOT_Y_SPACING = 18;
-        final int TE_SLOT_Y_SPACING = 48;
-        final int TILE_INVENTORY_XPOS = 70;
-        final int TILE_INVENTORY_YPOS = 12;
 
         final int HOTBAR_XPOS = 8;
         final int HOTBAR_YPOS = 142;
@@ -64,26 +67,52 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
             }
         }
 
-        addSlot(new Slot((Container) containerData, 37, 17, 27));
-        addSlot(new Slot((Container) containerData, 38, 17, 45));
-        addSlot(new Slot((Container) containerData, 39, 35, 36));
+        ItemStackHandler itemStackHandler = blockEntity.getInventory();
 
-        addSlot(new Slot((Container) containerData, 40, 116, 27));
-        addSlot(new Slot((Container) containerData, 41, 134, 27));
-        addSlot(new Slot((Container) containerData, 42, 116, 45));
-        addSlot(new Slot((Container) containerData, 43, 134, 45));
+        addSlot(new SlotItemHandler(itemStackHandler, 0, 17, 27));
+        addSlot(new SlotItemHandler(itemStackHandler, 1, 17, 45));
+        addSlot(new SlotItemHandler(itemStackHandler, 2, 35, 36));
 
-        addSlot(new ItemResultSlot((Container) containerData, 44, 80, 36));
+        addSlot(new SlotItemHandler(itemStackHandler, 3, 116, 27));
+        addSlot(new SlotItemHandler(itemStackHandler, 4, 134, 27));
+        addSlot(new SlotItemHandler(itemStackHandler, 5, 116, 45));
+        addSlot(new SlotItemHandler(itemStackHandler, 6, 134, 45));
+
+        addSlot(new ItemResultSlot(itemStackHandler, 7, 80, 36));
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        return ItemStack.EMPTY;
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
+        Slot sourceSlot = slots.get(index);
+        if (!sourceSlot.hasItem()) return ItemStack.EMPTY;
+        ItemStack sourceStack = sourceSlot.getItem();
+        ItemStack copyOfSourceStack = sourceStack.copy();
+
+        if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
+            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
+                    + 7, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + 7) {
+            if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else {
+            QuantiumizedStorage.LOGGER.warn("Invalid slotIndex: {}", index);
+            return ItemStack.EMPTY;
+        }
+        if (sourceStack.getCount() == 0) {
+            sourceSlot.set(ItemStack.EMPTY);
+        } else {
+            sourceSlot.setChanged();
+        }
+        sourceSlot.onTake(playerIn, sourceStack);
+        return copyOfSourceStack;
     }
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return true;
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, QSBlocks.DISK_ASSEMBLER.get());
     }
 
     @Override

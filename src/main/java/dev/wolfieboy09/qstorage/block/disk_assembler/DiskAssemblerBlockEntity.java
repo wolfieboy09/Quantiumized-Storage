@@ -18,6 +18,17 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
         super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
     }
 
+    public static class DiskAssemblerSlot {
+        public static final int MAIN_SLOT_1 = 0;
+        public static final int MAIN_SLOT_2 = 1;
+        public static final int MAIN_SLOT_3 = 2;
+        public static final int EXTRA_SLOT_1 = 3;
+        public static final int EXTRA_SLOT_2 = 4;
+        public static final int EXTRA_SLOT_3 = 5;
+        public static final int EXTRA_SLOT_4 = 6;
+        public static final int OUTPUT_SLOT = 7;
+    }
+
     private final ItemStackHandler inventory = new ItemStackHandler(8) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -35,7 +46,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
         if (this.progress != 0) {
             this.progress = 0;
             setChanged();
-            Objects.requireNonNull(level).sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+            Objects.requireNonNull(level).sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 

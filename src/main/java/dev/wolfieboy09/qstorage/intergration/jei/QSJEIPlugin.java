@@ -38,7 +38,7 @@ public class QSJEIPlugin implements IModPlugin {
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
         registration.addRecipes(DiskAssemblerCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.DISK_ASSEMBLER_TYPE.get()).stream()
-                .map(RecipeHolder::value).collect(Collectors.toList()));
+                .map(RecipeHolder::value).toList());
     }
 
     @Override

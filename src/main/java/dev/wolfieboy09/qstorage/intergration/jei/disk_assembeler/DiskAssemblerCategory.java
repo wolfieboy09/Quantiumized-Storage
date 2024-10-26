@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler;
 
+import com.mojang.serialization.Codec;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
@@ -9,6 +10,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
@@ -51,6 +53,15 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DiskAssemblerRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 17, 27);
+        builder.addSlot(RecipeIngredientRole.INPUT, 17, 45);
+        builder.addSlot(RecipeIngredientRole.INPUT, 35, 36);
 
+        builder.addSlot(RecipeIngredientRole.INPUT, 116, 27);
+        builder.addSlot(RecipeIngredientRole.INPUT, 134, 27);
+        builder.addSlot(RecipeIngredientRole.INPUT, 116, 45);
+        builder.addSlot(RecipeIngredientRole.INPUT, 134, 45);
+
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 36);
     }
 }

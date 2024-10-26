@@ -28,7 +28,7 @@ public record DiskAssemblerRecipe(
         Ingredient diskPort,
         Ingredient diskCasing,
         Ingredient screws,
-        List<Holder<Item>> extras,
+        List<Ingredient> extras,
         int energyCost,
         int timeInTicks,
         ItemStack result
@@ -36,7 +36,7 @@ public record DiskAssemblerRecipe(
 
     @Override
     public boolean matches(RecipeWrapper recipeWrapper, Level level) {
-        return !level.isClientSide();
+        return true;
     }
 
     @Override
@@ -70,7 +70,7 @@ public record DiskAssemblerRecipe(
                         Ingredient.CODEC.fieldOf("port").forGetter(DiskAssemblerRecipe::diskPort),
                         Ingredient.CODEC.fieldOf("casing").forGetter(DiskAssemblerRecipe::diskCasing),
                         Ingredient.CODEC.fieldOf("screws").forGetter(DiskAssemblerRecipe::screws),
-                        BuiltInRegistries.ITEM.holderByNameCodec().listOf().fieldOf("extras").forGetter(DiskAssemblerRecipe::extras),
+                        Ingredient.CODEC.listOf().fieldOf("extras").forGetter(DiskAssemblerRecipe::extras),
                         Codec.INT.fieldOf("energy").forGetter(DiskAssemblerRecipe::energyCost),
                         Codec.INT.fieldOf("ticks").forGetter(DiskAssemblerRecipe::timeInTicks),
                         ItemStack.CODEC.fieldOf("result").forGetter(DiskAssemblerRecipe::result)
@@ -81,7 +81,7 @@ public record DiskAssemblerRecipe(
                 Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::diskPort,
                 Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::diskCasing,
                 Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::screws,
-                ByteBufCodecs.holderRegistry(Registries.ITEM).apply(ByteBufCodecs.list(4)), DiskAssemblerRecipe::extras,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list(4)), DiskAssemblerRecipe::extras,
                 ByteBufCodecs.INT, DiskAssemblerRecipe::energyCost,
                 ByteBufCodecs.INT, DiskAssemblerRecipe::timeInTicks,
                 ItemStack.STREAM_CODEC, DiskAssemblerRecipe::result,
