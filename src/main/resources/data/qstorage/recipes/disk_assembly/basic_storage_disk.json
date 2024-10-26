@@ -9,9 +9,23 @@
   "screws": {
     "item": "qstorage:steel_screw"
   },
+  "extras": [
+    {
+      "item": "minecraft:dirt"
+    },
+    {
+      "item": "minecraft:cobblestone"
+    },
+    {
+      "item": "minecraft:stone"
+    },
+    {
+      "item": "minecraft:oak_log"
+    }
+  ],
   "energy": 100,
   "ticks": 200,
   "result": {
-    "id": "qstorage:basic_item_disk"
+    "id": "qstorage:basic_storage_disk"
   }
 }
