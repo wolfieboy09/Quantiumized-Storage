@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -64,7 +65,8 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
         return true;
     }
 
-    public EnergyStorage getEnergyHandler(Direction side) {
+    public EnergyStorage getEnergyHandler(@Nullable Direction side) {
+        // Compatibility with Jade.
         if (side == null) return this.getEnergyStorage();
         Direction blockFacing = this.getBlockState().getValue(DiskAssemblerBlock.FACING);
         return side == blockFacing.getOpposite() ? this.getEnergyStorage() : null;
