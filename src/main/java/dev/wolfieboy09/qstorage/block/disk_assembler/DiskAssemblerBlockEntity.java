@@ -13,6 +13,8 @@ import java.util.Objects;
 
 public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     private int progress = 0;
+    private int crafting_duration = 0;
+    private int energy_required = 0;
 
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
@@ -64,9 +66,17 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
         return true;
     }
 
+    public static int getEnergyCapacity() {
+        return 20000;
+    }
+
     public EnergyStorage getEnergyHandler(Direction side) {
-        if (side == null) return this.getEnergyStorage();
+        if (side == null) return this.getEnergyStorage(); // for special cases
         Direction blockFacing = this.getBlockState().getValue(DiskAssemblerBlock.FACING);
         return side == blockFacing.getOpposite() ? this.getEnergyStorage() : null;
+    }
+
+    public ItemStackHandler getInventoryHandler() {
+        return this.inventory;
     }
 }

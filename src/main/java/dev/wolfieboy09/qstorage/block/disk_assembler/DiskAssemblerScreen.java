@@ -27,8 +27,6 @@ public class DiskAssemblerScreen extends AbstractContainerScreen<DiskAssemblerMe
                 this.leftPos + 167,
                 this.topPos + 69,
                 0xFFCC2222);
-
-
     }
 
     @Override
