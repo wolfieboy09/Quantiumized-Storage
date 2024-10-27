@@ -6,6 +6,7 @@ import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -26,8 +27,8 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
     private final IDrawable icon;
 
     public DiskAssemblerCategory(@NotNull IGuiHelper guiHelper) {
-        ResourceLocation location = ResourceHelper.asResource("disk_assembler");
-        background = guiHelper.createDrawable(location, 0, 0, 100, 100);
+        ResourceLocation location = ResourceHelper.asResource("textures/gui/disk_assembler.png");
+        background = guiHelper.createDrawable(location, 0, 0, 176, 76);
         icon = guiHelper.createDrawableItemStack(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
     }
 
@@ -53,15 +54,18 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DiskAssemblerRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 17, 27);
-        builder.addSlot(RecipeIngredientRole.INPUT, 17, 45);
-        builder.addSlot(RecipeIngredientRole.INPUT, 35, 36);
+        builder.addSlot(RecipeIngredientRole.INPUT, 17, 27).addIngredients(recipe.diskPort());
+        builder.addSlot(RecipeIngredientRole.INPUT, 17, 45).addIngredients(recipe.diskCasing());
+        builder.addSlot(RecipeIngredientRole.INPUT, 35, 36).addIngredients(recipe.screws());
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 116, 27);
-        builder.addSlot(RecipeIngredientRole.INPUT, 134, 27);
-        builder.addSlot(RecipeIngredientRole.INPUT, 116, 45);
-        builder.addSlot(RecipeIngredientRole.INPUT, 134, 45);
+        builder.addSlot(RecipeIngredientRole.INPUT, 116, 27).addIngredients(recipe.extras().getFirst());
+        builder.addSlot(RecipeIngredientRole.INPUT, 134, 27).addIngredients(recipe.extras().get(1));
+        builder.addSlot(RecipeIngredientRole.INPUT, 116, 45).addIngredients(recipe.extras().get(2));
+        builder.addSlot(RecipeIngredientRole.INPUT, 134, 45).addIngredients(recipe.extras().get(3));
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 36);
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 36).addIngredient(
+            VanillaTypes.ITEM_STACK,
+            recipe.result()
+        );
     }
 }
