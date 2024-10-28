@@ -8,6 +8,7 @@ import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -63,24 +64,17 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
         builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.diskPort());
         builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.diskCasing());
         builder.addSlot(RecipeIngredientRole.INPUT, 35 - guiUOffset, 36 - guiVOffset).addIngredients(recipe.screws());
-        int l = recipe.extras().size();
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                int index = i * 2 + j;
-                
-                // Ensure the index is within bounds to prevent crashes
-                if (index < l) {
-                    int x = (116 + i * 18) - guiUOffset;
-                    int y = (27 + j * 18) - guiVOffset;
-                    var slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
-                    
-                    if (!recipe.extras().get(index).isEmpty()) {
-                        slot.addIngredients(recipe.extras().get(index));
-                    }
-                } else {
-                    recipe.extras().set(index, Ingredient.EMPTY);
-                }
+
+        int i = 0;
+        for (Ingredient extra : recipe.extras()) {
+            int x = (116 + (i / 2) * 18) - guiUOffset;
+            int y = (27 + (i % 2) * 18) - guiVOffset;
+            IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
+
+            if (!extra.isEmpty()) {
+                slot.addIngredients(extra);
             }
+            i++;
         }
         
         
