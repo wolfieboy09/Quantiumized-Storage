@@ -20,6 +20,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,12 +63,27 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
         builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.diskPort());
         builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.diskCasing());
         builder.addSlot(RecipeIngredientRole.INPUT, 35 - guiUOffset, 36 - guiVOffset).addIngredients(recipe.screws());
-
-        builder.addSlot(RecipeIngredientRole.INPUT, 116 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.extras().getFirst());
-        builder.addSlot(RecipeIngredientRole.INPUT, 134 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.extras().get(1));
-        builder.addSlot(RecipeIngredientRole.INPUT, 116 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.extras().get(2));
-        builder.addSlot(RecipeIngredientRole.INPUT, 134 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.extras().get(3));
-
+        int l = recipe.extras().size();
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                int index = i * 2 + j;
+                
+                // Ensure the index is within bounds to prevent crashes
+                if (index < l) {
+                    int x = (116 + i * 18) - guiUOffset;
+                    int y = (27 + j * 18) - guiVOffset;
+                    var slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
+                    
+                    if (!recipe.extras().get(index).isEmpty()) {
+                        slot.addIngredients(recipe.extras().get(index));
+                    }
+                } else {
+                    recipe.extras().set(index, Ingredient.EMPTY);
+                }
+            }
+        }
+        
+        
         builder.addSlot(RecipeIngredientRole.OUTPUT, 80 - guiUOffset, 36 - guiVOffset).addIngredient(
             VanillaTypes.ITEM_STACK,
             recipe.result()
