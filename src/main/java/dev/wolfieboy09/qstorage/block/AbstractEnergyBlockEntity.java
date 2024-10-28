@@ -4,8 +4,7 @@ import dev.wolfieboy09.qstorage.api.energy.ExtendedEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -120,7 +119,8 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
 
     @Override
     public void handleUpdateTag(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider lookupProvider) {
-        if (level == null) return;
-        this.energyStorage.deserializeNBT(lookupProvider, tag.get("Energy"));
+        Tag energyTag = tag.get("Energy");
+        if (energyTag == null) return;
+        this.energyStorage.deserializeNBT(lookupProvider, energyTag);
     }
 }
