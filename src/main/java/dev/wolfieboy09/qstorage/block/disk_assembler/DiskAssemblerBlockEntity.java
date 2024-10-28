@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     private int energy_required = 0;
 
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
-        super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
+        super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, getEnergyCapacity(), 1000, 0);
     }
 
     public static class DiskAssemblerSlot {
@@ -70,7 +71,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
         return 20000;
     }
 
-    public EnergyStorage getEnergyHandler(Direction side) {
+    public EnergyStorage getEnergyHandler(@Nullable Direction side) {
         if (side == null) return this.getEnergyStorage(); // for special cases
         Direction blockFacing = this.getBlockState().getValue(DiskAssemblerBlock.FACING);
         return side == blockFacing.getOpposite() ? this.getEnergyStorage() : null;
