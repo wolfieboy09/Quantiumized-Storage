@@ -4,10 +4,13 @@ import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -79,5 +82,26 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
 
     public ItemStackHandler getInventoryHandler() {
         return this.inventory;
+    }
+    
+    @Override
+    protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("Inventory", this.inventory.serializeNBT(registries));
+    }
+    
+    @Override
+    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("Inventory")) {
+            this.inventory.deserializeNBT(registries, tag.getCompound("Inventory"));
+        }
+    }
+    
+    @Override
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider registries) {
+        CompoundTag tag = super.getUpdateTag(registries);
+        tag.put("Inventory", this.inventory.serializeNBT(registries));
+        return tag;
     }
 }
