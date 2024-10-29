@@ -123,4 +123,10 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         if (energyTag == null) return;
         this.energyStorage.deserializeNBT(lookupProvider, energyTag);
     }
+
+    public void syncToClient() {
+        setChanged();
+        if (level == null) return;
+        level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+    }
 }
