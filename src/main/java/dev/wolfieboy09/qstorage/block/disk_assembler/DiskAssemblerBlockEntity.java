@@ -4,6 +4,8 @@ import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
@@ -14,7 +16,7 @@ import java.util.Objects;
 
 public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     private int progress = 0;
-    private int crafting_duration = 0;
+    private int crafting_ticks = 0;
     private int energy_required = 0;
 
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
@@ -79,5 +81,37 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
 
     public ItemStackHandler getInventoryHandler() {
         return this.inventory;
+    }
+
+
+    // Crafting land
+    public void craftDisk() {
+        if (level == null) return;
+        ItemStack stack = inventory.getStackInSlot(0);
+
+    }
+
+    private boolean isCrafting() {
+        return this.crafting_ticks > 0;
+    }
+
+    private void resetCrafting() {
+        crafting_ticks = 0;
+        energy_required = 0;
+        syncToClient();
+    }
+
+    public SimpleContainer getInputContainer() {
+        SimpleContainer container = new SimpleContainer(7);
+        for (int i = 0; i < 7; i++) {
+            container.setItem(i, inventory.getStackInSlot(i));
+        }
+        return container;
+    }
+
+    public SimpleContainer getOutputContainer() {
+        SimpleContainer container = new SimpleContainer(1);
+        container.setItem(8, inventory.getStackInSlot(8));
+        return container;
     }
 }
