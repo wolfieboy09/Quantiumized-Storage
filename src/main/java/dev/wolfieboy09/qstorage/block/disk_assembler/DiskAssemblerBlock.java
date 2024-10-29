@@ -1,22 +1,16 @@
 package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuConstructor;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CraftingTableBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +18,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -75,6 +70,22 @@ public class DiskAssemblerBlock extends BaseEntityBlock {
             serverPlayer.openMenu(Objects.requireNonNull(state.getMenuProvider(level, pos)), pos);
             return InteractionResult.SUCCESS;
         }
-        return InteractionResult.SUCCESS;
+        return super.useWithoutItem(state, level, pos, player, hitResult);
+    }
+
+    @Override
+    protected void onRemove(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof DiskAssemblerBlockEntity blockEntity) {
+                SimpleContainer inputInv = blockEntity.getInputContainer();
+                SimpleContainer outputInv = blockEntity.getOutputContainer();
+                Containers.dropContents(level, pos, inputInv);
+                Containers.dropContents(level, pos, outputInv);
+            }
+            super.onRemove(state, level, pos, newState, movedByPiston);
+        } else {
+            super.onRemove(state, level, pos, newState, movedByPiston);
+        }
     }
 }
