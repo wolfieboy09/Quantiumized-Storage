@@ -14,6 +14,6 @@ public class QSCapabilities {
     @SubscribeEvent
     public static void register(@NotNull RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, QSBlockEntities.DISK_ASSEMBLER.get(), DiskAssemblerBlockEntity::getEnergyHandler);
-        // event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, QSBlockEntities.DISK_ASSEMBLER.get(), (block, dir) -> block.getInventoryHandler());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, QSBlockEntities.DISK_ASSEMBLER.get(), (block, dir) -> block.getInventoryHandler());
     }
 }
