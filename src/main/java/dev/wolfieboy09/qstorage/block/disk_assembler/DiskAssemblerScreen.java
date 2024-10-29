@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.wolfieboy09.qstorage.api.util.FormattingUtil;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -37,7 +38,7 @@ public class DiskAssemblerScreen extends AbstractContainerScreen<DiskAssemblerMe
         int energyStored = this.menu.getEnergy();
         int maxEnergy = this.menu.getMaxEnergy();
 
-        Component text = Component.literal("Energy: " + energyStored + " / " + maxEnergy);
+        Component text = Component.literal("Energy: " + FormattingUtil.formatNumber(energyStored) + " / " + FormattingUtil.formatNumber(maxEnergy) + "FE");
         if(isHovering(163, 10, 3, 62, pMouseX, pMouseY)) {
             pGuiGraphics.renderTooltip(this.font, text, pMouseX, pMouseY);
         }
