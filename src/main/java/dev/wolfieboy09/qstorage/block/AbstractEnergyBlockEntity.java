@@ -87,14 +87,6 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        if (tag.contains("Energy")) {
-            this.energyStorage.deserializeNBT(registries, tag.get("Energy"));
-        }
-    }
-
-    @Override
     public int receiveEnergy(int i, boolean b) {
         return this.energyStorage.receiveEnergy(i, b);
     }
@@ -104,17 +96,59 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         return this.energyStorage.extractEnergy(i, b);
     }
 
+    // optional functions for blocks
+
+    /**
+     * Gets called from {@link #saveAdditional}
+     * @param tag
+     * @param registries
+     */
+    public void saveExtra(CompoundTag tag, HolderLookup.Provider registries) {}
+
+    /**
+     * Gets called from {@link #loadAdditional}
+     * @param tag
+     * @param registries
+     */
+    protected void loadExtra(CompoundTag tag, HolderLookup.Provider registries) {}
+
+    /**
+     * Gets called from {@link #getUpdateTag}
+     * @param tag
+     * @param lookupProvider
+     * @return
+     */
+    public CompoundTag updateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) { return tag; }
+
+    /**
+     * Gets called from {@link #handleUpdateTag}
+     * @param tag
+     * @param lookupProvider
+     */
+    public void handleUpdate(CompoundTag tag, HolderLookup.Provider lookupProvider) {}
+
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.put("Energy", this.energyStorage.serializeNBT(registries));
+        saveExtra(tag, registries);
     }
 
     @Override
     public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = super.getUpdateTag(registries);
+        CompoundTag tag = updateTag(super.getUpdateTag(registries), registries);
         tag.put("Energy", this.energyStorage.serializeNBT(registries));
         return tag;
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("Energy")) {
+            this.energyStorage.deserializeNBT(registries, tag.get("Energy"));
+        }
+        loadExtra(tag, registries);
     }
 
     @Override
@@ -122,5 +156,12 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         Tag energyTag = tag.get("Energy");
         if (energyTag == null) return;
         this.energyStorage.deserializeNBT(lookupProvider, energyTag);
+        handleUpdate(tag, lookupProvider);
+    }
+
+    public void syncToClient() {
+        setChanged();
+        if (level == null) return;
+        level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
     }
 }
