@@ -17,6 +17,8 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.stream.Collectors;
+
 @JeiPlugin
 public class QSJEIPlugin implements IModPlugin {
     @Override
