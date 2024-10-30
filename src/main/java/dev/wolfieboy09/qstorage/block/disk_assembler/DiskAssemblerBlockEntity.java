@@ -6,19 +6,24 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
-public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
+public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implements MenuProvider {
+    private final Component TITLE = Component.translatable("block.qstorage.disk_assembler");
     private int progress = 0;
     private int crafting_ticks = 0;
     private int energy_required = 0;
@@ -26,7 +31,18 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, getEnergyCapacity(), 1000, 0);
     }
-
+    
+    @Override
+    public @NotNull Component getDisplayName() {
+        return TITLE;
+    }
+    
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
+        this.energyData.set(0, this.energyStorage.getEnergyStored());
+        return new DiskAssemblerMenu(id, this.getBlockPos(), playerInv, player, this.energyData);
+    }
+    
     public static class DiskAssemblerSlot {
         public static final int MAIN_SLOT_1 = 0;
         public static final int MAIN_SLOT_2 = 1;
@@ -45,17 +61,12 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
                 resetProgress();
             }
             setChanged();
-            if (level != null && !level.isClientSide()) {
-                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            }
         }
     };
 
     protected void resetProgress() {
         if (this.progress != 0) {
             this.progress = 0;
-            setChanged();
-            Objects.requireNonNull(level).sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -102,7 +113,6 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     private void resetCrafting() {
         crafting_ticks = 0;
         energy_required = 0;
-        syncToClient();
     }
 
     public SimpleContainer getInputContainer() {
@@ -115,13 +125,14 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
 
     public SimpleContainer getOutputContainer() {
         SimpleContainer container = new SimpleContainer(1);
-        container.setItem(8, inventory.getStackInSlot(8));
+        container.setItem(0, inventory.getStackInSlot(inventory.getSlots() - 1));
         return container;
     }
 
     @Override
     public void saveExtra(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveExtra(tag, registries);
+        tag.putInt("progress", this.progress);
         tag.putInt("energy_required", this.energy_required);
         tag.putInt("crafting_ticks", this.crafting_ticks);
         tag.put("inventory", this.inventory.serializeNBT(registries));
@@ -130,6 +141,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity {
     @Override
     protected void loadExtra(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadExtra(tag, registries);
+        this.progress = tag.getInt("progress");
         this.energy_required = tag.getInt("energy_required");
         this.crafting_ticks = tag.getInt("crafting_ticks");
         this.inventory.deserializeNBT(registries, tag.getCompound("inventory"));

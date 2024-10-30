@@ -60,14 +60,11 @@ public class DiskAssemblerBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
-        return new SimpleMenuProvider((id, playerInv, serverPlayer) -> new DiskAssemblerMenu(id, pos, playerInv, serverPlayer), Component.translatable("block.qstorage.disk_assembler"));
-    }
-
-    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.openMenu(Objects.requireNonNull(state.getMenuProvider(level, pos)), pos);
+            if (level.getBlockEntity(pos) instanceof DiskAssemblerBlockEntity be) {
+                serverPlayer.openMenu(be, pos);
+            }
             return InteractionResult.SUCCESS;
         }
         return super.useWithoutItem(state, level, pos, player, hitResult);

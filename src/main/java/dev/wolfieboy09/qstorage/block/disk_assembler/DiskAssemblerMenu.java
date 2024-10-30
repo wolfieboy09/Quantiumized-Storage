@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
@@ -35,13 +36,13 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
         this(id, pos, playerInventory, playerIn, new SimpleContainerData(4));
     }
 
-    public DiskAssemblerMenu(int id, BlockPos pos, Inventory playerInventory, Player playerIn, ContainerData containerData) {
+    public DiskAssemblerMenu(int id, BlockPos pos, Inventory playerInventory, Player player, ContainerData containerData) {
         super(QSMenuTypes.DISK_ASSEMBLER.get(), id);
         addDataSlots(containerData);
-        DiskAssemblerBlockEntity blockEntity = (DiskAssemblerBlockEntity) playerIn.getCommandSenderWorld().getBlockEntity(pos);
-        if (blockEntity == null) return;
-        this.blockEntity = blockEntity;
-        this.level = playerInventory.player.level();
+        this.level = player.level();
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (!(blockEntity instanceof DiskAssemblerBlockEntity be)) return;
+        this.blockEntity = be;
         this.data = containerData;
 
         PlayerInvWrapper playerInvWrapper = new PlayerInvWrapper(playerInventory);
@@ -67,7 +68,7 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
             }
         }
 
-        ItemStackHandler itemStackHandler = blockEntity.getInventory();
+        ItemStackHandler itemStackHandler = be.getInventory();
 
         addSlot(new SlotItemHandler(itemStackHandler, 0, 17, 27));
         addSlot(new SlotItemHandler(itemStackHandler, 1, 17, 45));
@@ -117,7 +118,7 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
 
     @Override
     public int getEnergy() {
-        return this.blockEntity.getEnergyStored();
+        return this.data.get(0);
     }
 
     @Override

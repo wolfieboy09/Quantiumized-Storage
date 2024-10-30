@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -16,61 +16,34 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implements IEnergyStorage {
     protected final ExtendedEnergyStorage energyStorage;
-
+    protected ContainerData energyData = new ContainerData() {
+        private int energy = 0;
+        @Override
+        public int get(int i) {
+            return energy;
+        }
+        
+        @Override
+        public void set(int i, int i1) {
+            energy = i1;
+        }
+        
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    };
+    
     public AbstractEnergyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState, int capacity, int maxTransfer) {
         super(type, pos, blockState);
-        this.energyStorage = new ExtendedEnergyStorage(capacity, maxTransfer) {
-            @Override
-            public int receiveEnergy(int maxReceive, boolean simulate) {
-                int energyReceived = Math.min(maxReceive, this.getMaxReceive());
-                if (!simulate) {
-                    this.addEnergy(energyReceived);
-                    setChanged();
-                    level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-                }
-                return energyReceived;
-            }
-
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                int energyExtracted = Math.min(maxExtract, this.getMaxExtract());
-                if (!simulate) {
-                    this.removeEnergy(energyExtracted);
-                    setChanged();
-                    level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-                }
-                return energyExtracted;
-            }
-        };
+        this.energyStorage = new ExtendedEnergyStorage(capacity, maxTransfer,this);
     }
+    
 
-    public AbstractEnergyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState, int capacity, int maxRecieve, int maxExtract) {
+    public AbstractEnergyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState, int capacity, int maxReceive, int maxExtract) {
         super(type, pos, blockState);
-        this.energyStorage = new ExtendedEnergyStorage(capacity, maxRecieve, maxExtract) {
-            @Override
-            public int receiveEnergy(int maxReceive, boolean simulate) {
-                int energyReceived = Math.min(maxReceive, this.getMaxReceive());
-                if (!simulate) {
-                    this.addEnergy(energyReceived);
-                    setChanged();
-                    level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-                }
-                return energyReceived;
-            }
-
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                int energyExtracted = Math.min(maxExtract, this.getMaxExtract());
-                if (!simulate) {
-                    this.removeEnergy(energyExtracted);
-                    setChanged();
-                    level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-                }
-                return energyExtracted;
-            }
-        };
+        this.energyStorage = new ExtendedEnergyStorage(capacity, maxReceive, maxExtract,this);
     }
-
 
     public ExtendedEnergyStorage getEnergyStorage() {
         return this.energyStorage;
@@ -145,12 +118,12 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        if (tag.contains("Energy")) {
-            this.energyStorage.deserializeNBT(registries, tag.get("Energy"));
-        }
+        Tag energyTag = tag.get("Energy");
+        if (energyTag == null) return;
+        this.energyStorage.deserializeNBT(registries, energyTag);
         loadExtra(tag, registries);
     }
-
+    
     @Override
     public void handleUpdateTag(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider lookupProvider) {
         Tag energyTag = tag.get("Energy");
@@ -158,10 +131,10 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         this.energyStorage.deserializeNBT(lookupProvider, energyTag);
         handleUpdate(tag, lookupProvider);
     }
-
-    public void syncToClient() {
-        setChanged();
-        if (level == null) return;
-        level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+    
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        this.energyData.set(0, this.energyStorage.getEnergyStored());
     }
 }

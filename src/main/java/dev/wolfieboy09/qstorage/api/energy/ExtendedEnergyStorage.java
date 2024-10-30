@@ -1,19 +1,22 @@
 package dev.wolfieboy09.qstorage.api.energy;
 
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.energy.EnergyStorage;
 
 /**
  * An extension of the {@link EnergyStorage} class, providing additional methods for managing energy storage.
  */
 public class ExtendedEnergyStorage extends EnergyStorage {
-
+    private final BlockEntity be;
     /**
      * Creates a new ExtendedEnergyStorage instance with the specified capacity.
      *
      * @param capacity the maximum amount of energy that can be stored
+     * @param be the block entity associated with this storage
      */
-    public ExtendedEnergyStorage(int capacity) {
+    public ExtendedEnergyStorage(int capacity,BlockEntity be) {
         super(capacity);
+        this.be = be;
     }
 
     /**
@@ -21,20 +24,16 @@ public class ExtendedEnergyStorage extends EnergyStorage {
      *
      * @param capacity the maximum amount of energy that can be stored
      * @param maxTransfer the maximum amount of energy that can be transferred in a single operation
+     * @param be the block entity associated with this storage
      */
-    public ExtendedEnergyStorage(int capacity, int maxTransfer) {
+    public ExtendedEnergyStorage(int capacity, int maxTransfer, BlockEntity be) {
         super(capacity, maxTransfer);
+        this.be = be;
     }
-
-    /**
-     * Creates a new ExtendedEnergyStorage instance with the specified capacity, maximum receive amount, and maximum extract amount.
-     *
-     * @param capacity the maximum amount of energy that can be stored
-     * @param maxReceive the maximum amount of energy that can be received in a single operation
-     * @param maxExtract the maximum amount of energy that can be extracted in a single operation
-     */
-    public ExtendedEnergyStorage(int capacity, int maxReceive, int maxExtract) {
+    
+    public ExtendedEnergyStorage(int capacity, int maxReceive, int maxExtract, BlockEntity be) {
         super(capacity, maxReceive, maxExtract);
+        this.be = be;
     }
 
     /**
@@ -44,11 +43,13 @@ public class ExtendedEnergyStorage extends EnergyStorage {
      * @param maxReceive the maximum amount of energy that can be received in a single operation
      * @param maxExtract the maximum amount of energy that can be extracted in a single operation
      * @param energy the initial amount of energy stored
+     * @param be the block entity associated with this storage
      */
-    public ExtendedEnergyStorage(int capacity, int maxReceive, int maxExtract, int energy) {
+    public ExtendedEnergyStorage(int capacity, int maxReceive, int maxExtract, int energy, BlockEntity be) {
         super(capacity, maxReceive, maxExtract, energy);
+        this.be = be;
     }
-
+    
     /**
      * Sets the current energy amount to the specified value, clamping it to the range [0, capacity].
      *
@@ -60,6 +61,7 @@ public class ExtendedEnergyStorage extends EnergyStorage {
         if(energy > this.capacity)
             energy = this.capacity;
         this.energy = energy;
+        onEnergyChanged();
     }
 
     /**
@@ -96,5 +98,27 @@ public class ExtendedEnergyStorage extends EnergyStorage {
      */
     public int getMaxExtract() {
         return this.maxExtract;
+    }
+    
+    @Override
+    public int receiveEnergy(int toReceive, boolean simulate) {
+        var toReturn = super.receiveEnergy(toReceive, simulate);
+        if (!simulate) {
+            onEnergyChanged();
+        }
+        return toReturn;
+    }
+    
+    @Override
+    public int extractEnergy(int toExtract, boolean simulate) {
+        var toReturn = super.extractEnergy(toExtract, simulate);
+        if (!simulate) {
+            onEnergyChanged();
+        }
+        return toReturn;
+    }
+    
+    public void onEnergyChanged() {
+        this.be.setChanged();
     }
 }
