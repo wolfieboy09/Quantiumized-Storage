@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
+import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -19,6 +20,11 @@ public class QSBlocks {
     public static final DeferredBlock<DiskAssemblerBlock> DISK_ASSEMBLER = registerBlock(
             "disk_assembler",
             () -> new DiskAssemblerBlock(BlockBehaviour.Properties.of().noOcclusion())
+    );
+
+    public static final DeferredBlock<StorageMatrixBlock> STORAGE_MATRIX = registerBlock(
+            "storage_matrix",
+            () -> new StorageMatrixBlock(BlockBehaviour.Properties.of())
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
