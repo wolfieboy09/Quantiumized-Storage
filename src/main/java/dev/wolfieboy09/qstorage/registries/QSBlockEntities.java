@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlockEntity;
+import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -18,6 +19,14 @@ public class QSBlockEntities {
             () -> BlockEntityType.Builder.of(
                     DiskAssemblerBlockEntity::new,
                     QSBlocks.DISK_ASSEMBLER.get()
+            ).build(null)
+    );
+
+    public static final Supplier<BlockEntityType<StorageMatrixBlockEntity>> STORAGE_MATRIX = BLOCK_ENTITY_TYPES.register(
+            "storage_matrix",
+            () -> BlockEntityType.Builder.of(
+                    StorageMatrixBlockEntity::new,
+                    QSBlocks.STORAGE_MATRIX.get()
             ).build(null)
     );
 
