@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qstorage.block.AbstractBaseEntityBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
@@ -21,8 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @NothingNullByDefault
-@SuppressWarnings("deprecation")
-public class DiskAssemblerBlock extends BaseEntityBlock {
+public class DiskAssemblerBlock extends AbstractBaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final MapCodec<DiskAssemblerBlock> CODEC = simpleCodec(DiskAssemblerBlock::new);
 
@@ -44,12 +44,6 @@ public class DiskAssemblerBlock extends BaseEntityBlock {
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
-
-    @Override
-    protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
-    }
-
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
