@@ -24,7 +24,7 @@ public class DiskAssemblerScreen extends AbstractContainerScreen<DiskAssemblerMe
 
         graphics.fill(
                 this.leftPos + 163,
-                this.topPos + 75 + (-this.menu.getEnergyStoredScaled() / 2) - 6,
+                this.topPos + 69 + (-this.menu.getEnergyStoredScaled() / 2),
                 this.leftPos + 167,
                 this.topPos + 69,
                 0xFFCC2222);
