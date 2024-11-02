@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
     private DiskAssemblerBlockEntity blockEntity;
-    private Level level;
+    private final Level level;
     private ContainerData data;
 
     private static final int HOTBAR_SLOT_COUNT = 9;
