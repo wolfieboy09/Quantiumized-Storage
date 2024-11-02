@@ -31,7 +31,7 @@ public class StorageMatrixBlock extends AbstractBaseEntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return null;
+        return new StorageMatrixBlockEntity(pos, state);
     }
 
     @Override
