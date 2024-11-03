@@ -19,6 +19,6 @@ public class StorageMatrixScreen extends AbstractContainerScreen<StorageMatrixMe
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-
+        graphics.blit(BACKGROUND_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 }
