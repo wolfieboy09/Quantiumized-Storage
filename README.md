@@ -11,7 +11,6 @@ A NeoForge storage mod where you can store items, fluids, and energy!
 If you want a mod to be compatible built-in, just open an issue up, and I'll see if I can do it!
 - [ ] CC: Tweaked
 - [ ] Built-in KubeJS plugin
-- [ ] Jade
 
 # Credits
 Ishrit Madaan - Testing the mod, and helping out!
