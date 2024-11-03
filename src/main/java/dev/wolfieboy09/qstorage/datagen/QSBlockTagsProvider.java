@@ -18,7 +18,8 @@ public class QSBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     public void addTags(@NotNull HolderLookup.Provider provider) {
-        tag(Tags.Blocks.NEEDS_GOLD_TOOL)
-                .add(QSBlocks.DISK_ASSEMBLER.get());
+        tag(Tags.Blocks.NEEDS_WOOD_TOOL)
+                .add(QSBlocks.DISK_ASSEMBLER.get())
+                .add(QSBlocks.STORAGE_MATRIX.get());
     }
 }
