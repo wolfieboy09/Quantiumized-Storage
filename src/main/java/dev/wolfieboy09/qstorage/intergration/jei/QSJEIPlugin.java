@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qstorage.intergration.jei;
 
+import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler.DiskAssemblerCategory;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
@@ -7,6 +8,7 @@ import dev.wolfieboy09.qstorage.registries.QSRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.registration.IModInfoRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -17,6 +19,9 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @JeiPlugin
@@ -44,5 +49,10 @@ public class QSJEIPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()), DiskAssemblerCategory.RECIPE_TYPE);
+    }
+
+    @Override
+    public void registerModInfo(IModInfoRegistration modAliasRegistration) {
+        modAliasRegistration.addModAliases(QuantiumizedStorage.MOD_ID, "qstorage");
     }
 }
