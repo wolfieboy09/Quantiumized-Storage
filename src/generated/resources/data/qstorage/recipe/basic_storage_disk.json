@@ -1,0 +1,23 @@
+{
+  "type": "qstorage:disk_assembly",
+  "casing": {
+    "item": "qstorage:steel_casing"
+  },
+  "energy": 1000,
+  "extras": [
+    {
+      "item": "qstorage:data_crystal"
+    }
+  ],
+  "port": {
+    "item": "qstorage:item_port"
+  },
+  "result": {
+    "count": 1,
+    "id": "qstorage:basic_storage_disk"
+  },
+  "screws": {
+    "item": "qstorage:steel_screw"
+  },
+  "ticks": 500
+}

@@ -27,5 +27,6 @@ public class DataGeneration {
         generator.addProvider(event.includeClient(), new QSBlockStateProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new QSItemModelProvider(output, existingFileHelper));
         generator.addProvider(event.includeServer(), new QSItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter()));
+        generator.addProvider(event.includeServer(), new QSRecipeProvider(output, lookupProvider));
     }
 }
