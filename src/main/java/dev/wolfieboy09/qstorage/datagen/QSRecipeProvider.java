@@ -33,7 +33,7 @@ public class QSRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes(@NotNull RecipeOutput output) {
-        new DiskAssemblerBuilder(
+        DiskAssemblerBuilder.create(
                 Ingredient.of(QSItems.ITEM_PORT),
                 Ingredient.of(QSItems.STEEL_CASING),
                 Ingredient.of(QSItems.STEEL_SCREW),

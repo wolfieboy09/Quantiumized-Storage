@@ -67,4 +67,8 @@ public class DiskAssemblerBuilder implements RecipeBuilder {
         DiskAssemblerRecipe recipe = new DiskAssemblerRecipe(this.diskPort, this.diskCasing, this.screws, this.extras, this.energyCost, this.timeInTicks, this.result);
         output.accept(id, recipe, advancement.build(id.withPrefix("recipes/")));
     }
+
+    public static DiskAssemblerBuilder create(Ingredient diskPort, Ingredient diskCasing, Ingredient screws, List<Ingredient> extras, int energyCost, int timeInTicks, ItemStack result) {
+        return new DiskAssemblerBuilder(diskPort, diskCasing, screws, extras, energyCost, timeInTicks, result);
+    }
 }
