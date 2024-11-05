@@ -1,4 +1,5 @@
 {
+  "block.qstorage.circuit_engraver": "Circuit Engraver",
   "block.qstorage.disk_assembler": "Disk Assembler",
   "block.qstorage.storage_matrix": "Storage Matrix",
   "creative_tab.qstorage.block_group": "QS Blocks",
@@ -11,6 +12,7 @@
   "item.qstorage.elite_circuit": "Elite Circuit",
   "item.qstorage.item_port": "Item Port",
   "item.qstorage.multi_dimensional_storage_disk": "Multi Dimensional Storage Disk",
+  "item.qstorage.quantum_circuit": "Quantum Circuit",
   "item.qstorage.quantum_storage_disk": "Quantum Storage Disk",
   "item.qstorage.silicon": "Silicon",
   "item.qstorage.steel_casing": "Steel Casing",
