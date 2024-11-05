@@ -21,6 +21,11 @@ public class QSItems {
 
     public static final DeferredItem<Item> ITEM_PORT = simpleItem("item_port");
 
+    public static final DeferredItem<Item> BASIC_CIRCUIT = simpleItem("basic_circuit");
+    public static final DeferredItem<Item> ADVANCED_CIRCUIT = simpleItem("advanced_circuit");
+    public static final DeferredItem<Item> ELITE_CIRCUIT = simpleItem("elite_circuit");
+    public static final DeferredItem<Item> ULTIMATE_CIRCUIT = simpleItem("ultimate_circuit");
+
     public static final DeferredItem<ItemStorageDisk> BASIC_ITEM_DISK = registerItemStorageDisk("basic_storage_disk", ItemStorageType.BASIC);
     public static final DeferredItem<ItemStorageDisk> ADVANCED_ITEM_DISK = registerItemStorageDisk("advanced_storage_disk", ItemStorageType.ADVANCED);
     public static final DeferredItem<ItemStorageDisk> SUPERIOR_ITEM_DISK = registerItemStorageDisk("superior_storage_disk", ItemStorageType.SUPERIOR);

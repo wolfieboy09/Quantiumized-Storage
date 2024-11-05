@@ -28,5 +28,17 @@ public class QSItemTagsProvider extends ItemTagsProvider {
 
       tag(QSItemTags.ITEM_PORT)
               .add(QSItems.ITEM_PORT.get());
+
+      tag(QSItemTags.BASIC_CIRCUIT)
+              .add(QSItems.BASIC_CIRCUIT.get());
+
+      tag(QSItemTags.ADVANCED_CIRCUIT)
+              .add(QSItems.ADVANCED_CIRCUIT.get());
+
+      tag(QSItemTags.ELITE_CIRCUIT)
+              .add(QSItems.ELITE_CIRCUIT.get());
+
+      tag(QSItemTags.ULTIMATE_CIRCUIT)
+              .add(QSItems.ULTIMATE_CIRCUIT.get());
     }
 }

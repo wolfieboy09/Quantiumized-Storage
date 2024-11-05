@@ -3,9 +3,12 @@
   "block.qstorage.storage_matrix": "Storage Matrix",
   "creative_tab.qstorage.block_group": "QS Blocks",
   "creative_tab.qstorage.item_group": "QS Items",
+  "item.qstorage.advanced_circuit": "Advanced Circuit",
   "item.qstorage.advanced_storage_disk": "Advanced Storage Disk",
+  "item.qstorage.basic_circuit": "Basic Circuit",
   "item.qstorage.basic_storage_disk": "Basic Storage Disk",
   "item.qstorage.data_crystal": "Data Crystal",
+  "item.qstorage.elite_circuit": "Elite Circuit",
   "item.qstorage.item_port": "Item Port",
   "item.qstorage.multi_dimensional_storage_disk": "Multi Dimensional Storage Disk",
   "item.qstorage.quantum_storage_disk": "Quantum Storage Disk",
@@ -13,5 +16,6 @@
   "item.qstorage.steel_casing": "Steel Casing",
   "item.qstorage.steel_ingot": "Steel Ingot",
   "item.qstorage.steel_screw": "Steel Screw",
-  "item.qstorage.superior_storage_disk": "Superior Storage Disk"
+  "item.qstorage.superior_storage_disk": "Superior Storage Disk",
+  "item.qstorage.ultimate_circuit": "Ultimate Circuit"
 }
