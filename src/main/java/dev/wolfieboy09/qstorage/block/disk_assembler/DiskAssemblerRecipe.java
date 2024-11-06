@@ -17,9 +17,7 @@ import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 public record DiskAssemblerRecipe(
@@ -33,29 +31,26 @@ public record DiskAssemblerRecipe(
 ) implements Recipe<RecipeWrapper>, RecipeType<DiskAssemblerRecipe> {
 
     @Override
-    public boolean matches(RecipeWrapper recipeWrapper, Level level) {
-        ItemStack[] mainItems = {recipeWrapper.getItem(0), recipeWrapper.getItem(1), recipeWrapper.getItem(2)};
-        List<Predicate<ItemStack>> toTest = Arrays.asList(diskPort, diskCasing, screws);
-
-        for (Predicate<ItemStack> test : toTest) {
-            if (Arrays.stream(mainItems).noneMatch(test)) {
-                return false;
+    public boolean matches(RecipeWrapper input, Level level) {
+        boolean extrasMatch = !this.extras.isEmpty();
+        for (Ingredient extra : this.extras) {
+            if (!extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_1))
+                && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_2))
+                && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_3))
+                && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_4))) {
+                extrasMatch = false;
             }
         }
-
-        for (int i = 3; i <= 6; i++) {
-            ItemStack extraItem = recipeWrapper.getItem(i);
-            if (extras.stream().noneMatch(extra -> extra.test(extraItem))) {
-                return false;
-            }
-        }
-        return true;
+        
+        return this.diskPort.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_1))
+            && this.diskCasing.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_2))
+            && this.screws.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_3))
+            && extrasMatch;
     }
-
 
     @Override
     public @NotNull ItemStack assemble(RecipeWrapper recipeWrapper, HolderLookup.Provider provider) {
-        return this.result.copy();
+        return getResultItem(provider);
     }
 
     @Override
