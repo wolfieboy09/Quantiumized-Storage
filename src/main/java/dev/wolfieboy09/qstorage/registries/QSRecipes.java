@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
+import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverRecipe;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.Recipe;
@@ -18,6 +19,9 @@ public class QSRecipes {
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<DiskAssemblerRecipe>> DISK_ASSEMBLER_TYPE = registerRecipeType("disk_assembly");
     public static final DeferredHolder<RecipeSerializer<?>, DiskAssemblerRecipe.Serializer> DISK_ASSEMBLER_SERIALIZER = SERALIZERS.register("disk_assembly", DiskAssemblerRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CircuitEngraverRecipe>> CIRCUIT_ENGRAVER_TYPE = registerRecipeType("circuit_engraver");
+    public static final DeferredHolder<RecipeSerializer<?> , CircuitEngraverRecipe.Serializer> CIRCUIT_ENGRAVER_SERIALIZER = SERALIZERS.register("circuit_engraver", CircuitEngraverRecipe.Serializer::new);
 
     public static void register(IEventBus bus) {
         SERALIZERS.register(bus);
