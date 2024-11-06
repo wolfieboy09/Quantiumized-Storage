@@ -38,7 +38,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private boolean isValidRecipe = false;
     
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
-        super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, getEnergyCapacity(), 1000, 0);
+        super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
     }
     
     @Override
@@ -76,13 +76,13 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
             if (this.crafting_ticks < timeRequired) {
                 this.crafting_ticks++;
                 this.progress = getProgress();
-                QuantiumizedStorage.LOGGER.debug("Progress: {}", this.progress);
+                this.energyStorage.removeEnergy(this.recipe.energyCost() / 100);
             }
             
             // If progress reaches 100%, complete the crafting
             if (this.progress >= 100) {
                 // Consume energy and input items
-                this.energyStorage.removeEnergy(this.recipe.energyCost()); // Extract energy here upon successful crafting
+                // this.energyStorage.removeEnergy(this.recipe.energyCost()); // Extract energy here upon successful crafting
                 consumeInputItems();
                 
                 // Place result in output slot
@@ -130,7 +130,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
             QSRecipes.DISK_ASSEMBLER_TYPE.get(),
                         input,
                         this.level
-            ).orElseGet(()->null);
+            ).orElse(null);
         if (recipeFound == null) return false;
         DiskAssemblerRecipe recipe = recipeFound.value();
         boolean matches = recipe.matches(input, this.level);
@@ -179,11 +179,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
 
     @Override
     public boolean canReceive() {
-        return true;
-    }
-
-    public static int getEnergyCapacity() {
-        return 20000;
+        return this.energyStorage.canReceive();
     }
 
     public EnergyStorage getEnergyHandler(@Nullable Direction side) {
@@ -196,22 +192,6 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         return this.inventory;
     }
 
-
-    // Crafting land
-    public void craftDisk() {
-        if (level == null) return;
-        ItemStack stack = inventory.getStackInSlot(0);
-
-    }
-
-    private boolean isCrafting() {
-        return this.crafting_ticks > 0;
-    }
-
-    private void resetCrafting() {
-        crafting_ticks = 0;
-        energy_required = 0;
-    }
 
     public SimpleContainer getInputContainer() {
         SimpleContainer container = new SimpleContainer(7);
