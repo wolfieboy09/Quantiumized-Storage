@@ -156,8 +156,9 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         @Override
         protected void onContentsChanged(int slot) {
             if (slot < 7) {
-                resetProgress();
-                setIsValidRecipe(checkRecipe());
+                boolean isValidRecipe = checkRecipe();
+                if (!isValidRecipe) resetProgress();
+                setIsValidRecipe(isValidRecipe);
             }
             setChanged();
         }
