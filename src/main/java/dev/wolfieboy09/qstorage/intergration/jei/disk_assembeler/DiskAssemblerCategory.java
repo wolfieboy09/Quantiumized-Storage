@@ -83,18 +83,4 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
             recipe.result()
         );
     }
-
-    @Override
-    public void draw(DiskAssemblerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        // get correct numbers
-        // graphics.fill(
-        //        150,
-        //        100 - (20000 / 10),
-        //        154,
-        //        65,
-        //        0xFFCC2222
-        //);
-
-        graphics.drawCenteredString(Minecraft.getInstance().font, "Energy Cost: " + FormattingUtil.formatNumber(recipe.energyCost() * recipe.timeInTicks()) + " FE", 57, 65, 0xFFFFFFFF);
-    }
 }
