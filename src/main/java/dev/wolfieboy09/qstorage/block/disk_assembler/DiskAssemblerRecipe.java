@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -21,9 +20,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public record DiskAssemblerRecipe(
-        Ingredient diskPort,
-        Ingredient diskCasing,
-        Ingredient screws,
+        List<Ingredient> mainItems,
         List<Ingredient> extras,
         int energyCost,
         int timeInTicks,
@@ -33,6 +30,7 @@ public record DiskAssemblerRecipe(
     @Override
     public boolean matches(RecipeWrapper input, Level level) {
         boolean extrasMatch = !this.extras.isEmpty();
+        boolean ingredientsMatch = !this.mainItems.isEmpty();
         for (Ingredient extra : this.extras) {
             if (!extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_1))
                 && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_2))
@@ -41,11 +39,16 @@ public record DiskAssemblerRecipe(
                 extrasMatch = false;
             }
         }
+
+        for (Ingredient extra : this.mainItems) {
+            if (!extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_1))
+                    && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_2))
+                    && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_3))) {
+                ingredientsMatch = false;
+            }
+        }
         
-        return this.diskPort.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_1))
-            && this.diskCasing.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_2))
-            && this.screws.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_3))
-            && extrasMatch;
+        return extrasMatch && ingredientsMatch;
     }
 
     @Override
@@ -76,9 +79,7 @@ public record DiskAssemblerRecipe(
     public static class Serializer implements RecipeSerializer<DiskAssemblerRecipe> {
         private static final MapCodec<DiskAssemblerRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 builder -> builder.group(
-                        Ingredient.CODEC.fieldOf("port").forGetter(DiskAssemblerRecipe::diskPort),
-                        Ingredient.CODEC.fieldOf("casing").forGetter(DiskAssemblerRecipe::diskCasing),
-                        Ingredient.CODEC.fieldOf("screws").forGetter(DiskAssemblerRecipe::screws),
+                        Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(DiskAssemblerRecipe::mainItems),
                         Ingredient.CODEC.listOf().fieldOf("extras").forGetter(DiskAssemblerRecipe::extras),
                         Codec.INT.fieldOf("energy").forGetter(DiskAssemblerRecipe::energyCost),
                         Codec.INT.fieldOf("ticks").forGetter(DiskAssemblerRecipe::timeInTicks),
@@ -86,10 +87,8 @@ public record DiskAssemblerRecipe(
                 ).apply(builder, DiskAssemblerRecipe::new)
         );
 
-        private static final StreamCodec<RegistryFriendlyByteBuf, DiskAssemblerRecipe> STREAM_CODEC = NeoForgeStreamCodecs.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::diskPort,
-                Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::diskCasing,
-                Ingredient.CONTENTS_STREAM_CODEC, DiskAssemblerRecipe::screws,
+        private static final StreamCodec<RegistryFriendlyByteBuf, DiskAssemblerRecipe> STREAM_CODEC = StreamCodec.composite(
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list(3)), DiskAssemblerRecipe::mainItems,
                 Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list(4)), DiskAssemblerRecipe::extras,
                 ByteBufCodecs.INT, DiskAssemblerRecipe::energyCost,
                 ByteBufCodecs.INT, DiskAssemblerRecipe::timeInTicks,

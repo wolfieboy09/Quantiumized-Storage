@@ -61,9 +61,9 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DiskAssemblerRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.diskPort());
-        builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.diskCasing());
-        builder.addSlot(RecipeIngredientRole.INPUT, 35 - guiUOffset, 36 - guiVOffset).addIngredients(recipe.screws());
+        builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.mainItems().getFirst());
+        builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.mainItems().get(1));
+        builder.addSlot(RecipeIngredientRole.INPUT, 35 - guiUOffset, 36 - guiVOffset).addIngredients(recipe.mainItems().get(2));
 
         int i = 0;
         for (Ingredient extra : recipe.extras()) {

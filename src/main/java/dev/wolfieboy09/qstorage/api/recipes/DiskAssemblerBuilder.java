@@ -22,18 +22,14 @@ import java.util.Map;
 @NothingNullByDefault
 public class DiskAssemblerBuilder implements RecipeBuilder {
     protected final ItemStack result;
-    protected final Ingredient diskPort;
-    protected final Ingredient diskCasing;
-    protected final Ingredient screws;
+    protected final List<Ingredient> mainIngredients;
     protected final List<Ingredient> extras;
     protected final int energyCost;
     protected final int timeInTicks;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public DiskAssemblerBuilder(Ingredient diskPort, Ingredient diskCasing, Ingredient screws, List<Ingredient> extras, int energyCost, int timeInTicks, ItemStack result) {
-        this.diskPort = diskPort;
-        this.diskCasing = diskCasing;
-        this.screws = screws;
+    public DiskAssemblerBuilder(List<Ingredient> mainIngredients, List<Ingredient> extras, int energyCost, int timeInTicks, ItemStack result) {
+        this.mainIngredients = mainIngredients;
         this.extras = extras;
         this.energyCost = energyCost;
         this.timeInTicks = timeInTicks;
@@ -64,11 +60,11 @@ public class DiskAssemblerBuilder implements RecipeBuilder {
                 .rewards(AdvancementRewards.Builder.recipe(id))
                 .requirements(AdvancementRequirements.Strategy.OR);
         this.criteria.forEach(advancement::addCriterion);
-        DiskAssemblerRecipe recipe = new DiskAssemblerRecipe(this.diskPort, this.diskCasing, this.screws, this.extras, this.energyCost, this.timeInTicks, this.result);
+        DiskAssemblerRecipe recipe = new DiskAssemblerRecipe(this.mainIngredients, this.extras, this.energyCost, this.timeInTicks, this.result);
         output.accept(id, recipe, advancement.build(id.withPrefix("recipes/")));
     }
 
-    public static DiskAssemblerBuilder create(Ingredient diskPort, Ingredient diskCasing, Ingredient screws, List<Ingredient> extras, int energyCost, int timeInTicks, ItemStack result) {
-        return new DiskAssemblerBuilder(diskPort, diskCasing, screws, extras, energyCost, timeInTicks, result);
+    public static DiskAssemblerBuilder create(List<Ingredient> mainIngredients, List<Ingredient> extras, int energyCost, int timeInTicks, ItemStack result) {
+        return new DiskAssemblerBuilder(mainIngredients, extras, energyCost, timeInTicks, result);
     }
 }
