@@ -12,6 +12,7 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +22,11 @@ public class QSRecipeProvider extends RecipeProvider {
     }
 
     private static @NotNull @Unmodifiable List<Ingredient> listedIngredients(ItemLike @NotNull ... ingredients) {
-        return List.of(Ingredient.of(ingredients));
+        List<Ingredient> list = new ArrayList<>(List.of());
+        for (ItemLike item : ingredients) {
+            list.add(Ingredient.of(item));
+        }
+        return list;
     }
 
     @Override
