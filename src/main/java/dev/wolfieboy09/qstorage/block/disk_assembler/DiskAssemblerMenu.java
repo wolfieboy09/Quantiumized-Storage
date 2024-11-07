@@ -29,14 +29,12 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
     private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    private static final int TE_INVENTORY_ROW_COUNT = 2;
-    private static final int TE_INVENTORY_COLUMN_COUNT = 3;
 
     public DiskAssemblerMenu(int id, BlockPos pos, Inventory playerInventory, Player playerIn) {
         this(id, pos, playerInventory, playerIn, new SimpleContainerData(4));
     }
 
-    public DiskAssemblerMenu(int id, BlockPos pos, Inventory playerInventory, Player player, ContainerData containerData) {
+    public DiskAssemblerMenu(int id, BlockPos pos, Inventory playerInventory, @NotNull Player player, ContainerData containerData) {
         super(QSMenuTypes.DISK_ASSEMBLER.get(), id);
         addDataSlots(containerData);
         this.level = player.level();

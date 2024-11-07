@@ -97,8 +97,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
             
             // If progress reaches 100%, complete the crafting
             if (this.progress >= 100) {
-                // Consume energy and input items
-                // this.energyStorage.removeEnergy(this.recipe.energyCost()); // Extract energy here upon successful crafting
+                // Consume input items
                 consumeInputItems();
                 
                 // Place result in output slot
@@ -213,14 +212,14 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     public SimpleContainer getInputContainer() {
         SimpleContainer container = new SimpleContainer(7);
         for (int i = 0; i < 7; i++) {
-            container.setItem(i, inventory.getStackInSlot(i));
+            container.setItem(i, this.inventory.getStackInSlot(i));
         }
         return container;
     }
 
     public SimpleContainer getOutputContainer() {
         SimpleContainer container = new SimpleContainer(1);
-        container.setItem(0, inventory.getStackInSlot(inventory.getSlots() - 1));
+        container.setItem(0, this.inventory.getStackInSlot(this.inventory.getSlots() - 1));
         return container;
     }
     
