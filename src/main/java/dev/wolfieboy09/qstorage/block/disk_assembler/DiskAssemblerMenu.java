@@ -116,6 +116,14 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, QSBlocks.DISK_ASSEMBLER.get());
     }
 
+    public int getTotalProgress() {
+        return this.data.get(2);
+    }
+
+    public int getCurrentProgress() {
+        return this.data.get(1);
+    }
+
     @Override
     public int getEnergy() {
         return this.data.get(0);

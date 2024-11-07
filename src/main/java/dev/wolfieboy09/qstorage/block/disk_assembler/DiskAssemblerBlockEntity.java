@@ -15,6 +15,8 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -36,6 +38,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private int energy_required = 0;
     private DiskAssemblerRecipe recipe = null;
     private boolean isValidRecipe = false;
+    private final ContainerData containerData = new SimpleContainerData(3);
     
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
@@ -45,13 +48,25 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     public @NotNull Component getDisplayName() {
         return TITLE;
     }
+
+    private void updateContainer() {
+        this.containerData.set(0, this.energyStorage.getEnergyStored());
+        this.containerData.set(1, this.getProgress());
+        this.containerData.set(2, this.recipe == null ? 0 : this.recipe.timeInTicks());
+    }
     
     @Override
     public @Nullable AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-        this.energyData.set(0, this.energyStorage.getEnergyStored());
-        return new DiskAssemblerMenu(id, this.getBlockPos(), playerInv, player, this.energyData);
+        updateContainer();
+        return new DiskAssemblerMenu(id, this.getBlockPos(), playerInv, player, this.containerData);
     }
-    
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        updateContainer();
+    }
+
     public void tick() {
         if (this.level == null || getInputContainer().isEmpty()) return;
         
@@ -77,6 +92,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
                 this.crafting_ticks++;
                 this.progress = getProgress();
                 this.energyStorage.removeEnergy(this.recipe.energyCost() / 100);
+                setChanged();
             }
             
             // If progress reaches 100%, complete the crafting
@@ -99,6 +115,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     }
     
     private int getProgress() {
+        if (this.recipe == null) return 0;
         return (int) (this.crafting_ticks / (float) this.recipe.timeInTicks() * 100);
     }
     
@@ -120,7 +137,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private boolean checkRecipe(){
     //    Get the input items
         if (this.level == null) return false;
-        var inputHandler = new ItemStackHandler(7);
+        ItemStackHandler inputHandler = new ItemStackHandler(7);
         for (int i = 0; i < 7; i++) {
             inputHandler.setStackInSlot(i, this.inventory.getStackInSlot(i));
         }
@@ -218,7 +235,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     }
     
     private void loadRecipeFromNBT(CompoundTag recipeTag) {
-        var recipe = Recipe.CODEC.parse(NbtOps.INSTANCE, recipeTag).getOrThrow();
+        Recipe<?> recipe = Recipe.CODEC.parse(NbtOps.INSTANCE, recipeTag).getOrThrow();
         if (recipe instanceof DiskAssemblerRecipe diskAssemblerRecipe) {
             this.recipe = diskAssemblerRecipe;
         }

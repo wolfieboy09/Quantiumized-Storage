@@ -35,7 +35,7 @@ public class QSRecipeProvider extends RecipeProvider {
                 listedIngredients(QSItems.ITEM_PORT, QSItems.STEEL_CASING, QSItems.STEEL_SCREW),
                 listedIngredients(QSItems.DATA_CRYSTAL, QSItems.BASIC_CIRCUIT),
                 2000,
-                20,
+                60,
                 new ItemStack(QSItems.BASIC_ITEM_DISK.get())
         ).save(output);
     }
