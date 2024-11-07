@@ -95,9 +95,9 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
-    runtimeOnly "curse.maven:powah-rearchitected-633483:5735677"
-    runtimeOnly "curse.maven:cloth-config-348521:5729127"
-    runtimeOnly "curse.maven:jade-324717:5846105"
+    localRuntime "curse.maven:powah-rearchitected-633483:5735677"
+    localRuntime "curse.maven:cloth-config-348521:5729127"
+    localRuntime "curse.maven:jade-324717:5846105"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
