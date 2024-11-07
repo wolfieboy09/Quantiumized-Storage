@@ -16,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implements IEnergyStorage {
     protected final ExtendedEnergyStorage energyStorage;
-    protected ContainerData energyData = new ContainerData() {
+    protected ContainerData energyContainer = new ContainerData() {
         private int energy = 0;
         @Override
         public int get(int i) {
@@ -135,6 +135,6 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     @Override
     public void setChanged() {
         super.setChanged();
-        this.energyData.set(0, this.energyStorage.getEnergyStored());
+        this.energyContainer.set(0, this.energyStorage.getEnergyStored());
     }
 }

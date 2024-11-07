@@ -51,8 +51,8 @@ public class StorageMatrixBlockEntity extends AbstractEnergyBlockEntity implemen
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        this.energyData.set(0, this.energyStorage.getEnergyStored());
-        return new StorageMatrixMenu(containerId, this.getBlockPos(), playerInventory, player, this.energyData);
+        this.energyContainer.set(0, this.energyStorage.getEnergyStored());
+        return new StorageMatrixMenu(containerId, this.getBlockPos(), playerInventory, player, this.energyContainer);
     }
     public EnergyStorage getEnergyHandler(@Nullable Direction side) {
         if (side == null) return this.getEnergyStorage();
