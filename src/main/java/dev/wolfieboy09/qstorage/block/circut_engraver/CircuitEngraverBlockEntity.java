@@ -14,9 +14,4 @@ public class CircuitEngraverBlockEntity extends AbstractEnergyBlockEntity {
     public boolean canExtract() {
         return false;
     }
-
-    @Override
-    public boolean canReceive() {
-        return this.energyStorage.canExtract();
-    }
 }

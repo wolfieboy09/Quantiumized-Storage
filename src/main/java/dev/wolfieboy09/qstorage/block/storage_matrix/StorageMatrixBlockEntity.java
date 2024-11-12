@@ -45,11 +45,6 @@ public class StorageMatrixBlockEntity extends AbstractEnergyBlockEntity implemen
     }
 
     @Override
-    public boolean canReceive() {
-        return this.energyStorage.canReceive();
-    }
-
-    @Override
     public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
         this.energyContainer.set(0, this.energyStorage.getEnergyStored());
         return new StorageMatrixMenu(containerId, this.getBlockPos(), playerInventory, player, this.energyContainer);

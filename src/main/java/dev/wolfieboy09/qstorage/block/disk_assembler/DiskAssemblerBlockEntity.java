@@ -193,11 +193,6 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         return false;
     }
 
-    @Override
-    public boolean canReceive() {
-        return this.energyStorage.canReceive();
-    }
-
     public EnergyStorage getEnergyHandler(@Nullable Direction side) {
         if (side == null) return this.getEnergyStorage(); // for special cases
         Direction blockFacing = this.getBlockState().getValue(DiskAssemblerBlock.FACING);
