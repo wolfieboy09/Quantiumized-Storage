@@ -20,12 +20,12 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
         private int energy = 0;
         @Override
         public int get(int i) {
-            return energy;
+            return this.energy;
         }
         
         @Override
         public void set(int i, int i1) {
-            energy = i1;
+            this.energy = i1;
         }
         
         @Override
@@ -136,5 +136,15 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     public void setChanged() {
         super.setChanged();
         this.energyContainer.set(0, this.energyStorage.getEnergyStored());
+    }
+
+    @Override
+    public boolean canReceive() {
+        return this.energyStorage.canReceive();
+    }
+
+    @Override
+    public boolean canExtract() {
+        return this.energyStorage.canExtract();
     }
 }
