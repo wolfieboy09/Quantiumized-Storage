@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
+import dev.wolfieboy09.qstorage.api.slots.EnergySlot;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyContainerMenu;
 import dev.wolfieboy09.qstorage.block.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
@@ -78,6 +79,7 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
         addSlot(new SlotItemHandler(itemStackHandler, 6, 134, 45));
 
         addSlot(new ItemResultSlot(itemStackHandler, 7, 80, 36));
+        addSlot(new EnergySlot(itemStackHandler, 8, 134, 6));
     }
 
     @Override

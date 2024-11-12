@@ -22,7 +22,9 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +69,25 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         updateContainer();
     }
 
+    private void doEnergySlot() {
+        ItemStack energySlotStack = this.inventory.getStackInSlot(8);
+        if (energySlotStack.isEmpty()) return;
+
+        IEnergyStorage itemEnergyStorage = energySlotStack.getCapability(Capabilities.EnergyStorage.ITEM);
+        if (itemEnergyStorage == null || !itemEnergyStorage.canExtract()) return;
+
+        int itemEnergyStored = itemEnergyStorage.getEnergyStored();
+        int transferRate = Math.min(itemEnergyStored, this.energyStorage.getMaxReceive());
+        int energyToExtract = Math.min(transferRate, this.energyStorage.getMaxEnergyStored() - this.energyStorage.getEnergyStored());
+
+        if (energyToExtract > 0) {
+            int extractedEnergy = itemEnergyStorage.extractEnergy(energyToExtract, false);
+            this.energyStorage.addEnergy(extractedEnergy);
+        }
+    }
+
     public void tick() {
+        doEnergySlot();
         if (this.level == null || getInputContainer().isEmpty()) return;
         
         // Validate the recipe
@@ -168,7 +188,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         public static final int OUTPUT_SLOT = 7;
     }
 
-    private final ItemStackHandler inventory = new ItemStackHandler(8) {
+    private final ItemStackHandler inventory = new ItemStackHandler(9) {
         @Override
         protected void onContentsChanged(int slot) {
             if (slot < 7) {
@@ -215,6 +235,12 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     public SimpleContainer getOutputContainer() {
         SimpleContainer container = new SimpleContainer(1);
         container.setItem(0, this.inventory.getStackInSlot(this.inventory.getSlots() - 1));
+        return container;
+    }
+
+    public SimpleContainer getEnergySlot() {
+        SimpleContainer container = new SimpleContainer(1);
+        container.setItem(0, this.inventory.getStackInSlot(8));
         return container;
     }
     

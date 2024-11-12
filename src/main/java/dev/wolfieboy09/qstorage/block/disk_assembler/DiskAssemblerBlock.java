@@ -75,8 +75,10 @@ public class DiskAssemblerBlock extends AbstractBaseEntityBlock {
             if (be instanceof DiskAssemblerBlockEntity blockEntity) {
                 SimpleContainer inputInv = blockEntity.getInputContainer();
                 SimpleContainer outputInv = blockEntity.getOutputContainer();
+                SimpleContainer energySlot = blockEntity.getEnergySlot();
                 Containers.dropContents(level, pos, inputInv);
                 Containers.dropContents(level, pos, outputInv);
+                Containers.dropContents(level, pos, energySlot);
             }
             super.onRemove(state, level, pos, newState, movedByPiston);
         } else {
