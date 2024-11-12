@@ -40,5 +40,8 @@ public class QSItemTagsProvider extends ItemTagsProvider {
 
       tag(QSItemTags.ULTIMATE_CIRCUIT)
               .add(QSItems.ULTIMATE_CIRCUIT.get());
+
+      tag(QSItemTags.QUANTUM_CIRCUIT)
+              .add(QSItems.QUANTUM_CIRCUIT.get());
     }
 }

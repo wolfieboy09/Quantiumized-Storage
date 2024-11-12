@@ -19,10 +19,15 @@ public class QSItemTags {
 
 
     // Mod Tags
-    public static final TagKey<Item> DATA_CRYSTAL = ItemTags.create(ResourceHelper.asResource("data_crystals"));
-    public static final TagKey<Item> ITEM_PORT = ItemTags.create(ResourceHelper.asResource("item_ports"));
+    public static final TagKey<Item> DATA_CRYSTAL = modTag("crystals/data");
+    public static final TagKey<Item> ITEM_PORT = modTag("ports/item");
+    public static final TagKey<Item> QUANTUM_CIRCUIT = modTag("circuits/quantum");
 
     private static @NotNull TagKey<Item> globalTag(String path) {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
+    }
+
+    private static TagKey<Item> modTag(String path) {
+        return ItemTags.create(ResourceHelper.asResource(path));
     }
 }
