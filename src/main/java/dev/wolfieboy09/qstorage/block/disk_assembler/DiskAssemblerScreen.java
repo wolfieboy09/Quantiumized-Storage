@@ -31,7 +31,7 @@ public class DiskAssemblerScreen extends AbstractContainerScreen<DiskAssemblerMe
 
         int progress = this.menu.getCurrentProgress();
         int recipeTotalProgress = this.menu.getTotalProgress();
-        int width = progress * 30 / recipeTotalProgress;
+        int width = recipeTotalProgress == 0 ? 0 : progress * 30 / recipeTotalProgress;
         graphics.blit(BACKGROUND_LOCATION, this.leftPos + 52, this.topPos + 25, 176, 0, width, 34);
     }
 
