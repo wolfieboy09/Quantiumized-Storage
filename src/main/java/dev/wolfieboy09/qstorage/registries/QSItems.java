@@ -44,5 +44,4 @@ public class QSItems {
     private static @NotNull DeferredItem<Item> simpleItem(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties()));
     }
-
 }
