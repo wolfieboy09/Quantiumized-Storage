@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlock;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -12,8 +13,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+@MethodsReturnNonnullByDefault
 public class QSBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(QuantiumizedStorage.MOD_ID);
     public static final DeferredRegister.Items BLOCK_ITEMS = DeferredRegister.createItems(QuantiumizedStorage.MOD_ID);
@@ -25,13 +28,19 @@ public class QSBlocks {
 
     public static final DeferredBlock<StorageMatrixBlock> STORAGE_MATRIX = registerBlock(
             "storage_matrix",
-            () -> new StorageMatrixBlock(BlockBehaviour.Properties.of())
+            StorageMatrixBlock::new
     );
 
     public static final DeferredBlock<CircuitEngraverBlock> CIRCUIT_ENGRAVER = registerBlock(
             "circuit_engraver",
-            () -> new CircuitEngraverBlock(BlockBehaviour.Properties.of())
+            CircuitEngraverBlock::new
     );
+
+    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
+        DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));
+        registerBlockItem(name, toReturn);
+        return toReturn;
+    }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
