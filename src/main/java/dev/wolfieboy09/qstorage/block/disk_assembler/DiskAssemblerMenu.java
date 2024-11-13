@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
@@ -54,19 +55,6 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
         final int PLAYER_INVENTORY_XPOS = 8;
         final int PLAYER_INVENTORY_YPOS = 84;
 
-        for (int x = 0; x < HOTBAR_SLOT_COUNT; x++) {
-            addSlot(new SlotItemHandler(playerInvWrapper, x, HOTBAR_XPOS + SLOT_X_SPACING * x, HOTBAR_YPOS));
-        }
-
-        for (int y = 0; y < PLAYER_INVENTORY_ROW_COUNT; y++) {
-            for (int x = 0; x < PLAYER_INVENTORY_COLUMN_COUNT; x++) {
-                int slotNumber = HOTBAR_SLOT_COUNT + y * PLAYER_INVENTORY_COLUMN_COUNT + x;
-                int xpos = PLAYER_INVENTORY_XPOS + x * SLOT_X_SPACING;
-                int ypos = PLAYER_INVENTORY_YPOS + y * SLOT_Y_SPACING;
-                addSlot(new SlotItemHandler(playerInvWrapper, slotNumber, xpos, ypos));
-            }
-        }
-
         ItemStackHandler itemStackHandler = be.getInventory();
 
         addSlot(new SlotItemHandler(itemStackHandler, 0, 17, 27));
@@ -80,6 +68,19 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
 
         addSlot(new ItemResultSlot(itemStackHandler, 7, 80, 36));
         addSlot(new EnergySlot(itemStackHandler, 8, 134, 6));
+
+        for (int x = 0; x < HOTBAR_SLOT_COUNT; x++) {
+            addSlot(new SlotItemHandler(playerInvWrapper, x, HOTBAR_XPOS + SLOT_X_SPACING * x, HOTBAR_YPOS));
+        }
+
+        for (int y = 0; y < PLAYER_INVENTORY_ROW_COUNT; y++) {
+            for (int x = 0; x < PLAYER_INVENTORY_COLUMN_COUNT; x++) {
+                int slotNumber = HOTBAR_SLOT_COUNT + y * PLAYER_INVENTORY_COLUMN_COUNT + x;
+                int xpos = PLAYER_INVENTORY_XPOS + x * SLOT_X_SPACING;
+                int ypos = PLAYER_INVENTORY_YPOS + y * SLOT_Y_SPACING;
+                addSlot(new SlotItemHandler(playerInvWrapper, slotNumber, xpos, ypos));
+            }
+        }
     }
 
     @Override
@@ -89,12 +90,18 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
 
-        if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-                    + 7, false)) {
+        if (sourceStack.getCapability(Capabilities.EnergyStorage.ITEM) != null) {
+            if(!moveItemStackTo(sourceStack, 8, TE_INVENTORY_FIRST_SLOT_INDEX + 9, false)) {
                 return ItemStack.EMPTY;
             }
-        } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + 7) {
+        }
+
+        if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
+            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
+                    + 8, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + 8) {
             if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
                 return ItemStack.EMPTY;
             }
