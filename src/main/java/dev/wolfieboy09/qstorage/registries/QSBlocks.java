@@ -2,6 +2,8 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlock;
+import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlock;
+import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -21,7 +23,7 @@ public class QSBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(QuantiumizedStorage.MOD_ID);
     public static final DeferredRegister.Items BLOCK_ITEMS = DeferredRegister.createItems(QuantiumizedStorage.MOD_ID);
 
-    public static final DeferredBlock<DiskAssemblerBlock> DISK_ASSEMBLER = registerBlock(
+    public static final DeferredBlock<DiskAssemblerBlock> DISK_ASSEMBLER = registerBlockWithProperties(
             "disk_assembler",
             () -> new DiskAssemblerBlock(BlockBehaviour.Properties.of().noOcclusion())
     );
@@ -36,13 +38,18 @@ public class QSBlocks {
             CircuitEngraverBlock::new
     );
 
+    public static final DeferredBlock<CreativeEnergyBlock> CREATIVE_ENERGY_BLOCK = registerBlock(
+            "creative_energy_block",
+            CreativeEnergyBlock::new
+    );
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));
         registerBlockItem(name, toReturn);
         return toReturn;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
+    private static <T extends Block> DeferredBlock<T> registerBlockWithProperties(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
         return toReturn;

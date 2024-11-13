@@ -2,7 +2,6 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlockEntity;
-import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -16,6 +15,6 @@ public class QSCapabilities {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, QSBlockEntities.DISK_ASSEMBLER.get(), DiskAssemblerBlockEntity::getEnergyHandler);
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, QSBlockEntities.DISK_ASSEMBLER.get(), (block, dir) -> block.getInventoryHandler());
 
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, QSBlockEntities.STORAGE_MATRIX.get(), StorageMatrixBlockEntity::getEnergyHandler);
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, QSBlockEntities.CREATIVE_ENERGY_BLOCK.get(), (block, dir) -> block.getEnergyHandler());
     }
 }
