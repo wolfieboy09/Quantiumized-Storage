@@ -9,18 +9,18 @@ import net.neoforged.neoforge.energy.EnergyStorage;
 public class ExtendedEnergyStorage extends EnergyStorage {
     private final BlockEntity be;
     /**
-     * Creates a new ExtendedEnergyStorage instance with the specified capacity.
+     * Creates a new {@link ExtendedEnergyStorage} instance with the specified capacity.
      *
      * @param capacity the maximum amount of energy that can be stored
      * @param be the block entity associated with this storage
      */
-    public ExtendedEnergyStorage(int capacity,BlockEntity be) {
+    public ExtendedEnergyStorage(int capacity, BlockEntity be) {
         super(capacity);
         this.be = be;
     }
 
     /**
-     * Creates a new ExtendedEnergyStorage instance with the specified capacity and maximum transfer amount.
+     * Creates a new {@link ExtendedEnergyStorage} instance with the specified capacity and maximum transfer amount.
      *
      * @param capacity the maximum amount of energy that can be stored
      * @param maxTransfer the maximum amount of energy that can be transferred in a single operation
@@ -30,14 +30,22 @@ public class ExtendedEnergyStorage extends EnergyStorage {
         super(capacity, maxTransfer);
         this.be = be;
     }
-    
+
+    /**
+     * Creates a new {@link ExtendedEnergyStorage} instance with the specified capacity, maximum receive amount, and maximum extract amount.
+     *
+     * @param capacity The maximum amount of energy that can be stored
+     * @param maxReceive The maximum amount of energy that can be received in a single operation
+     * @param maxExtract The maximum amount of energy that can be extracted in a single operation
+     * @param be The block entity associated with this storage
+     */
     public ExtendedEnergyStorage(int capacity, int maxReceive, int maxExtract, BlockEntity be) {
         super(capacity, maxReceive, maxExtract);
         this.be = be;
     }
 
     /**
-     * Creates a new ExtendedEnergyStorage instance with the specified capacity, maximum receive amount, maximum extract amount, and initial energy amount.
+     * Creates a new {@link ExtendedEnergyStorage} instance with the specified capacity, maximum receive amount, maximum extract amount, and initial energy amount.
      *
      * @param capacity the maximum amount of energy that can be stored
      * @param maxReceive the maximum amount of energy that can be received in a single operation
@@ -53,7 +61,7 @@ public class ExtendedEnergyStorage extends EnergyStorage {
     /**
      * Sets the current energy amount to the specified value, clamping it to the range [0, capacity].
      *
-     * @param energy the new energy amount
+     * @param energy The new energy amount
      */
     public void setEnergy(int energy) {
         if(energy < 0)
@@ -117,7 +125,7 @@ public class ExtendedEnergyStorage extends EnergyStorage {
         }
         return toReturn;
     }
-    
+
     public void onEnergyChanged() {
         this.be.setChanged();
     }
