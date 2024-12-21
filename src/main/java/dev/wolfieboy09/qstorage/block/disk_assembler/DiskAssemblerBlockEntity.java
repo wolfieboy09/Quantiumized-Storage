@@ -10,6 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -41,7 +43,9 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private DiskAssemblerRecipe recipe = null;
     private boolean isValidRecipe = false;
     private final ContainerData containerData = new SimpleContainerData(3);
-    
+    private BlockCapabilityCache<IEnergyStorage, @Nullable Direction> capCache;
+
+
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
     }
@@ -118,7 +122,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
             // If progress reaches 100%, complete the crafting
             if (this.progress >= 100) {
                 // Consume input items
-                consumeInputItems();
+                consumeInputItems(recipe);
                 
                 // Place result in output slot
                 if (outputSlotStack.isEmpty()) {
@@ -138,7 +142,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         return (int) (this.crafting_ticks / (float) this.recipe.timeInTicks() * 100);
     }
     
-    private void consumeInputItems() {
+    private void consumeInputItems(DiskAssemblerRecipe recipe) {
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_1).shrink(1);
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_2).shrink(1);
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_3).shrink(1);
@@ -217,6 +221,26 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         if (side == null) return this.getEnergyStorage(); // for special cases
         Direction blockFacing = this.getBlockState().getValue(DiskAssemblerBlock.FACING);
         return side == blockFacing.getOpposite() ? this.getEnergyStorage() : null;
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level instanceof ServerLevel serverLevel) {
+            this.capCache = BlockCapabilityCache.create(
+                    Capabilities.EnergyStorage.BLOCK,
+                    serverLevel,
+                    getBlockPos(),
+                    this.getBlockState().getValue(DiskAssemblerBlock.FACING).getOpposite(),
+                    () -> !this.isRemoved(),
+                    this::onCapInvalidate
+            );
+        }
+    }
+
+    private void onCapInvalidate() {
+        if (level == null) return;
+        level.invalidateCapabilities(getBlockPos());
     }
 
     public ItemStackHandler getInventoryHandler() {

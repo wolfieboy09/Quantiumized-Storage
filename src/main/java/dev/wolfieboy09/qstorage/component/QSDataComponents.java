@@ -1,8 +1,8 @@
 package dev.wolfieboy09.qstorage.component;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
-import dev.wolfieboy09.qstorage.api.records.BaseStorageDisk;
-import dev.wolfieboy09.qstorage.api.records.ItemStorageDiskRecord;
+import dev.wolfieboy09.qstorage.api.components.BaseStorageDisk;
+import dev.wolfieboy09.qstorage.api.components.ItemStorageDiskComponent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
@@ -19,11 +19,11 @@ public class QSDataComponents {
                     .networkSynchronized(BaseStorageDisk.STREAM_CODEC)
     );
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemStorageDiskRecord>> ITEM_STORAGE_DISK_COMPONENT = REGISTRAR.registerComponentType(
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemStorageDiskComponent>> ITEM_STORAGE_DISK_COMPONENT = REGISTRAR.registerComponentType(
             "item_storage_disk",
             builder -> builder
-                    .persistent(ItemStorageDiskRecord.CODEC)
-                    .networkSynchronized(ItemStorageDiskRecord.STREAM_CODEC)
+                    .persistent(ItemStorageDiskComponent.CODEC)
+                    .networkSynchronized(ItemStorageDiskComponent.STREAM_CODEC)
     );
 
     public static void register(IEventBus eventBus) {

@@ -21,9 +21,9 @@ import java.util.Map;
 
 @NothingNullByDefault
 public class DiskAssemblerBuilder implements RecipeBuilder {
-    protected final ItemStack result;
     protected final List<Ingredient> mainIngredients;
     protected final List<Ingredient> extras;
+    protected final ItemStack result;
     protected final int energyCost;
     protected final int timeInTicks;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();

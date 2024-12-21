@@ -14,4 +14,3 @@ import java.lang.annotation.RetentionPolicy;
 @NotNull
 public @interface NothingNullByDefault {
 }
-

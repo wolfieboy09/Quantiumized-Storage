@@ -31,9 +31,4 @@ public class CreativeEnergyBlock extends AbstractBaseEntityBlock {
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new CreativeEnergyBlockEntity(blockPos, blockState);
     }
-
-    @Override
-    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : ((level1, pos, state, blockEntity) -> ((CreativeEnergyBlockEntity) blockEntity).tick());
-    }
 }

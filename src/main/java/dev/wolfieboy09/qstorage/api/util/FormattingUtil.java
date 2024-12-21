@@ -12,5 +12,4 @@ public class FormattingUtil {
             return String.valueOf(number);
         }
     }
-
 }

@@ -84,38 +84,49 @@ public class DiskAssemblerMenu extends AbstractEnergyContainerMenu {
     }
 
     @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
-        Slot sourceSlot = slots.get(index);
-        if (!sourceSlot.hasItem()) return ItemStack.EMPTY;
-        ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
 
-        if (sourceStack.getCapability(Capabilities.EnergyStorage.ITEM) != null) {
-            if(!moveItemStackTo(sourceStack, 8, TE_INVENTORY_FIRST_SLOT_INDEX + 9, false)) {
+        if (slot.hasItem()) {
+            ItemStack stackInSlot = slot.getItem();
+            itemstack = stackInSlot.copy();
+
+            if (stackInSlot.getCapability(Capabilities.EnergyStorage.ITEM) != null) {
+                if (!this.moveItemStackTo(stackInSlot, 8, TE_INVENTORY_FIRST_SLOT_INDEX + 9, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
+            if (index >= VANILLA_SLOT_COUNT && index < slots.size()) {
+                if (!this.moveItemStackTo(stackInSlot, VANILLA_SLOT_COUNT, VANILLA_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT, false)) {
+                    return ItemStack.EMPTY;
+                }
+                slot.onQuickCraft(stackInSlot, itemstack);
+            } else if (index >= VANILLA_FIRST_SLOT_INDEX && index < VANILLA_SLOT_COUNT) {
+                if (!this.moveItemStackTo(stackInSlot, VANILLA_SLOT_COUNT, slots.size(), false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (index >= TE_INVENTORY_FIRST_SLOT_INDEX) {
+                if (!this.moveItemStackTo(stackInSlot, VANILLA_FIRST_SLOT_INDEX, VANILLA_SLOT_COUNT, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
+            if (stackInSlot.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+
+            if (stackInSlot.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
             }
+
+            slot.onTake(player, stackInSlot);
         }
 
-        if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-                    + 8, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + 8) {
-            if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else {
-            QuantiumizedStorage.LOGGER.warn("Invalid slotIndex: {}", index);
-            return ItemStack.EMPTY;
-        }
-        if (sourceStack.getCount() == 0) {
-            sourceSlot.set(ItemStack.EMPTY);
-        } else {
-            sourceSlot.setChanged();
-        }
-        sourceSlot.onTake(playerIn, sourceStack);
-        return copyOfSourceStack;
+        return itemstack;
     }
 
     @Override

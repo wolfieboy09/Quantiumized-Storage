@@ -27,7 +27,7 @@ public class QSItemTags {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
     }
 
-    private static TagKey<Item> modTag(String path) {
+    private static @NotNull TagKey<Item> modTag(String path) {
         return ItemTags.create(ResourceHelper.asResource(path));
     }
 }

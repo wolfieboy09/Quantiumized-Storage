@@ -1,17 +1,24 @@
 package dev.wolfieboy09.qstorage.item;
 
-
-import dev.wolfieboy09.qstorage.api.records.ItemStorageDiskRecord;
+import dev.wolfieboy09.qstorage.api.items.CapacityItemStackHandler;
+import dev.wolfieboy09.qstorage.api.components.BaseStorageDisk;
+import dev.wolfieboy09.qstorage.api.components.ItemStorageDiskComponent;
 import dev.wolfieboy09.qstorage.api.storage.CustomDiskType;
 import dev.wolfieboy09.qstorage.api.storage.IItemStorageDisk;
 import dev.wolfieboy09.qstorage.api.storage.ItemStorageType;
 import dev.wolfieboy09.qstorage.api.storage.StorageType;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 
 /**
@@ -20,9 +27,11 @@ import org.jetbrains.annotations.NotNull;
  * to interact with the storage disk's capacity and type.
  * The storage disk can be created using predefined {@link ItemStorageType} or a custom disk type.
  */
+@ParametersAreNonnullByDefault
 public class ItemStorageDisk extends Item implements IItemStorageDisk {
     private final ItemStorageType storageType;
     private final int capacity;
+    private final CapacityItemStackHandler inventory;
 
     /**
      * Constructor for creating a storage disk with a predefined {@link ItemStorageType}.
@@ -30,9 +39,10 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
      * @param storageType The type of storage for the disk from the {@link ItemStorageType} enum.
      */
     public ItemStorageDisk(@NotNull ItemStorageType storageType) {
-        super(new Properties().stacksTo(1));
+        super(new Properties().stacksTo(1).component(QSDataComponents.ITEM_STORAGE_DISK_COMPONENT, new ItemStorageDiskComponent(new BaseStorageDisk(StorageType.ITEM), storageType, NonNullList.createWithCapacity(storageType.getCapacity()))));
         this.storageType = storageType;
         this.capacity = storageType.getCapacity();
+        this.inventory = new CapacityItemStackHandler(storageType.getCapacity());
     }
 
     /**
@@ -45,6 +55,7 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
         super(new Properties().stacksTo(1));
         this.storageType = storageType;
         this.capacity = capacity;
+        this.inventory = new CapacityItemStackHandler(capacity);
     }
 
     /**
@@ -59,6 +70,7 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
         customType.setColor(diskType.getColor());
         this.storageType = customType;
         this.capacity = diskType.getCapacity();
+        this.inventory = new CapacityItemStackHandler(diskType.getCapacity());
     }
 
     /**
@@ -105,7 +117,7 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
      *
      * @return The data component type for this storage disk.
      */
-    public DataComponentType<ItemStorageDiskRecord> getComponentType() {
+    public DataComponentType<ItemStorageDiskComponent> getComponentType() {
         return QSDataComponents.ITEM_STORAGE_DISK_COMPONENT.get();
     }
 
@@ -114,10 +126,28 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
      * This component holds the data specific to this storage disk.
      *
      * @param stack The item stack representing the storage disk.
-     * @return The {@link ItemStorageDiskRecord} containing the disk's stored data.
+     * @return The {@link ItemStorageDiskComponent} containing the disk's stored data.
      */
-    public ItemStorageDiskRecord getComponent(@NotNull ItemStack stack) {
+    public ItemStorageDiskComponent getComponent(@NotNull ItemStack stack) {
         return stack.get(getComponentType());
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
+        ItemStorageDiskComponent data = stack.get(QSDataComponents.ITEM_STORAGE_DISK_COMPONENT);
+        if (data == null) return;
+        int count = 0;
+        for (ItemStack itemStack : data.contents()) count += itemStack.getCount();
+        tooltip.add(Component.literal(count + " / " + this.capacity));
+    }
+
+    public IItemHandler getInventoryHandler(ItemStack stack) {
+        ItemStorageDiskComponent data = stack.get(QSDataComponents.ITEM_STORAGE_DISK_COMPONENT);
+        if (data == null) return null;
+        NonNullList<ItemStack> contents = data.contents();
+        for (int i = 0; i < contents.size(); i++) this.inventory.setStackInSlot(i, contents.get(i));
+        stack.set(QSDataComponents.ITEM_STORAGE_DISK_COMPONENT, data);
+        return this.inventory;
     }
 }
 

@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qstorage;
 
+import net.minecraft.core.Holder;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -14,6 +15,6 @@ public class Config {
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
-
+        Holder
     }
 }

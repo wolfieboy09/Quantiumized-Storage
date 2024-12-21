@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.api.records;
+package dev.wolfieboy09.qstorage.api.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

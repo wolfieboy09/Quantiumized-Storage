@@ -73,30 +73,24 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
 
     /**
      * Gets called from {@link #saveAdditional}
-     * @param tag
-     * @param registries
+     *
      */
     public void saveExtra(CompoundTag tag, HolderLookup.Provider registries) {}
 
     /**
      * Gets called from {@link #loadAdditional}
-     * @param tag
-     * @param registries
+     *
      */
     protected void loadExtra(CompoundTag tag, HolderLookup.Provider registries) {}
 
     /**
      * Gets called from {@link #getUpdateTag}
-     * @param tag
-     * @param lookupProvider
-     * @return
      */
     public CompoundTag updateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) { return tag; }
 
     /**
      * Gets called from {@link #handleUpdateTag}
-     * @param tag
-     * @param lookupProvider
+     *
      */
     public void handleUpdate(CompoundTag tag, HolderLookup.Provider lookupProvider) {}
 

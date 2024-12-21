@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
 import dev.wolfieboy09.qstorage.registries.*;
+import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
