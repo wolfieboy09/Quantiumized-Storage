@@ -15,6 +15,6 @@ public class Config {
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
-        Holder
+
     }
 }
