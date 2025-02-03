@@ -11,13 +11,13 @@ public class Gas {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Gas> STREAM_CODEC = ByteBufCodecs.registry(QSRegistries.GAS_REGISTRY_KEY);
 
-    private final GasBuilder gasData;
+    private final GasBuilder gasBuilder;
 
-    public Gas(GasBuilder data) {
-       this.gasData = data;
+    public Gas(GasBuilder builder) {
+       this.gasBuilder = builder;
     }
 
     public GasData getGasData() {
-        return this.gasData;
+        return this.gasBuilder;
     }
 }
