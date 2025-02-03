@@ -98,7 +98,7 @@ dependencies {
 
     localRuntime "curse.maven:powah-rearchitected-633483:6143661"
     localRuntime "curse.maven:cloth-config-348521:5729127"
-    localRuntime "curse.maven:jade-324717:6011327"
+    localRuntime "curse.maven:jade-324717:6011258"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
