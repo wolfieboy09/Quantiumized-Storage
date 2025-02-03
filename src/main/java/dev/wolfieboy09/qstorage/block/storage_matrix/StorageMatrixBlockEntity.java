@@ -54,6 +54,10 @@ public class StorageMatrixBlockEntity extends AbstractEnergyBlockEntity implemen
         return side == this.getBlockState().getValue(StorageMatrixBlock.FACING).getOpposite() ? this.getEnergyStorage() : null;
     }
 
+    public ItemStackHandler getInventory() {
+        return this.inventory;
+    }
+
     @Override
     public void saveExtra(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveExtra(tag, registries);
