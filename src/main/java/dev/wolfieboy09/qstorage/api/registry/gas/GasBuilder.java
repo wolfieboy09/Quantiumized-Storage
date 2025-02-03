@@ -29,6 +29,10 @@ public class GasBuilder implements GasData {
         return this;
     }
 
+    /**
+     * Creates the {@link Gas} instance.
+     * @return the {@link Gas} data from the builder.
+     */
     public Gas build() {
         return new Gas(this);
     }
