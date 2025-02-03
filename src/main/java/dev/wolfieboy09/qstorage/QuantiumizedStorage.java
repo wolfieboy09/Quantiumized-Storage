@@ -4,10 +4,9 @@ import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
 import dev.wolfieboy09.qstorage.registries.*;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 @Mod(QuantiumizedStorage.MOD_ID)
@@ -15,7 +14,7 @@ public class QuantiumizedStorage {
     public static final String MOD_ID = "qstorage";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public QuantiumizedStorage(IEventBus modEventBus) {
+    public QuantiumizedStorage(@NotNull IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
 
         QSDataComponents.register(modEventBus);
@@ -25,6 +24,9 @@ public class QuantiumizedStorage {
         QSRecipes.register(modEventBus);
         QSCreativeTab.register(modEventBus);
         QSMenuTypes.register(modEventBus);
+        QSGasses.register(modEventBus);
+
+        modEventBus.addListener(QSEvents::registerRegistries);
 
         // NeoForge.EVENT_BUS.register(this);
 
