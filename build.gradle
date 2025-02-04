@@ -81,12 +81,26 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-    repositories {
-        maven {
-            url "https://cursemaven.com"
-            content {
-                includeGroup "curse.maven"
-            }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        name = "LatvianMaven"
+        url "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.latvian.apps"
+        }
+    }
+
+    maven {
+        name = "JitpackMaven"
+        url 'https://jitpack.io'
+        content {
+            includeGroup "com.github.rtyley"
         }
     }
 }
@@ -99,6 +113,10 @@ dependencies {
     localRuntime "curse.maven:powah-rearchitected-633483:6143661"
     localRuntime "curse.maven:cloth-config-348521:5729127"
     localRuntime "curse.maven:jade-324717:6011258"
+    //localRuntime "curse.maven:probejs-585406:5820894"
+
+    api("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+    interfaceInjectionData("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
