@@ -31,3 +31,17 @@ description='''${mod_description}'''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.qstorage]]
+    modId="kubejs"
+    type="optional"
+    versionRange="[2101.7.2-build.216,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.qstorage]]
+    modId="jei"
+    type="optional"
+    versionRange="[19.21.0.247,)"
+    ordering="NONE"
+    side="CLIENT"
