@@ -24,9 +24,12 @@ public class QuantiumizedStorage {
         QSRecipes.register(modEventBus);
         QSCreativeTab.register(modEventBus);
         QSMenuTypes.register(modEventBus);
+        QSParticleTypes.register(modEventBus);
         QSGasses.register(modEventBus);
 
         modEventBus.addListener(QSEvents::registerRegistries);
+        modEventBus.addListener(QSEvents::particle);
+
 
         // NeoForge.EVENT_BUS.register(this);
 
