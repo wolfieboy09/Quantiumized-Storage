@@ -61,9 +61,15 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DiskAssemblerRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.mainItems().getFirst());
-        builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.mainItems().get(1));
-        builder.addSlot(RecipeIngredientRole.INPUT, 35 - guiUOffset, 36 - guiVOffset).addIngredients(recipe.mainItems().get(2));
+        for (int i = 0; i < recipe.mainItems().size(); i++) {
+            if (i == 0) {
+                builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 27 - guiVOffset).addIngredients(recipe.mainItems().get(i));
+            } else if (i == 1) {
+                builder.addSlot(RecipeIngredientRole.INPUT, 17 - guiUOffset, 45 - guiVOffset).addIngredients(recipe.mainItems().get(i));
+            } else {
+                builder.addSlot(RecipeIngredientRole.INPUT, 35 - guiUOffset, 36 - guiVOffset).addIngredients(recipe.mainItems().get(i));
+            }
+        }
 
         int i = 0;
         for (Ingredient extra : recipe.extras()) {
