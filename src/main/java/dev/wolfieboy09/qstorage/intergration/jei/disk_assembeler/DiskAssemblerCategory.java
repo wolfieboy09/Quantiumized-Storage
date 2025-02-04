@@ -35,8 +35,8 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
 
     public DiskAssemblerCategory(@NotNull IGuiHelper guiHelper) {
         ResourceLocation location = ResourceHelper.asResource("textures/gui/disk_assembler.png");
-        background = guiHelper.createDrawable(location, guiUOffset, guiVOffset, 160, 76);
-        icon = guiHelper.createDrawableItemStack(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
+        this.background = guiHelper.createDrawable(location, guiUOffset, guiVOffset, 160, 76);
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
 
     @Override
     public IDrawable getBackground() {
-        return background;
+        return this.background;
     }
 
     @Override
@@ -71,8 +71,8 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
             }
         }
 
-        int i = 0;
-        for (Ingredient extra : recipe.extras()) {
+        for (int i = 0; i < recipe.extras().size(); i++) {
+            Ingredient extra = recipe.extras().get(i);
             int x = (116 + (i / 2) * 18) - guiUOffset;
             int y = (27 + (i % 2) * 18) - guiVOffset;
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
@@ -80,7 +80,6 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
             if (!extra.isEmpty()) {
                 slot.addIngredients(extra);
             }
-            i++;
         }
         
         
