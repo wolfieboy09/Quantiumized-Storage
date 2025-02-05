@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.util.NamingUtil;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSCreativeTab;
+import dev.wolfieboy09.qstorage.registries.QSGasses;
 import dev.wolfieboy09.qstorage.registries.QSItems;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -23,6 +24,9 @@ public class QSLangProvider extends LanguageProvider {
         );
         QSCreativeTab.REGISTER.getEntries().forEach(
                 tab -> add(tab.get().getDisplayName().getString(), QSCreativeTab.nameForLangGen.get(tab.get().getDisplayName().getString()))
+        );
+        QSGasses.GASSES.getEntries().forEach(
+                tab -> add(tab.get().getName().getString(), NamingUtil.toHumanReadable(tab.get().getResourceLocation().getPath()))
         );
     }
 }
