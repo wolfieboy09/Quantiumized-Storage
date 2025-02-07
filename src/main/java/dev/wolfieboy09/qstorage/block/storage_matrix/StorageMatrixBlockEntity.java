@@ -1,7 +1,6 @@
 package dev.wolfieboy09.qstorage.block.storage_matrix;
 
 import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
-import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
