@@ -14,4 +14,6 @@ public class CircuitEngraverBlockEntity extends AbstractEnergyBlockEntity {
     public boolean canExtract() {
         return false;
     }
+
+
 }

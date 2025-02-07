@@ -1,8 +1,8 @@
 package dev.wolfieboy09.qstorage.item;
 
-import dev.wolfieboy09.qstorage.api.items.CapacityItemStackHandler;
 import dev.wolfieboy09.qstorage.api.components.BaseStorageDisk;
 import dev.wolfieboy09.qstorage.api.components.ItemStorageDiskComponent;
+import dev.wolfieboy09.qstorage.api.items.CapacityItemStackHandler;
 import dev.wolfieboy09.qstorage.api.storage.CustomDiskType;
 import dev.wolfieboy09.qstorage.api.storage.IItemStorageDisk;
 import dev.wolfieboy09.qstorage.api.storage.ItemStorageType;

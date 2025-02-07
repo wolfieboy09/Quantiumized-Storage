@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
@@ -20,7 +21,7 @@ public class QSCreativeTab {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ITEMS = addTab("item_group", "QS Items", QSItems.ITEMS, () -> new ItemStack(QSItems.SILICON.get()));
     public static DeferredHolder<CreativeModeTab, CreativeModeTab> BLOCKS = addTab("block_group", "QS Blocks", QSBlocks.BLOCK_ITEMS, () -> new ItemStack(QSBlocks.DISK_ASSEMBLER.get()));
 
-    public static DeferredHolder<CreativeModeTab, CreativeModeTab> addTab(String id, String name, DeferredRegister.Items entries, Supplier<ItemStack> icon) {
+    public static @NotNull DeferredHolder<CreativeModeTab, CreativeModeTab> addTab(String id, String name, DeferredRegister.Items entries, Supplier<ItemStack> icon) {
         String displayKey = "creative_tab." + QuantiumizedStorage.MOD_ID + "." + id;
         nameForLangGen.put(displayKey, name);
 

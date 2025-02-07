@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qstorage.api.storage;
 
-import dev.wolfieboy09.qstorage.item.ItemStorageDisk;
 import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.NotNull;
 

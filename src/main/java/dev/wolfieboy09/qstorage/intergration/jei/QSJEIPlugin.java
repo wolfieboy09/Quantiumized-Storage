@@ -1,17 +1,20 @@
 package dev.wolfieboy09.qstorage.intergration.jei;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
+import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
+import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler.DiskAssemblerCategory;
+import dev.wolfieboy09.qstorage.intergration.jei.modifiers.GasIngredientHelper;
+import dev.wolfieboy09.qstorage.intergration.jei.modifiers.GasIngredientRenderer;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.registration.IModInfoRegistration;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +23,10 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
+@NothingNullByDefault
 public class QSJEIPlugin implements IModPlugin {
+    public static final IIngredientType<Gas> GAS_TYPE = () -> Gas.class;
+
     @Override
     public @NotNull ResourceLocation getPluginUid() {
         return ResourceHelper.asResource("jei_plugin");
@@ -49,5 +55,10 @@ public class QSJEIPlugin implements IModPlugin {
     @Override
     public void registerModInfo(IModInfoRegistration modAliasRegistration) {
         modAliasRegistration.addModAliases(QuantiumizedStorage.MOD_ID, "qstorage");
+    }
+
+    @Override
+    public void registerIngredients(IModIngredientRegistration registration) {
+        registration.register(GAS_TYPE, QSRegistries.GAS_REGISTRY.stream().toList(), new GasIngredientHelper(), new GasIngredientRenderer(16, 16), Gas.CODEC);
     }
 }

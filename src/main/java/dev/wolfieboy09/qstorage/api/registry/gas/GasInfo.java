@@ -1,6 +1,10 @@
 package dev.wolfieboy09.qstorage.api.registry.gas;
 
-public interface GasData {
+import net.minecraft.world.effect.MobEffectInstance;
+
+import java.util.List;
+
+public interface GasInfo {
     default boolean isPoisonous() {
         return false;
     }
@@ -15,5 +19,9 @@ public interface GasData {
 
     default int tint() {
         return 0xFFFFFF;
+    }
+
+    default List<MobEffectInstance> effects() {
+        return List.of();
     }
 }

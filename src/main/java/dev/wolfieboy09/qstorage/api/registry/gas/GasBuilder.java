@@ -1,11 +1,16 @@
 package dev.wolfieboy09.qstorage.api.registry.gas;
 
-public class GasBuilder implements GasData {
+import net.minecraft.world.effect.MobEffectInstance;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class GasBuilder implements GasInfo {
     private boolean isPoisonous = false;
     private int tint = 0xFFFFFF;
     private boolean flammable = false;
-
     private boolean heavyGas = false;
+    private List<MobEffectInstance> effects = new LinkedList<>();
 
     public GasBuilder() {}
 
@@ -26,6 +31,11 @@ public class GasBuilder implements GasData {
 
     public GasBuilder flammable(boolean flammable) {
         this.flammable = flammable;
+        return this;
+    }
+
+    public GasBuilder effects(MobEffectInstance ... effects) {
+        this.effects = List.of(effects);
         return this;
     }
 
@@ -56,5 +66,9 @@ public class GasBuilder implements GasData {
     public int tint() {
         return this.tint;
     }
-}
 
+    @Override
+    public List<MobEffectInstance> effects() {
+        return this.effects;
+    }
+}

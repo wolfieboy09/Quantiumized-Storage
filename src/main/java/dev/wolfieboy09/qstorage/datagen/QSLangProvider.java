@@ -2,12 +2,12 @@ package dev.wolfieboy09.qstorage.datagen;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.util.NamingUtil;
-import dev.wolfieboy09.qstorage.registries.QSBlocks;
-import dev.wolfieboy09.qstorage.registries.QSCreativeTab;
-import dev.wolfieboy09.qstorage.registries.QSGasses;
-import dev.wolfieboy09.qstorage.registries.QSItems;
+import dev.wolfieboy09.qstorage.registries.*;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class QSLangProvider extends LanguageProvider {
     public QSLangProvider(PackOutput output) {
@@ -16,6 +16,10 @@ public class QSLangProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        final Map<String, String> toGenerate = new HashMap<>();
+        toGenerate.put("qstorage.oxygen_deprivation", "%s could not breath on land");
+        toGenerate.put("effect.qstorage.oxygen_deprivation", "Oxygen Deprivation");
+
         QSItems.ITEMS.getEntries().forEach(
                 item -> addItem(item, NamingUtil.toHumanReadable(item.getRegisteredName().split(":")[1]))
         );
@@ -28,5 +32,6 @@ public class QSLangProvider extends LanguageProvider {
         QSGasses.GASSES.getEntries().forEach(
                 tab -> add(tab.get().getName().getString(), NamingUtil.toHumanReadable(tab.get().getResourceLocation().getPath()))
         );
+        toGenerate.forEach(this::add);
     }
 }

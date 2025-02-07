@@ -1,2 +1,4 @@
-+dev.wolfieboy09.qstorage.api
 -dev.wolfieboy09.qstorage
++dev.wolfieboy09.qstorage.components
++dev.wolfieboy09.qstorage.energy
++dev.wolfieboy09.qstorage.util
