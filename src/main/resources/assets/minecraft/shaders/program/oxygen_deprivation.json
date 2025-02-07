@@ -6,7 +6,7 @@
   "fragment": "qstorage:oxygen_deprivation",
   "passes": [
     {
-      "name": "oxygen_deprivation",
+      "name": "color_convolve",
       "vertex": "minecraft:blit_screen",
       "fragment": "qstorage:oxygen_deprivation",
       "intarget": "minecraft:main",
@@ -14,37 +14,9 @@
       "use_linear_filter": true,
       "uniforms": [
         {
-          "name": "DesaturateFactor",
-          "values": [0.0]
-        },
-        {
-          "name": "SpreadFactor",
-          "values": [0.0]
-        },
-        {
           "name": "Severity",
-          "values": [0.0]
-        }
-      ]
-    },
-    {
-      "name": "oxygen_deprivation",
-      "vertex": "minecraft:blit_screen",
-      "fragment": "qstorage:oxygen_deprivation",
-      "intarget": "swap",
-      "outtarget": "minecraft:main",
-      "use_linear_filter": true,
-      "uniforms": [
-        {
-          "name": "DesaturateFactor",
-          "values": [0.0]
-        },
-        {
-          "name": "SpreadFactor",
-          "values": [0.0]
-        },
-        {
-          "name": "Severity",
+          "type": "float",
+          "count": 1,
           "values": [0.0]
         }
       ]
