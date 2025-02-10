@@ -2,22 +2,16 @@ package dev.wolfieboy09.qstorage.entity;
 
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
-import dev.wolfieboy09.qstorage.api.registry.gas.GasLike;
 import dev.wolfieboy09.qstorage.api.registry.gas.GasStack;
-import dev.wolfieboy09.qstorage.registries.QSGasses;
+import dev.wolfieboy09.qstorage.particles.GasParticleOptions;
 import dev.wolfieboy09.qstorage.registries.QSParticleTypes;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -41,13 +35,13 @@ public class GasCloudEntity extends AreaEffectCloud {
 
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
-            AABB area = this.getBoundingBox().inflate(3.0); // 3-block radius
+            AABB area = this.getBoundingBox().inflate(this.gas.getGasData().gasRange());
 
             serverLevel.getEntitiesOfClass(LivingEntity.class, area).forEach((entity) ->
                     this.gas.getGasData().effects().forEach((effect) ->
                             entity.addEffect(new MobEffectInstance(effect))));
 
-            serverLevel.sendParticles(ParticleTypes.CLOUD, this.getX(), this.getY(), this.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
+            serverLevel.sendParticles(new GasParticleOptions(QSParticleTypes.GAS_PARTICLE.get(), new GasStack(this.gas)), this.getX(), this.getY(), this.getZ(), 2000, this.gas.getGasData().gasRange(), this.gas.getGasData().gasRange(), this.gas.getGasData().gasRange(), this.gas.getGasData().particleSpeed());
 
             if (--lifetime <= 0) {
                 this.discard();
