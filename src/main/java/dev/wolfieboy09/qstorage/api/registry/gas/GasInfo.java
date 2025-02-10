@@ -24,4 +24,12 @@ public interface GasInfo {
     default List<MobEffectInstance> effects() {
         return List.of();
     }
+
+    default float gasRange() {
+        return 3.0f;
+    }
+
+    default float particleSpeed() {
+        return 0.01f;
+    }
 }

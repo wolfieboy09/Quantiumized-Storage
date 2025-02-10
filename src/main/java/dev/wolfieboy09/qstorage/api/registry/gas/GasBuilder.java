@@ -11,6 +11,9 @@ public class GasBuilder implements GasInfo {
     private boolean flammable = false;
     private boolean heavyGas = false;
     private List<MobEffectInstance> effects = new LinkedList<>();
+    private float range = 3;
+    private float pSpeed = 0.01f;
+
 
     public GasBuilder() {}
 
@@ -36,6 +39,16 @@ public class GasBuilder implements GasInfo {
 
     public GasBuilder effects(MobEffectInstance ... effects) {
         this.effects = List.of(effects);
+        return this;
+    }
+
+    public GasBuilder range(float range) {
+        this.range = range;
+        return this;
+    }
+
+    public GasBuilder particleSpeed(float pSpeed) {
+        this.pSpeed = pSpeed;
         return this;
     }
 
@@ -70,5 +83,15 @@ public class GasBuilder implements GasInfo {
     @Override
     public List<MobEffectInstance> effects() {
         return this.effects;
+    }
+
+    @Override
+    public float gasRange() {
+        return this.range;
+    }
+
+    @Override
+    public float particleSpeed() {
+        return this.pSpeed;
     }
 }
