@@ -10,9 +10,11 @@ import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.util.ColorUtil;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
-import dev.wolfieboy09.qstorage.intergration.kubejs.events.QSGasJS;
+import dev.wolfieboy09.qstorage.intergration.kubejs.bindings.MobEffectInstanceBinding;
+import dev.wolfieboy09.qstorage.intergration.kubejs.builders.KubeGasBuilder;
 import dev.wolfieboy09.qstorage.intergration.kubejs.schemas.DiskAssemblySchema;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
 import org.jetbrains.annotations.NotNull;
 
 public class QSKubeJSPlugin implements KubeJSPlugin {
@@ -25,8 +27,8 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     @Override
     public void registerBuilderTypes(@NotNull BuilderTypeRegistry registry) {
         registry.of(QSRegistries.GAS_REGISTRY_KEY, reg -> {
-            reg.addDefault(QSGasJS.class, QSGasJS::new);
-            reg.add(locate("gas"), QSGasJS.class, QSGasJS::new);
+            reg.addDefault(KubeGasBuilder.class, KubeGasBuilder::new);
+            reg.add(locate("gas"), KubeGasBuilder.class, KubeGasBuilder::new);
         });
     }
 
@@ -38,6 +40,8 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     @Override
     public void registerBindings(BindingRegistry bindings) {
         bindings.add("ColorUtil", ColorUtil.class);
+        bindings.add("MobEffectInstance", MobEffectInstanceBinding.class);
+        bindings.add("MobEffects", MobEffects.class);
     }
 
     private @NotNull ResourceLocation locate(String id) {

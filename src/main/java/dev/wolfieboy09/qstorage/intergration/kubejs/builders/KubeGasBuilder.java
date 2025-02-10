@@ -1,16 +1,19 @@
-package dev.wolfieboy09.qstorage.intergration.kubejs.events;
+package dev.wolfieboy09.qstorage.intergration.kubejs.builders;
 
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.util.ReturnsSelf;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.registry.gas.GasBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 
 @SuppressWarnings("unused")
-public class QSGasJS extends BuilderBase<Gas> {
+@ReturnsSelf
+public class KubeGasBuilder extends BuilderBase<Gas> {
     private final GasBuilder builder = new GasBuilder();
 
-    public QSGasJS(ResourceLocation id) {
+    public KubeGasBuilder(ResourceLocation id) {
         super(id);
     }
 
@@ -20,26 +23,32 @@ public class QSGasJS extends BuilderBase<Gas> {
     }
 
     @Info("If the gas is poisonous to entities")
-    public QSGasJS poisonous(boolean isPoisonous) {
+    public KubeGasBuilder poisonous(boolean isPoisonous) {
         this.builder.poisonous(isPoisonous);
         return this;
     }
 
     @Info("If the gas is heavy")
-    public QSGasJS heavy(boolean isHeavy) {
+    public KubeGasBuilder heavy(boolean isHeavy) {
         this.builder.heavy(isHeavy);
         return this;
     }
 
     @Info("Gas particle tint")
-    public QSGasJS tint(int tint) {
+    public KubeGasBuilder tint(int tint) {
         this.builder.tint(tint);
         return this;
     }
 
     @Info("If the gas will react to fire")
-    public QSGasJS flammable(boolean flammable) {
+    public KubeGasBuilder flammable(boolean flammable) {
         this.builder.flammable(flammable);
+        return this;
+    }
+
+    @Info("The mob effects to give to any entity from the gas")
+    public KubeGasBuilder effects(MobEffectInstance... effects) {
+        this.builder.effects(effects);
         return this;
     }
 }
