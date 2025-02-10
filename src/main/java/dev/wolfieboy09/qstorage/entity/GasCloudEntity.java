@@ -43,9 +43,9 @@ public class GasCloudEntity extends AreaEffectCloud {
             ServerLevel serverLevel = (ServerLevel) this.level();
             AABB area = this.getBoundingBox().inflate(3.0); // 3-block radius
 
-            for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, area)) {
-                this.gas.getGasData().effects().forEach((e) -> entity.addEffect(new MobEffectInstance(e)));
-            }
+            serverLevel.getEntitiesOfClass(LivingEntity.class, area).forEach((entity) ->
+                    this.gas.getGasData().effects().forEach((effect) ->
+                            entity.addEffect(new MobEffectInstance(effect))));
 
             serverLevel.sendParticles(ParticleTypes.CLOUD, this.getX(), this.getY(), this.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
 
