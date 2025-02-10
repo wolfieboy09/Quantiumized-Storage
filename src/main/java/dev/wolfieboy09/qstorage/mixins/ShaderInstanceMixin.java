@@ -3,7 +3,6 @@ package dev.wolfieboy09.qstorage.mixins;
 import com.mojang.blaze3d.shaders.Uniform;
 import net.minecraft.client.renderer.ShaderInstance;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

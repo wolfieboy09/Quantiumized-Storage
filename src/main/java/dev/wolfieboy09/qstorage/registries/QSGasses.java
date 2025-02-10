@@ -6,7 +6,6 @@ import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.registry.gas.GasBuilder;
 import dev.wolfieboy09.qstorage.api.util.ColorUtil;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

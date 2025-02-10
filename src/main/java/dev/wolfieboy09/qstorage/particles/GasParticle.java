@@ -2,15 +2,10 @@ package dev.wolfieboy09.qstorage.particles;
 
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.registry.gas.GasLike;
-import dev.wolfieboy09.qstorage.entity.GasCloudEntity;
-import dev.wolfieboy09.qstorage.registries.QSEntities;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 public class GasParticle extends TextureSheetParticle {

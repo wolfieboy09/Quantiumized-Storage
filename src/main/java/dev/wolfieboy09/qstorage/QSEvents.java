@@ -2,17 +2,8 @@ package dev.wolfieboy09.qstorage;
 
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.particles.GasParticleProvider;
-import dev.wolfieboy09.qstorage.registries.QSEffects;
 import dev.wolfieboy09.qstorage.registries.QSParticleTypes;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import org.jetbrains.annotations.NotNull;
 

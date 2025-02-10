@@ -2,7 +2,10 @@ package dev.wolfieboy09.qstorage.datagen;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.util.NamingUtil;
-import dev.wolfieboy09.qstorage.registries.*;
+import dev.wolfieboy09.qstorage.registries.QSBlocks;
+import dev.wolfieboy09.qstorage.registries.QSCreativeTab;
+import dev.wolfieboy09.qstorage.registries.QSGasses;
+import dev.wolfieboy09.qstorage.registries.QSItems;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 

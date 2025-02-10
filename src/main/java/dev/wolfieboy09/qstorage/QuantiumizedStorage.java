@@ -1,22 +1,11 @@
 package dev.wolfieboy09.qstorage;
 
 import com.mojang.logging.LogUtils;
-import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
 import dev.wolfieboy09.qstorage.registries.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Player;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
