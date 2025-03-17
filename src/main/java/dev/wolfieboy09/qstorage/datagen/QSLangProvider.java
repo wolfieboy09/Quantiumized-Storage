@@ -22,6 +22,8 @@ public class QSLangProvider extends LanguageProvider {
         final Map<String, String> toGenerate = new HashMap<>();
         toGenerate.put("qstorage.oxygen_deprivation", "%s could not breath on land");
         toGenerate.put("effect.qstorage.oxygen_deprivation", "Oxygen Deprivation");
+        toGenerate.put("tooltip.qstorage.max_energy_upgrade", "Adds more energy capacity");
+        toGenerate.put("tooltip.qstorage.speed_upgrade", "Makes the process faster");
 
         QSItems.ITEMS.getEntries().forEach(
                 item -> addItem(item, NamingUtil.toHumanReadable(item.getRegisteredName().split(":")[1]))
