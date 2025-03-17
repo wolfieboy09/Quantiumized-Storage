@@ -20,7 +20,7 @@ import net.minecraft.world.phys.AABB;
 
 public class GasCloudEntity extends AreaEffectCloud {
     private Gas gas;
-    private int lifetime = 200;
+    private int lifetime = 400;
 
     public GasCloudEntity(EntityType<? extends AreaEffectCloud> entityType, Level level) {
         super(entityType, level);
@@ -41,9 +41,9 @@ public class GasCloudEntity extends AreaEffectCloud {
                     this.gas.getGasData().effects().forEach((effect) ->
                             entity.addEffect(new MobEffectInstance(effect))));
 
-            serverLevel.sendParticles(new GasParticleOptions(QSParticleTypes.GAS_PARTICLE.get(), new GasStack(this.gas)), this.getX(), this.getY(), this.getZ(), 2000, this.gas.getGasData().gasRange(), this.gas.getGasData().gasRange(), this.gas.getGasData().gasRange(), this.gas.getGasData().particleSpeed());
+            serverLevel.sendParticles(new GasParticleOptions(QSParticleTypes.GAS_PARTICLE.get(), new GasStack(this.gas)), this.getX(), this.getY(), this.getZ(), 1500, this.gas.getGasData().gasRange(), this.gas.getGasData().gasRange(), this.gas.getGasData().gasRange(), this.gas.getGasData().particleSpeed());
 
-            if (--lifetime <= 0) {
+            if (--this.lifetime <= 0) {
                 this.discard();
             }
         }
