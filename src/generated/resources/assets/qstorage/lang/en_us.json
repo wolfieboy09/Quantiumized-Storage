@@ -5,7 +5,6 @@
   "block.qstorage.storage_matrix": "Storage Matrix",
   "creative_tab.qstorage.block_group": "QS Blocks",
   "creative_tab.qstorage.item_group": "QS Items",
-  "death.attack.qstorage.oxygen_deprivation": "%s could not breath on land",
   "effect.qstorage.oxygen_deprivation": "Oxygen Deprivation",
   "gas.qstorage.hydrogen": "Hydrogen",
   "item.qstorage.advanced_circuit": "Advanced Circuit",
@@ -15,13 +14,18 @@
   "item.qstorage.data_crystal": "Data Crystal",
   "item.qstorage.elite_circuit": "Elite Circuit",
   "item.qstorage.item_port": "Item Port",
+  "item.qstorage.max_energy_upgrade": "Max Energy Upgrade",
   "item.qstorage.multi_dimensional_storage_disk": "Multi Dimensional Storage Disk",
   "item.qstorage.quantum_circuit": "Quantum Circuit",
   "item.qstorage.quantum_storage_disk": "Quantum Storage Disk",
   "item.qstorage.silicon": "Silicon",
+  "item.qstorage.speed_upgrade": "Speed Upgrade",
   "item.qstorage.steel_casing": "Steel Casing",
   "item.qstorage.steel_ingot": "Steel Ingot",
   "item.qstorage.steel_screw": "Steel Screw",
   "item.qstorage.superior_storage_disk": "Superior Storage Disk",
-  "item.qstorage.ultimate_circuit": "Ultimate Circuit"
+  "item.qstorage.ultimate_circuit": "Ultimate Circuit",
+  "qstorage.oxygen_deprivation": "%s could not breath on land",
+  "tooltip.qstorage.max_energy_upgrade": "Adds more energy capacity",
+  "tooltip.qstorage.speed_upgrade": "Makes the process faster"
 }
