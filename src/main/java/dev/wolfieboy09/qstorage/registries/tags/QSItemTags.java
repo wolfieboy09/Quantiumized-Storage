@@ -22,6 +22,7 @@ public class QSItemTags {
     public static final TagKey<Item> DATA_CRYSTAL = modTag("crystals/data");
     public static final TagKey<Item> ITEM_PORT = modTag("ports/item");
     public static final TagKey<Item> QUANTUM_CIRCUIT = modTag("circuits/quantum");
+    public static final TagKey<Item> UPGRADES = modTag("upgrades");
 
     private static @NotNull TagKey<Item> globalTag(String path) {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", path));

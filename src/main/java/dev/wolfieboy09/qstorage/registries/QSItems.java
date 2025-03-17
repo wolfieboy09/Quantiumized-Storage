@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage.registries;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.storage.ItemStorageType;
 import dev.wolfieboy09.qstorage.item.ItemStorageDisk;
+import dev.wolfieboy09.qstorage.item.UpgradeItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -27,6 +28,9 @@ public class QSItems {
     public static final DeferredItem<Item> ULTIMATE_CIRCUIT = simpleItem("ultimate_circuit");
     public static final DeferredItem<Item> QUANTUM_CIRCUIT = simpleItem("quantum_circuit");
 
+    public static final DeferredItem<UpgradeItem> MAX_ENERGY_UPGRADE = registerUpgradeItem("max_energy_upgrade");
+    public static final DeferredItem<UpgradeItem> SPEED_UPGRADE = registerUpgradeItem("speed_upgrade");
+
     public static final DeferredItem<ItemStorageDisk> BASIC_ITEM_DISK = registerItemStorageDisk("basic_storage_disk", ItemStorageType.BASIC);
     public static final DeferredItem<ItemStorageDisk> ADVANCED_ITEM_DISK = registerItemStorageDisk("advanced_storage_disk", ItemStorageType.ADVANCED);
     public static final DeferredItem<ItemStorageDisk> SUPERIOR_ITEM_DISK = registerItemStorageDisk("superior_storage_disk", ItemStorageType.SUPERIOR);
@@ -39,6 +43,10 @@ public class QSItems {
 
     private static @NotNull DeferredItem<ItemStorageDisk> registerItemStorageDisk(String name, ItemStorageType storageType) {
         return ITEMS.register(name, () -> new ItemStorageDisk(storageType));
+    }
+
+    private static @NotNull DeferredItem<UpgradeItem> registerUpgradeItem(String name) {
+        return ITEMS.register(name, () -> new UpgradeItem(new Item.Properties(), "tooltip.qstorage." + name));
     }
 
     private static @NotNull DeferredItem<Item> simpleItem(String name) {

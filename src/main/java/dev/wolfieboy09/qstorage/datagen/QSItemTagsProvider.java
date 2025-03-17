@@ -43,5 +43,9 @@ public class QSItemTagsProvider extends ItemTagsProvider {
 
       tag(QSItemTags.QUANTUM_CIRCUIT)
               .add(QSItems.QUANTUM_CIRCUIT.get());
+
+      tag(QSItemTags.UPGRADES)
+              .add(QSItems.MAX_ENERGY_UPGRADE.get())
+              .add(QSItems.SPEED_UPGRADE.get());
     }
 }
