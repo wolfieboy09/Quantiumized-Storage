@@ -23,6 +23,7 @@ public class QSEntities {
                     () -> EntityType.Builder.of(GasCloudEntity::new, MobCategory.MISC)
                             .sized(1.0f, 1.0f)
                             .fireImmune()
+                            .canSpawnFarFromPlayer()
                             .build(QuantiumizedStorage.MOD_ID + ":gas_cloud"));
 
     public static void registerAttributes(@NotNull EntityAttributeCreationEvent event) {
