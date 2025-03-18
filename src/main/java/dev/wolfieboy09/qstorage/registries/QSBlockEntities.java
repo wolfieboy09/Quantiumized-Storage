@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlockEntity;
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlockEntity;
+import dev.wolfieboy09.qstorage.block.smeltery.SmelteryBlockEntity;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
@@ -41,6 +42,12 @@ public class QSBlockEntities {
             "creative_energy_block",
             CreativeEnergyBlockEntity::new,
             QSBlocks.CREATIVE_ENERGY_BLOCK
+    );
+
+    public static final Supplier<BlockEntityType<SmelteryBlockEntity>> SMELTERY = createBlockEntity(
+            "smeltery",
+            SmelteryBlockEntity::new,
+            QSBlocks.SMELTERY
     );
 
     private static <T extends BlockEntity> @NotNull Supplier<BlockEntityType<T>> createBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier, Supplier<? extends Block> block) {

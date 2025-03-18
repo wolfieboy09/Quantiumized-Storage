@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
+import dev.wolfieboy09.qstorage.block.smeltery.SmelteryBlock;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.BlockItem;
@@ -40,6 +41,11 @@ public class QSBlocks {
     public static final DeferredBlock<CreativeEnergyBlock> CREATIVE_ENERGY_BLOCK = registerBlock(
             "creative_energy_block",
             CreativeEnergyBlock::new
+    );
+
+    public static final DeferredBlock<SmelteryBlock> SMELTERY = registerBlock(
+            "smeltery",
+            SmelteryBlock::new
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {

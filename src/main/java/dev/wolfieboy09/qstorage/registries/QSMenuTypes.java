@@ -3,6 +3,8 @@ package dev.wolfieboy09.qstorage.registries;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerMenu;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerScreen;
+import dev.wolfieboy09.qstorage.block.smeltery.SmelteryMenu;
+import dev.wolfieboy09.qstorage.block.smeltery.SmelteryScreen;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixMenu;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixScreen;
 import net.minecraft.core.registries.Registries;
@@ -26,6 +28,9 @@ public class QSMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<StorageMatrixMenu>> STORAGE_MATRIX = MENUS.register("storage_matrix", () ->
             IMenuTypeExtension.create((id, playerInv, data) -> new StorageMatrixMenu(id, data.readBlockPos(), playerInv, playerInv.player)));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<SmelteryMenu>> SMELTERY_MENU = MENUS.register("smeltery", () ->
+            IMenuTypeExtension.create((id, playerInv, data) -> new SmelteryMenu(id, data.readBlockPos(), playerInv, playerInv.player)));
+
     public static void register(IEventBus bus) {
         MENUS.register(bus);
     }
@@ -34,5 +39,6 @@ public class QSMenuTypes {
     public static void registerScreens(@NotNull RegisterMenuScreensEvent event) {
         event.register(QSMenuTypes.DISK_ASSEMBLER.get(), DiskAssemblerScreen::new);
         event.register(QSMenuTypes.STORAGE_MATRIX.get(), StorageMatrixScreen::new);
+        event.register(QSMenuTypes.SMELTERY_MENU.get(), SmelteryScreen::new);
     }
 }

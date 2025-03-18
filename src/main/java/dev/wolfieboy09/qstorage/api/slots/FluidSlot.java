@@ -5,6 +5,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
@@ -44,5 +45,15 @@ public class FluidSlot extends Slot {
 
     public IFluidHandler getFluidHandler() {
         return this.fluidHandler;
+    }
+
+    @Override
+    public final boolean mayPickup(Player player) {
+        return super.mayPickup(player);
+    }
+
+    @Override
+    public final boolean mayPlace(ItemStack stack) {
+        return super.mayPlace(stack);
     }
 }
