@@ -14,7 +14,6 @@ public class EnergySlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        IEnergyStorage energyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
-        return energyStorage != null;
+        return stack.getCapability(Capabilities.EnergyStorage.ITEM) != null;
     }
 }
