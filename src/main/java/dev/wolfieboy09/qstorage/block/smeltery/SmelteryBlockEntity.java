@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,7 +15,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -66,8 +64,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     }
 
     private CompoundTag saveFluidTank(FluidTank fluidTank,HolderLookup.Provider registries) {
-        CompoundTag tempTag = new CompoundTag();
-        return fluidTank.writeToNBT(registries, tempTag);
+        return fluidTank.writeToNBT(registries, new CompoundTag());
     }
 
     private void loadFluidTank(FluidTank fluidTank,CompoundTag tag,HolderLookup.Provider registries) {
@@ -93,7 +90,6 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-//        Load here all the stuff
         loadFluidTank(this.inputTanks.get(0), tag.getCompound("InputTank1"), registries);
         loadFluidTank(this.inputTanks.get(1), tag.getCompound("InputTank2"), registries);
         loadFluidTank(this.inputTanks.get(2), tag.getCompound("InputTank3"), registries);
@@ -103,8 +99,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         this.inventory.deserializeNBT(registries, tag);
     }
 
-    public void tick(){
-//        Tick here
-        int test = 0;
+    public void tick() {
+
     }
 }
