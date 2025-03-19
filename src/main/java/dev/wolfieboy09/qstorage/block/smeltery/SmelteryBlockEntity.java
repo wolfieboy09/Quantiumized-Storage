@@ -63,7 +63,10 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         ListTag listTag = new ListTag();
-        this.inputTanks.forEach(tank -> listTag.add(tank.getFluid().save(registries)));
+        listTag.add(this.inputTanks.getFirst().writeToNBT(registries, tag));
+        listTag.add(this.inputTanks.get(1).writeToNBT(registries, tag));
+        listTag.add(this.inputTanks.get(2).writeToNBT(registries, tag));
+
         tag.put("InputTanks", listTag);
         tag.put("Inventory", this.inventory.serializeNBT(registries));
         tag.put("OutputTank", this.outputFluidTank.writeToNBT(registries, tag));
@@ -72,11 +75,11 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        for (int i = 0; i < 3; i++) {
-            FluidTank tank = this.inputTanks.get(i);
-            ListTag from = tag.getList("InputTanks", Tag.TAG_COMPOUND);
-            tank.readFromNBT(registries, from.getCompound(i));
-        }
+        ListTag from = tag.getList("InputTanks", Tag.TAG_COMPOUND);
+        this.inputTanks.getFirst().readFromNBT(registries, from.getCompound(0));
+        this.inputTanks.get(1).readFromNBT(registries, from.getCompound(1));
+        this.inputTanks.get(2).readFromNBT(registries, from.getCompound(2));
+
         this.outputFluidTank.readFromNBT(registries, tag);
         this.wasteOutputFluidTank.readFromNBT(registries, tag);
         this.inventory.deserializeNBT(registries, tag);
