@@ -80,7 +80,8 @@ public class SmelteryMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
-        return null;
+        //TODO get quick move stack working
+        return ItemStack.EMPTY;
     }
 
     @Override
