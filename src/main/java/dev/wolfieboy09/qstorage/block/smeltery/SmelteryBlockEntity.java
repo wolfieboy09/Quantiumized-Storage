@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -30,7 +29,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     private final Component TITLE = Component.translatable("block.qstorage.smeltery");
     private final ContainerData containerData = new SimpleContainerData(3);
     private final ItemStackHandler inventory = new ItemStackHandler(5);
-    private final List<FluidTank> inputTanks = new ArrayList<>(3);
+    private final List<FluidTank> inputTanks = new ArrayList<>();
     private final FluidTank outputFluidTank = new FluidTank(10000);
     private final FluidTank wasteOutputFluidTank = new FluidTank(10000);
 
@@ -44,6 +43,10 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     public IFluidHandler getInputFluid(int index) {
         return this.inputTanks.get(index);
+    }
+
+    public List<FluidTank> getInputTanks() {
+        return this.inputTanks;
     }
 
     private void updateContainer() {
