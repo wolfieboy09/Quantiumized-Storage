@@ -11,7 +11,8 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 @NothingNullByDefault
 public class FluidSlot extends Slot {
-    private static final Container emptyContainer = new SimpleContainer(0);
+//    This is necessary don't make it 0;
+    private static final Container emptyContainer = new SimpleContainer(1);
     private final IFluidHandler fluidHandler;
     private final int index;
 
@@ -55,5 +56,10 @@ public class FluidSlot extends Slot {
     @Override
     public final boolean mayPlace(ItemStack stack) {
         return super.mayPlace(stack);
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemStack.EMPTY;
     }
 }

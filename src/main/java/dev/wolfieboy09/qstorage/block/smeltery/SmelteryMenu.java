@@ -11,10 +11,12 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 @NothingNullByDefault
 public class SmelteryMenu extends AbstractContainerMenu {
@@ -29,6 +31,8 @@ public class SmelteryMenu extends AbstractContainerMenu {
     private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
+    final int SLOT_X_SPACING = 18;
+    final int SLOT_Y_SPACING = 18;
 
     public SmelteryMenu(int id, BlockPos pos, Inventory playerInventory, @NotNull Player player, ContainerData containerData) {
         super(QSMenuTypes.SMELTERY_MENU.get(), id);
@@ -38,18 +42,14 @@ public class SmelteryMenu extends AbstractContainerMenu {
         if (!(blockEntity instanceof SmelteryBlockEntity be)) return;
         this.blockEntity = be;
         this.data = containerData;
+        List<FluidTank> inputFluidTanks = be.getInputTanks();
+        addSlot(new GuiFluidSlot(inputFluidTanks.getFirst(), 0, 1, 1));
+        createPlayerInventory(playerInventory, 48, 150);
+        createPlayerHotbar(playerInventory,48,208);
+    }
+
+    private void createPlayerInventory(@NotNull Inventory playerInventory,int PLAYER_INVENTORY_XPOS, int PLAYER_INVENTORY_YPOS) {
         PlayerInvWrapper playerInvWrapper = new PlayerInvWrapper(playerInventory);
-        final int SLOT_X_SPACING = 18;
-        final int SLOT_Y_SPACING = 18;
-
-        final int HOTBAR_XPOS = 8;
-        final int HOTBAR_YPOS = 142;
-        final int PLAYER_INVENTORY_XPOS = 8;
-        final int PLAYER_INVENTORY_YPOS = 84;
-
-        ItemStackHandler itemStackHandler = be.getInventory();
-
-        addSlot(new GuiFluidSlot(this.blockEntity.getInputFluid(0), 1, 1, 1));
 
         for (int y = 0; y < PLAYER_INVENTORY_ROW_COUNT; y++) {
             for (int x = 0; x < PLAYER_INVENTORY_COLUMN_COUNT; x++) {
@@ -58,6 +58,12 @@ public class SmelteryMenu extends AbstractContainerMenu {
                 int ypos = PLAYER_INVENTORY_YPOS + y * SLOT_Y_SPACING;
                 addSlot(new SlotItemHandler(playerInvWrapper, slotNumber, xpos, ypos));
             }
+        }
+    }
+
+    private void createPlayerHotbar(@NotNull Inventory playerInv,int HOTBAR_XPOS,int HOTBAR_YPOS) {
+        for (int col = 0; col < HOTBAR_SLOT_COUNT; ++col) {
+            this.addSlot(new Slot(playerInv, col, HOTBAR_XPOS + col * SLOT_X_SPACING, HOTBAR_YPOS));
         }
     }
 
