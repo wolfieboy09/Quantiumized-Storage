@@ -2,11 +2,13 @@ package dev.wolfieboy09.qstorage.block.smeltery;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
+import dev.wolfieboy09.qstorage.api.widgets.FluidWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
 public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
@@ -16,6 +18,13 @@ public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
         super(menu, playerInventory, title);
         this.imageHeight = 232;
         this.imageWidth = 256;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        clearWidgets();
+        addRenderableWidget(new FluidWidget(Fluids.LAVA, 100, 8, 20, 64));
     }
 
     @Override

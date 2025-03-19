@@ -18,6 +18,9 @@ description='''${mod_description}'''
 #[[mixins]]
 #config="qstorage.mixins.json"
 
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
+
 [[dependencies.qstorage]]
     modId="neoforge"
     type="required"
