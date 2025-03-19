@@ -1,7 +1,6 @@
 package dev.wolfieboy09.qstorage.block.smeltery;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qstorage.api.slots.GuiFluidSlot;
 import dev.wolfieboy09.qstorage.block.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
@@ -12,12 +11,9 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 @NothingNullByDefault
 public class SmelteryMenu extends AbstractContainerMenu {
