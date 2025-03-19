@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.block.smeltery;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.slots.GuiFluidSlot;
+import dev.wolfieboy09.qstorage.block.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
 import net.minecraft.core.BlockPos;
@@ -42,8 +43,14 @@ public class SmelteryMenu extends AbstractContainerMenu {
         if (!(blockEntity instanceof SmelteryBlockEntity be)) return;
         this.blockEntity = be;
         this.data = containerData;
-        List<FluidTank> inputFluidTanks = be.getInputTanks();
-        addSlot(new GuiFluidSlot(inputFluidTanks.getFirst(), 0, 1, 1));
+
+        addSlot(new SlotItemHandler(be.getInventory(), 0, 93, 6));
+        addSlot(new SlotItemHandler(be.getInventory(), 1, 93, 29));
+        addSlot(new SlotItemHandler(be.getInventory(), 2, 93, 52));
+
+        addSlot(new ItemResultSlot(be.getInventory(), 3, 171, 6));
+        addSlot(new ItemResultSlot(be.getInventory(), 4, 171, 52));
+
         createPlayerInventory(playerInventory, 48, 150);
         createPlayerHotbar(playerInventory,48,208);
     }
