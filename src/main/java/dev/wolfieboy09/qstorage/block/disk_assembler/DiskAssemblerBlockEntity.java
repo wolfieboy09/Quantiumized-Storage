@@ -43,8 +43,6 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private DiskAssemblerRecipe recipe = null;
     private boolean isValidRecipe = false;
     private final ContainerData containerData = new SimpleContainerData(3);
-    private BlockCapabilityCache<IEnergyStorage, @Nullable Direction> capCache;
-
 
     public DiskAssemblerBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.DISK_ASSEMBLER.get(), pos, blockState, 20000, 1000, 0);
@@ -226,16 +224,6 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     @Override
     public void onLoad() {
         super.onLoad();
-        if (level instanceof ServerLevel serverLevel) {
-            this.capCache = BlockCapabilityCache.create(
-                    Capabilities.EnergyStorage.BLOCK,
-                    serverLevel,
-                    getBlockPos(),
-                    this.getBlockState().getValue(DiskAssemblerBlock.FACING).getOpposite(),
-                    () -> !this.isRemoved(),
-                    this::onCapInvalidate
-            );
-        }
     }
 
     private void onCapInvalidate() {
