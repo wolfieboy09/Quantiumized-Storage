@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.block.smeltery;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.fluids.ExtendedFluidTank;
+import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -18,7 +19,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -32,6 +33,10 @@ import java.util.List;
 public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvider {
     public static final int TANK_CAPACITY = 10000;
     public static final int INPUT_TANKS_COUNT = 3;
+    public static final BlockCapability<IFluidHandler, Void> FLUID_CAPABILITY = BlockCapability.createVoid(
+            ResourceHelper.asResource("fluid_handler"),
+            IFluidHandler.class
+    );
 
     private final Component TITLE = Component.translatable("block.qstorage.smeltery");
     // Expand container data to include both fluid IDs and amounts
@@ -72,6 +77,31 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         for (int i = 0; i < INPUT_TANKS_COUNT; i++) {
             this.inputTanks.add(new ExtendedFluidTank(TANK_CAPACITY, this::onContentsChanged));
         }
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+//        if (this.level == null) return;
+//        if (this.level instanceof ServerLevel serverLevel) {
+//            this.fluidCache = BlockCapabilityCache.createVoid(
+//                    Capabilities.FluidHandler.BLOCK,
+//                    serverLevel,
+//                    getBlockPos(),
+//                    null,
+//                    () -> !this.isRemoved(),
+//                    this::invalidateCap
+//            );
+//        }
+    }
+
+    public @Nullable IFluidHandler getFluidHandler() {
+        return null;
+    }
+
+    private void invalidateCap() {
+        if (this.level == null) return;
+        this.level.invalidateCapabilities(getBlockPos());
     }
 
     public List<ExtendedFluidTank> getInputTanks() {
@@ -131,15 +161,14 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     public void tick() {
 //        Testing if the tanks function correctly
-        this.inputTanks.getFirst().fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
-        this.inputTanks.get(1).fill(new FluidStack(Fluids.LAVA,10), IFluidHandler.FluidAction.EXECUTE);
+//        this.inputTanks.getFirst().fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
+//        this.inputTanks.get(1).fill(new FluidStack(Fluids.LAVA,10), IFluidHandler.FluidAction.EXECUTE);
     }
 
     @Override
     public void setChanged() {
         super.setChanged();
-        if (this.level == null) return;
-        if (this.level.isClientSide) return;
+        if (this.level == null || this.level.isClientSide) return;
     }
 
     @Override
