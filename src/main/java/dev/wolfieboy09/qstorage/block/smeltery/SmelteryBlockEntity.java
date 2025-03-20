@@ -33,10 +33,6 @@ import java.util.List;
 public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvider {
     public static final int TANK_CAPACITY = 10000;
     public static final int INPUT_TANKS_COUNT = 3;
-    public static final BlockCapability<IFluidHandler, Void> FLUID_CAPABILITY = BlockCapability.createVoid(
-            ResourceHelper.asResource("fluid_handler"),
-            IFluidHandler.class
-    );
 
     private final Component TITLE = Component.translatable("block.qstorage.smeltery");
     // Expand container data to include both fluid IDs and amounts
@@ -47,6 +43,86 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     private final List<ExtendedFluidTank> inputTanks = new ArrayList<>(INPUT_TANKS_COUNT);
     private final ExtendedFluidTank outputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::setChanged);
     private final ExtendedFluidTank wasteOutputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::setChanged);
+    private final IFluidHandler fluidHandler = new IFluidHandler() {
+
+        @Override
+        public int getTanks() {
+            return 5;
+        }
+
+        @Override
+        public FluidStack getFluidInTank(int tank) {
+            return switch (tank) {
+                case 0 -> inputTanks.getFirst().getFluid();
+                case 1 -> inputTanks.get(1).getFluid();
+                case 2 -> inputTanks.get(2).getFluid();
+                case 3 -> outputFluidTank.getFluid();
+                case 4 -> wasteOutputFluidTank.getFluid();
+                default -> FluidStack.EMPTY;
+            };
+        }
+
+        @Override
+        public int getTankCapacity(int tank) {
+            return switch (tank) {
+                case 0 -> inputTanks.getFirst().getCapacity();
+                case 1 -> inputTanks.get(1).getCapacity();
+                case 2 -> inputTanks.get(2).getCapacity();
+                case 3 -> outputFluidTank.getCapacity();
+                case 4 -> wasteOutputFluidTank.getCapacity();
+                default -> 0;
+            };
+        }
+
+        @Override
+        public boolean isFluidValid(int tank, FluidStack stack) {
+            return switch (tank) {
+                case 0 -> inputTanks.getFirst().isFluidValid(stack);
+                case 1 -> inputTanks.get(1).isFluidValid(stack);
+                case 2 -> inputTanks.get(2).isFluidValid(stack);
+                case 3 -> outputFluidTank.isFluidValid(stack);
+                case 4 -> wasteOutputFluidTank.isFluidValid(stack);
+                default -> false;
+            };
+        }
+
+        @Override
+        public int fill(FluidStack fluidStack, FluidAction fluidAction) {
+            for (ExtendedFluidTank inputTank : inputTanks) {
+                if (inputTank.getFluid().getFluid() == fluidStack.getFluid()) {
+                    return inputTank.fill(fluidStack, fluidAction);
+                } else if (inputTank.getFluid().isEmpty()) {
+                    return inputTank.fill(fluidStack, fluidAction);
+                }
+            }
+        //    Cant fill into the output tanks
+            return 0;
+        }
+
+        @Override
+        public FluidStack drain(FluidStack fluidStack, FluidAction fluidAction) {
+            if (outputFluidTank.getFluid().getFluid() == fluidStack.getFluid()) {
+                return outputFluidTank.drain(fluidStack, fluidAction);
+            }
+            if (wasteOutputFluidTank.getFluid().getFluid() == fluidStack.getFluid()) {
+                return wasteOutputFluidTank.drain(fluidStack, fluidAction);
+            }
+        //    Cant extract out from the input tanks
+            return FluidStack.EMPTY;
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction fluidAction) {
+            if (outputFluidTank.getFluidAmount() >= maxDrain) {
+                return outputFluidTank.drain(maxDrain, fluidAction);
+            }
+            if (wasteOutputFluidTank.getFluidAmount() >= maxDrain) {
+                return wasteOutputFluidTank.drain(maxDrain, fluidAction);
+            }
+        //    Cant extract out from the input tanks
+            return FluidStack.EMPTY;
+        }
+    };
 
     public SmelteryBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.SMELTERY.get(), pos, blockState);
@@ -79,29 +155,8 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         }
     }
 
-    @Override
-    public void onLoad() {
-        super.onLoad();
-//        if (this.level == null) return;
-//        if (this.level instanceof ServerLevel serverLevel) {
-//            this.fluidCache = BlockCapabilityCache.createVoid(
-//                    Capabilities.FluidHandler.BLOCK,
-//                    serverLevel,
-//                    getBlockPos(),
-//                    null,
-//                    () -> !this.isRemoved(),
-//                    this::invalidateCap
-//            );
-//        }
-    }
-
     public @Nullable IFluidHandler getFluidHandler() {
-        return null;
-    }
-
-    private void invalidateCap() {
-        if (this.level == null) return;
-        this.level.invalidateCapabilities(getBlockPos());
+        return this.fluidHandler;
     }
 
     public List<ExtendedFluidTank> getInputTanks() {
