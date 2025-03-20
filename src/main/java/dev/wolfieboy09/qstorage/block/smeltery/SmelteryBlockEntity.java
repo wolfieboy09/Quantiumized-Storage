@@ -77,9 +77,9 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         super.saveAdditional(tag, registries);
 //        Save here all the stuff
         ListTag listTag = new ListTag();
-        listTag.add(saveFluidTank(this.inputTanks.get(0),registries));
-        listTag.add(saveFluidTank(this.inputTanks.get(1),registries));
-        listTag.add(saveFluidTank(this.inputTanks.get(2),registries));
+        for (ExtendedFluidTank inputTank : this.inputTanks) {
+            listTag.add(saveFluidTank(inputTank, registries));
+        }
 
         tag.put("InputTanks", listTag);
         tag.put("Inventory", this.inventory.serializeNBT(registries));
@@ -90,9 +90,10 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        loadFluidTank(this.inputTanks.get(0), tag.getCompound("InputTank1"), registries);
-        loadFluidTank(this.inputTanks.get(1), tag.getCompound("InputTank2"), registries);
-        loadFluidTank(this.inputTanks.get(2), tag.getCompound("InputTank3"), registries);
+        ListTag listTag = tag.getList("InputTanks", Tag.TAG_COMPOUND);
+        for (int i = 0; i < listTag.size(); i++) {
+            loadFluidTank(this.inputTanks.get(i), listTag.getCompound(i), registries);
+        }
 
         loadFluidTank(this.outputFluidTank, tag.getCompound("OutputTank"), registries);
         loadFluidTank(this.wasteOutputFluidTank, tag.getCompound("WasteTank"), registries);
