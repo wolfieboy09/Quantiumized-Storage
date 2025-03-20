@@ -90,7 +90,7 @@ public class SmelteryMenu extends AbstractContainerMenu {
         
         // Convert ID back to fluid
         Fluid fluid = BuiltInRegistries.FLUID.byId(fluidId);
-        if (fluid == null || (fluid == Fluids.EMPTY && amount == 0)) {
+        if (fluid == Fluids.EMPTY && amount == 0) {
             return FluidStack.EMPTY;
         }
         
@@ -109,6 +109,6 @@ public class SmelteryMenu extends AbstractContainerMenu {
     }
 
     public SmelteryBlockEntity getBlockEntity() {
-        return blockEntity;
+        return this.blockEntity;
     }
 }
