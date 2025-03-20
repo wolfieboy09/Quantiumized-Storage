@@ -6,20 +6,15 @@ import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.function.Supplier;
@@ -60,11 +55,11 @@ public class FluidWidget extends AbstractWidget {
             var amount = fluid.getAmount();
             if (hasShiftDown()){
                 graphics.renderTooltip(Minecraft.getInstance().font,
-                        Component.translatable("qstorage.screen.fluid",hoverName,formatted(amount),formatted(maxCapacity)),
+                        Component.translatable("qstorage.screen.fluid",hoverName,formatted(amount),formatted(this.maxCapacity)),
                         mouseX, mouseY);
             } else {
                 graphics.renderTooltip(Minecraft.getInstance().font,
-                        Component.translatable("qstorage.screen.fluid",hoverName,withSuffix(amount),withSuffix(maxCapacity)),
+                        Component.translatable("qstorage.screen.fluid",hoverName,withSuffix(amount),withSuffix(this.maxCapacity)),
                         mouseX, mouseY);
             }
 
@@ -72,7 +67,7 @@ public class FluidWidget extends AbstractWidget {
     }
 
     public void renderFluid(GuiGraphics guiGraphics, int startX, int startY, int width, int height) {
-        FluidStack fluidStack = fluidSupplier.get();
+        FluidStack fluidStack = this.fluidSupplier.get();
         if (fluidStack.isEmpty() || height <= 0) return;
 
         Fluid fluid = fluidStack.getFluid();
