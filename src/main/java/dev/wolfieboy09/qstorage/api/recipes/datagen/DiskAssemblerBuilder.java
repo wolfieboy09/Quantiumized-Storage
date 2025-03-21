@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.api.recipes;
+package dev.wolfieboy09.qstorage.api.recipes.datagen;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerRecipe;
