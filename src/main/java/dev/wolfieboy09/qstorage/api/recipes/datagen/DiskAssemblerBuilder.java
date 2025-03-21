@@ -61,7 +61,7 @@ public class DiskAssemblerBuilder implements RecipeBuilder {
                 .requirements(AdvancementRequirements.Strategy.OR);
         this.criteria.forEach(advancement::addCriterion);
         DiskAssemblerRecipe recipe = new DiskAssemblerRecipe(this.mainIngredients, this.extras, this.energyCost, this.timeInTicks, this.result);
-        output.accept(id, recipe, advancement.build(id.withPrefix("recipes/")));
+        output.accept(id, recipe, advancement.build(id.withPrefix("recipes/disk_assembler/")));
     }
 
     public static DiskAssemblerBuilder create(List<Ingredient> mainIngredients, List<Ingredient> extras, int energyCost, int timeInTicks, ItemStack result) {
