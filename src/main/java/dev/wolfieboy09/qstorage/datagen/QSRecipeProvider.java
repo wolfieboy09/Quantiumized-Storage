@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qstorage.datagen;
 
-import dev.wolfieboy09.qstorage.api.recipes.DiskAssemblerBuilder;
+import dev.wolfieboy09.qstorage.api.recipes.datagen.DiskAssemblerBuilder;
 import dev.wolfieboy09.qstorage.registries.QSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
