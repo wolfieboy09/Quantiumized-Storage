@@ -1,0 +1,26 @@
+{
+  "type": "qstorage:smeltery",
+  "ingredients": [
+    {
+      "amount": 1500,
+      "id": "minecraft:water"
+    },
+    {
+      "item": "minecraft:nether_star"
+    }
+  ],
+  "result": [
+    {
+      "count": 2,
+      "id": "qstorage:data_crystal"
+    }
+  ],
+  "temperature": 500,
+  "ticks": 20,
+  "waste": [
+    {
+      "count": 8,
+      "id": "minecraft:dirt"
+    }
+  ]
+}
