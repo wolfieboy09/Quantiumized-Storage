@@ -162,6 +162,33 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
+tasks.register('countLines') {
+    group = "Reporting"
+    description = "line counting and class counting"
+
+    def srcDir = layout.projectDirectory.dir("src/main/java").asFile
+
+    doLast {
+        def totalLines = 0
+        def totalClasses = 0
+
+        if (srcDir.exists()) {
+            srcDir.eachFileRecurse { file ->
+                if (file.name.endsWith(".java")) {
+                    def lineCount = file.readLines().size()
+                    totalLines += lineCount
+                    totalClasses++
+                }
+            }
+        }
+
+        println "Total Java classes: $totalClasses"
+        println "Total lines of code: $totalLines"
+    }
+}
+
+
+
 idea {
     module {
         downloadSources = true
