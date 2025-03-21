@@ -86,14 +86,14 @@ repositories {
         url = "https://modmaven.dev"
     }
     maven {
-        url "https://cursemaven.com"
+        url = "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
     maven {
         name = "LatvianMaven"
-        url "https://maven.latvian.dev/releases"
+        url = "https://maven.latvian.dev/releases"
         content {
             includeGroup "dev.latvian.mods"
             includeGroup "dev.latvian.apps"
@@ -102,7 +102,7 @@ repositories {
 
     maven {
         name = "JitpackMaven"
-        url 'https://jitpack.io'
+        url = 'https://jitpack.io'
         content {
             includeGroup "com.github.rtyley"
         }
@@ -153,7 +153,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/repo"
+            url = "file://${project.projectDir}/repo"
         }
     }
 }
