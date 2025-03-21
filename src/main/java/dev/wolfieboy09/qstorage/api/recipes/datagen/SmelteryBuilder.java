@@ -58,14 +58,14 @@ public class SmelteryBuilder implements RecipeBuilder {
     }
 
     @Override
-    public void save(RecipeOutput recipeOutput, ResourceLocation resourceLocation) {
+    public void save(RecipeOutput recipeOutput, ResourceLocation id) {
         Advancement.Builder advancement = recipeOutput.advancement()
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(resourceLocation))
-                .rewards(AdvancementRewards.Builder.recipe(resourceLocation))
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+                .rewards(AdvancementRewards.Builder.recipe(id))
                 .requirements(AdvancementRequirements.Strategy.OR);
         this.criteria.forEach(advancement::addCriterion);
         SmelteryRecipe recipe = new SmelteryRecipe(this.ingredients, this.result, this.waste, this.minFuelTemp, this.timeInTicks);
-        recipeOutput.accept(resourceLocation, recipe, advancement.build(resourceLocation.withPath("recipes/")));
+        recipeOutput.accept(id, recipe, advancement.build(id.withPath("recipes/smeltery/" + id.getPath())));
     }
 
     public static SmelteryBuilder create(List<Either<Ingredient, FluidStack>> ingredients, List<Either<ItemStack, FluidStack>> result, List<Either<ItemStack, FluidStack>> waste, int minFuelTemp, int timeInTicks) {
