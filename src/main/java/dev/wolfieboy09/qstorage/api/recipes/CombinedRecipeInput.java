@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.api.recipe;
+package dev.wolfieboy09.qstorage.api.recipes;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
