@@ -28,7 +28,8 @@ public class QSTags {
     public static final TagKey<Item> UPGRADES = modTag("upgrades");
 
     // Gasses
-    public static final TagKey<Gas> FLAMMABLE = null;
+    public static final TagKey<Gas> FLAMMABLE = gasTag("flammable");
+    public static final TagKey<Gas> OXYGEN_DEPRIVATION = gasTag("oxygen_deprivation");
 
     private static @NotNull TagKey<Gas> gasTag(String path) {
         return GasTags.create(ResourceHelper.asResource(path));
