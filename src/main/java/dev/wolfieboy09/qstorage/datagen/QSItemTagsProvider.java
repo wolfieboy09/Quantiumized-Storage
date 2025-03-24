@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qstorage.datagen;
 
 import dev.wolfieboy09.qstorage.registries.QSItems;
-import dev.wolfieboy09.qstorage.registries.tags.QSTags;
+import dev.wolfieboy09.qstorage.registries.tags.QSItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -17,34 +17,34 @@ public class QSItemTagsProvider extends ItemTagsProvider {
 
     @Override
     public void addTags(@NotNull HolderLookup.Provider provider) {
-      tag(QSTags.SILICON)
+      tag(QSItemTags.SILICON)
               .add(QSItems.SILICON.get());
 
-      tag(QSTags.DATA_CRYSTAL)
+      tag(QSItemTags.DATA_CRYSTAL)
               .add(QSItems.DATA_CRYSTAL.get());
 
-      tag(QSTags.STEEL_INGOT)
+      tag(QSItemTags.STEEL_INGOT)
               .add(QSItems.STEEL_INGOT.get());
 
-      tag(QSTags.ITEM_PORT)
+      tag(QSItemTags.ITEM_PORT)
               .add(QSItems.ITEM_PORT.get());
 
-      tag(QSTags.BASIC_CIRCUIT)
+      tag(QSItemTags.BASIC_CIRCUIT)
               .add(QSItems.BASIC_CIRCUIT.get());
 
-      tag(QSTags.ADVANCED_CIRCUIT)
+      tag(QSItemTags.ADVANCED_CIRCUIT)
               .add(QSItems.ADVANCED_CIRCUIT.get());
 
-      tag(QSTags.ELITE_CIRCUIT)
+      tag(QSItemTags.ELITE_CIRCUIT)
               .add(QSItems.ELITE_CIRCUIT.get());
 
-      tag(QSTags.ULTIMATE_CIRCUIT)
+      tag(QSItemTags.ULTIMATE_CIRCUIT)
               .add(QSItems.ULTIMATE_CIRCUIT.get());
 
-      tag(QSTags.QUANTUM_CIRCUIT)
+      tag(QSItemTags.QUANTUM_CIRCUIT)
               .add(QSItems.QUANTUM_CIRCUIT.get());
 
-      tag(QSTags.UPGRADES)
+      tag(QSItemTags.UPGRADES)
               .add(QSItems.MAX_ENERGY_UPGRADE.get())
               .add(QSItems.SPEED_UPGRADE.get());
     }
