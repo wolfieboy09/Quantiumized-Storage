@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qstorage.registries.tags;
 
-import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.tags.GasTags;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
@@ -10,7 +9,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
-public class QSTags {
+public class QSItemTags {
     // Global tags
     public static final TagKey<Item> STEEL_INGOT = globalTag("ingots/steel");
     public static final TagKey<Item> SILICON = globalTag("silicon");
@@ -26,14 +25,6 @@ public class QSTags {
     public static final TagKey<Item> ITEM_PORT = modTag("ports/item");
     public static final TagKey<Item> QUANTUM_CIRCUIT = modTag("circuits/quantum");
     public static final TagKey<Item> UPGRADES = modTag("upgrades");
-
-    // Gasses
-    public static final TagKey<Gas> FLAMMABLE = gasTag("flammable");
-    public static final TagKey<Gas> OXYGEN_DEPRIVATION = gasTag("oxygen_deprivation");
-
-    private static @NotNull TagKey<Gas> gasTag(String path) {
-        return GasTags.create(ResourceHelper.asResource(path));
-    }
 
     private static @NotNull TagKey<Item> globalTag(String path) {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
