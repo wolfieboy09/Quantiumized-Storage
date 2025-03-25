@@ -87,8 +87,8 @@ public class StorageMatrixMenu extends AbstractEnergyContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(@NotNull Player player, int index) {
-        return null;
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        return ItemStack.EMPTY;
     }
 
     @Override
