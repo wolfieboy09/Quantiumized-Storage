@@ -223,7 +223,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     @Override
     public void setChanged() {
         super.setChanged();
-        if (this.level == null || this.level.isClientSide) return;
+        //if (this.level == null || this.level.isClientSide) return;
     }
 
     @Override
