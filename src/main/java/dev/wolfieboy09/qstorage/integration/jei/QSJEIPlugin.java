@@ -1,14 +1,14 @@
-package dev.wolfieboy09.qstorage.intergration.jei;
+package dev.wolfieboy09.qstorage.integration.jei;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
-import dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler.DiskAssemblerCategory;
-import dev.wolfieboy09.qstorage.intergration.jei.modifiers.GasIngredientHelper;
-import dev.wolfieboy09.qstorage.intergration.jei.modifiers.GasIngredientRenderer;
-import dev.wolfieboy09.qstorage.intergration.jei.smeltery.SmelteryCategory;
+import dev.wolfieboy09.qstorage.integration.jei.disk_assembeler.DiskAssemblerCategory;
+import dev.wolfieboy09.qstorage.integration.jei.modifiers.GasIngredientHelper;
+import dev.wolfieboy09.qstorage.integration.jei.modifiers.GasIngredientRenderer;
+import dev.wolfieboy09.qstorage.integration.jei.smeltery.SmelteryCategory;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSRecipes;
 import mezz.jei.api.IModPlugin;
@@ -47,6 +47,8 @@ public class QSJEIPlugin implements IModPlugin {
 
         registration.addRecipes(DiskAssemblerCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.DISK_ASSEMBLER_TYPE.get()).stream()
                 .map(RecipeHolder::value).toList());
+
+        //System.out.println("Recipes: " + recipeManager.getAllRecipesFor(QSRecipes.SMELTERY_RECIPE_TYPE.get()).stream().toList());
 
         registration.addRecipes(SmelteryCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.SMELTERY_RECIPE_TYPE.get()).stream()
                 .map(RecipeHolder::value).toList());

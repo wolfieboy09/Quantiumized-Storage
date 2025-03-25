@@ -1,8 +1,8 @@
-package dev.wolfieboy09.qstorage.intergration.jei.modifiers;
+package dev.wolfieboy09.qstorage.integration.jei.modifiers;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
-import dev.wolfieboy09.qstorage.intergration.jei.QSJEIPlugin;
+import dev.wolfieboy09.qstorage.integration.jei.QSJEIPlugin;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;

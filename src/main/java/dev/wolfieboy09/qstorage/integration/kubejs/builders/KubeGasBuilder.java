@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.intergration.kubejs.builders;
+package dev.wolfieboy09.qstorage.integration.kubejs.builders;
 
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.typings.Info;

@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.intergration.kubejs.events;
+package dev.wolfieboy09.qstorage.integration.kubejs.events;
 
 import dev.latvian.mods.kubejs.event.EventGroup;
 

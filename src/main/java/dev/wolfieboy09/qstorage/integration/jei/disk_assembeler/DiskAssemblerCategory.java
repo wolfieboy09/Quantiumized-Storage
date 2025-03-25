@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler;
+package dev.wolfieboy09.qstorage.integration.jei.disk_assembeler;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;

@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.intergration.kubejs.bindings;
+package dev.wolfieboy09.qstorage.integration.kubejs.bindings;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;

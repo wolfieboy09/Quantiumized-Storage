@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.intergration.kubejs;
+package dev.wolfieboy09.qstorage.integration.kubejs;
 
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchemaRegistry;
@@ -10,9 +10,9 @@ import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.util.ColorUtil;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
-import dev.wolfieboy09.qstorage.intergration.kubejs.bindings.MobEffectInstanceBinding;
-import dev.wolfieboy09.qstorage.intergration.kubejs.builders.KubeGasBuilder;
-import dev.wolfieboy09.qstorage.intergration.kubejs.schemas.DiskAssemblySchema;
+import dev.wolfieboy09.qstorage.integration.kubejs.bindings.MobEffectInstanceBinding;
+import dev.wolfieboy09.qstorage.integration.kubejs.builders.KubeGasBuilder;
+import dev.wolfieboy09.qstorage.integration.kubejs.schemas.DiskAssemblySchema;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import org.jetbrains.annotations.NotNull;

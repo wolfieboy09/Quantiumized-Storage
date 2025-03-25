@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.intergration.kubejs.schemas;
+package dev.wolfieboy09.qstorage.integration.kubejs.schemas;
 
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
 import dev.latvian.mods.kubejs.recipe.component.*;

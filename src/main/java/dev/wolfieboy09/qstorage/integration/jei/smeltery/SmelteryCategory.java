@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.intergration.jei.smeltery;
+package dev.wolfieboy09.qstorage.integration.jei.smeltery;
 
 import com.mojang.datafixers.util.Either;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
@@ -28,7 +28,7 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
     private final int guiUOffset = 13;
     private final int guiVOffset = 4;
 
-    public SmelteryCategory(IGuiHelper guiHelper) {
+    public SmelteryCategory(@NotNull IGuiHelper guiHelper) {
         ResourceLocation location = ResourceHelper.asResource("textures/gui/smeltery.png");
         this.background = guiHelper.createDrawable(location, guiUOffset, guiVOffset, 160, 76);
         this.icon = guiHelper.createDrawableItemStack(new ItemStack(QSBlocks.SMELTERY.get()));
@@ -40,8 +40,13 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
     }
 
     @Override
-    public Component getTitle() {
+    public @NotNull Component getTitle() {
         return QSBlocks.DISK_ASSEMBLER.get().getName();
+    }
+
+    @Override
+    public @Nullable IDrawable getBackground() {
+        return this.background;
     }
 
     @Override
@@ -49,12 +54,20 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
         return this.icon;
     }
 
+//    @Override
+//    @NothingNullByDefault
+//    public void draw(SmelteryRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+//        guiGraphics.renderItem(new ItemStack(QSItems.MULTI_DIMENSIONAL_ITEM_DISK.get()), 0, 0);
+//    }
+
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull SmelteryRecipe recipe, @NotNull IFocusGroup focuses) {
         int itemIndex = 0;
         int fluidIndex = 0;
+        System.out.println("showing");
 
         for (Either<Ingredient, FluidStack> either : recipe.ingredients()) {
+            System.out.println("Looping for: " + either.toString());
             if (either.left().isPresent() && itemIndex < 3) {
                 Ingredient ingredient = either.left().get();
                 switch (itemIndex) {
