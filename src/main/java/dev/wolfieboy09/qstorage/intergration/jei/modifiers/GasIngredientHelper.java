@@ -38,6 +38,6 @@ public class GasIngredientHelper implements IIngredientHelper<Gas> {
 
     @Override
     public String getErrorInfo(@Nullable Gas ingredient) {
-        return "An error occured with: " + ingredient;
+        return "An error occurred with: " + ingredient;
     }
 }
