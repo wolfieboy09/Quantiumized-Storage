@@ -8,6 +8,7 @@ import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.intergration.jei.disk_assembeler.DiskAssemblerCategory;
 import dev.wolfieboy09.qstorage.intergration.jei.modifiers.GasIngredientHelper;
 import dev.wolfieboy09.qstorage.intergration.jei.modifiers.GasIngredientRenderer;
+import dev.wolfieboy09.qstorage.intergration.jei.smeltery.SmelteryCategory;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSRecipes;
 import mezz.jei.api.IModPlugin;
@@ -36,6 +37,7 @@ public class QSJEIPlugin implements IModPlugin {
     public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new DiskAssemblerCategory(guiHelper));
+        registration.addRecipeCategories(new SmelteryCategory(guiHelper));
     }
 
     @Override
@@ -45,11 +47,15 @@ public class QSJEIPlugin implements IModPlugin {
 
         registration.addRecipes(DiskAssemblerCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.DISK_ASSEMBLER_TYPE.get()).stream()
                 .map(RecipeHolder::value).toList());
+
+        registration.addRecipes(SmelteryCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.SMELTERY_RECIPE_TYPE.get()).stream()
+                .map(RecipeHolder::value).toList());
     }
 
     @Override
     public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(QSBlocks.DISK_ASSEMBLER.get()), DiskAssemblerCategory.RECIPE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(QSBlocks.SMELTERY.get()), SmelteryCategory.RECIPE_TYPE);
     }
 
     @Override
