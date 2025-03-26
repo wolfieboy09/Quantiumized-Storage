@@ -25,6 +25,8 @@ public class QSLangProvider extends LanguageProvider {
         toGenerate.put("tooltip.qstorage.max_energy_upgrade", "Adds more energy capacity");
         toGenerate.put("tooltip.qstorage.speed_upgrade", "Makes the process faster");
 
+        toGenerate.put("qstorage.screen.fluid", "%s: %s/%s");
+
         QSItems.ITEMS.getEntries().forEach(
                 item -> addItem(item, NamingUtil.toHumanReadable(item.getRegisteredName().split(":")[1]))
         );
