@@ -28,6 +28,9 @@ public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
         addRenderableWidget(new FluidWidget(() -> this.menu.getFluidInTank(0), this.leftPos + 8, this.topPos + 6, 18, 62, TANK_CAPACITY));
         addRenderableWidget(new FluidWidget(() -> this.menu.getFluidInTank(1), this.leftPos + 38, this.topPos + 6, 18, 62, TANK_CAPACITY));
         addRenderableWidget(new FluidWidget(() -> this.menu.getFluidInTank(2), this.leftPos + 67, this.topPos + 6, 18, 62, TANK_CAPACITY));
+
+        addRenderableWidget(new FluidWidget(() -> this.menu.getFluidInTank(3), this.leftPos + 194, this.topPos + 6, 18, 62, TANK_CAPACITY));
+        addRenderableWidget(new FluidWidget(() -> this.menu.getFluidInTank(4), this.leftPos + 223, this.topPos + 6, 18, 62, TANK_CAPACITY));
     }
 
     @Override
