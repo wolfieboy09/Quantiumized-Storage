@@ -27,7 +27,7 @@
   "item.qstorage.superior_storage_disk": "Superior Storage Disk",
   "item.qstorage.ultimate_circuit": "Ultimate Circuit",
   "qstorage.oxygen_deprivation": "%s could not breath on land",
+  "qstorage.screen.fluid": "%s: %s/%s",
   "tooltip.qstorage.max_energy_upgrade": "Adds more energy capacity",
-  "tooltip.qstorage.speed_upgrade": "Makes the process faster",
-  "qstorage.screen.fluid": "%s: %s/%s MB"
+  "tooltip.qstorage.speed_upgrade": "Makes the process faster"
 }
