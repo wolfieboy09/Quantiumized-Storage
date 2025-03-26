@@ -116,7 +116,7 @@ dependencies {
 
     //localRuntime "curse.maven:powah-rearchitected-633483:6143661"
     //localRuntime "curse.maven:cloth-config-348521:5729127"
-    localRuntime "curse.maven:jade-324717:6291517"
+    implementation "curse.maven:jade-324717:6291517"
     //localRuntime "curse.maven:probejs-585406:5820894"
 
     api("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
