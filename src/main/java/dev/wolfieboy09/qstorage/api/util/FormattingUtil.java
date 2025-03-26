@@ -1,15 +1,13 @@
 package dev.wolfieboy09.qstorage.api.util;
 
+import org.jetbrains.annotations.NotNull;
+
 public class FormattingUtil {
-    public static String formatNumber(int number) {
-        if (number >= 1_000_000_000) {
-            return String.format("%.1fB", number / 1_000_000_000.0);
-        } else if (number >= 1_000_000) {
-            return String.format("%.1fM", number / 1_000_000.0);
-        } else if (number >= 1_000) {
-            return String.format("%.1fk", number / 1_000.0);
-        } else {
-            return String.valueOf(number);
-        }
+    public static @NotNull String formatNumber(int count) {
+        if (count < 1000) return "" + count;
+        int exp = (int) (Math.log(count) / Math.log(1000));
+        return String.format("%.1f%c",
+                count / Math.pow(1000, exp),
+                "kMGTPE".charAt(exp - 1));
     }
 }
