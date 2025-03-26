@@ -40,9 +40,7 @@ public class FluidWidget extends AbstractWidget {
     public static String withSuffix(int count) {
         if (count < 1000) return "" + count;
         int exp = (int) (Math.log(count) / Math.log(1000));
-        return String.format("%.1f%c",
-                count / Math.pow(1000, exp),
-                "kMGTPE".charAt(exp - 1));
+        return String.format("%.1f", count / Math.pow(1000, exp));
     }
 
     @Override
@@ -55,11 +53,11 @@ public class FluidWidget extends AbstractWidget {
             var amount = fluid.getAmount();
             if (hasShiftDown()){
                 graphics.renderTooltip(Minecraft.getInstance().font,
-                        Component.translatable("qstorage.screen.fluid",hoverName,formatted(amount),formatted(this.maxCapacity)),
+                        Component.translatable("qstorage.screen.fluid",hoverName, formatted(amount), formatted(this.maxCapacity)),
                         mouseX, mouseY);
             } else {
                 graphics.renderTooltip(Minecraft.getInstance().font,
-                        Component.translatable("qstorage.screen.fluid",hoverName,withSuffix(amount),withSuffix(this.maxCapacity)),
+                        Component.translatable("qstorage.screen.fluid",hoverName, withSuffix(amount), withSuffix(this.maxCapacity)),
                         mouseX, mouseY);
             }
 
