@@ -58,7 +58,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                 case 2 -> inputTanks.get(2).getFluid();
                 case 3 -> outputFluidTank.getFluid();
                 case 4 -> wasteOutputFluidTank.getFluid();
-                default -> FluidStack.EMPTY;
+                default -> throw new IllegalArgumentException("Index: " + tank + " was invalid for getting a fluid tank");
             };
         }
 
@@ -70,7 +70,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                 case 2 -> inputTanks.get(2).getCapacity();
                 case 3 -> outputFluidTank.getCapacity();
                 case 4 -> wasteOutputFluidTank.getCapacity();
-                default -> 0;
+                default -> throw new IllegalArgumentException("Index: " + tank + " was invalid for getting a fluid tank capacity");
             };
         }
 
@@ -82,7 +82,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                 case 2 -> inputTanks.get(2).isFluidValid(stack);
                 case 3 -> outputFluidTank.isFluidValid(stack);
                 case 4 -> wasteOutputFluidTank.isFluidValid(stack);
-                default -> false;
+                default -> throw new IllegalArgumentException("Index: " + tank + " was invalid for fluid validation");
             };
         }
 
