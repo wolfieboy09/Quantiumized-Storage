@@ -2,7 +2,7 @@ package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import dev.wolfieboy09.qstorage.api.slots.EnergySlot;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyContainerMenu;
-import dev.wolfieboy09.qstorage.block.ItemResultSlot;
+import dev.wolfieboy09.qstorage.api.slots.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
 import net.minecraft.core.BlockPos;

@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qstorage.block.smeltery;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qstorage.block.ItemResultSlot;
+import dev.wolfieboy09.qstorage.api.slots.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
 import net.minecraft.core.BlockPos;

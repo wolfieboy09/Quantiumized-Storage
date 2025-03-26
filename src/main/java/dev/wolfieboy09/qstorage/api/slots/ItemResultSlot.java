@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.block;
+package dev.wolfieboy09.qstorage.api.slots;
 
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
