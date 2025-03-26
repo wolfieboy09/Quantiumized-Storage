@@ -44,7 +44,6 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     private final ExtendedFluidTank outputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::setChanged);
     private final ExtendedFluidTank wasteOutputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::setChanged);
     private final IFluidHandler fluidHandler = new IFluidHandler() {
-
         @Override
         public int getTanks() {
             return 5;
