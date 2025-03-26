@@ -28,6 +28,8 @@ public class QSItems {
     public static final DeferredItem<Item> ULTIMATE_CIRCUIT = simpleItem("ultimate_circuit");
     public static final DeferredItem<Item> QUANTUM_CIRCUIT = simpleItem("quantum_circuit");
 
+    public static final DeferredItem<Item> SULFUR = simpleItem("sulfur");
+
     public static final DeferredItem<UpgradeItem> MAX_ENERGY_UPGRADE = registerUpgradeItem("max_energy_upgrade");
     public static final DeferredItem<UpgradeItem> SPEED_UPGRADE = registerUpgradeItem("speed_upgrade");
 
