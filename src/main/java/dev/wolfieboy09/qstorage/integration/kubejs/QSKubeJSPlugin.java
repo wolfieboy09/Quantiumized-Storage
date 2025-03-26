@@ -38,7 +38,7 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     }
 
     @Override
-    public void registerBindings(BindingRegistry bindings) {
+    public void registerBindings(@NotNull BindingRegistry bindings) {
         bindings.add("ColorUtil", ColorUtil.class);
         bindings.add("MobEffectInstance", MobEffectInstanceBinding.class);
         bindings.add("MobEffects", MobEffects.class);
