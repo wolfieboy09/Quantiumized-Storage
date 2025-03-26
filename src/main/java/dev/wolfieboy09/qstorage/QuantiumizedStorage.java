@@ -33,8 +33,9 @@ public class QuantiumizedStorage {
 
         modEventBus.addListener(QSEvents::registerRegistries);
         modEventBus.addListener(QSEvents::particle);
+        modEventBus.register(QSClientEvents.class);
+
 //        modEventBus.register(QSShading.class);
-//        NeoForge.EVENT_BUS.register(QSClientEvents.class);
 
         // modEventBus.addListener(this::addCreative);
 
