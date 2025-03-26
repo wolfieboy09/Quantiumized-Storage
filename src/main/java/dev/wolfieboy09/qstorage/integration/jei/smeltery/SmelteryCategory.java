@@ -84,15 +84,14 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
             if (either.right().isPresent() && fluidIndex < 3) {
                 FluidStack fluid = either.right().get();
                 int fluidX = 90 - guiUOffset;
-                int fluidY = 20 + (fluidIndex * 18) - guiVOffset; // Stacks fluids vertically
+                int fluidY = 20 + (fluidIndex * 18) - guiVOffset;
 
-                builder.addSlot(RecipeIngredientRole.INPUT, fluidX, fluidY)
-                        .setFluidRenderer(1000, true, 16, 16) // Adjusts size and amount
+                builder.addSlot(RecipeIngredientRole.RENDER_ONLY, fluidX, fluidY)
+                        .setFluidRenderer(1000, true, 16, 16)
                         .addFluidStack(fluid.getFluid(), fluid.getAmount());
                 fluidIndex++;
             }
 
-            // Stop early if we reach the max allowed inputs
             if (itemIndex + fluidIndex >= 3) break;
         }
     }
