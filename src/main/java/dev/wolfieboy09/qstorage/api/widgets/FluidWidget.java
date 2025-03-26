@@ -45,7 +45,8 @@ public class FluidWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        FluidStack fluid = fluidSupplier.get();
+        FluidStack fluid = this.fluidSupplier.get();
+        if (fluid.isEmpty()) return;
         int fluidFilled = fluid.getAmount() * 100 / this.maxCapacity;
         renderFluid(graphics,getX(),getY()+this.height,this.width, (int) (this.height * (float) fluidFilled / 100f));
         if (isHovered()) {
