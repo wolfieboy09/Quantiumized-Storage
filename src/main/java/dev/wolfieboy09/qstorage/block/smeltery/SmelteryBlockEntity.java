@@ -39,8 +39,8 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     private final ContainerData containerData = new SimpleContainerData(INPUT_TANKS_COUNT * 2);
     private final ItemStackHandler inventory = new ItemStackHandler(5);
     private final List<ExtendedFluidTank> inputTanks = new ArrayList<>(INPUT_TANKS_COUNT);
-    private final ExtendedFluidTank outputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::setChanged);
-    private final ExtendedFluidTank wasteOutputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::setChanged);
+    private final ExtendedFluidTank outputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::onContentsChanged);
+    private final ExtendedFluidTank wasteOutputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::onContentsChanged);
     private final IFluidHandler fluidHandler = new IFluidHandler() {
         @Override
         public int getTanks() {
@@ -85,6 +85,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
         @Override
         public int fill(FluidStack fluidStack, FluidAction fluidAction) {
+            onContentsChanged();
             for (ExtendedFluidTank inputTank : inputTanks) {
                 if (inputTank.getFluid().getFluid() == fluidStack.getFluid()) {
                     return inputTank.fill(fluidStack, fluidAction);
@@ -98,6 +99,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
         @Override
         public FluidStack drain(FluidStack fluidStack, FluidAction fluidAction) {
+            onContentsChanged();
             if (outputFluidTank.getFluid().getFluid() == fluidStack.getFluid()) {
                 return outputFluidTank.drain(fluidStack, fluidAction);
             }
@@ -110,6 +112,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
         @Override
         public FluidStack drain(int maxDrain, FluidAction fluidAction) {
+            onContentsChanged();
             if (outputFluidTank.getFluidAmount() >= maxDrain) {
                 return outputFluidTank.drain(maxDrain, fluidAction);
             }
@@ -213,8 +216,14 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     public void tick() {
 //        Testing if the tanks function correctly
+//        this.inputTanks.getFirst().setFluid(new FluidStack(Fluids.WATER, 5000));
+//        this.inputTanks.get(1).setFluid(new FluidStack(Fluids.LAVA, 5000));
+//        this.inputTanks.get(2).setFluid(new FluidStack(Fluids.WATER, 5000));
+//        this.outputFluidTank.setFluid(new FluidStack(Fluids.LAVA, 5000));
+//        this.wasteOutputFluidTank.setFluid(new FluidStack(Fluids.WATER, 5000));
 //        this.inputTanks.getFirst().fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
 //        this.inputTanks.get(1).fill(new FluidStack(Fluids.LAVA,10), IFluidHandler.FluidAction.EXECUTE);
+//        this.inputTanks.get(2).fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
 //        this.outputFluidTank.fill(new FluidStack(Fluids.LAVA, 10), IFluidHandler.FluidAction.EXECUTE);
 //        this.wasteOutputFluidTank.fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
     }
