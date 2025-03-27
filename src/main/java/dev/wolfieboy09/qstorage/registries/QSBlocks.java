@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
+import dev.wolfieboy09.qstorage.block.PipeBlock;
 import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
@@ -46,6 +47,11 @@ public class QSBlocks {
     public static final DeferredBlock<SmelteryBlock> SMELTERY = registerBlockWithProperties(
             "smeltery",
             () -> new SmelteryBlock(BlockBehaviour.Properties.of().noOcclusion())
+    );
+
+    public static final DeferredBlock<PipeBlock> PIPE = registerBlock(
+            "pipe",
+            PipeBlock::new
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
