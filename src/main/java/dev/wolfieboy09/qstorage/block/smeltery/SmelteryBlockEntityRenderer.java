@@ -38,6 +38,9 @@ public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<Smeltery
         FluidStack inputFluid2 = blockEntity.getFluidHandler().getFluidInTank(1);
         FluidStack inputFluid3 = blockEntity.getFluidHandler().getFluidInTank(2);
 
+        FluidStack resultFluid = blockEntity.getFluidHandler().getFluidInTank(3);
+        FluidStack wasteFluid = blockEntity.getFluidHandler().getFluidInTank(4);
+
         Level level = blockEntity.getLevel();
 
         if (level == null) return;
@@ -96,9 +99,9 @@ public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<Smeltery
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
             int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
             VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
-            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(2).getAmount() / blockEntity.getFluidHandler().getTankCapacity(1)) * 0.635f) + 0.26f;
+            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(2).getAmount() / blockEntity.getFluidHandler().getTankCapacity(2)) * 0.635f) + 0.26f;
 
-            if(blockEntity.getFluidHandler().getFluidInTank(1).getAmount() < blockEntity.getFluidHandler().getTankCapacity(2)) {
+            if(blockEntity.getFluidHandler().getFluidInTank(2).getAmount() < blockEntity.getFluidHandler().getTankCapacity(2)) {
                 poseStack.pushPose();
                 poseStack.translate(0.625,0.05,-0.44);
                 drawQuad(builder, poseStack, 0.25f, height, 0.5f, 0.365f, height, 0.75f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
@@ -109,6 +112,52 @@ public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<Smeltery
             poseStack.mulPose(Axis.YN.rotationDegrees(90));
             poseStack.translate(-0.43, 0.05, -1.24);
             drawQuad(builder, poseStack, 0.487f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
+            poseStack.popPose();
+        }
+
+        if (!resultFluid.isEmpty()) {
+            FluidState state = resultFluid.getFluid().defaultFluidState();
+            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(resultFluid.getFluid());
+            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(resultFluid);
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
+            int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
+            VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
+            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(3).getAmount() / blockEntity.getFluidHandler().getTankCapacity(3)) * 0.635f) + 0.26f;
+
+            if(blockEntity.getFluidHandler().getFluidInTank(3).getAmount() < blockEntity.getFluidHandler().getTankCapacity(3)) {
+                poseStack.pushPose();
+                poseStack.translate(-0.24,0.05,-0.44);
+                drawQuad(builder, poseStack, 0.27f, height, 0.5f, 0.365f, height, 0.88f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
+                poseStack.popPose();
+            }
+
+            poseStack.pushPose();
+            poseStack.mulPose(Axis.YN.rotationDegrees(270));
+            poseStack.translate(-0.75, 0.05, -0.22);
+            drawQuad(builder, poseStack, 0.3f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
+            poseStack.popPose();
+        }
+
+        if (!wasteFluid.isEmpty()) {
+            FluidState state = wasteFluid.getFluid().defaultFluidState();
+            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(wasteFluid.getFluid());
+            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(wasteFluid);
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
+            int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
+            VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
+            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(4).getAmount() / blockEntity.getFluidHandler().getTankCapacity(4)) * 0.635f) + 0.26f;
+
+            if(blockEntity.getFluidHandler().getFluidInTank(4).getAmount() < blockEntity.getFluidHandler().getTankCapacity(4)) {
+                poseStack.pushPose();
+                poseStack.translate(-0.24,0.05,-0.44);
+                drawQuad(builder, poseStack, 0.27f, height, 0.5f, 0.365f, height, 0.88f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
+                poseStack.popPose();
+            }
+
+            poseStack.pushPose();
+            poseStack.mulPose(Axis.YN.rotationDegrees(270));
+            poseStack.translate(-0.75, 0.05, -0.22);
+            drawQuad(builder, poseStack, 0.3f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
             poseStack.popPose();
         }
     }
