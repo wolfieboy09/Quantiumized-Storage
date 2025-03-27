@@ -43,9 +43,9 @@ public class QSBlocks {
             CreativeEnergyBlock::new
     );
 
-    public static final DeferredBlock<SmelteryBlock> SMELTERY = registerBlock(
+    public static final DeferredBlock<SmelteryBlock> SMELTERY = registerBlockWithProperties(
             "smeltery",
-            SmelteryBlock::new
+            () -> new SmelteryBlock(BlockBehaviour.Properties.of().noOcclusion())
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
