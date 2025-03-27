@@ -9,14 +9,16 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 @NothingNullByDefault
 public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<SmelteryBlockEntity> {
@@ -26,138 +28,60 @@ public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<Smeltery
         this.context = context;
     }
 
-//    private void renderInputFluid1(PoseStack poseStack) {
-//
-//    }
-
-
+    // Thanks to Random (random832) on the NeoForge server for making this code so much better
     @Override
     public void render(SmelteryBlockEntity blockEntity, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
-        if (blockEntity.getFluidHandler() == null) return;
-        FluidStack inputFluid1 = blockEntity.getFluidHandler().getFluidInTank(0);
-        FluidStack inputFluid2 = blockEntity.getFluidHandler().getFluidInTank(1);
-        FluidStack inputFluid3 = blockEntity.getFluidHandler().getFluidInTank(2);
-
-        FluidStack resultFluid = blockEntity.getFluidHandler().getFluidInTank(3);
-        FluidStack wasteFluid = blockEntity.getFluidHandler().getFluidInTank(4);
-
+        IFluidHandler handler = blockEntity.getFluidHandler();
         Level level = blockEntity.getLevel();
 
-        if (level == null) return;
+        if (handler == null || level == null) return;
+
+        FluidStack inputFluid1 = handler.getFluidInTank(0);
+        FluidStack inputFluid2 = handler.getFluidInTank(1);
+        FluidStack inputFluid3 = handler.getFluidInTank(2);
+        FluidStack resultFluid = handler.getFluidInTank(3);
+        FluidStack wasteFluid = handler.getFluidInTank(4);
+        //TODO Get all 4 directions showing the fluid correctly
+//        int[] rotationAngle = switch (blockEntity.getBlockState().getValue(SmelteryBlock.FACING)) {
+//            case SOUTH -> new int[] {180, 90};
+//            default -> new int[] {90, 270};
+//        };
 
         BlockPos pos = blockEntity.getBlockPos();
-        if (!inputFluid1.isEmpty()) {
-            FluidState state = inputFluid1.getFluid().defaultFluidState();
-            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(inputFluid1.getFluid());
-            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(inputFluid1);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
+//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid1, level, pos, 0.625f, 0.188f, 0.25f, 0.75f, 0.2f, -1.24f, 0.487f, rotationAngle[0], handler.getTankCapacity(0));
+//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid2, level, pos, 0.625f, -0.13f, 0.25f, 0.76f, -0.115f, -1.24f, 0.487f, rotationAngle[0], handler.getTankCapacity(1));
+//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid3, level, pos, 0.625f, -0.44f, 0.25f, 0.75f, -0.43f, -1.24f, 0.487f, rotationAngle[0], handler.getTankCapacity(2));
+//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, resultFluid, level, pos, -0.24f, -0.44f, 0.27f, 0.88f, -0.75f, -0.22f, 0.3f, rotationAngle[1], handler.getTankCapacity(3));
+//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, wasteFluid, level, pos, -0.24f, 0.06f, 0.27f, 0.88f, -1.3f, -0.22f, 0.3f, rotationAngle[1], handler.getTankCapacity(4));
+
+        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid1, level, pos, 0.625f, 0.188f, 0.25f, 0.75f, 0.2f, -1.24f, 0.487f, 90, handler.getTankCapacity(0));
+        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid2, level, pos, 0.625f, -0.13f, 0.25f, 0.76f, -0.115f, -1.24f, 0.487f, 90, handler.getTankCapacity(1));
+        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid3, level, pos, 0.625f, -0.44f, 0.25f, 0.75f, -0.43f, -1.24f, 0.487f, 90, handler.getTankCapacity(2));
+        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, resultFluid, level, pos, -0.24f, -0.44f, 0.27f, 0.88f, -0.75f, -0.22f, 0.3f, 270, handler.getTankCapacity(3));
+        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, wasteFluid, level, pos, -0.24f, 0.06f, 0.27f, 0.88f, -1.3f, -0.22f, 0.3f, 270, handler.getTankCapacity(4));
+    }
+
+    private static void drawFluid(SmelteryBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay, FluidStack fluid, BlockAndTintGetter level, BlockPos pos, float x0, float z0, float x1, float z2, float x3, float z3, float x4, int rotationAngle, int tankCapacity) {
+        if (!fluid.isEmpty()) {
+            FluidState state = fluid.getFluid().defaultFluidState();
+            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(fluid.getFluid());
+            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(fluid);
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(stillTexture);
             int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
             VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
-            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(0).getAmount() / blockEntity.getFluidHandler().getTankCapacity(0)) * 0.635f) + 0.26f;
+            float height = (((float) fluid.getAmount() / tankCapacity) * 0.635f) + 0.26f;
 
-            if(blockEntity.getFluidHandler().getFluidInTank(0).getAmount() < blockEntity.getFluidHandler().getTankCapacity(0)) {
+            if(fluid.getAmount() < tankCapacity) {
                 poseStack.pushPose();
-                poseStack.translate(0.625,0.05,0.188);
-                drawQuad(builder, poseStack, 0.25f, height, 0.5f, 0.365f, height, 0.75f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
+                poseStack.translate(x0, 0.05f, z0);
+                drawQuad(builder, poseStack, x1, height, 0.5f, 0.365f, height, z2, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
                 poseStack.popPose();
             }
 
             poseStack.pushPose();
-            poseStack.mulPose(Axis.YN.rotationDegrees(90));
-            poseStack.translate(0.2, 0.05, -1.24);
-            drawQuad(builder, poseStack, 0.487f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-            poseStack.popPose();
-        }
-
-        if (!inputFluid2.isEmpty()) {
-            FluidState state = inputFluid2.getFluid().defaultFluidState();
-            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(inputFluid2.getFluid());
-            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(inputFluid2);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
-            int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
-            VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
-            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(1).getAmount() / blockEntity.getFluidHandler().getTankCapacity(1)) * 0.635f) + 0.26f;
-
-            if(blockEntity.getFluidHandler().getFluidInTank(1).getAmount() < blockEntity.getFluidHandler().getTankCapacity(1)) {
-                poseStack.pushPose();
-                poseStack.translate(0.625,0.05,-0.13);
-                drawQuad(builder, poseStack, 0.25f, height, 0.5f, 0.365f, height, 0.75f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-                poseStack.popPose();
-            }
-
-            poseStack.pushPose();
-            poseStack.mulPose(Axis.YN.rotationDegrees(90));
-            poseStack.translate(-0.115, 0.05, -1.24);
-            drawQuad(builder, poseStack, 0.487f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-            poseStack.popPose();
-        }
-
-        if (!inputFluid3.isEmpty()) {
-            FluidState state = inputFluid3.getFluid().defaultFluidState();
-            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(inputFluid3.getFluid());
-            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(inputFluid3);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
-            int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
-            VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
-            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(2).getAmount() / blockEntity.getFluidHandler().getTankCapacity(2)) * 0.635f) + 0.26f;
-
-            if(blockEntity.getFluidHandler().getFluidInTank(2).getAmount() < blockEntity.getFluidHandler().getTankCapacity(2)) {
-                poseStack.pushPose();
-                poseStack.translate(0.625,0.05,-0.44);
-                drawQuad(builder, poseStack, 0.25f, height, 0.5f, 0.365f, height, 0.75f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-                poseStack.popPose();
-            }
-
-            poseStack.pushPose();
-            poseStack.mulPose(Axis.YN.rotationDegrees(90));
-            poseStack.translate(-0.43, 0.05, -1.24);
-            drawQuad(builder, poseStack, 0.487f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-            poseStack.popPose();
-        }
-
-        if (!resultFluid.isEmpty()) {
-            FluidState state = resultFluid.getFluid().defaultFluidState();
-            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(resultFluid.getFluid());
-            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(resultFluid);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
-            int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
-            VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
-            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(3).getAmount() / blockEntity.getFluidHandler().getTankCapacity(3)) * 0.635f) + 0.26f;
-
-            if(blockEntity.getFluidHandler().getFluidInTank(3).getAmount() < blockEntity.getFluidHandler().getTankCapacity(3)) {
-                poseStack.pushPose();
-                poseStack.translate(-0.24,0.05,-0.44);
-                drawQuad(builder, poseStack, 0.27f, height, 0.5f, 0.365f, height, 0.88f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-                poseStack.popPose();
-            }
-
-            poseStack.pushPose();
-            poseStack.mulPose(Axis.YN.rotationDegrees(270));
-            poseStack.translate(-0.75, 0.05, -0.22);
-            drawQuad(builder, poseStack, 0.3f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-            poseStack.popPose();
-        }
-
-        if (!wasteFluid.isEmpty()) {
-            FluidState state = wasteFluid.getFluid().defaultFluidState();
-            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(wasteFluid.getFluid());
-            ResourceLocation stillTexture = fluidTypeExtensions.getStillTexture(wasteFluid);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillTexture);
-            int tintColor = fluidTypeExtensions.getTintColor(state, level, pos);
-            VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
-            float height = (((float) blockEntity.getFluidHandler().getFluidInTank(4).getAmount() / blockEntity.getFluidHandler().getTankCapacity(4)) * 0.635f) + 0.26f;
-
-            if(blockEntity.getFluidHandler().getFluidInTank(4).getAmount() < blockEntity.getFluidHandler().getTankCapacity(4)) {
-                poseStack.pushPose();
-                poseStack.translate(-0.24,0.05,-0.44);
-                drawQuad(builder, poseStack, 0.27f, height, 0.5f, 0.365f, height, 0.88f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
-                poseStack.popPose();
-            }
-
-            poseStack.pushPose();
-            poseStack.mulPose(Axis.YN.rotationDegrees(270));
-            poseStack.translate(-0.75, 0.05, -0.22);
-            drawQuad(builder, poseStack, 0.3f, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
+            poseStack.mulPose(Axis.YN.rotationDegrees(rotationAngle));
+            poseStack.translate(x3, 0.05f, z3);
+            drawQuad(builder, poseStack, x4, 0, 0.25f, 0.74f, height, 0.25f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);
             poseStack.popPose();
         }
     }
