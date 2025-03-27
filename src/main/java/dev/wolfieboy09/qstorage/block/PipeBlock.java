@@ -24,7 +24,7 @@ public class PipeBlock extends Block implements SimpleWaterloggedBlock, EntityBl
     public static final BooleanProperty HAS_DATA = BooleanProperty.create("has_data");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    protected PipeBlock(@NotNull Properties properties) {
+    public PipeBlock(@NotNull Properties properties) {
         super(properties.mapColor(MapColor.COLOR_GRAY).strength(0.5f).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK));
 
         registerDefaultState(stateDefinition.any()
