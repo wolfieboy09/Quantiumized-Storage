@@ -1,5 +1,5 @@
 {
-	"textures": {
+  "textures": {
 		"0": "qstorage:block/pipe_connected",
 		"particle": "qstorage:block/pipe_connected"
 	},
@@ -10,12 +10,12 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 7, 7]},
 			"color": 3,
 			"faces": {
-				"north": {"uv": [0, 0, 2, 2], "texture": "#missing"},
-				"east": {"uv": [0, 2, 2, 4], "texture": "#missing"},
-				"south": {"uv": [2, 0, 4, 2], "texture": "#missing"},
-				"west": {"uv": [2, 2, 4, 4], "texture": "#missing"},
-				"up": {"uv": [2, 6, 0, 4], "texture": "#missing"},
-				"down": {"uv": [6, 0, 4, 2], "texture": "#missing"}
+				"north": {"uv": [0, 0, 2, 2], "texture": "#0"},
+				"east": {"uv": [0, 2, 2, 4], "texture": "#0"},
+				"south": {"uv": [2, 0, 4, 2], "texture": "#0"},
+				"west": {"uv": [2, 2, 4, 4], "texture": "#0"},
+				"up": {"uv": [2, 6, 0, 4], "texture": "#0"},
+				"down": {"uv": [6, 0, 4, 2], "texture": "#0"}
 			}
 		},
 		{
