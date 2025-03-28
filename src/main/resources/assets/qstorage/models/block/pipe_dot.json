@@ -1,5 +1,5 @@
 {
-	"textures": {
+  "textures": {
 		"0": "qstorage:block/pipe_dot",
 		"particle": "qstorage:block/pipe_dot"
 	},
