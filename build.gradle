@@ -119,6 +119,8 @@ dependencies {
     implementation "curse.maven:jade-324717:6291517"
     //localRuntime "curse.maven:probejs-585406:5820894"
 
+    localRuntime "curse.maven:mekanism-268560:6327955"
+
     api("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
     interfaceInjectionData("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
 }
