@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.block;
+package dev.wolfieboy09.qstorage.block.pipe;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
@@ -37,6 +38,11 @@ public class PipeBlock extends Block implements SimpleWaterloggedBlock, EntityBl
                 .setValue(HAS_DATA, false)
                 .setValue(WATERLOGGED, false)
         );
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(UP, DOWN, NORTH, SOUTH, EAST, WEST, HAS_DATA, WATERLOGGED);
     }
 
     @Override
