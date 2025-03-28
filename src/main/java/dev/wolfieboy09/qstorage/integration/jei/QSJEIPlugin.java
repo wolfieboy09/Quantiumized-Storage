@@ -36,8 +36,7 @@ public class QSJEIPlugin implements IModPlugin {
     @Override
     public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
-        registration.addRecipeCategories(new DiskAssemblerCategory(guiHelper));
-        registration.addRecipeCategories(new SmelteryCategory(guiHelper));
+        registration.addRecipeCategories(new DiskAssemblerCategory(guiHelper), new SmelteryCategory(guiHelper));
     }
 
     @Override
