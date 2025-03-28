@@ -2,16 +2,23 @@ package dev.wolfieboy09.qstorage.integration.jei.smeltery;
 
 import com.mojang.datafixers.util.Either;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
+import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryRecipe;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
+import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.IDrawableAnimated;
+import mezz.jei.api.gui.drawable.IDrawableBuilder;
+import mezz.jei.api.gui.drawable.IDrawableStatic;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +27,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@NothingNullByDefault
 public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
     public static final RecipeType<SmelteryRecipe> RECIPE_TYPE = RecipeType.create(QuantiumizedStorage.MOD_ID, "smeltery", SmelteryRecipe.class);
     private final IDrawable background;
@@ -30,7 +38,7 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
 
     public SmelteryCategory(@NotNull IGuiHelper guiHelper) {
         ResourceLocation location = ResourceHelper.asResource("textures/gui/smeltery.png");
-        this.background = guiHelper.createDrawable(location, guiUOffset, guiVOffset, 160, 76);
+        this.background = guiHelper.createDrawable(location, guiUOffset, guiVOffset, 160, 75);
         this.icon = guiHelper.createDrawableItemStack(new ItemStack(QSBlocks.SMELTERY.get()));
     }
 
@@ -41,24 +49,18 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
 
     @Override
     public @NotNull Component getTitle() {
-        return QSBlocks.DISK_ASSEMBLER.get().getName();
+        return QSBlocks.SMELTERY.get().getName();
     }
 
     @Override
-    public @Nullable IDrawable getBackground() {
-        return this.background;
+    public void draw(SmelteryRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+
     }
 
     @Override
     public @Nullable IDrawable getIcon() {
         return this.icon;
     }
-
-//    @Override
-//    @NothingNullByDefault
-//    public void draw(SmelteryRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-//        guiGraphics.renderItem(new ItemStack(QSItems.MULTI_DIMENSIONAL_ITEM_DISK.get()), 0, 0);
-//    }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull SmelteryRecipe recipe, @NotNull IFocusGroup focuses) {

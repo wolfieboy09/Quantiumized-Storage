@@ -56,11 +56,11 @@ public class QSRecipeProvider extends RecipeProvider {
                     Either.right(new FluidStack(Fluids.WATER, 1500)),
                     Either.left(Ingredient.of(new ItemStack(Items.NETHER_STAR)))),
             List.of(
-                    Either.left(new ItemStack(Items.SOUL_CAMPFIRE))),
+                    Either.left(new ItemStack(QSItems.DATA_CRYSTAL.get()))),
             List.of(
                     Either.left(new ItemStack(Items.DIRT, 8))),
             500,
             20
-        ).save(output);
+        ).save(output, "soul_campfire_test");
     }
 }
