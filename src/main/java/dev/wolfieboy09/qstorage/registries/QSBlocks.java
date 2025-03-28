@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
-import dev.wolfieboy09.qstorage.block.PipeBlock;
+import dev.wolfieboy09.qstorage.block.pipe.PipeBlock;
 import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
