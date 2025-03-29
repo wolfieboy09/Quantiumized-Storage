@@ -2,15 +2,13 @@ package dev.wolfieboy09.qstorage.integration.kubejs.schemas;
 
 import com.mojang.datafixers.util.Either;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
-import dev.latvian.mods.kubejs.recipe.component.ComponentRole;
-import dev.latvian.mods.kubejs.recipe.component.IngredientComponent;
-import dev.latvian.mods.kubejs.recipe.component.RecipeComponent;
-import dev.latvian.mods.kubejs.recipe.component.RecipeComponentBuilder;
+import dev.latvian.mods.kubejs.recipe.component.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.List;
 
 public interface SmelterySchema {
-    //RecipeKey<List<Either<Ingredient, FluidStack>>> INGREDIENTS = IngredientComponent.INGREDIENT.or(FILL THIS OUT).asList().key("ingredients", ComponentRole.INPUT);
+    //RecipeKey<List<Either<Ingredient, SizedFluidIngredient>>> INGREDIENTS = IngredientComponent.INGREDIENT.or(INSERT SIZED FLUID INGREDIENT HERE).asList().key("ingredients", ComponentRole.INPUT);
 }
