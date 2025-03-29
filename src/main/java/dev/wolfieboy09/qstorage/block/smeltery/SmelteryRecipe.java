@@ -18,12 +18,14 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.List;
 
 @NothingNullByDefault
 public record SmelteryRecipe(
-        List<Either<Ingredient, FluidStack>> ingredients,
+        List<Either<Ingredient, SizedFluidIngredient>> ingredients,
         List<Either<ItemStack, FluidStack>> result,
         List<Either<ItemStack, FluidStack>> waste,
         int minFuelTemp,
@@ -37,7 +39,7 @@ public record SmelteryRecipe(
                         ingredient -> ingredient.test(input.getItem(0)) &&
                                 ingredient.test(input.getItem(1)) &&
                                 ingredient.test(input.getItem(2)),
-                        fluid -> input.matchFluid(fluid.getFluid(), 0) &&
+                        fluid -> input.matchFluid(fluid.amount(), 0) &&
                                 input.matchFluid(fluid.getFluid(), 1) &&
                                 input.matchFluid(fluid.getFluid(), 2)
                 ));
