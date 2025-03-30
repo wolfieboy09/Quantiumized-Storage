@@ -13,6 +13,7 @@ import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.integration.kubejs.bindings.MobEffectInstanceBinding;
 import dev.wolfieboy09.qstorage.integration.kubejs.builders.KubeGasBuilder;
 import dev.wolfieboy09.qstorage.integration.kubejs.schemas.DiskAssemblySchema;
+import dev.wolfieboy09.qstorage.integration.kubejs.schemas.SmelterySchema;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,7 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     public void registerRecipeSchemas(@NotNull RecipeSchemaRegistry registry) {
         registry.namespace(QuantiumizedStorage.MOD_ID);
         registry.register(locate("disk_assembly"), DiskAssemblySchema.SCHEMA);
+        registry.register(locate("smeltery"), SmelterySchema.SCHEMA);
     }
 
     @Override
