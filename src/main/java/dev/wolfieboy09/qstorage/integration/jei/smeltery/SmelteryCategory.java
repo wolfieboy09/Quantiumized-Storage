@@ -7,12 +7,8 @@ import dev.wolfieboy09.qstorage.api.util.FluidUtil;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryRecipe;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
-import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.drawable.IDrawableBuilder;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -23,9 +19,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,12 +65,12 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
         this.background.draw(guiGraphics);
         int count = 0;
 
-        for (Either<Ingredient, FluidStack> either : recipe.ingredients()) {
+        for (Either<Ingredient, SizedFluidIngredient> either : recipe.ingredients()) {
             if (either.right().isPresent()) {
                 switch (count) {
-                    case 0 -> FluidUtil.renderFluid(guiGraphics, either.right().get(), 8 - guiUOffset, 68 - guiVOffset, 18, 62);
-                    case 1 -> FluidUtil.renderFluid(guiGraphics, either.right().get(), 38 - guiUOffset, 68 - guiVOffset, 18, 62);
-                    case 2 -> FluidUtil.renderFluid(guiGraphics, either.right().get(), 67 - guiUOffset, 68 - guiVOffset, 18, 62);
+                    case 0 -> FluidUtil.renderFluid(guiGraphics, either.right().get().getFluids(), 8 - guiUOffset, 68 - guiVOffset, 18, 62);
+                    case 1 -> FluidUtil.renderFluid(guiGraphics, either.right().get().getFluids(), 38 - guiUOffset, 68 - guiVOffset, 18, 62);
+                    case 2 -> FluidUtil.renderFluid(guiGraphics, either.right().get().getFluids(), 67 - guiUOffset, 68 - guiVOffset, 18, 62);
                 }
                 count++;
             }
@@ -105,7 +101,7 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
         int itemIndex = 0;
         System.out.println("showing");
 
-        for (Either<Ingredient, FluidStack> either : recipe.ingredients()) {
+        for (Either<Ingredient, SizedFluidIngredient> either : recipe.ingredients()) {
             System.out.println("Looping for: " + either.toString());
             if (either.left().isPresent()) {
                 Ingredient ingredient = either.left().get();
