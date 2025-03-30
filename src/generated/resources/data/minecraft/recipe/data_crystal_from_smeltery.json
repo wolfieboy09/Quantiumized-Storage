@@ -2,10 +2,6 @@
   "type": "qstorage:smeltery",
   "ingredients": [
     {
-      "amount": 1500,
-      "id": "minecraft:water"
-    },
-    {
       "item": "minecraft:nether_star"
     }
   ],

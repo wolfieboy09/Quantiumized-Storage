@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:soul_campfire_smeltery_test"
+        "recipe": "minecraft:data_crystal_from_smeltery"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -15,7 +15,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:soul_campfire_smeltery_test"
+      "minecraft:data_crystal_from_smeltery"
     ]
   }
 }
