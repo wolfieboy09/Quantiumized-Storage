@@ -1,7 +1,5 @@
 package dev.wolfieboy09.qstorage.registries.tags;
 
-import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
-import dev.wolfieboy09.qstorage.api.tags.GasTags;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;

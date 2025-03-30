@@ -2,8 +2,6 @@ package dev.wolfieboy09.qstorage.datagen;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.datagen.GasTagProvider;
-import dev.wolfieboy09.qstorage.registries.QSGasses;
-import dev.wolfieboy09.qstorage.registries.tags.QSGasTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;

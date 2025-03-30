@@ -7,6 +7,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.CompletableFuture;
 
 public abstract class GasTagProvider extends TagsProvider<Gas> {
