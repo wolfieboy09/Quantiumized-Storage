@@ -33,6 +33,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     private int progress = 0;
     private int crafting_ticks = 0;
     private boolean isValidRecipe = false;
+    @UnknownNullability
     private SmelteryRecipe recipe = null;
 
     private final Component TITLE = Component.translatable("block.qstorage.smeltery");
@@ -51,7 +53,17 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     // For each tank: [fluidId, amount]
     // So for 3 tanks we need 6 integers
     private final ContainerData containerData = new SimpleContainerData(INPUT_TANKS_COUNT * 2);
-    private final ItemStackHandler inventory = new ItemStackHandler(5);
+    private final ItemStackHandler inventory = new ItemStackHandler(5) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            if (slot < 2) {
+                boolean isValidRecipe = checkRecipe();
+                if (!isValidRecipe) resetProgress();
+                setIsValidRecipe(isValidRecipe);
+            }
+            setChanged();
+        }
+    };
     private final List<ExtendedFluidTank> inputTanks = new ArrayList<>(INPUT_TANKS_COUNT);
     private final ExtendedFluidTank outputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::onContentsChanged);
     private final ExtendedFluidTank wasteOutputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::onContentsChanged);
@@ -209,6 +221,10 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         return fluidTank.writeToNBT(registries, new CompoundTag());
     }
 
+    private void setIsValidRecipe(boolean val) {
+        this.isValidRecipe = val;
+    }
+
     private void loadFluidTank(FluidTank fluidTank, CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.isEmpty()) return;
         fluidTank.readFromNBT(registries, tag);
@@ -217,6 +233,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
+        saveRecipeToNBT(tag);
         ListTag listTag = new ListTag();
         for (ExtendedFluidTank inputTank : this.inputTanks) {
             listTag.add(saveFluidTank(inputTank, registries));
@@ -254,7 +271,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     public SimpleContainer getInputContainer() {
         SimpleContainer container = new SimpleContainer(4);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < container.getContainerSize(); i++) {
             container.setItem(i, this.inventory.getStackInSlot(i));
         }
         return container;
@@ -347,7 +364,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     }
 
     public void tick() {
-        if (!this.isValidRecipe || this.level == null || getInputTanks().isEmpty() || getInputContainer().isEmpty()) return;
+        if (!this.isValidRecipe || this.level == null || (getInputTanks().isEmpty() || getInputContainer().isEmpty())) return;
 
         ItemStack outputSlotStack = this.inventory.getStackInSlot(SmelterySlot.RESULT_SLOT);
         ItemStack resultItem = this.recipe.getResultItem(this.level.registryAccess());
