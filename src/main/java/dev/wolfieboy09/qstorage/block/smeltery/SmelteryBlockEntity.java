@@ -61,7 +61,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                 if (!isValidRecipe) resetProgress();
                 setIsValidRecipe(isValidRecipe);
             }
-            setChanged();
+            SmelteryBlockEntity.this.onContentsChanged();
         }
     };
     private final List<ExtendedFluidTank> inputTanks = new ArrayList<>(INPUT_TANKS_COUNT);
