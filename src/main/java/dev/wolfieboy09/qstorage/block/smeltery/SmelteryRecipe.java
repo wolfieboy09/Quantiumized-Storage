@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.wolfieboy09.qstorage.api.BiHolder;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.recipes.CombinedRecipeInput;
 import dev.wolfieboy09.qstorage.registries.QSRecipes;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Debug;
 
 import java.util.List;
 
@@ -39,15 +42,44 @@ public record SmelteryRecipe(
                         ingredient -> ingredient.test(input.getItem(0)) &&
                                 ingredient.test(input.getItem(1)) &&
                                 ingredient.test(input.getItem(2)),
-                        fluid -> input.matchFluid(fluid.amount(), 0) &&
-                                input.matchFluid(fluid.getFluid(), 1) &&
-                                input.matchFluid(fluid.getFluid(), 2)
+                        fluid -> input.matchListOfFluid(fluid.getFluids(), 0) &&
+                                input.matchListOfFluid(fluid.getFluids(), 1) &&
+                                input.matchListOfFluid(fluid.getFluids(), 2)
                 ));
     }
 
     @Override
+    @Deprecated
+    /**
+     * Use {@link SmelteryRecipe#compile(CombinedRecipeInput, HolderLookup.Provider)} instead
+     */
     public ItemStack assemble(CombinedRecipeInput recipeWrapper, HolderLookup.Provider provider) {
         return this.result.getFirst().left().orElse(ItemStack.EMPTY);
+    }
+
+    public ItemStack getItemStackFromList(List<Either<ItemStack, FluidStack>> selection) {
+        for (Either<ItemStack, FluidStack> either : selection) {
+            if (either.left().isPresent()) {
+                return either.left().get();
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public FluidStack getFluidStackFromList(List<Either<ItemStack, FluidStack>> selection) {
+        for (Either<ItemStack, FluidStack> either : selection) {
+            if (either.right().isPresent()) {
+                return either.right().get();
+            }
+        }
+        return FluidStack.EMPTY;
+    }
+
+    public BiHolder<BiHolder<ItemStack, FluidStack>, BiHolder<ItemStack, FluidStack>> assembleRecipe(CombinedRecipeInput recipeWrapper, HolderLookup.Provider provider) {
+        return new BiHolder<>(
+                new BiHolder<>(getItemStackFromList(this.result), getFluidStackFromList(this.result)),
+                new BiHolder<>(getItemStackFromList(this.waste), getFluidStackFromList(this.waste))
+        );
     }
 
     @Override
@@ -57,7 +89,12 @@ public record SmelteryRecipe(
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return this.result.getFirst().left().orElse(ItemStack.EMPTY);
+        return getItemStackFromList(this.result);
+    }
+
+    // Do I need HolderLookup#Provider? no
+    public FluidStack getResultFluid() {
+        return getFluidStackFromList(this.result);
     }
 
     @Override
@@ -73,7 +110,7 @@ public record SmelteryRecipe(
     public static class Serializer implements RecipeSerializer<SmelteryRecipe> {
         private static final MapCodec<SmelteryRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 builder -> builder.group(
-                        Codec.either(Ingredient.CODEC, FluidStack.CODEC).listOf(0, 3).fieldOf("ingredients").forGetter(SmelteryRecipe::ingredients),
+                        Codec.either(Ingredient.CODEC, SizedFluidIngredient.FLAT_CODEC).listOf(0, 3).fieldOf("ingredients").forGetter(SmelteryRecipe::ingredients),
                         Codec.either(ItemStack.CODEC, FluidStack.CODEC).listOf(1, 2).fieldOf("result").forGetter(SmelteryRecipe::result),
                         Codec.either(ItemStack.CODEC, FluidStack.CODEC).listOf(0, 2).fieldOf("waste").forGetter(SmelteryRecipe::waste),
                         Codec.INT.fieldOf("temperature").forGetter(SmelteryRecipe::minFuelTemp),
@@ -82,7 +119,7 @@ public record SmelteryRecipe(
         );
 
         private static final StreamCodec<RegistryFriendlyByteBuf, SmelteryRecipe> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.either(Ingredient.CONTENTS_STREAM_CODEC, FluidStack.STREAM_CODEC).apply(ByteBufCodecs.list(3)), SmelteryRecipe::ingredients,
+                ByteBufCodecs.either(Ingredient.CONTENTS_STREAM_CODEC, SizedFluidIngredient.STREAM_CODEC).apply(ByteBufCodecs.list(3)), SmelteryRecipe::ingredients,
                 ByteBufCodecs.either(ItemStack.STREAM_CODEC, FluidStack.STREAM_CODEC).apply(ByteBufCodecs.list(2)), SmelteryRecipe::result,
                 ByteBufCodecs.either(ItemStack.STREAM_CODEC, FluidStack.STREAM_CODEC).apply(ByteBufCodecs.list(2)), SmelteryRecipe::waste,
                 ByteBufCodecs.INT, SmelteryRecipe::minFuelTemp,
