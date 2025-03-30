@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
@@ -24,14 +25,14 @@ import java.util.Map;
 
 @NothingNullByDefault
 public class SmelteryBuilder implements RecipeBuilder {
-    protected final List<Either<Ingredient, FluidStack>> ingredients;
+    protected final List<Either<Ingredient, SizedFluidIngredient>> ingredients;
     protected final List<Either<ItemStack, FluidStack>> result;
     protected final List<Either<ItemStack, FluidStack>> waste;
     protected final int minFuelTemp;
     protected final int timeInTicks;
     protected final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
-    public SmelteryBuilder(List<Either<Ingredient, FluidStack>> ingredients, List<Either<ItemStack, FluidStack>> result, List<Either<ItemStack, FluidStack>> waste, int minFuelTemp, int timeInTicks) {
+    public SmelteryBuilder(List<Either<Ingredient, SizedFluidIngredient>> ingredients, List<Either<ItemStack, FluidStack>> result, List<Either<ItemStack, FluidStack>> waste, int minFuelTemp, int timeInTicks) {
         this.ingredients = ingredients;
         this.result = result;
         this.waste = waste;
@@ -69,7 +70,7 @@ public class SmelteryBuilder implements RecipeBuilder {
         recipeOutput.accept(id, recipe, advancement.build(id.withPath("recipes/smeltery/" + id.getPath())));
     }
 
-    public static SmelteryBuilder create(List<Either<Ingredient, FluidStack>> ingredients, List<Either<ItemStack, FluidStack>> result, List<Either<ItemStack, FluidStack>> waste, int minFuelTemp, int timeInTicks) {
+    public static SmelteryBuilder create(List<Either<Ingredient, SizedFluidIngredient>> ingredients, List<Either<ItemStack, FluidStack>> result, List<Either<ItemStack, FluidStack>> waste, int minFuelTemp, int timeInTicks) {
         return new SmelteryBuilder(ingredients, result, waste, minFuelTemp, timeInTicks);
     }
 }
