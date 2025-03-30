@@ -34,4 +34,14 @@ public class CombinedRecipeInput implements RecipeInput {
     public int size() {
         return this.fluidHandler.getTanks() + this.itemHandler.getSlots();
     }
+
+    // My IDE told me to put the @NotNull in between these two, and @NotNull FluidStack[] was just not good enough for it
+    public boolean matchListOfFluid(FluidStack @NotNull [] fluids, int tank) {
+        for (FluidStack tagged : fluids) {
+            if (matchFluid(tagged.getFluid(), tank)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
