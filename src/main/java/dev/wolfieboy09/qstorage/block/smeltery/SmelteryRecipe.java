@@ -20,6 +20,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -45,11 +46,11 @@ public record SmelteryRecipe(
                 ));
     }
 
-    @Override
-    @Deprecated
     /**
-     * Use {@link SmelteryRecipe#compile(CombinedRecipeInput, HolderLookup.Provider)} instead
+     * Use {@link SmelteryRecipe#assembleRecipe(CombinedRecipeInput, HolderLookup.Provider)} instead
      */
+    @Override
+    @ApiStatus.Obsolete
     public ItemStack assemble(CombinedRecipeInput recipeWrapper, HolderLookup.Provider provider) {
         return this.result.getFirst().left().orElse(ItemStack.EMPTY);
     }
