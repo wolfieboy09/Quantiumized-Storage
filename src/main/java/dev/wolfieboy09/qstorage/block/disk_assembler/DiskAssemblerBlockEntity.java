@@ -90,11 +90,9 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
 
     public void tick() {
         doEnergySlot();
-        if (this.level == null || getInputContainer().isEmpty()) return;
-        
-        // Validate the recipe
-        if (!this.isValidRecipe) return;
-        
+        //                                                         Validate the recipe
+        if (this.level == null || getInputContainer().isEmpty() || !this.isValidRecipe) return;
+
         // Check if output has space before crafting
         ItemStack outputSlotStack = this.inventory.getStackInSlot(DiskAssemblerSlot.OUTPUT_SLOT);
         ItemStack resultItem = this.recipe.getResultItem(this.level.registryAccess());
@@ -141,6 +139,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     }
     
     private void consumeInputItems(DiskAssemblerRecipe recipe) {
+        // TODO Have it shrink by recipe amount
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_1).shrink(1);
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_2).shrink(1);
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_3).shrink(1);
