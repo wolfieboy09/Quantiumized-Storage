@@ -1,23 +1,34 @@
 package dev.wolfieboy09.qstorage.block.smeltery;
 
+import dev.wolfieboy09.qstorage.QuantiumizedStorage;
+import dev.wolfieboy09.qstorage.api.BiHolder;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.fluids.ExtendedFluidTank;
+import dev.wolfieboy09.qstorage.api.recipes.CombinedRecipeInput;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
+import dev.wolfieboy09.qstorage.registries.QSRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -31,6 +42,10 @@ import java.util.List;
 public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvider {
     public static final int TANK_CAPACITY = 10000;
     public static final int INPUT_TANKS_COUNT = 3;
+    private int progress = 0;
+    private int crafting_ticks = 0;
+    private boolean isValidRecipe = false;
+    private SmelteryRecipe recipe = null;
 
     private final Component TITLE = Component.translatable("block.qstorage.smeltery");
     // Expand container data to include both fluid IDs and amounts
@@ -134,6 +149,19 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         updateContainerData();
     }
 
+    public static class SmelterySlot {
+        public static final int MAIN_ITEM_SLOT_1 = 0;
+        public static final int MAIN_ITEM_SLOT_2 = 1;
+        public static final int MAIN_ITEM_SLOT_3 = 2;
+        public static final int RESULT_SLOT = 3;
+        public static final int WASTE_RESULT_SLOT = 4;
+        public static final int FLUID_SLOT_1 = 0;
+        public static final int FLUID_SLOT_2 = 1;
+        public static final int FLUID_SLOT_3 = 2;
+        public static final int RESULT_FLUID_SLOT = 3;
+        public static final int WASTE_RESULT_FLUID_SLOT = 4;
+    }
+
     private void updateContainerData() {
         // Update container data with fluid IDs and amounts
         for (int i = 0; i < INPUT_TANKS_COUNT; i++) {
@@ -199,6 +227,10 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         tag.put("Inventory", this.inventory.serializeNBT(registries));
         tag.put("OutputTank", saveFluidTank(this.outputFluidTank, registries));
         tag.put("WasteTank", saveFluidTank(this.wasteOutputFluidTank, registries));
+
+        tag.putInt("progress", this.progress);
+        tag.putInt("crafting_ticks", this.crafting_ticks);
+        tag.putBoolean("isValidRecipe", this.isValidRecipe);
     }
 
     @Override
@@ -212,30 +244,198 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         loadFluidTank(this.outputFluidTank, tag.getCompound("OutputTank"), registries);
         loadFluidTank(this.wasteOutputFluidTank, tag.getCompound("WasteTank"), registries);
         this.inventory.deserializeNBT(registries, tag);
+
+        this.progress = tag.getInt("progress");
+        this.crafting_ticks = tag.getInt("crafting_ticks");
+        this.isValidRecipe = tag.getBoolean("isValidRecipe");
+        if (tag.contains("recipe")) {
+            loadRecipeFromNBT(tag.getCompound("recipe"));
+        }
+    }
+
+    public SimpleContainer getInputContainer() {
+        SimpleContainer container = new SimpleContainer(4);
+        for (int i = 0; i < 4; i++) {
+            container.setItem(i, this.inventory.getStackInSlot(i));
+        }
+        return container;
+    }
+
+    private final List<FluidTank> recipeTanks = new ArrayList<>();
+    private final IFluidHandler recipeTanksHandler = new IFluidHandler() {
+        @Override
+        public int getTanks() {
+            return 5;
+        }
+
+        @Override
+        public FluidStack getFluidInTank(int i) {
+            return recipeTanks.get(i).getFluid();
+        }
+
+        @Override
+        public int getTankCapacity(int i) {
+            return recipeTanks.get(i).getTankCapacity(i);
+        }
+
+        @Override
+        public boolean isFluidValid(int i, FluidStack fluidStack) {
+            return recipeTanks.get(i).isFluidValid(fluidStack);
+        }
+
+        @Override
+        public int fill(FluidStack fluidStack, FluidAction fluidAction) {
+            int filled = 0;
+            for (FluidTank recipeTank : recipeTanks) {
+                if (recipeTank.isFluidValid(fluidStack)) {
+                    filled = recipeTank.fill(fluidStack, fluidAction);
+                    return filled;
+                }
+            }
+            return filled;
+        }
+
+        @Override
+        public FluidStack drain(FluidStack fluidStack, FluidAction fluidAction) {
+            for (FluidTank recipeTank : recipeTanks) {
+                if (recipeTank.isFluidValid(fluidStack)) {
+                    return recipeTank.drain(fluidStack, fluidAction);
+                }
+            }
+            return FluidStack.EMPTY;
+        }
+
+        @Override
+        public FluidStack drain(int i, FluidAction fluidAction) {
+            for (FluidTank recipeTank : recipeTanks) {
+                if (recipeTank.isFluidValid(recipeTank.getFluidInTank(i))) {
+                    return recipeTank.drain(i, fluidAction);
+                }
+            }
+            return FluidStack.EMPTY;
+        }
+    };
+
+
+    private boolean checkRecipe() {
+        if (this.level == null) return false;
+        ItemStackHandler itemInputHandler = new ItemStackHandler(4);
+        this.recipeTanks.clear();
+        for (int i = 0; i < 4; i++) {
+            this.recipeTanks.add(new FluidTank(TANK_CAPACITY));
+        }
+        for (int i = 0; i < 4; i++) {
+            itemInputHandler.setStackInSlot(i, this.inventory.getStackInSlot(i));
+            if (getFluidHandler() != null) recipeTanks.get(i).setFluid(getFluidHandler().getFluidInTank(i));
+        }
+        CombinedRecipeInput input = new CombinedRecipeInput(recipeTanksHandler, itemInputHandler);
+        RecipeManager recipes = this.level.getRecipeManager();
+        RecipeHolder<SmelteryRecipe> recipeFound = recipes.getRecipeFor(
+                QSRecipes.SMELTERY_RECIPE_TYPE.get(),
+                input,
+                this.level
+        ).orElse(null);
+        if (recipeFound == null) return false;
+        SmelteryRecipe recipeFetched = recipeFound.value();
+        boolean matches = recipeFetched.matches(input, this.level);
+        if (!matches) return false;
+        // LEFT                                  |  RIGHT
+        // Main Results (at least one required)  |  Waste (not required, can be null for both)
+        BiHolder<BiHolder<ItemStack, FluidStack>, BiHolder<ItemStack, FluidStack>> results = recipeFetched.assembleRecipe(input, this.level.registryAccess());
+        if (results.left().left() != null || results.left().right() != null) return false;
+        this.recipe = recipeFound.value();
+        return true;
     }
 
     public void tick() {
-//        Testing if the tanks function correctly
-//        this.inputTanks.getFirst().setFluid(new FluidStack(Fluids.WATER, 5000));
-//        this.inputTanks.get(1).setFluid(new FluidStack(Fluids.LAVA, 5000));
-//        this.inputTanks.get(2).setFluid(new FluidStack(Fluids.WATER, 5000));
-//        this.outputFluidTank.setFluid(new FluidStack(Fluids.LAVA, 5000));
-//        this.wasteOutputFluidTank.setFluid(new FluidStack(Fluids.WATER, 5000));
-//        this.inputTanks.getFirst().fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
-//        this.inputTanks.get(1).fill(new FluidStack(Fluids.LAVA,10), IFluidHandler.FluidAction.EXECUTE);
-//        this.inputTanks.get(2).fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
-//        this.outputFluidTank.fill(new FluidStack(Fluids.LAVA, 10), IFluidHandler.FluidAction.EXECUTE);
-//        this.wasteOutputFluidTank.fill(new FluidStack(Fluids.WATER, 10), IFluidHandler.FluidAction.EXECUTE);
+        if (!this.isValidRecipe || this.level == null || getInputTanks().isEmpty() || getInputContainer().isEmpty()) return;
+
+        ItemStack outputSlotStack = this.inventory.getStackInSlot(SmelterySlot.RESULT_SLOT);
+        ItemStack resultItem = this.recipe.getResultItem(this.level.registryAccess());
+        FluidStack resultFluidSlot = this.recipe.getFluidStackFromList(this.recipe.result());
+        FluidTank outputFluidSlot = this.outputFluidTank;
+
+        boolean outputItemHasSpace = outputSlotStack.isEmpty() ||
+                (outputSlotStack.getItem() == resultItem.getItem() &&
+                        outputSlotStack.getCount() + resultItem.getCount() <= outputSlotStack.getMaxStackSize());
+
+        boolean outputFluidHasSpace = outputFluidTank.isEmpty() ||
+                (outputFluidSlot.getFluidInTank(SmelterySlot.RESULT_FLUID_SLOT).getFluid() == resultFluidSlot.getFluid() && outputFluidSlot.getFluidInTank(SmelterySlot.RESULT_FLUID_SLOT).getAmount() + resultFluidSlot.getAmount() <= outputFluidSlot.getCapacity());
+
+
+        // No room? Don't continue
+        if (!outputItemHasSpace && !outputFluidHasSpace) return;
+
+        int timeRequired = this.recipe.timeInTicks();
+
+        if (this.crafting_ticks < timeRequired) {
+            this.crafting_ticks++;
+            this.progress = getProgress();
+            setChanged();
+        }
+
+        if (this.progress >= 100) {
+            consumeInputItems(recipe);
+            if (outputSlotStack.isEmpty()) {
+                this.inventory.setStackInSlot(SmelterySlot.RESULT_SLOT, resultItem.copy());
+            } else {
+                outputSlotStack.grow(resultItem.getCount());
+            }
+        }
+
+        resetProgress();
+    }
+
+    private int getProgress() {
+        if (this.recipe == null) return 0;
+        return (int) (this.crafting_ticks / (float) this.recipe.timeInTicks() * 100);
+    }
+
+    private void consumeInputItems(SmelteryRecipe recipe) {
+        // TODO Have it shrink by recipe amount
+        this.inventory.getStackInSlot(SmelterySlot.MAIN_ITEM_SLOT_1).shrink(1);
+        this.inventory.getStackInSlot(SmelterySlot.MAIN_ITEM_SLOT_2).shrink(1);
+        this.inventory.getStackInSlot(SmelterySlot.MAIN_ITEM_SLOT_2).shrink(1);
+        // TODO Drain the fluid tanks by the recipe amount as well
+    }
+
+    protected void resetProgress() {
+        this.crafting_ticks = 0;
+        this.progress = 0;
     }
 
     @Override
     public void setChanged() {
         super.setChanged();
-        //if (this.level == null || this.level.isClientSide) return;
+        updateContainerData();
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return this.saveWithoutMetadata(registries);
+        CompoundTag toMerge = new CompoundTag();
+        toMerge.putInt("crafting_ticks", this.crafting_ticks);
+        return super.saveWithoutMetadata(registries).merge(toMerge);
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
+        super.handleUpdateTag(tag, lookupProvider);
+        this.crafting_ticks = tag.getInt("crafting_ticks");
+    }
+
+    private void saveRecipeToNBT(CompoundTag nbt) {
+        try {
+            if (this.recipe instanceof SmelteryRecipe smelteryRecipe) {
+                nbt.put("recipe", SmelteryRecipe.CODEC.encodeStart(NbtOps.INSTANCE, smelteryRecipe).getOrThrow());
+            }
+        } catch (Exception e) {
+            QuantiumizedStorage.LOGGER.error("Error saving recipe to NBT: {}", e.getMessage());
+        }
+    }
+
+    private void loadRecipeFromNBT(CompoundTag recipeTag) {
+        if (Recipe.CODEC.parse(NbtOps.INSTANCE, recipeTag).getOrThrow() instanceof SmelteryRecipe smelteryRecipe) {
+            this.recipe = smelteryRecipe;
+        }
     }
 }
