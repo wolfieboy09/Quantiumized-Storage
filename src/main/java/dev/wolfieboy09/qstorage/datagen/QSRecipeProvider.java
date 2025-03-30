@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +51,6 @@ public class QSRecipeProvider extends RecipeProvider {
 
         SmelteryBuilder.create(
             List.of(
-                    Either.right(new FluidStack(Fluids.WATER, 1500)),
                     Either.left(Ingredient.of(new ItemStack(Items.NETHER_STAR)))),
             List.of(
                     Either.left(new ItemStack(QSItems.DATA_CRYSTAL.get()))),
@@ -61,6 +58,6 @@ public class QSRecipeProvider extends RecipeProvider {
                     Either.left(new ItemStack(Items.DIRT, 8))),
             500,
             20
-        ).save(output, "soul_campfire_test");
+        ).save(output, "data_crystal_from_smeltery");
     }
 }
