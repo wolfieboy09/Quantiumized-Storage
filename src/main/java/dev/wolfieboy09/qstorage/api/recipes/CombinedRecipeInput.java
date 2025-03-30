@@ -32,7 +32,7 @@ public class CombinedRecipeInput implements RecipeInput {
 
     @Override
     public int size() {
-        return this.fluidHandler.getTanks() + this.itemHandler.getSlots();
+        return this.itemHandler.getSlots();
     }
 
     // My IDE told me to put the @NotNull in between these two, and @NotNull FluidStack[] was just not good enough for it
