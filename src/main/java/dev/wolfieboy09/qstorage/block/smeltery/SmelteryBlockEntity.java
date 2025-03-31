@@ -361,17 +361,25 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         ItemStack resultItem = this.recipe.getResultItem(this.level.registryAccess());
         FluidStack resultFluidSlot = this.recipe.getFluidStackFromList(this.recipe.result());
         FluidTank outputFluidSlot = this.outputFluidTank;
+        ItemStack wasteItem = this.recipe.waste().getFirst().left().orElse(ItemStack.EMPTY);
+        ItemStack wasteSlotStack = this.inventory.getStackInSlot(SmelterySlot.WASTE_RESULT_SLOT);
+//        FluidStack extraResultFluid = this.recipe.result().getFirst().right().orElse(FluidStack.EMPTY);
+
+
 
         boolean outputItemHasSpace = outputSlotStack.isEmpty() ||
                 (outputSlotStack.getItem() == resultItem.getItem() &&
                         outputSlotStack.getCount() + resultItem.getCount() <= outputSlotStack.getMaxStackSize());
+        boolean wasteSlotHasSpace = wasteSlotStack.isEmpty() ||
+                (wasteSlotStack.getItem() == wasteItem.getItem() &&
+                        wasteSlotStack.getCount() + wasteItem.getCount() <= wasteSlotStack.getMaxStackSize());
 
         boolean outputFluidHasSpace = outputFluidTank.isEmpty() ||
                 (outputFluidSlot.getFluidInTank(SmelterySlot.RESULT_FLUID_SLOT).getFluid() == resultFluidSlot.getFluid() && outputFluidSlot.getFluidInTank(SmelterySlot.RESULT_FLUID_SLOT).getAmount() + resultFluidSlot.getAmount() <= outputFluidSlot.getCapacity());
 
 
         // No room? Don't continue
-        if (!outputItemHasSpace && !outputFluidHasSpace) return;
+        if (!outputItemHasSpace && !outputFluidHasSpace && !wasteSlotHasSpace) return;
 
         int timeRequired = this.recipe.timeInTicks();
 
@@ -387,6 +395,12 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                 this.inventory.setStackInSlot(SmelterySlot.RESULT_SLOT, resultItem.copy());
             } else {
                 outputSlotStack.grow(resultItem.getCount());
+            }
+//            handle waste result item
+            if (wasteSlotStack.isEmpty()) {
+                this.inventory.setStackInSlot(SmelterySlot.WASTE_RESULT_SLOT, wasteItem.copy());
+            } else {
+                wasteSlotStack.grow(wasteItem.getCount());
             }
             resetProgress();
             setIsValidRecipe(false);
