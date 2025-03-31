@@ -3,6 +3,8 @@ package dev.wolfieboy09.qstorage.registries;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerMenu;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerScreen;
+import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerMenu;
+import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerScreen;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryMenu;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryScreen;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixMenu;
@@ -31,6 +33,9 @@ public class QSMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<SmelteryMenu>> SMELTERY_MENU = MENUS.register("smeltery", () ->
             IMenuTypeExtension.create((id, playerInv, data) -> new SmelteryMenu(id, data.readBlockPos(), playerInv, playerInv.player)));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<GasFillerMenu>> GAS_FILLER_MENU = MENUS.register("gas_filler", () ->
+            IMenuTypeExtension.create((id, playerInv, data) -> new GasFillerMenu(id, data.readBlockPos(), playerInv, playerInv.player)));
+
     public static void register(IEventBus bus) {
         MENUS.register(bus);
     }
@@ -40,5 +45,6 @@ public class QSMenuTypes {
         event.register(QSMenuTypes.DISK_ASSEMBLER.get(), DiskAssemblerScreen::new);
         event.register(QSMenuTypes.STORAGE_MATRIX.get(), StorageMatrixScreen::new);
         event.register(QSMenuTypes.SMELTERY_MENU.get(), SmelteryScreen::new);
+        event.register(QSMenuTypes.GAS_FILLER_MENU.get(), GasFillerScreen::new);
     }
 }
