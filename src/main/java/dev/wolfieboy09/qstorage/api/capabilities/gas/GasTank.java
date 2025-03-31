@@ -1,8 +1,13 @@
 package dev.wolfieboy09.qstorage.api.capabilities.gas;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qstorage.api.registry.gas.GasStack;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
@@ -11,6 +16,22 @@ public class GasTank implements IGasHandler, IGasTank {
     protected Predicate<GasStack> validator;
     protected GasStack gas;
     protected int capacity;
+
+    public static final Codec<GasTank> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            GasStack.CODEC.fieldOf("gas").forGetter(GasTank::getGas),
+            Codec.INT.fieldOf("capacity").forGetter(GasTank::getCapacity)
+    ).apply(instance, GasTank::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, GasTank> STREAM_CODEC = StreamCodec.composite(
+            GasStack.STREAM_CODEC, GasTank::getGas,
+            ByteBufCodecs.INT, GasTank::getCapacity,
+            GasTank::new
+    );
+
+    private GasTank(GasStack stack, int capacity) {
+        this.capacity = capacity;
+        this.gas = stack;
+    }
 
     public GasTank(int capacity) {
         this(capacity, (e) -> true);
@@ -24,6 +45,11 @@ public class GasTank implements IGasHandler, IGasTank {
 
     public GasTank setCapacity(int capacity) {
         this.capacity = capacity;
+        return this;
+    }
+
+    public GasTank setGasInSlot(int index, GasStack gasStack) {
+        this.gas = gasStack;
         return this;
     }
 
@@ -127,10 +153,7 @@ public class GasTank implements IGasHandler, IGasTank {
 
     @Override
     public GasStack drain(int maxDrain, boolean simulate) {
-        int drained = maxDrain;
-        if (this.gas.getAmount() < maxDrain) {
-            drained = this.gas.getAmount();
-        }
+        int drained = Math.min(this.gas.getAmount(), maxDrain);
         GasStack stack = this.gas.copyWithAmount(drained);
         if (!simulate && drained > 0) {
             this.gas.shrink(drained);
