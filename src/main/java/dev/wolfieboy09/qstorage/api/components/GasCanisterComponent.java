@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.api.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.wolfieboy09.qstorage.api.capabilities.gas.GasTank;
 import dev.wolfieboy09.qstorage.api.gas.SingleGasTankHandler;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -16,4 +17,10 @@ public record GasCanisterComponent(SingleGasTankHandler gasTankHandler) {
             SingleGasTankHandler.STREAM_CODEC, GasCanisterComponent::gasTankHandler,
             GasCanisterComponent::new
     );
+
+    // Data component data stuff
+
+    public GasTank getGasTank() {
+        return this.gasTankHandler.getTank();
+    }
 }
