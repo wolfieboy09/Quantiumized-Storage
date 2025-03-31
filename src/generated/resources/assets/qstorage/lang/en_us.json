@@ -16,6 +16,7 @@
   "item.qstorage.basic_storage_disk": "Basic Storage Disk",
   "item.qstorage.data_crystal": "Data Crystal",
   "item.qstorage.elite_circuit": "Elite Circuit",
+  "item.qstorage.gas_canister": "Gas Canister",
   "item.qstorage.item_port": "Item Port",
   "item.qstorage.max_energy_upgrade": "Max Energy Upgrade",
   "item.qstorage.multi_dimensional_storage_disk": "Multi Dimensional Storage Disk",
@@ -29,8 +30,10 @@
   "item.qstorage.sulfur": "Sulfur",
   "item.qstorage.superior_storage_disk": "Superior Storage Disk",
   "item.qstorage.ultimate_circuit": "Ultimate Circuit",
+  "qstorage.gas_canister.shifted_info": "Supports containing gasses inside the container",
   "qstorage.oxygen_deprivation": "%s could not breath on land",
   "qstorage.screen.fluid": "%s: %s/%s",
+  "qstorage.tooltip.shift_info": "Press §6SHIFT§r for more info",
   "tooltip.qstorage.max_energy_upgrade": "Adds more energy capacity",
   "tooltip.qstorage.speed_upgrade": "Makes the process faster"
 }
