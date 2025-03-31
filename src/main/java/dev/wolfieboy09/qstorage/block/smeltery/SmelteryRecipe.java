@@ -34,16 +34,18 @@ public record SmelteryRecipe(
 ) implements Recipe<CombinedRecipeInput> {
     @Override
     public boolean matches(CombinedRecipeInput input, Level level) {
-        // credts to 7410 in Turty's server for this return statement stuff
-        return this.ingredients.stream()
-                .allMatch(either -> either.map(
-                        ingredient -> ingredient.test(input.getItem(0)) &&
-                                ingredient.test(input.getItem(1)) &&
-                                ingredient.test(input.getItem(2)),
-                        fluid -> input.matchListOfFluid(fluid.getFluids(), 0) &&
-                                input.matchListOfFluid(fluid.getFluids(), 1) &&
-                                input.matchListOfFluid(fluid.getFluids(), 2)
-                ));
+        if (this.ingredients.isEmpty()) {
+            return false;
+        }
+        // Check if ALL ingredient requirement is satisfied by the input
+        return this.ingredients.stream().allMatch(eitherIngredient ->
+                eitherIngredient.map(
+                        // --- Case 1: Required ingredient is an ITEM ---
+                        input::matchItem,
+                        // --- Case 2: Required ingredient is a FLUID ---
+                        input::matchFluid
+                )
+        );
     }
 
     /**

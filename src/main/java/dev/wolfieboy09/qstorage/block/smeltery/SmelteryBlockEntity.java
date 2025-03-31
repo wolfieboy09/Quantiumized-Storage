@@ -56,11 +56,8 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     private final ItemStackHandler inventory = new ItemStackHandler(5) {
         @Override
         protected void onContentsChanged(int slot) {
-            if (slot < 2) {
-                boolean isValidRecipe = checkRecipe();
-                if (!isValidRecipe) resetProgress();
-                setIsValidRecipe(isValidRecipe);
-            }
+            boolean isValidRecipe = checkRecipe();
+            if (!isValidRecipe) resetProgress();
             SmelteryBlockEntity.this.onContentsChanged();
         }
     };
@@ -335,12 +332,12 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     private boolean checkRecipe() {
         if (this.level == null) return false;
-        ItemStackHandler itemInputHandler = new ItemStackHandler(4);
+        ItemStackHandler itemInputHandler = new ItemStackHandler(3);
         this.recipeTanks.clear();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             this.recipeTanks.add(new FluidTank(TANK_CAPACITY));
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             itemInputHandler.setStackInSlot(i, this.inventory.getStackInSlot(i));
             if (getFluidHandler() != null) recipeTanks.get(i).setFluid(getFluidHandler().getFluidInTank(i));
         }
@@ -352,14 +349,8 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                 this.level
         ).orElse(null);
         if (recipeFound == null) return false;
-        SmelteryRecipe recipeFetched = recipeFound.value();
-        boolean matches = recipeFetched.matches(input, this.level);
-        if (!matches) return false;
-        // LEFT                                  |  RIGHT
-        // Main Results (at least one required)  |  Waste (not required, can be null for both)
-        BiHolder<BiHolder<ItemStack, FluidStack>, BiHolder<ItemStack, FluidStack>> results = recipeFetched.assembleRecipe(input, this.level.registryAccess());
-        if (results.left().left() != null || results.left().right() != null) return false;
         this.recipe = recipeFound.value();
+        setIsValidRecipe(true);
         return true;
     }
 
@@ -370,17 +361,25 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         ItemStack resultItem = this.recipe.getResultItem(this.level.registryAccess());
         FluidStack resultFluidSlot = this.recipe.getFluidStackFromList(this.recipe.result());
         FluidTank outputFluidSlot = this.outputFluidTank;
+        ItemStack wasteItem = this.recipe.waste().getFirst().left().orElse(ItemStack.EMPTY);
+        ItemStack wasteSlotStack = this.inventory.getStackInSlot(SmelterySlot.WASTE_RESULT_SLOT);
+//        FluidStack extraResultFluid = this.recipe.result().getFirst().right().orElse(FluidStack.EMPTY);
+
+
 
         boolean outputItemHasSpace = outputSlotStack.isEmpty() ||
                 (outputSlotStack.getItem() == resultItem.getItem() &&
                         outputSlotStack.getCount() + resultItem.getCount() <= outputSlotStack.getMaxStackSize());
+        boolean wasteSlotHasSpace = wasteSlotStack.isEmpty() ||
+                (wasteSlotStack.getItem() == wasteItem.getItem() &&
+                        wasteSlotStack.getCount() + wasteItem.getCount() <= wasteSlotStack.getMaxStackSize());
 
         boolean outputFluidHasSpace = outputFluidTank.isEmpty() ||
                 (outputFluidSlot.getFluidInTank(SmelterySlot.RESULT_FLUID_SLOT).getFluid() == resultFluidSlot.getFluid() && outputFluidSlot.getFluidInTank(SmelterySlot.RESULT_FLUID_SLOT).getAmount() + resultFluidSlot.getAmount() <= outputFluidSlot.getCapacity());
 
 
         // No room? Don't continue
-        if (!outputItemHasSpace && !outputFluidHasSpace) return;
+        if (!outputItemHasSpace || !outputFluidHasSpace || !wasteSlotHasSpace) return;
 
         int timeRequired = this.recipe.timeInTicks();
 
@@ -397,9 +396,17 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
             } else {
                 outputSlotStack.grow(resultItem.getCount());
             }
+//            handle waste result item
+            if (wasteSlotStack.isEmpty()) {
+                this.inventory.setStackInSlot(SmelterySlot.WASTE_RESULT_SLOT, wasteItem.copy());
+            } else {
+                wasteSlotStack.grow(wasteItem.getCount());
+            }
+            resetProgress();
+            setIsValidRecipe(false);
+            this.recipe = null;
+            checkRecipe();
         }
-
-        resetProgress();
     }
 
     private int getProgress() {
@@ -408,10 +415,25 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     private void consumeInputItems(SmelteryRecipe recipe) {
         // TODO Have it shrink by recipe amount
-        this.inventory.getStackInSlot(SmelterySlot.MAIN_ITEM_SLOT_1).shrink(1);
-        this.inventory.getStackInSlot(SmelterySlot.MAIN_ITEM_SLOT_2).shrink(1);
-        this.inventory.getStackInSlot(SmelterySlot.MAIN_ITEM_SLOT_2).shrink(1);
-        // TODO Drain the fluid tanks by the recipe amount as well
+        recipe.ingredients().forEach((elem)->{
+            elem.map(ingredient -> {
+                    boolean satisfied = false;
+                        for (int i = 0; i < this.inventory.getSlots(); i++) {
+                            var stack = this.inventory.getStackInSlot(i);
+                            if (ingredient.test(stack)) {
+                                this.inventory.getStackInSlot(i).shrink(1);
+                                satisfied = true;
+                            }
+                            if (satisfied) return true;
+                        }
+                        return null;
+                    },
+                    sizedFluidIngredient -> {
+                        // TODO Drain the fluid tanks by the recipe amount as well
+                        return false;
+                    }
+                    );
+        });
     }
 
     protected void resetProgress() {
