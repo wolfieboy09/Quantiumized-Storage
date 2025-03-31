@@ -332,7 +332,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     private boolean checkRecipe() {
         if (this.level == null) return false;
-        ItemStackHandler itemInputHandler = new ItemStackHandler(4);
+        ItemStackHandler itemInputHandler = new ItemStackHandler(3);
         this.recipeTanks.clear();
         for (int i = 0; i < 3; i++) {
             this.recipeTanks.add(new FluidTank(TANK_CAPACITY));
