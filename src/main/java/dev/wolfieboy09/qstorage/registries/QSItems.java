@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.storage.ItemStorageType;
+import dev.wolfieboy09.qstorage.item.GasCanisterItem;
 import dev.wolfieboy09.qstorage.item.ItemStorageDisk;
 import dev.wolfieboy09.qstorage.item.UpgradeItem;
 import net.minecraft.world.item.Item;
@@ -38,6 +39,8 @@ public class QSItems {
     public static final DeferredItem<ItemStorageDisk> SUPERIOR_ITEM_DISK = registerItemStorageDisk("superior_storage_disk", ItemStorageType.SUPERIOR);
     public static final DeferredItem<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
     public static final DeferredItem<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
+
+    public static final DeferredItem<GasCanisterItem> GAS_CANISTER = ITEMS.register("gas_canister", () -> new GasCanisterItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
