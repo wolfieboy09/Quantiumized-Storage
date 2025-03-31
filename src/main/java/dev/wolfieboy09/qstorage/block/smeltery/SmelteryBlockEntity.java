@@ -379,7 +379,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
 
         // No room? Don't continue
-        if (!outputItemHasSpace && !outputFluidHasSpace && !wasteSlotHasSpace) return;
+        if (!outputItemHasSpace || !outputFluidHasSpace || !wasteSlotHasSpace) return;
 
         int timeRequired = this.recipe.timeInTicks();
 
