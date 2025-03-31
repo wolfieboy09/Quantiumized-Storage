@@ -259,7 +259,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
         loadFluidTank(this.outputFluidTank, tag.getCompound("OutputTank"), registries);
         loadFluidTank(this.wasteOutputFluidTank, tag.getCompound("WasteTank"), registries);
-        this.inventory.deserializeNBT(registries, tag);
+        this.inventory.deserializeNBT(registries, tag.getCompound("Inventory"));
 
         this.progress = tag.getInt("progress");
         this.crafting_ticks = tag.getInt("crafting_ticks");
