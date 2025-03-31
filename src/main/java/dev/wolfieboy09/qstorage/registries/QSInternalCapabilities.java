@@ -20,6 +20,7 @@ public class QSInternalCapabilities {
 
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, QSBlockEntities.CREATIVE_ENERGY_BLOCK.get(), (block, dir) -> block.getEnergyHandler());
 
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, QSBlockEntities.SMELTERY.get(), (block, dir) -> block.getInventory());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, QSBlockEntities.SMELTERY.get(), (block, dir) -> block.getFluidHandler());
 
         for (DeferredHolder<Item, ? extends Item> item : QSItems.ITEMS.getEntries()) {
