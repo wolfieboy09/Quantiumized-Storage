@@ -15,6 +15,9 @@ import java.util.function.Supplier;
 @SuppressWarnings("unused")
 public class QSGasses {
     public static final DeferredRegister<Gas> GASSES = DeferredRegister.create(QSRegistries.GAS_REGISTRY, QuantiumizedStorage.MOD_ID);
+
+    public static final Supplier<Gas> EMPTY  = GASSES.register("empty", () -> new GasBuilder().build());
+
     public static final Supplier<Gas> HYDROGEN = GASSES.register("hydrogen", () ->
             new GasBuilder().tint(ColorUtil.fromArgb(128, 256, 256, 256)).flammable(true).effects(
                     new MobEffectInstance(QSEffects.OXYGEN_DEPRIVATION, 120)
