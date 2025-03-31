@@ -8,6 +8,7 @@ import dev.wolfieboy09.qstorage.registries.QSGasses;
 import dev.wolfieboy09.qstorage.registries.QSItems;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +20,7 @@ public class QSLangProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        final Map<String, String> toGenerate = new HashMap<>();
-        toGenerate.put("qstorage.oxygen_deprivation", "%s could not breath on land");
-        toGenerate.put("effect.qstorage.oxygen_deprivation", "Oxygen Deprivation");
-        toGenerate.put("tooltip.qstorage.max_energy_upgrade", "Adds more energy capacity");
-        toGenerate.put("tooltip.qstorage.speed_upgrade", "Makes the process faster");
-
-        toGenerate.put("qstorage.screen.fluid", "%s: %s/%s");
+        final Map<String, String> toGenerate = getStringStringMap();
 
         QSItems.ITEMS.getEntries().forEach(
                 item -> addItem(item, NamingUtil.toHumanReadable(item.getRegisteredName().split(":")[1]))
@@ -40,5 +35,18 @@ public class QSLangProvider extends LanguageProvider {
                 tab -> add(tab.get().getName().getString(), NamingUtil.toHumanReadable(tab.get().getResourceLocation().getPath()))
         );
         toGenerate.forEach(this::add);
+    }
+
+    private static @NotNull Map<String, String> getStringStringMap() {
+        final Map<String, String> toGenerate = new HashMap<>();
+        toGenerate.put("qstorage.oxygen_deprivation", "%s could not breath on land");
+        toGenerate.put("effect.qstorage.oxygen_deprivation", "Oxygen Deprivation");
+        toGenerate.put("tooltip.qstorage.max_energy_upgrade", "Adds more energy capacity");
+        toGenerate.put("tooltip.qstorage.speed_upgrade", "Makes the process faster");
+
+        toGenerate.put("qstorage.screen.fluid", "%s: %s/%s");
+        toGenerate.put("qstorage.tooltip.shift_info", "Press §6SHIFT§r for more info");
+        toGenerate.put("qstorage.gas_canister.shifted_info", "Supports containing gasses inside the container");
+        return toGenerate;
     }
 }
