@@ -403,8 +403,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     }
 
     private int getProgress() {
-        if (this.recipe == null) return 0;
-        return (int) (this.crafting_ticks / (float) this.recipe.timeInTicks() * 100);
+        return this.recipe == null ? 0 : (int) (this.crafting_ticks / (float) this.recipe.timeInTicks() * 100);
     }
 
     private void consumeInputItems(SmelteryRecipe recipe) {
