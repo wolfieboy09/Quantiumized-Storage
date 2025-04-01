@@ -9,11 +9,13 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -46,8 +48,18 @@ public class DiskAssemblerCategory implements IRecipeCategory<DiskAssemblerRecip
     }
 
     @Override
-    public IDrawable getBackground() {
-        return this.background;
+    public int getWidth() {
+        return 160;
+    }
+
+    @Override
+    public int getHeight() {
+        return 76;
+    }
+
+    @Override
+    public void draw(DiskAssemblerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        this.background.draw(guiGraphics);
     }
 
     @Override
