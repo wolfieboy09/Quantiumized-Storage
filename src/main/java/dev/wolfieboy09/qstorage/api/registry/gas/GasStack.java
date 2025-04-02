@@ -20,6 +20,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
 import net.neoforged.neoforge.common.util.DataComponentUtil;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 
 import java.util.Objects;
@@ -28,7 +29,9 @@ import java.util.Optional;
 @NothingNullByDefault
 public class GasStack implements MutableDataComponentHolder {
     public static final GasStack EMPTY = new GasStack((Void) null);
-    @Nullable
+
+    // Use @UnknownNullability so the IDE will shut up about it being null to represent being empty
+    @UnknownNullability
     private final Gas gas;
     private int amount;
     private final PatchedDataComponentMap components;
@@ -89,7 +92,7 @@ public class GasStack implements MutableDataComponentHolder {
         return new GasStack(this.gas, this.amount, this.components);
     }
 
-    @Nullable
+    @UnknownNullability
     private Gas getGas() {
         return this.gas;
     }
