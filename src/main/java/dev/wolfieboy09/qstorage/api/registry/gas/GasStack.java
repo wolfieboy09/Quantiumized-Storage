@@ -2,9 +2,11 @@ package dev.wolfieboy09.qstorage.api.registry.gas;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
+import dev.wolfieboy09.qstorage.registries.QSGasses;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
@@ -38,7 +40,7 @@ public class GasStack implements MutableDataComponentHolder {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final Codec<Holder<Gas>> GAS_NON_EMPTY_CODEC = QSRegistries.GAS_REGISTRY.holderByNameCodec();
+    public static final Codec<Holder<Gas>> GAS_NON_EMPTY_CODEC = QSRegistries.GAS_REGISTRY.holderByNameCodec().validate(holder -> holder.is(QSGasses.EMPTY.get().builtInRegistryHolder()) ? DataResult.error(() -> "Gas must not be qstorage:empty") : DataResult.success(holder));
     public static final Codec<GasStack> SINGLE_GAS_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create((instance) -> instance.group(GAS_NON_EMPTY_CODEC.fieldOf("id").forGetter(GasStack::getGasHolder)).apply(instance, GasStack::new)));
     public static final StreamCodec<RegistryFriendlyByteBuf, GasStack> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.holderRegistry(QSRegistries.GAS_REGISTRY_KEY), GasStack::getGasHolder,
@@ -89,12 +91,15 @@ public class GasStack implements MutableDataComponentHolder {
     }
 
     public GasStack copy() {
-        return new GasStack(this.gas, this.amount, this.components);
+        if (this.isEmpty() || this.gas == null) {
+            return EMPTY;
+        } else {
+            return new GasStack(this.gas, this.amount, this.components);
+        }
     }
 
-    @UnknownNullability
     private Gas getGas() {
-        return this.gas;
+        return this.isEmpty() ? QSGasses.EMPTY.get() : this.gas;
     }
 
     public boolean isEmpty() {
