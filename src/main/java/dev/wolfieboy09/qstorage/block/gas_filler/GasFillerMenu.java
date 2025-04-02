@@ -34,7 +34,7 @@ public class GasFillerMenu extends AbstractContainerMenu {
         BlockEntity blockEntity = this.level.getBlockEntity(pos);
         if (!(blockEntity instanceof GasFillerBlockEntity be)) return;
         this.blockEntity = be;
-        addSlot(new GasSlot(be.getInventory(), 0, 50, 0));
+        addSlot(new GasSlot(be.getInventory(), 0, 129, 36));
 
         createPlayerInventory(playerInventory, 8, 87);
         createPlayerHotbar(playerInventory, 8, 145);
@@ -59,8 +59,17 @@ public class GasFillerMenu extends AbstractContainerMenu {
         }
     }
 
+    public GasFillerState getFillState() {
+        return switch (this.data.get(2)) {
+            case 0 -> GasFillerState.FILL;
+            case 1 -> GasFillerState.DRAIN;
+            default -> throw new IllegalArgumentException("Id is not a value of 0 or 1 for GasFillerState. Value given: " + this.data.get(2));
+        };
+    }
+
     public void updateMode(GasFillerState newState) {
-        //TODO Update
+        this.data.set(2, newState.id);
+        this.blockEntity.setChanged();
     }
 
     @Override
