@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qstorage.block.smeltery;
 
+import dev.wolfieboy09.qstorage.api.QSConstants;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.slots.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
@@ -25,16 +26,6 @@ public class SmelteryMenu extends AbstractContainerMenu {
     private final Level level;
     private final ContainerData data;
 
-    private static final int HOTBAR_SLOT_COUNT = 9;
-    private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
-    private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-    private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
-    private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    final int SLOT_X_SPACING = 18;
-    final int SLOT_Y_SPACING = 18;
-
     public SmelteryMenu(int id, BlockPos pos, Inventory playerInventory, @NotNull Player player, ContainerData containerData) {
         super(QSMenuTypes.SMELTERY_MENU.get(), id);
         addDataSlots(containerData);
@@ -58,19 +49,19 @@ public class SmelteryMenu extends AbstractContainerMenu {
     private void createPlayerInventory(@NotNull Inventory playerInventory, int PLAYER_INVENTORY_XPOS, int PLAYER_INVENTORY_YPOS) {
         PlayerInvWrapper playerInvWrapper = new PlayerInvWrapper(playerInventory);
 
-        for (int y = 0; y < PLAYER_INVENTORY_ROW_COUNT; y++) {
-            for (int x = 0; x < PLAYER_INVENTORY_COLUMN_COUNT; x++) {
-                int slotNumber = HOTBAR_SLOT_COUNT + y * PLAYER_INVENTORY_COLUMN_COUNT + x;
-                int xpos = PLAYER_INVENTORY_XPOS + x * SLOT_X_SPACING;
-                int ypos = PLAYER_INVENTORY_YPOS + y * SLOT_Y_SPACING;
+        for (int y = 0; y < QSConstants.PLAYER_INVENTORY_ROW_COUNT; y++) {
+            for (int x = 0; x < QSConstants.PLAYER_INVENTORY_COLUMN_COUNT; x++) {
+                int slotNumber = QSConstants.HOTBAR_SLOT_COUNT + y * QSConstants.PLAYER_INVENTORY_COLUMN_COUNT + x;
+                int xpos = PLAYER_INVENTORY_XPOS + x * QSConstants.SLOT_X_SPACING;
+                int ypos = PLAYER_INVENTORY_YPOS + y * QSConstants.SLOT_Y_SPACING;
                 addSlot(new SlotItemHandler(playerInvWrapper, slotNumber, xpos, ypos));
             }
         }
     }
 
     private void createPlayerHotbar(@NotNull Inventory playerInv, int HOTBAR_XPOS, int HOTBAR_YPOS) {
-        for (int col = 0; col < HOTBAR_SLOT_COUNT; ++col) {
-            this.addSlot(new Slot(playerInv, col, HOTBAR_XPOS + col * SLOT_X_SPACING, HOTBAR_YPOS));
+        for (int col = 0; col < QSConstants.HOTBAR_SLOT_COUNT; ++col) {
+            this.addSlot(new Slot(playerInv, col, HOTBAR_XPOS + col * QSConstants.SLOT_X_SPACING, HOTBAR_YPOS));
         }
     }
 
