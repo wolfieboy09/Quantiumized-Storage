@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qstorage.api.slots;
 
-import dev.wolfieboy09.qstorage.item.GasCanisterItem;
+import dev.wolfieboy09.qstorage.api.capabilities.QSCapabilities;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -13,6 +13,6 @@ public class GasSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        return stack.getItem() instanceof GasCanisterItem;
+        return stack.getCapability(QSCapabilities.GasStorage.ITEM) != null;
     }
 }
