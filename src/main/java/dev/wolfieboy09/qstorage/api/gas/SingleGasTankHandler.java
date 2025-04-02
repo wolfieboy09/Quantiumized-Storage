@@ -68,8 +68,8 @@ public class SingleGasTankHandler implements IGasHandler, IGasHandlerModifiable,
     }
 
     @Override
-    public GasStack drain(int index, boolean simulate) {
-        return this.tank.drain(index, simulate);
+    public GasStack drain(int maxDrain, boolean simulate) {
+        return this.tank.drain(maxDrain, simulate);
     }
 
     @Override
@@ -92,5 +92,9 @@ public class SingleGasTankHandler implements IGasHandler, IGasHandlerModifiable,
 
     public GasStack getGas() {
         return this.tank.getGas();
+    }
+
+    public SingleGasTankHandler copy() {
+        return new SingleGasTankHandler(this.tank);
     }
 }

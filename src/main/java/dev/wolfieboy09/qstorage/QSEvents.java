@@ -15,6 +15,4 @@ public class QSEvents {
     public static void particle(@NotNull RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(QSParticleTypes.GAS_PARTICLE.get(), GasParticleProvider::new);
     }
-
-
 }
