@@ -10,5 +10,5 @@ public interface IGasHandler {
     int fill(GasStack gasStack, boolean simulate);
 
     GasStack drain(GasStack gasStack, boolean simulate);
-    GasStack drain(int index, boolean simulate);
+    GasStack drain(int maxDrain, boolean simulate);
 }
