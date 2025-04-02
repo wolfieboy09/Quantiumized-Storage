@@ -10,7 +10,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class QSDataComponents {
+public final class QSDataComponents {
     public static final DeferredRegister.DataComponents REGISTRAR = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, QuantiumizedStorage.MOD_ID);
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<BaseStorageDisk>> BASE_STORAGE_DISK_COMPONENT = REGISTRAR.registerComponentType(
