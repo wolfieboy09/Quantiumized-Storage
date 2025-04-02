@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qstorage.api.fluids;
 
+import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -12,6 +13,7 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
+@NothingNullByDefault
 public class FluidStackHandler implements IFluidHandler, IFluidHandlerModifiable, INBTSerializable<CompoundTag> {
     protected NonNullList<FluidTank> stacks;
 
@@ -103,17 +105,28 @@ public class FluidStackHandler implements IFluidHandler, IFluidHandlerModifiable
 
     @Override
     public int fill(FluidStack fluidStack, FluidAction fluidAction) {
+        for (FluidTank tank : this.stacks) {
+            if (tank.getFluid() == fluidStack) {
+                return tank.fill(fluidStack, fluidAction);
+            }
+        }
         return 0;
     }
 
     @Override
     public FluidStack drain(FluidStack fluidStack, FluidAction fluidAction) {
-        return null;
+        for (FluidTank tank : this.stacks) {
+            if (tank.getFluid() == fluidStack) {
+                return tank.drain(fluidStack, fluidAction);
+            }
+        }
+        return FluidStack.EMPTY;
     }
 
     @Override
     public FluidStack drain(int i, FluidAction fluidAction) {
-        return null;
+        //TODO complete this part for draining
+        return FluidStack.EMPTY;
     }
 
     protected void onContentsChanged(int index) {}
