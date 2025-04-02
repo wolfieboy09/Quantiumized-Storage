@@ -161,4 +161,8 @@ public class GasTank implements IGasHandler, IGasTank {
         }
         return stack;
     }
+
+    public GasTank copy() {
+        return new GasTank(this.gas, this.capacity);
+    }
 }
