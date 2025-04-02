@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
 import dev.wolfieboy09.qstorage.registries.*;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -31,7 +32,8 @@ public class QuantiumizedStorage {
         modEventBus.addListener(QSEntities::registerRenderers);
         QSEntities.register(modEventBus);
 
-        modEventBus.addListener(QSEvents::registerRegistries);
+        // Register before neoforge because wiki says so
+        modEventBus.addListener(EventPriority.HIGH, QSEvents::registerRegistries);
         modEventBus.addListener(QSEvents::particle);
         modEventBus.register(QSClientEvents.class);
 
