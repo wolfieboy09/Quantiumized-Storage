@@ -4,8 +4,11 @@ import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.capabilities.gas.GasTank;
 import dev.wolfieboy09.qstorage.api.components.GasCanisterComponent;
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
+import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
+import dev.wolfieboy09.qstorage.api.registry.gas.GasStack;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
+import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -43,9 +46,8 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
         this.containerData.set(1, this.gasTank.getGasAmount());
     }
 
-
-    public GasFillerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
-        super(type, pos, blockState);
+    public GasFillerBlockEntity(BlockPos pos, BlockState blockState) {
+        super(QSBlockEntities.GAS_FILLER.get(), pos, blockState);
     }
 
     @Override
