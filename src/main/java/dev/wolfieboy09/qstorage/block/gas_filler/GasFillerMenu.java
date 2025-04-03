@@ -15,9 +15,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
 @NothingNullByDefault
+@SuppressWarnings("SameParameterValue")
 public class GasFillerMenu extends AbstractContainerMenu {
+    @UnknownNullability
     private GasFillerBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
