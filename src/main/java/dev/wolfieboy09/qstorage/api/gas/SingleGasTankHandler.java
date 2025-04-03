@@ -32,6 +32,14 @@ public class SingleGasTankHandler implements IGasHandler, IGasHandlerModifiable,
         this.tank = tank;
     }
 
+    public SingleGasTankHandler(int capacity) {
+        this.tank = new GasTank(capacity);
+    }
+
+    public void setGasInTank(GasStack gasStack) {
+        this.tank = this.tank.setGasInSlot(0, gasStack);
+    }
+
     @Override
     public void setStackInTank(int index, GasStack gasStack) {
         this.tank = this.tank.setGasInSlot(index, gasStack);
