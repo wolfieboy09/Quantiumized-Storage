@@ -53,11 +53,10 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     // For each tank: [fluidId, amount]
     // So for 3 tanks we need 6 integers
     private final ContainerData containerData = new SimpleContainerData(INPUT_TANKS_COUNT * 2);
-    private final ItemStackHandler inventory = new ItemStackHandler(5) {
+    private final ItemStackHandler inventory = new ItemStackHandler(6) {
         @Override
         protected void onContentsChanged(int slot) {
-            boolean isValidRecipe = checkRecipe();
-            if (!isValidRecipe) resetProgress();
+            if (!checkRecipe()) resetProgress();
             SmelteryBlockEntity.this.onContentsChanged();
         }
     };
@@ -168,6 +167,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         public static final int FLUID_SLOT_3 = 2;
         public static final int RESULT_FLUID_SLOT = 3;
         public static final int WASTE_RESULT_FLUID_SLOT = 4;
+        public static final int FUEL_SLOT = 5;
     }
 
     private void updateContainerData() {

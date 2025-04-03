@@ -1,10 +1,10 @@
 package dev.wolfieboy09.qstorage.integration.kubejs.events;
 
 import dev.latvian.mods.kubejs.event.EventGroup;
+import dev.latvian.mods.kubejs.event.EventHandler;
 
 public interface QSKubeEvents {
     EventGroup GROUP = EventGroup.of("QSEvents");
 
-    //EventHandler REGISTER_GAS = QSKubeEvents.GROUP.startup("registerGas", () -> QSGasJS.class);
-
+    EventHandler DATA_MAP_EVENT = GROUP.server("register", () -> QSDataMapEvent.class);
 }

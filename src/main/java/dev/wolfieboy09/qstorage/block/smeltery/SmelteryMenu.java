@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.block.smeltery;
 
 import dev.wolfieboy09.qstorage.api.QSConstants;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qstorage.api.slots.FuelSlot;
 import dev.wolfieboy09.qstorage.api.slots.ItemResultSlot;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
 import dev.wolfieboy09.qstorage.registries.QSMenuTypes;
@@ -41,6 +42,7 @@ public class SmelteryMenu extends AbstractContainerMenu {
 
         addSlot(new ItemResultSlot(be.getInventory(), 3, 171, 6));
         addSlot(new ItemResultSlot(be.getInventory(), 4, 171, 52));
+        addSlot(new FuelSlot(be.getInventory(), 5, 171, 100));
 
         createPlayerInventory(playerInventory, 48, 150);
         createPlayerHotbar(playerInventory, 48, 208);
