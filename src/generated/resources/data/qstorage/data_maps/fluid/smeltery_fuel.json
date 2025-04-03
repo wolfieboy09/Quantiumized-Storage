@@ -1,0 +1,8 @@
+{
+  "values": {
+    "#minecraft:lava": {
+      "burn_time": 20000,
+      "temperature": 1500
+    }
+  }
+}

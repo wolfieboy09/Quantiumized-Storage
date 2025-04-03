@@ -1,0 +1,40 @@
+{
+  "values": {
+    "#c:buckets/lava": {
+      "burn_time": 20000,
+      "temperature": 1500
+    },
+    "#c:rods/blaze": {
+      "burn_time": 2400,
+      "temperature": 2000
+    },
+    "#c:storage_blocks/coal": {
+      "burn_time": 1600,
+      "temperature": 1800
+    },
+    "#c:storage_blocks/dried_kelp": {
+      "burn_time": 4000,
+      "temperature": 800
+    },
+    "#minecraft:coals": {
+      "burn_time": 1600,
+      "temperature": 1200
+    },
+    "#minecraft:logs_that_burn": {
+      "burn_time": 300,
+      "temperature": 400
+    },
+    "#minecraft:planks": {
+      "burn_time": 300,
+      "temperature": 400
+    },
+    "#minecraft:rods/wooden": {
+      "burn_time": 100,
+      "temperature": 200
+    },
+    "minecraft:bamboo": {
+      "burn_time": 50,
+      "temperature": 150
+    }
+  }
+}
