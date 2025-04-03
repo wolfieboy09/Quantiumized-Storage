@@ -17,6 +17,8 @@ public class GasTank implements IGasHandler, IGasTank {
     protected GasStack gas;
     protected int capacity;
 
+    private Runnable consumer;
+
     public static final Codec<GasTank> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             GasStack.CODEC.fieldOf("gas").forGetter(GasTank::getGas),
             Codec.INT.fieldOf("capacity").forGetter(GasTank::getCapacity)
@@ -31,6 +33,11 @@ public class GasTank implements IGasHandler, IGasTank {
     private GasTank(GasStack stack, int capacity) {
         this.capacity = capacity;
         this.gas = stack;
+    }
+
+    public GasTank(int capacity, Runnable callback) {
+        this(capacity);
+        this.consumer = callback;
     }
 
     public GasTank(int capacity) {
@@ -111,7 +118,15 @@ public class GasTank implements IGasHandler, IGasTank {
         return this.validator.test(gasStack);
     }
 
-    protected void onContentsChanged() {}
+    /**
+     * Called when the gas tank contents are updated.
+     * @implNote Only runs when a {@link Runnable} is present on the constructor
+     */
+    protected void onContentsChanged() {
+        if (this.consumer != null) {
+            this.consumer.run();
+        }
+    }
 
     @Override
     public int fill(GasStack resource, boolean simulate) {
