@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qstorage.api.recipes.datagen;
+package dev.wolfieboy09.qstorage.api.datagen;
 
 import com.mojang.datafixers.util.Either;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;

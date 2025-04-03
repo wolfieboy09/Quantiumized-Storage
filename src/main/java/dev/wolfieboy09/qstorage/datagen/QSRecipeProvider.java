@@ -1,8 +1,8 @@
 package dev.wolfieboy09.qstorage.datagen;
 
 import com.mojang.datafixers.util.Either;
-import dev.wolfieboy09.qstorage.api.recipes.datagen.DiskAssemblerBuilder;
-import dev.wolfieboy09.qstorage.api.recipes.datagen.SmelteryBuilder;
+import dev.wolfieboy09.qstorage.api.datagen.DiskAssemblerBuilder;
+import dev.wolfieboy09.qstorage.api.datagen.SmelteryBuilder;
 import dev.wolfieboy09.qstorage.registries.QSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
