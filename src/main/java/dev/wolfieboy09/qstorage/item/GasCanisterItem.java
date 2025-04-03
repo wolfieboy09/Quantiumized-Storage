@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage.item;
 import dev.wolfieboy09.qstorage.api.capabilities.gas.GasTank;
 import dev.wolfieboy09.qstorage.api.components.GasCanisterComponent;
 import dev.wolfieboy09.qstorage.api.gas.SingleGasTankHandler;
+import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -25,7 +26,8 @@ public class GasCanisterItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         GasCanisterComponent data = stack.get(QSDataComponents.GAS_CANISTER_COMPONENT.get());
         if (data != null && !data.getGasTank().getGas().isEmpty()) {
-            tooltipComponents.add(Component.translatable("qstorage.gas_canister.contains_gas", Component.literal(data.getGasTank().getGas().getGasHolder().getRegisteredName())));
+            String langKey = data.getGasTank().getGas().getGasHolder().getRegisteredName();
+            tooltipComponents.add(Component.translatable("qstorage.gas_canister.contains_gas", Component.literal(langKey)));
             tooltipComponents.add(Component.literal(data.getGasTank().getGasAmount() + " / " + data.getGasTank().getCapacity()));
         }
 
