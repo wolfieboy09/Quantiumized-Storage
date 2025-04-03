@@ -53,7 +53,7 @@ public class SmelteryBlock extends AbstractBaseEntityBlock {
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : ((level1, pos, state, blockEntity) -> ((SmelteryBlockEntity) blockEntity).tick());
+        return level.isClientSide ? null : (level1, pos, state, blockEntity) -> ((SmelteryBlockEntity) blockEntity).tick();
     }
 
     @Override
