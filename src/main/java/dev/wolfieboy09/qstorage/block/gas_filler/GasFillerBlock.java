@@ -31,7 +31,7 @@ public class GasFillerBlock extends AbstractBaseEntityBlock {
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return null;
+        return level.isClientSide ? null : (lvl, pos, blockState, blockEntity) -> ((GasFillerBlockEntity) blockEntity).tick();
     }
 
     @Override
