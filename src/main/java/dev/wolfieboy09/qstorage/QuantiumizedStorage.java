@@ -37,6 +37,8 @@ public class QuantiumizedStorage {
         modEventBus.addListener(QSEvents::particle);
         modEventBus.register(QSClientEvents.class);
 
+        modEventBus.addListener(QSDataMaps::register);
+
 //        modEventBus.register(QSShading.class);
 
         // modEventBus.addListener(this::addCreative);
