@@ -23,4 +23,8 @@ public record GasCanisterComponent(SingleGasTankHandler gasTankHandler) {
     public GasTank getGasTank() {
         return this.gasTankHandler.getTank();
     }
+
+    public int getTankCapacity() {
+        return this.gasTankHandler.getTankCapacity(0);
+    }
 }
