@@ -3,7 +3,6 @@ package dev.wolfieboy09.qstorage.item;
 import dev.wolfieboy09.qstorage.api.capabilities.gas.GasTank;
 import dev.wolfieboy09.qstorage.api.components.GasCanisterComponent;
 import dev.wolfieboy09.qstorage.api.gas.SingleGasTankHandler;
-import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.component.QSDataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;

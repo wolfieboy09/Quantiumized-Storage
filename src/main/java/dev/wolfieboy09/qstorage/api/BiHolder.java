@@ -1,9 +1,9 @@
 package dev.wolfieboy09.qstorage.api;
 
+import com.mojang.datafixers.util.Either;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.mojang.datafixers.util.Either;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**

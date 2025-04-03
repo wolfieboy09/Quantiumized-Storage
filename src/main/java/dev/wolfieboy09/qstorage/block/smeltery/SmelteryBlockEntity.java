@@ -1,7 +1,6 @@
 package dev.wolfieboy09.qstorage.block.smeltery;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
-import dev.wolfieboy09.qstorage.api.BiHolder;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.fluids.ExtendedFluidTank;
 import dev.wolfieboy09.qstorage.api.recipes.CombinedRecipeInput;

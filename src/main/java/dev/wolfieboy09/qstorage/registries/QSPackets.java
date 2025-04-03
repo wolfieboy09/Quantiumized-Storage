@@ -1,8 +1,6 @@
 package dev.wolfieboy09.qstorage.registries;
 
-import dev.wolfieboy09.qstorage.packets.GasFillerModeData;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
