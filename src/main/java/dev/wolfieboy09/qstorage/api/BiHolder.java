@@ -1,5 +1,7 @@
 package dev.wolfieboy09.qstorage.api;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.mojang.datafixers.util.Either;
 /**
@@ -16,5 +18,15 @@ public record BiHolder<L, R>(@Nullable L left,@Nullable R right) {
 
     public boolean isRightPresent() {
         return this.right != null;
+    }
+
+    @Contract("_ -> new")
+    public static <L, R> @NotNull BiHolder<L, R> left(@Nullable L value) {
+        return new BiHolder<>(value, null);
+    }
+
+    @Contract("_ -> new")
+    public static <L, R> @NotNull BiHolder<L, R> right(@Nullable R value) {
+        return new BiHolder<>(null, value);
     }
 }
