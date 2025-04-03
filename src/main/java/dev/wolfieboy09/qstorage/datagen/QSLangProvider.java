@@ -47,7 +47,7 @@ public class QSLangProvider extends LanguageProvider {
         toGenerate.put("qstorage.screen.fluid", "%s: %s/%s");
         toGenerate.put("qstorage.tooltip.shift_info", "Press §6SHIFT§r for more info");
         toGenerate.put("qstorage.gas_canister.shifted_info", "Supports containing gasses inside the container");
-        toGenerate.put("qstorage.gas_canister.contains_gas", "Storing §e%s§r");
+        toGenerate.put("qstorage.gas_canister.contains_gas", "Storing §e%s§r gU");
         return toGenerate;
     }
 }
