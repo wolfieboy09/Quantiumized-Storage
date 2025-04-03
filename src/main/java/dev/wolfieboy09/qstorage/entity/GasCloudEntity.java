@@ -52,7 +52,7 @@ public class GasCloudEntity extends AreaEffectCloud {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         this.lifetime = tag.getInt("Lifetime");
-        this.gas = QSRegistries.GAS_REGISTRY.get(ResourceLocation.parse(tag.getString("Gas")));
+        this.gas = QSRegistries.GAS.get(ResourceLocation.parse(tag.getString("Gas")));
         super.readAdditionalSaveData(tag);
     }
 

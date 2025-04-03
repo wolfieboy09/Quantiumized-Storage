@@ -42,7 +42,7 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     public void setChanged() {
         super.setChanged();
         // Gas ID
-        this.containerData.set(0, QSRegistries.GAS_REGISTRY.getId(this.gasTank.getGas().getGasHolder().value()));
+        this.containerData.set(0, QSRegistries.GAS.getId(this.gasTank.getGas().getGasHolder().value()));
         // Gas Amount
         this.containerData.set(1, this.gasTank.getGasAmount());
 
@@ -72,7 +72,7 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     public void tick() {
         GasCanisterComponent data = this.inventory.getStackInSlot(0).get(QSDataComponents.GAS_CANISTER_COMPONENT.get());
         if (!this.inventory.getStackInSlot(0).isEmpty() && data != null) {
-            SingleGasTankHandler tank = new SingleGasTankHandler(new GasTank(data.getTankCapacity()));
+            SingleGasTankHandler tank = new SingleGasTankHandler(data.getTankCapacity());
             tank.setGasInTank(new GasStack(QSGasses.HYDROGEN.get()));
             this.inventory.getStackInSlot(0).set(QSDataComponents.GAS_CANISTER_COMPONENT.get(), new GasCanisterComponent(tank));
         }
