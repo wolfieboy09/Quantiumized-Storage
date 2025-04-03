@@ -66,6 +66,6 @@ public class QSJEIPlugin implements IModPlugin {
 
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
-        registration.register(GAS_TYPE, QSRegistries.GAS_REGISTRY.stream().toList(), new GasIngredientHelper(), new GasIngredientRenderer(16, 16), Gas.CODEC);
+        registration.register(GAS_TYPE, QSRegistries.GAS.stream().toList(), new GasIngredientHelper(), new GasIngredientRenderer(16, 16), Gas.CODEC);
     }
 }

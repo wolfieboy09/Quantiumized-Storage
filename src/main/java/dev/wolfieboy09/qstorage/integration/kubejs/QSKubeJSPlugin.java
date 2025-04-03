@@ -28,7 +28,7 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
 
     @Override
     public void registerBuilderTypes(@NotNull BuilderTypeRegistry registry) {
-        registry.of(QSRegistries.GAS_REGISTRY_KEY, reg -> {
+        registry.of(QSRegistries.GAS_KEY, reg -> {
             reg.addDefault(KubeGasBuilder.class, KubeGasBuilder::new);
             reg.add(locate("gas"), KubeGasBuilder.class, KubeGasBuilder::new);
         });
@@ -36,7 +36,7 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
 
     @Override
     public void registerServerRegistries(@NotNull ServerRegistryRegistry registry) {
-        registry.register(QSRegistries.GAS_REGISTRY_KEY, Gas.CODEC, Gas.class);
+        registry.register(QSRegistries.GAS_KEY, Gas.CODEC, Gas.class);
     }
 
     @Override

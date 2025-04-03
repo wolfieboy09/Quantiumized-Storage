@@ -12,6 +12,6 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class GasTagProvider extends TagsProvider<Gas> {
     protected GasTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, QSRegistries.GAS_REGISTRY_KEY, lookupProvider, modId, existingFileHelper);
+        super(output, QSRegistries.GAS_KEY, lookupProvider, modId, existingFileHelper);
     }
 }

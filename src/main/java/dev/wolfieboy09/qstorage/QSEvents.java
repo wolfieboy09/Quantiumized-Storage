@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class QSEvents {
     public static void registerRegistries(@NotNull NewRegistryEvent event) {
-        event.register(QSRegistries.GAS_REGISTRY);
+        event.register(QSRegistries.GAS);
     }
 
     public static void particle(@NotNull RegisterParticleProvidersEvent event) {

@@ -8,6 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class GasTags {
     public static @NotNull TagKey<Gas> create(ResourceLocation name) {
-        return TagKey.create(QSRegistries.GAS_REGISTRY_KEY, name);
+        return TagKey.create(QSRegistries.GAS_KEY, name);
     }
 }

@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public class QSGasses {
-    public static final DeferredRegister<Gas> GASSES = DeferredRegister.create(QSRegistries.GAS_REGISTRY, QuantiumizedStorage.MOD_ID);
+    public static final DeferredRegister<Gas> GASSES = DeferredRegister.create(QSRegistries.GAS, QuantiumizedStorage.MOD_ID);
 
     public static final Supplier<Gas> EMPTY  = GASSES.register("empty", () -> new GasBuilder().build());
 
