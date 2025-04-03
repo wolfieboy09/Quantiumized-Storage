@@ -40,10 +40,10 @@ public class GasStack implements MutableDataComponentHolder {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final Codec<Holder<Gas>> GAS_NON_EMPTY_CODEC = QSRegistries.GAS_REGISTRY.holderByNameCodec().validate(holder -> holder.is(QSGasses.EMPTY.get().builtInRegistryHolder()) ? DataResult.error(() -> "Gas must not be qstorage:empty") : DataResult.success(holder));
+    public static final Codec<Holder<Gas>> GAS_NON_EMPTY_CODEC = QSRegistries.GAS.holderByNameCodec().validate(holder -> holder.is(QSGasses.EMPTY.get().builtInRegistryHolder()) ? DataResult.error(() -> "Gas must not be qstorage:empty") : DataResult.success(holder));
     public static final Codec<GasStack> SINGLE_GAS_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create((instance) -> instance.group(GAS_NON_EMPTY_CODEC.fieldOf("id").forGetter(GasStack::getGasHolder)).apply(instance, GasStack::new)));
     public static final StreamCodec<RegistryFriendlyByteBuf, GasStack> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(QSRegistries.GAS_REGISTRY_KEY), GasStack::getGasHolder,
+            ByteBufCodecs.holderRegistry(QSRegistries.GAS_KEY), GasStack::getGasHolder,
             ByteBufCodecs.INT, GasStack::getAmount,
             GasStack::new
     );

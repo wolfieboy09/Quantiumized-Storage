@@ -11,18 +11,18 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 public class Gas implements GasLike {
-    public static final Codec<Gas> CODEC = QSRegistries.GAS_REGISTRY.byNameCodec();
+    public static final Codec<Gas> CODEC = QSRegistries.GAS.byNameCodec();
     private String descriptionId;
     private ResourceLocation location;
     private final Holder<Gas> builtInRegistryHolder;
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, Gas> STREAM_CODEC = ByteBufCodecs.registry(QSRegistries.GAS_REGISTRY_KEY);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Gas> STREAM_CODEC = ByteBufCodecs.registry(QSRegistries.GAS_KEY);
 
     protected final GasBuilder gasBuilder;
 
     public Gas(GasBuilder builder) {
         this.gasBuilder = builder;
-        this.builtInRegistryHolder = QSRegistries.GAS_REGISTRY.wrapAsHolder(this);
+        this.builtInRegistryHolder = QSRegistries.GAS.wrapAsHolder(this);
     }
 
     public GasInfo getGasData() {
@@ -31,7 +31,7 @@ public class Gas implements GasLike {
 
     protected String getOrCreateDescriptionId() {
        if (this.descriptionId == null) {
-           this.descriptionId = Util.makeDescriptionId("gas", QSRegistries.GAS_REGISTRY.getKey(this));
+           this.descriptionId = Util.makeDescriptionId("gas", QSRegistries.GAS.getKey(this));
        }
        return this.descriptionId;
     }
@@ -50,7 +50,7 @@ public class Gas implements GasLike {
 
     public ResourceLocation getResourceLocation() {
         if (this.location == null) {
-            this.location = QSRegistries.GAS_REGISTRY.getKey(this);
+            this.location = QSRegistries.GAS.getKey(this);
         }
         return this.location;
     }
