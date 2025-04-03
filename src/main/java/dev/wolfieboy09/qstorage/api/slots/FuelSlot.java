@@ -13,6 +13,6 @@ public class FuelSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        return stack.getItemHolder().getData(QSDataMaps.SMELTERY_FUEL_ITEM) != null || super.mayPlace(stack);
+        return stack.getItemHolder().getData(QSDataMaps.SMELTERY_FUEL_ITEM) != null;
     }
 }
