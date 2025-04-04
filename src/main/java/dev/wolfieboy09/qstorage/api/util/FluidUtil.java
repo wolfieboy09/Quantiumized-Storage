@@ -96,7 +96,6 @@ public final class FluidUtil {
      */
     public static void renderFluid(GuiGraphics guiGraphics, FluidStack fluidStack, int x, int y, int width, int height) {
         // It will iterate through one stack, so this will do
-        FluidStack[] stack = new FluidStack[] {fluidStack};
-        renderFluid(guiGraphics, stack, x, y, width, height);
+        renderFluid(guiGraphics, new FluidStack[] {fluidStack}, x, y, width, height);
     }
 }
