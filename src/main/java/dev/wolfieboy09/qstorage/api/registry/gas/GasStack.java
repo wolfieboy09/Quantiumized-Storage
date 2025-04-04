@@ -98,7 +98,7 @@ public class GasStack implements MutableDataComponentHolder {
         }
     }
 
-    private Gas getGas() {
+    public Gas getGas() {
         return this.isEmpty() ? QSGasses.EMPTY.get() : this.gas;
     }
 
