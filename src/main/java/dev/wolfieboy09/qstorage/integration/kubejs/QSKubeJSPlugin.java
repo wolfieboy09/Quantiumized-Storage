@@ -19,6 +19,7 @@ import dev.wolfieboy09.qstorage.integration.kubejs.bindings.MobEffectInstanceBin
 import dev.wolfieboy09.qstorage.integration.kubejs.builders.KubeGasBuilder;
 import dev.wolfieboy09.qstorage.integration.kubejs.events.QSDataMapEvent;
 import dev.wolfieboy09.qstorage.integration.kubejs.events.QSKubeEvents;
+import dev.wolfieboy09.qstorage.integration.kubejs.events.SmelteryFuelMapper;
 import dev.wolfieboy09.qstorage.integration.kubejs.schemas.DiskAssemblySchema;
 import dev.wolfieboy09.qstorage.integration.kubejs.schemas.SmelterySchema;
 import net.minecraft.resources.ResourceLocation;
@@ -58,6 +59,13 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     }
 
     @Override
+    public void registerBindings(@NotNull BindingRegistry bindings) {
+        bindings.add("ColorUtil", ColorUtil.class);
+        bindings.add("MobEffectInstance", MobEffectInstanceBinding.class);
+        bindings.add("MobEffects", MobEffects.class);
+    }
+
+    @Override
     public void generateData(KubeDataGenerator generator) {
         JsonObject itemJson = new JsonObject();
         JsonObject fluidJson = new JsonObject();
@@ -70,17 +78,23 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
 
         QSKubeEvents.DATA_MAP_EVENT.post(new QSDataMapEvent());
 
-        for (Map.Entry<Item, SmelteryFuel> entry : QSDataMapEvent.SMELTERY_DATA_MAP.left().entrySet()) {
+        for (Map.Entry<Item, SmelteryFuelMapper> entry : QSDataMapEvent.SMELTERY_DATA_MAP.left().entrySet()) {
             JsonObject json = new JsonObject();
-            SmelteryFuel value = entry.getValue();
+            SmelteryFuelMapper value = entry.getValue();
+            if (value.replace()) {
+                json.addProperty("replace", true);
+            }
             json.addProperty("burn_time",value.burnTime());
             json.addProperty("temperature", value.temperature());
             itemJson.add(entry.getKey().kjs$getId(), json);
         }
 
-        for (Map.Entry<Fluid, SmelteryFuel> entry : QSDataMapEvent.SMELTERY_DATA_MAP.right().entrySet()) {
+        for (Map.Entry<Fluid, SmelteryFuelMapper> entry : QSDataMapEvent.SMELTERY_DATA_MAP.right().entrySet()) {
             JsonObject json = new JsonObject();
-            SmelteryFuel value = entry.getValue();
+            SmelteryFuelMapper value = entry.getValue();
+            if (value.replace()) {
+                json.addProperty("replace", true);
+            }
             json.addProperty("burn_time",value.burnTime());
             json.addProperty("temperature", value.temperature());
             fluidJson.add(entry.getKey().kjs$getId(), json);
@@ -108,13 +122,6 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     private void clearMappings() {
         QSDataMapEvent.SMELTERY_DATA_MAP.left().clear();
         QSDataMapEvent.SMELTERY_DATA_MAP.right().clear();
-    }
-
-    @Override
-    public void registerBindings(@NotNull BindingRegistry bindings) {
-        bindings.add("ColorUtil", ColorUtil.class);
-        bindings.add("MobEffectInstance", MobEffectInstanceBinding.class);
-        bindings.add("MobEffects", MobEffects.class);
     }
 
     private @NotNull ResourceLocation locate(String id) {

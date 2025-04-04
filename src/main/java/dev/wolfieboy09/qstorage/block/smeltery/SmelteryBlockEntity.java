@@ -209,7 +209,6 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-        updateContainerData();
         return new SmelteryMenu(id, this.getBlockPos(), playerInv, player, this.containerData);
     }
 

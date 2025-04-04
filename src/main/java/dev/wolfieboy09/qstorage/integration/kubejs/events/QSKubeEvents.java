@@ -6,5 +6,5 @@ import dev.latvian.mods.kubejs.event.EventHandler;
 public interface QSKubeEvents {
     EventGroup GROUP = EventGroup.of("QSEvents");
 
-    EventHandler DATA_MAP_EVENT = GROUP.server("register", () -> QSDataMapEvent.class);
+    EventHandler DATA_MAP_EVENT = GROUP.server("registerFuels", () -> QSDataMapEvent.class);
 }
