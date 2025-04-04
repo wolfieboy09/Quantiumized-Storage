@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qstorage.integration.kubejs;
 
 import com.google.gson.JsonObject;
+import dev.latvian.mods.kubejs.event.EventGroupRegistry;
 import dev.latvian.mods.kubejs.generator.KubeDataGenerator;
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchemaRegistry;
@@ -52,6 +53,11 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     }
 
     @Override
+    public void registerEvents(EventGroupRegistry registry) {
+        registry.register(QSKubeEvents.GROUP);
+    }
+
+    @Override
     public void generateData(KubeDataGenerator generator) {
         JsonObject itemJson = new JsonObject();
         JsonObject fluidJson = new JsonObject();
@@ -83,19 +89,18 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
         if (!itemJson.isEmpty()) {
             JsonObject json = new JsonObject();
             json.add("values", itemJson);
+            System.out.println("--- ITEM JSON ---");
+            System.out.println(json);
             generator.add(GeneratedData.json(locate("data_maps/item/smeltery_fuel.json"), () -> json));
         }
 
         if (!fluidJson.isEmpty()) {
             JsonObject json = new JsonObject();
             json.add("values", fluidJson);
+            System.out.println("--- FLUID JSON ---");
+            System.out.println(json);
             generator.add(GeneratedData.json(locate("data_maps/fluid/smeltery_fuel.json"), () -> json));
         }
-
-        System.out.println("--- ITEM JSON ---");
-        System.out.println(itemJson);
-        System.out.println("--- FLUID JSON ---");
-        System.out.println(fluidJson);
 
         clearMappings();
     }
