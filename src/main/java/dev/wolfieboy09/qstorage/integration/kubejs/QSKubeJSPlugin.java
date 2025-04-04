@@ -10,7 +10,6 @@ import dev.latvian.mods.kubejs.registry.ServerRegistryRegistry;
 import dev.latvian.mods.kubejs.script.BindingRegistry;
 import dev.latvian.mods.kubejs.script.data.GeneratedData;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
-import dev.wolfieboy09.qstorage.api.datamaps.SmelteryFuel;
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.Gas;
 import dev.wolfieboy09.qstorage.api.util.ColorUtil;
@@ -80,24 +79,33 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
 
         for (Map.Entry<Item, SmelteryFuelMapper> entry : QSDataMapEvent.SMELTERY_DATA_MAP.left().entrySet()) {
             JsonObject json = new JsonObject();
-            SmelteryFuelMapper value = entry.getValue();
-            if (value.replace()) {
+            JsonObject data = new JsonObject();
+            SmelteryFuelMapper wrapper = entry.getValue();
+
+            data.addProperty("burn_time", wrapper.burnTime());
+            data.addProperty("temperature", wrapper.temperature());
+
+            json.add("value", data);
+            if (wrapper.replace()) {
                 json.addProperty("replace", true);
             }
-            json.addProperty("burn_time",value.burnTime());
-            json.addProperty("temperature", value.temperature());
             itemJson.add(entry.getKey().kjs$getId(), json);
+
         }
 
         for (Map.Entry<Fluid, SmelteryFuelMapper> entry : QSDataMapEvent.SMELTERY_DATA_MAP.right().entrySet()) {
             JsonObject json = new JsonObject();
-            SmelteryFuelMapper value = entry.getValue();
-            if (value.replace()) {
+            JsonObject data = new JsonObject();
+            SmelteryFuelMapper wrapper = entry.getValue();
+
+            data.addProperty("burn_time", wrapper.burnTime());
+            data.addProperty("temperature", wrapper.temperature());
+
+            json.add("value", data);
+            if (wrapper.replace()) {
                 json.addProperty("replace", true);
             }
-            json.addProperty("burn_time",value.burnTime());
-            json.addProperty("temperature", value.temperature());
-            fluidJson.add(entry.getKey().kjs$getId(), json);
+            itemJson.add(entry.getKey().kjs$getId(), json);
         }
 
         if (!itemJson.isEmpty()) {
