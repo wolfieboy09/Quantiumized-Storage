@@ -32,7 +32,7 @@
   "item.qstorage.sulfur": "Sulfur",
   "item.qstorage.superior_storage_disk": "Superior Storage Disk",
   "item.qstorage.ultimate_circuit": "Ultimate Circuit",
-  "qstorage.gas_canister.contains_gas": "Storing §e%s§r gU",
+  "qstorage.gas_canister.contains_gas": "Storing §e%s§r",
   "qstorage.gas_canister.shifted_info": "Supports containing gasses inside the container",
   "qstorage.oxygen_deprivation": "%s could not breath on land",
   "qstorage.screen.fluid": "%s: %s/%s",
