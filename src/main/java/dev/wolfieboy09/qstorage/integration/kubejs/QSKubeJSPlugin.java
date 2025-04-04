@@ -53,7 +53,7 @@ public class QSKubeJSPlugin implements KubeJSPlugin {
     }
 
     @Override
-    public void registerEvents(EventGroupRegistry registry) {
+    public void registerEvents(@NotNull EventGroupRegistry registry) {
         registry.register(QSKubeEvents.GROUP);
     }
 
