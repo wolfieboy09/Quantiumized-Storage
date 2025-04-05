@@ -32,7 +32,7 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
             setChanged();
         }
     };
-    private final ContainerData containerData = new SimpleContainerData(4);
+    private final ContainerData containerData = new SimpleContainerData(3);
 
     private GasFillerState gasFillerState = GasFillerState.FILL;
 
