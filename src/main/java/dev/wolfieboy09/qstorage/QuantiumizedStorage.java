@@ -28,6 +28,7 @@ public class QuantiumizedStorage {
         QSParticleTypes.register(modEventBus);
         QSGasses.register(modEventBus);
         QSEffects.register(modEventBus);
+        modEventBus.addListener(QSPackets::register);
         //modEventBus.addListener(QSEntities::registerAttributes);
         modEventBus.addListener(QSEntities::registerRenderers);
         QSEntities.register(modEventBus);

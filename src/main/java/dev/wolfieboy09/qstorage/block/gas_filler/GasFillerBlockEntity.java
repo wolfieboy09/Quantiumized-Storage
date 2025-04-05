@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
+import static dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlock.MODE;
+
 @NothingNullByDefault
 public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvider {
     private final Component TITLE = Component.translatable("block.qstorage.gas_filler");
@@ -44,9 +46,6 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
         this.containerData.set(0, QSRegistries.GAS.getId(this.gasTank.getGas().getGasHolder().value()));
         // Gas Amount
         this.containerData.set(1, this.gasTank.getGasAmount());
-
-        // GasFillerState ID
-        this.containerData.set(2, this.gasFillerState.id);
     }
 
     public GasFillerBlockEntity(BlockPos pos, BlockState blockState) {
@@ -80,5 +79,11 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
 
             this.inventory.getStackInSlot(0).set(QSDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent(tank));
         }
+    }
+
+    public void setState(GasFillerState state) {
+        this.gasFillerState = state;
+        this.setChanged();
+        this.level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(MODE, state));
     }
 }
