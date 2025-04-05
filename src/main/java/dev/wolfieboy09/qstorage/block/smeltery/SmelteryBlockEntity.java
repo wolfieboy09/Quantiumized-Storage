@@ -56,7 +56,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         @Override
         protected void onContentsChanged(int slot) {
             if (!checkRecipe()) resetProgress();
-            SmelteryBlockEntity.this.onContentsChanged();
+            SmelteryBlockEntity.this.setChanged();
         }
     };
     private final List<ExtendedFluidTank> inputTanks = new ArrayList<>(INPUT_TANKS_COUNT);
@@ -106,7 +106,6 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
 
         @Override
         public int fill(FluidStack fluidStack, FluidAction fluidAction) {
-            onContentsChanged();
             for (ExtendedFluidTank inputTank : inputTanks) {
                 if (inputTank.getFluid().getFluid() == fluidStack.getFluid()) {
                     return inputTank.fill(fluidStack, fluidAction);
