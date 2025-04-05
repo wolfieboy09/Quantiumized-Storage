@@ -29,7 +29,7 @@ public class GasFillerScreen extends AbstractContainerScreen<GasFillerMenu> {
         CycleButton<GasFillerState> cycler = CycleButton.<GasFillerState>builder((gasFillerState) -> Component.literal(gasFillerState.name()))
                 .withInitialValue(GasFillerState.FILL)
                 .withValues(GasFillerState.FILL, GasFillerState.DRAIN)
-                .create(232, 110, 75, 15, Component.literal("Mode"), (button, value) -> this.menu.updateMode(button.getValue()));
+                .create(this.width - 249, this.height - 155, 75, 15, Component.literal("Mode"), (button, value) -> this.menu.updateMode(button.getValue()));
 
         addRenderableWidget(cycler);
     }
