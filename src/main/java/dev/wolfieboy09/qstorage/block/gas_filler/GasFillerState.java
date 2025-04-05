@@ -4,16 +4,11 @@ import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 
 public enum GasFillerState implements StringRepresentable {
-    FILL(0),
-    DRAIN(1);
-
-    final int id;
-    GasFillerState(int id) {
-        this.id = id;
-    }
+    FILL,
+    DRAIN;
 
     @Override
     public @NotNull String getSerializedName() {
-        return name();
+        return Integer.toString(ordinal());
     }
 }

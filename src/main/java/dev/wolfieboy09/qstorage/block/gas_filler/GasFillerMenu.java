@@ -17,6 +17,8 @@ import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
+import static dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlock.MODE;
+
 @NothingNullByDefault
 @SuppressWarnings("SameParameterValue")
 public class GasFillerMenu extends AbstractContainerMenu {
@@ -63,16 +65,11 @@ public class GasFillerMenu extends AbstractContainerMenu {
     }
 
     public GasFillerState getFillState() {
-        return switch (this.data.get(2)) {
-            case 0 -> GasFillerState.FILL;
-            case 1 -> GasFillerState.DRAIN;
-            default -> throw new IllegalArgumentException("Id is not a value of 0 or 1 for GasFillerState. Value given: " + this.data.get(2));
-        };
+        return this.blockEntity.getBlockState().getValue(MODE);
     }
 
     public void updateMode(GasFillerState newState) {
-        this.data.set(2, newState.id);
-        this.blockEntity.setChanged();
+        this.blockEntity.setState(newState);
     }
 
     @Override
@@ -83,5 +80,9 @@ public class GasFillerMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return stillValid(ContainerLevelAccess.create(level, this.blockEntity.getBlockPos()), player, QSBlocks.GAS_FILLER.get());
+    }
+
+    public GasFillerBlockEntity getBE() {
+        return this.blockEntity;
     }
 }
