@@ -51,7 +51,8 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     // Expand container data to include both fluid IDs and amounts
     // For each tank: [fluidId, amount]
     // So for 3 tanks we need 6 integers
-    private final ContainerData containerData = new SimpleContainerData(INPUT_TANKS_COUNT * 2);
+    // Plus 1 for the progress amount
+    private final ContainerData containerData = new SimpleContainerData((INPUT_TANKS_COUNT * 2) + 2);
     private final ItemStackHandler inventory = new ItemStackHandler(6) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -181,6 +182,11 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
             this.containerData.set(i * 2, fluidId);
             this.containerData.set(i * 2 + 1, amount);
         }
+
+        // INPUT_TANKS_COUNT is equal to 3, and sinse the container data does * 2 for fluid ID and amount
+        // We can do simple math 3 * 2 = 6, so 7 would be the
+        // Needs to be 6 since it starts at 0
+        this.containerData.set(6, 24);
     }
     
     public void initInputFluidTanks() {
