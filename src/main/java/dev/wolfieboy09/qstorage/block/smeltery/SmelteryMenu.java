@@ -90,6 +90,13 @@ public class SmelteryMenu extends AbstractContainerMenu {
         return new FluidStack(fluid, amount);
     }
 
+    public int getProgress() {
+        for (int i = 0; i < this.data.getCount(); i++) {
+            System.out.println("THING " + i + " VALUE: " + this.data.get(i));
+        }
+        return 0;
+    }
+
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
         //TODO get quick move stack working

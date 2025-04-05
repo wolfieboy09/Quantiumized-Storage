@@ -52,5 +52,7 @@ public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
         if (!stack.isEmpty() && data != null) {
             guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal("Burn Time: " + data.burnTime() + " | Temperature: " + data.temperature()), mouseX, mouseY);
         }
+        //TODO
+        guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal("Time: " + this.menu.getProgress()), mouseX, mouseY);
     }
 }
