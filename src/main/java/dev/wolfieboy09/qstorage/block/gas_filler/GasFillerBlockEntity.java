@@ -3,7 +3,6 @@ package dev.wolfieboy09.qstorage.block.gas_filler;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.capabilities.gas.GasTank;
 import dev.wolfieboy09.qstorage.api.components.GasCanisterComponent;
-import dev.wolfieboy09.qstorage.api.gas.SingleGasTankHandler;
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.GasStack;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
@@ -70,11 +69,16 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     }
 
     public void tick() {
-        GasCanisterComponent data = this.inventory.getStackInSlot(0).get(QSDataComponents.GAS_CANISTER_COMPONENT.get());
+        GasCanisterComponent data = this.inventory.getStackInSlot(0).get(QSDataComponents.GAS_CANISTER_COMPONENT);
         if (!this.inventory.getStackInSlot(0).isEmpty() && data != null) {
-            SingleGasTankHandler tank = new SingleGasTankHandler(data.getTankCapacity());
-            tank.setGasInTank(new GasStack(QSGasses.HYDROGEN.get()));
-            this.inventory.getStackInSlot(0).set(QSDataComponents.GAS_CANISTER_COMPONENT.get(), new GasCanisterComponent(tank));
+            GasTank tank = new GasTank(data.getTankCapacity());
+            int amount = data.getGasTank().getGasAmount();
+            if (amount < data.getTankCapacity()) {
+                amount++;
+            }
+            tank.setGasInSlot(0, new GasStack(QSGasses.HYDROGEN.get(), amount));
+
+            this.inventory.getStackInSlot(0).set(QSDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent(tank));
         }
     }
 }
