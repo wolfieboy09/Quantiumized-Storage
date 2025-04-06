@@ -431,16 +431,17 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                         return null;
                     },
                     fluidIngredient -> {
-                        boolean satisfied = false;
-                        for (int i = 0; i < this.fluidHandler.getTanks(); i++) {
-                            FluidStack stack = this.fluidHandler.getFluidInTank(i);
-                            if (fluidIngredient.test(stack)) {
-                                this.fluidHandler.getFluidInTank(i).shrink(fluidIngredient.amount());
-                                satisfied = true;
-                            }
-                            if (satisfied) return true;
-                        }
-                        return null;
+                        return true;
+//                        boolean satisfied = false;
+//                        for (int i = 0; i < this.fluidHandler.getTanks(); i++) {
+//                            FluidStack stack = this.fluidHandler.getFluidInTank(i);
+//                            if (fluidIngredient.test(stack)) {
+//                                this.fluidHandler.getFluidInTank(i).shrink(fluidIngredient.amount());
+//                                satisfied = true;
+//                            }
+//                            if (satisfied) return true;
+//                        }
+//                        return null;
                     }
                     );
         });
