@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage.block.smeltery;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.fluids.ExtendedFluidTank;
+import dev.wolfieboy09.qstorage.api.items.ExtendedItemStackHandler;
 import dev.wolfieboy09.qstorage.api.recipes.CombinedRecipeInput;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
@@ -53,13 +54,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     // So for 3 tanks we need 6 integers
     // Plus 1 for the progress amount
     private final ContainerData containerData = new SimpleContainerData((INPUT_TANKS_COUNT * 2) + 1);
-    private final ItemStackHandler inventory = new ItemStackHandler(6) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            if (!checkRecipe()) resetProgress();
-            SmelteryBlockEntity.this.setChanged();
-        }
-    };
+    private final ExtendedItemStackHandler inventory = new ExtendedItemStackHandler(6, this::onContentsChanged);
     private final List<ExtendedFluidTank> inputTanks = new ArrayList<>(INPUT_TANKS_COUNT);
     private final ExtendedFluidTank outputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::onContentsChanged);
     private final ExtendedFluidTank wasteOutputFluidTank = new ExtendedFluidTank(TANK_CAPACITY, this::onContentsChanged);
