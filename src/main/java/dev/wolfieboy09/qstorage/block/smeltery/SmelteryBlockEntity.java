@@ -52,7 +52,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     // For each tank: [fluidId, amount]
     // So for 3 tanks we need 6 integers
     // Plus 1 for the progress amount
-    private final ContainerData containerData = new SimpleContainerData((INPUT_TANKS_COUNT * 2) + 2);
+    private final ContainerData containerData = new SimpleContainerData((INPUT_TANKS_COUNT * 2) + 1);
     private final ItemStackHandler inventory = new ItemStackHandler(6) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -183,9 +183,9 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
             this.containerData.set(i * 2 + 1, amount);
         }
 
-        // INPUT_TANKS_COUNT is equal to 3, and sinse the container data does * 2 for fluid ID and amount
+        // INPUT_TANKS_COUNT is equal to 3, and since the container data does * 2 for fluid ID and amount
         // We can do simple math 3 * 2 = 6, so 7 would be the
-        // Needs to be 6 since it starts at 0
+        // Needs to be 6 since the index stuff starts at 0
         this.containerData.set(6, 24);
     }
     
@@ -417,12 +417,11 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     }
 
     private void consumeInputItems(SmelteryRecipe recipe) {
-        // TODO Have it shrink by recipe amount
         recipe.ingredients().forEach((elem)->{
             elem.map(ingredient -> {
                     boolean satisfied = false;
                         for (int i = 0; i < this.inventory.getSlots(); i++) {
-                            var stack = this.inventory.getStackInSlot(i);
+                            ItemStack stack = this.inventory.getStackInSlot(i);
                             if (ingredient.test(stack)) {
                                 this.inventory.getStackInSlot(i).shrink(1);
                                 satisfied = true;
@@ -431,9 +430,17 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                         }
                         return null;
                     },
-                    sizedFluidIngredient -> {
-                        // TODO Drain the fluid tanks by the recipe amount as well
-                        return false;
+                    fluidIngredient -> {
+                        boolean satisfied = false;
+                        for (int i = 0; i < this.fluidHandler.getTanks(); i++) {
+                            FluidStack stack = this.fluidHandler.getFluidInTank(i);
+                            if (fluidIngredient.test(stack)) {
+                                this.fluidHandler.getFluidInTank(i).shrink(fluidIngredient.amount());
+                                satisfied = true;
+                            }
+                            if (satisfied) return true;
+                        }
+                        return null;
                     }
                     );
         });
