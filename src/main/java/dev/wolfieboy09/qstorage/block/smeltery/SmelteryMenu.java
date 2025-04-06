@@ -68,7 +68,7 @@ public class SmelteryMenu extends AbstractContainerMenu {
     }
 
     public SmelteryMenu(int id, BlockPos pos, Inventory playerInventory, Player playerIn) {
-        this(id, pos, playerInventory, playerIn, new SimpleContainerData(SmelteryBlockEntity.INPUT_TANKS_COUNT * 2));
+        this(id, pos, playerInventory, playerIn, new SimpleContainerData((SmelteryBlockEntity.INPUT_TANKS_COUNT * 2) + 1));
     }
 
     // Get fluid from container data
@@ -91,10 +91,7 @@ public class SmelteryMenu extends AbstractContainerMenu {
     }
 
     public int getProgress() {
-        for (int i = 0; i < this.data.getCount(); i++) {
-            System.out.println("THING " + i + " VALUE: " + this.data.get(i));
-        }
-        return 0;
+        return this.data.get(6);
     }
 
     @Override

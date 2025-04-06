@@ -186,7 +186,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         // INPUT_TANKS_COUNT is equal to 3, and since the container data does * 2 for fluid ID and amount
         // We can do simple math 3 * 2 = 6, so 7 would be the
         // Needs to be 6 since the index stuff starts at 0
-        this.containerData.set(6, 24);
+        this.containerData.set(6, this.getProgress());
     }
     
     public void initInputFluidTanks() {
