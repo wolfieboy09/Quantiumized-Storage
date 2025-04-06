@@ -23,6 +23,8 @@ public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
         super(menu, playerInventory, title);
         this.imageHeight = 232;
         this.imageWidth = 256;
+        this.titleLabelX = 118;
+        this.inventoryLabelY = 135;
     }
 
     @Override
@@ -47,12 +49,6 @@ public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
-        ItemStack stack = this.menu.getBlockEntity().getInventory().getStackInSlot(5);
-        SmelteryFuel data = stack.getItemHolder().getData(QSDataMaps.SMELTERY_FUEL_ITEM);
-        if (!stack.isEmpty() && data != null) {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal("Burn Time: " + data.burnTime() + " | Temperature: " + data.temperature()), mouseX, mouseY);
-        }
-        //TODO
-        //guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal("Time: " + this.menu.getProgress()), mouseX, mouseY);
+        guiGraphics.blit(BACKGROUND_LOCATION, this.leftPos + 119, this.topPos + 28, 0, 232, (this.menu.getProgress() * 42) / 100, 15);
     }
 }
