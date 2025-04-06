@@ -19,8 +19,7 @@ public final class QSPackets {
 
     public static class ServerPayloadHandler {
         public static void handleGasFillerMode(GasFillerModeData payload, final IPayloadContext context) {
-            var be = context.player().level().getBlockEntity(payload.blockPos());
-            if (be instanceof GasFillerBlockEntity gasFiller) {
+            if (context.player().level().getBlockEntity(payload.blockPos()) instanceof GasFillerBlockEntity gasFiller) {
                 gasFiller.setState(payload.state());
             }
         }
