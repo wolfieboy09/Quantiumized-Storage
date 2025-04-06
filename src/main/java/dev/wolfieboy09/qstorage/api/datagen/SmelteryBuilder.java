@@ -15,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.Nullable;
@@ -54,8 +55,12 @@ public class SmelteryBuilder implements RecipeBuilder {
 
     @Override
     public Item getResult() {
-        if (this.result.getFirst().left().isEmpty()) return Items.AIR;
-        return this.result.getFirst().left().get().getItem();
+        for (Either<ItemStack, FluidStack> either : this.result) {
+            if (either.left().isPresent()) {
+                return either.left().get().getItem();
+            }
+        }
+       return Items.AIR;
     }
 
     @Override
