@@ -450,6 +450,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     protected void resetProgress() {
         this.crafting_ticks = 0;
         this.progress = 0;
+        updateContainerData();
     }
 
     @Override
