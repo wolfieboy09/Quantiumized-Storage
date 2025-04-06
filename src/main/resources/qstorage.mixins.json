@@ -7,5 +7,8 @@
   "refmap": "qstorage.refmap.json",
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "EitherRecipeComponentMixin"
+  ]
 }

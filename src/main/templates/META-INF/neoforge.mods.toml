@@ -15,8 +15,8 @@ authors="${mod_authors}"
 
 description='''${mod_description}'''
 
-#[[mixins]]
-#config="qstorage.mixins.json"
+[[mixins]]
+config="qstorage.mixins.json"
 
 #[[accessTransformers]]
 #file="META-INF/accesstransformer.cfg"
@@ -38,7 +38,7 @@ description='''${mod_description}'''
 [[dependencies.qstorage]]
     modId="kubejs"
     type="optional"
-    versionRange="[2101.7.1-build.181,)"
+    versionRange="[2101.7.1-build.181,2101.7.2-build.227)"
     ordering="NONE"
     side="BOTH"
 
