@@ -12,8 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlock.MODE;
-
 @NothingNullByDefault
 public class GasFillerScreen extends AbstractContainerScreen<GasFillerMenu> {
     private static final ResourceLocation BACKGROUND_LOCATION = ResourceHelper.asResource("textures/gui/gas_filler.png");

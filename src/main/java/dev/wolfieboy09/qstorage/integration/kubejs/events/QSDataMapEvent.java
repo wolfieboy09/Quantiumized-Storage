@@ -3,7 +3,6 @@ package dev.wolfieboy09.qstorage.integration.kubejs.events;
 import dev.latvian.mods.kubejs.event.KubeEvent;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.wolfieboy09.qstorage.api.BiHolder;
-import dev.wolfieboy09.qstorage.api.datamaps.SmelteryFuel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
