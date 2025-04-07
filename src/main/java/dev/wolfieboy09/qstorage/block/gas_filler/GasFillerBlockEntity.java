@@ -30,7 +30,7 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     private final GasTank gasTank = new GasTank(5000, this::setChanged);
 
     private final ItemStackHandler inventory = new ExtendedItemStackHandler(1, this::setChanged);
-    private final ContainerData containerData = new SimpleContainerData(3);
+    private final ContainerData containerData = new SimpleContainerData(2);
 
     private GasFillerState gasFillerState = GasFillerState.FILL;
 

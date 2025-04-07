@@ -28,7 +28,7 @@ public class GasFillerMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public GasFillerMenu(int id, BlockPos pos, Inventory playerInventory, Player player) {
-        this(id, pos, playerInventory, player, new SimpleContainerData(3));
+        this(id, pos, playerInventory, player, new SimpleContainerData(2));
     }
 
     public GasFillerMenu(int id, BlockPos pos, Inventory playerInventory, @NotNull Player player, ContainerData containerData) {
