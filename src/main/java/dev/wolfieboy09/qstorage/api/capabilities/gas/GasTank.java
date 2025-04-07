@@ -86,14 +86,15 @@ public class GasTank implements IGasHandler, IGasTank {
         return this.gas.getAmount();
     }
 
-    public GasTank readFromNBT(HolderLookup.Provider lookupProvider, @NotNull CompoundTag nbt) {
+    public void readFromNBT(HolderLookup.Provider lookupProvider, @NotNull CompoundTag nbt) {
         this.gas = GasStack.parseOptional(lookupProvider, nbt.getCompound("Gas"));
-        return this;
+        this.setCapacity(nbt.getInt("Capacity"));
     }
 
     public CompoundTag writeToNBT(HolderLookup.Provider lookupProvider, CompoundTag nbt) {
         if (!this.gas.isEmpty()) {
             nbt.put("Gas", this.gas.save(lookupProvider));
+            nbt.putInt("Capacity", this.capacity);
         }
         return nbt;
     }

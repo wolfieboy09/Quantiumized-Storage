@@ -11,6 +11,9 @@ import dev.wolfieboy09.qstorage.component.QSDataComponents;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import dev.wolfieboy09.qstorage.registries.QSGasses;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -66,14 +69,22 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     public void tick() {
         GasCanisterComponent data = this.inventory.getStackInSlot(0).get(QSDataComponents.GAS_CANISTER_COMPONENT);
         if (!this.inventory.getStackInSlot(0).isEmpty() && data != null) {
-            GasTank tank = new GasTank(data.getTankCapacity());
-            int amount = data.getGasTank().getGasAmount();
-            if (amount < data.getTankCapacity()) {
-                amount++;
-            }
-            tank.setGasInSlot(0, new GasStack(QSGasses.HYDROGEN.get(), amount));
+            if (this.gasFillerState == GasFillerState.FILL) {
+                if (this.gasTank.isGasValid(data.getGas())) {
+                    GasTank tank = new GasTank(data.getTankCapacity());
+                    int amount = data.getGasTank().getGasAmount();
+                    if (amount < data.getTankCapacity()) {
+                        amount++;
+                    }
+                    tank.setGasInSlot(0, new GasStack(data.getGas().getGas(), amount));
 
-            this.inventory.getStackInSlot(0).set(QSDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent(tank));
+                    this.inventory.getStackInSlot(0).set(QSDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent(tank));
+                }
+            } else if (this.gasFillerState == GasFillerState.DRAIN) {
+               if (this.gasTank.isGasValid(data.getGas())) {
+
+               }
+            }
         }
     }
 
@@ -81,5 +92,16 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
         this.gasFillerState = state;
         this.setChanged();
         this.level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(MODE, state));
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        tag.put("GasTank", this.gasTank.writeToNBT(registries, tag));
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        this.gasTank.readFromNBT(registries, tag.getCompound("GasTank"));
     }
 }
