@@ -14,7 +14,7 @@ public class CapacityItemStackHandler extends ItemStackHandler {
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        if (getTotalItemCount() + stack.getCount() > capacity) {
+        if (getTotalItemCount() + stack.getCount() > this.capacity) {
             return stack; // don't insert if it would exceed capacity
         }
         return super.insertItem(slot, stack, simulate);
