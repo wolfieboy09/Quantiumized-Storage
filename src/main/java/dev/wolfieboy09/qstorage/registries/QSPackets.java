@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage.registries;
 import dev.wolfieboy09.qstorage.api.packets.OneWayPacketHandler;
 import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlockEntity;
 import dev.wolfieboy09.qstorage.packets.GasFillerModeData;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -19,7 +20,8 @@ public final class QSPackets {
 
     public static class ServerPayloadHandler {
         public static void handleGasFillerMode(GasFillerModeData payload, final IPayloadContext context) {
-            if (context.player().level().getBlockEntity(payload.blockPos()) instanceof GasFillerBlockEntity gasFiller) {
+            BlockEntity blockEntity = context.player().level().getBlockEntity(payload.blockPos());
+            if (blockEntity instanceof GasFillerBlockEntity gasFiller) {
                 gasFiller.setState(payload.state());
             }
         }
