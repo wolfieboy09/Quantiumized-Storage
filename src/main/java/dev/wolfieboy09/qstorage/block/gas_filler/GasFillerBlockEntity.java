@@ -70,7 +70,8 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
         GasCanisterComponent data = this.inventory.getStackInSlot(0).get(QSDataComponents.GAS_CANISTER_COMPONENT);
         if (!this.inventory.getStackInSlot(0).isEmpty() && data != null) {
             if (this.gasFillerState == GasFillerState.FILL) {
-                if (this.gasTank.isGasValid(data.getGas())) {
+                // Gas Tank to ITEM
+                if (this.gasTank.getGas() == data.getGas()) {
                     GasTank tank = new GasTank(data.getTankCapacity());
                     int amount = data.getGasTank().getGasAmount();
                     if (amount < data.getTankCapacity()) {
@@ -81,8 +82,8 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
                     this.inventory.getStackInSlot(0).set(QSDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent(tank));
                 }
             } else if (this.gasFillerState == GasFillerState.DRAIN) {
-               if (this.gasTank.isGasValid(data.getGas())) {
-
+               if (this.gasTank.getGas() == data.getGas()) {
+                    //TODO Have the ITEM to the block gas tank
                }
             }
         }
