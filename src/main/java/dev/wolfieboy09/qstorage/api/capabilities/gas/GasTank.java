@@ -10,6 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class GasTank implements IGasHandler, IGasTank {
@@ -113,6 +114,17 @@ public class GasTank implements IGasHandler, IGasTank {
     @Override
     public int getTankCapacity(int index) {
         return this.getCapacity();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        return Objects.equals(this.gas, ((GasTank) o).gas);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.gas);
     }
 
     @Override
