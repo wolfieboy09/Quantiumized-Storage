@@ -92,11 +92,12 @@ public class GasTank implements IGasHandler, IGasTank {
     }
 
     public CompoundTag writeToNBT(HolderLookup.Provider lookupProvider, CompoundTag nbt) {
+        CompoundTag data = new CompoundTag();
         if (!this.gas.isEmpty()) {
-            nbt.put("Gas", this.gas.save(lookupProvider));
-            nbt.putInt("Capacity", this.capacity);
+            data.put("Gas", this.gas.save(lookupProvider));
+            data.putInt("Capacity", this.capacity);
         }
-        return nbt;
+        return data;
     }
 
     @Override
