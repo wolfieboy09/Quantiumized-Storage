@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qstorage.block.storage_matrix;
 
+import dev.wolfieboy09.qstorage.api.items.ExtendedItemStackHandler;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -22,12 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class StorageMatrixBlockEntity extends AbstractEnergyBlockEntity implements MenuProvider {
     private final Component TITLE = Component.translatable("block.qstorage.storage_matrix");
-    private final ItemStackHandler inventory = new ItemStackHandler(8) {
-        @Override
-        public void onContentsChanged(int slot) {
-            setChanged();
-        }
-    };
+    private final ItemStackHandler inventory = new ExtendedItemStackHandler(8, this::setChanged);
 
     public StorageMatrixBlockEntity(BlockPos pos, BlockState blockState) {
         super(QSBlockEntities.STORAGE_MATRIX.get(), pos, blockState, 20000, 1000, 0);

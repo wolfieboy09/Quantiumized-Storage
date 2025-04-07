@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage.block.gas_filler;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.capabilities.gas.GasTank;
 import dev.wolfieboy09.qstorage.api.components.GasCanisterComponent;
+import dev.wolfieboy09.qstorage.api.items.ExtendedItemStackHandler;
 import dev.wolfieboy09.qstorage.api.registry.QSRegistries;
 import dev.wolfieboy09.qstorage.api.registry.gas.GasStack;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
@@ -28,12 +29,7 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     private final Component TITLE = Component.translatable("block.qstorage.gas_filler");
     private final GasTank gasTank = new GasTank(5000, this::setChanged);
 
-    private final ItemStackHandler inventory = new ItemStackHandler(1) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
-        }
-    };
+    private final ItemStackHandler inventory = new ExtendedItemStackHandler(1, this::setChanged);
     private final ContainerData containerData = new SimpleContainerData(3);
 
     private GasFillerState gasFillerState = GasFillerState.FILL;

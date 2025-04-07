@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qstorage.block.disk_assembler;
 
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
+import dev.wolfieboy09.qstorage.api.items.ExtendedItemStackHandler;
 import dev.wolfieboy09.qstorage.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.registries.QSBlockEntities;
 import dev.wolfieboy09.qstorage.registries.QSRecipes;
@@ -187,19 +188,16 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         public static final int OUTPUT_SLOT = 7;
     }
 
-    private final ItemStackHandler inventory = new ItemStackHandler(9) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            if (slot < 7) {
-                boolean isValidRecipe = checkRecipe();
-                if (!isValidRecipe) resetProgress();
-                setIsValidRecipe(isValidRecipe);
-            }
-            setChanged();
+    private final ItemStackHandler inventory = new ExtendedItemStackHandler(9, (slot) -> {
+        if (slot < 7) {
+            boolean isValidRecipe = checkRecipe();
+            if (!isValidRecipe) resetProgress();
+            setIsValidRecipe(isValidRecipe);
         }
-    };
+        setChanged();
+    });
     
-    private void setIsValidRecipe(boolean value){
+    private void setIsValidRecipe(boolean value) {
         this.isValidRecipe = value;
     }
 
