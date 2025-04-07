@@ -19,8 +19,6 @@ public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
         super(menu, playerInventory, title);
         this.imageHeight = 232;
         this.imageWidth = 256;
-        this.titleLabelX = 118;
-        this.inventoryLabelY = 135;
     }
 
     @Override
@@ -46,5 +44,11 @@ public class SmelteryScreen extends AbstractContainerScreen<SmelteryMenu> {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
         guiGraphics.blit(BACKGROUND_LOCATION, this.leftPos + 119, this.topPos + 28, 0, 232, (this.menu.getProgress() * 42) / 100, 15);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        // We do not want to render the "inventory" label.
+        guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
     }
 }
