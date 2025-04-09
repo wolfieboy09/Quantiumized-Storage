@@ -5,6 +5,7 @@ import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlock;
+import dev.wolfieboy09.qstorage.block.pipe.ItemPipe;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryBlock;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -51,6 +52,11 @@ public class QSBlocks {
 
     public static final DeferredBlock<GasFillerBlock> GAS_FILLER = registerBlock(
             "gas_filler", GasFillerBlock::new
+    );
+
+    public static final DeferredBlock<ItemPipe> TEST_PIPE = registerBlock(
+            "item_pipe",
+            ItemPipe::new
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
