@@ -13,7 +13,7 @@ import org.jetbrains.annotations.UnknownNullability;
  * @param <L> The left type
  * @param <R> The right type
  */
-public record BiHolder<L, R>(@UnknownNullability L left,@UnknownNullability R right) {
+public record Pair<L, R>(@UnknownNullability L left, @UnknownNullability R right) {
     public boolean isLeftPresent() {
         return this.left != null;
     }
@@ -23,12 +23,12 @@ public record BiHolder<L, R>(@UnknownNullability L left,@UnknownNullability R ri
     }
 
     @Contract("_ -> new")
-    public static <L, R> @NotNull BiHolder<L, R> left(@Nullable L value) {
-        return new BiHolder<>(value, null);
+    public static <L, R> @NotNull Pair<L, R> left(@Nullable L value) {
+        return new Pair<>(value, null);
     }
 
     @Contract("_ -> new")
-    public static <L, R> @NotNull BiHolder<L, R> right(@Nullable R value) {
-        return new BiHolder<>(null, value);
+    public static <L, R> @NotNull Pair<L, R> right(@Nullable R value) {
+        return new Pair<>(null, value);
     }
 }

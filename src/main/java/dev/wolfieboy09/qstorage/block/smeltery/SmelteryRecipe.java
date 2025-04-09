@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.wolfieboy09.qstorage.api.BiHolder;
+import dev.wolfieboy09.qstorage.api.Pair;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.api.recipes.CombinedRecipeInput;
 import dev.wolfieboy09.qstorage.registries.QSRecipes;
@@ -75,10 +75,10 @@ public record SmelteryRecipe(
         return FluidStack.EMPTY;
     }
 
-    public BiHolder<BiHolder<ItemStack, FluidStack>, BiHolder<ItemStack, FluidStack>> assembleRecipe(CombinedRecipeInput recipeWrapper, HolderLookup.Provider provider) {
-        return new BiHolder<>(
-                new BiHolder<>(getItemStackFromList(this.result), getFluidStackFromList(this.result)),
-                new BiHolder<>(getItemStackFromList(this.waste), getFluidStackFromList(this.waste))
+    public Pair<Pair<ItemStack, FluidStack>, Pair<ItemStack, FluidStack>> assembleRecipe(CombinedRecipeInput recipeWrapper, HolderLookup.Provider provider) {
+        return new Pair<>(
+                new Pair<>(getItemStackFromList(this.result), getFluidStackFromList(this.result)),
+                new Pair<>(getItemStackFromList(this.waste), getFluidStackFromList(this.waste))
         );
     }
 
