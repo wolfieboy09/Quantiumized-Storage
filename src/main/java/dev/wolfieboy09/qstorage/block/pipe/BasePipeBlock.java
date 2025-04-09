@@ -15,8 +15,9 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.Nullable;
 
 @NothingNullByDefault
-public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direction>> extends Block implements SimpleWaterloggedBlock {
+public abstract class BasePipeBlock<T extends BlockCapability<H, @Nullable Direction>, H> extends Block implements SimpleWaterloggedBlock {
     private final T capability;
+    private final H capHandler;
 
     public static final BooleanProperty UP = BlockStateProperties.UP;
     public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
@@ -30,11 +31,17 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
     /**
      * Creates a new pipe block with the given block capability
      * @param blockCap The capability to handle
+     * @param capHandler The handler for the capability
      * @param mapColor The color of the pipe
      */
-    public BasePipeBlock(T blockCap, MapColor mapColor) {
+    public BasePipeBlock(T blockCap, H capHandler, MapColor mapColor) {
         super(Properties.of().mapColor(mapColor).strength(0.5F).pushReaction(PushReaction.BLOCK));
         this.capability = blockCap;
+        this.capHandler = capHandler;
+    }
+
+    public H getHandler() {
+        return this.capHandler;
     }
 
     @Override
