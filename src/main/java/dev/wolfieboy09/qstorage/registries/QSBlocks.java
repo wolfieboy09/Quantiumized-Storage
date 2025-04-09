@@ -5,7 +5,7 @@ import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlock;
-import dev.wolfieboy09.qstorage.block.pipe.ItemPipe;
+import dev.wolfieboy09.qstorage.block.pipe.pipes.ItemPipe;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryBlock;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;

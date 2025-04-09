@@ -3,13 +3,12 @@ package dev.wolfieboy09.qstorage.block.pipe;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,34 +56,22 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-        if (!level.isClientSide) {
-            Direction direction = Direction.getNearest(
-                    pos.getX() - neighborPos.getX(),
-                    pos.getY() - neighborPos.getY(),
-                    pos.getZ() - neighborPos.getZ()
-            );
-
-            System.out.println("Can Connect: " + canConnectToSide(state, level, pos, neighborPos, direction));
-        }
-    }
-
-    private boolean canConnectToSide(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor, @Nullable Direction context) {
-        if (level.isClientSide()) return false;
-        BlockEntity entity = level.getBlockEntity(neighbor);
-        if (entity != null && entity.getLevel() instanceof ServerLevel serverLevel) {
-            return entity.getLevel() != null && serverLevel.getCapability(this.capability, neighbor, context) != null;
-        }
-        return false;
-    }
-
-    @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, Direction facing, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATER_LOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        return state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(facing), this.canConnectTo(level, pos, facing));
     }
+
+    private Boolean canConnectTo(BlockGetter level, BlockPos pos, Direction face) {
+        BlockPos newPos = pos.relative(face);
+        BlockState state = level.getBlockState(newPos);
+        Block newBlock = state.getBlock();
+        BlockEntity blockEntity = level.getBlockEntity(newPos);
+        //TODO https://github.com/Commoble/morered/blob/main/src/main/java/net/commoble/morered/transportation/TubeBlock.java#L252
+        return true;
+    }
+
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {

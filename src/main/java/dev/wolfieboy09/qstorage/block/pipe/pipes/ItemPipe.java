@@ -1,5 +1,6 @@
-package dev.wolfieboy09.qstorage.block.pipe;
+package dev.wolfieboy09.qstorage.block.pipe.pipes;
 
+import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.capabilities.BlockCapability;
