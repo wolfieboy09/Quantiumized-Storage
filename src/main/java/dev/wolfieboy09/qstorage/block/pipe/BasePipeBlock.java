@@ -59,15 +59,21 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         if (!level.isClientSide) {
-            System.out.println("Can Connect: " + canConnectToSide(state, level, pos, neighborPos));
+            Direction direction = Direction.getNearest(
+                    pos.getX() - neighborPos.getX(),
+                    pos.getY() - neighborPos.getY(),
+                    pos.getZ() - neighborPos.getZ()
+            );
+
+            System.out.println("Can Connect: " + canConnectToSide(state, level, pos, neighborPos, direction));
         }
     }
 
-    private boolean canConnectToSide(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+    private boolean canConnectToSide(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor, @Nullable Direction context) {
         if (level.isClientSide()) return false;
         BlockEntity entity = level.getBlockEntity(neighbor);
         if (entity != null && entity.getLevel() instanceof ServerLevel serverLevel) {
-            return entity.getLevel() != null && serverLevel.getCapability(this.capability, neighbor, null) != null;
+            return entity.getLevel() != null && serverLevel.getCapability(this.capability, neighbor, context) != null;
         }
         return false;
     }
