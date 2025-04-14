@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
 
 @NothingNullByDefault
@@ -60,16 +62,19 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
         if (state.getValue(WATER_LOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(facing), this.canConnectTo(level, pos, facing));
+        return state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(facing), this.canConnectTo((Level) level, pos, facing));
     }
 
-    private Boolean canConnectTo(BlockGetter level, BlockPos pos, Direction face) {
-        BlockPos newPos = pos.relative(face);
-        BlockState state = level.getBlockState(newPos);
-        Block newBlock = state.getBlock();
-        BlockEntity blockEntity = level.getBlockEntity(newPos);
-        //TODO https://github.com/Commoble/morered/blob/main/src/main/java/net/commoble/morered/transportation/TubeBlock.java#L252
-        return true;
+    private boolean canConnectTo(Level world, BlockPos pos, Direction facing) {
+        return world.getCapability(this.capability, pos.relative(facing), facing.getOpposite()) != null;
+    }
+
+    public boolean isAbleToConnect(Level world, BlockPos pos, Direction facing) {
+        return isPipe(world, pos, facing) || canConnectTo(world, pos, facing);
+    }
+
+    private boolean isPipe(Level world, BlockPos pos, Direction facing) {
+        return world.getBlockState(pos.relative(facing)).getBlock().equals(this);
     }
 
 
