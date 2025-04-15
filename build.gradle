@@ -114,10 +114,7 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
-    //localRuntime "curse.maven:powah-rearchitected-633483:6143661"
-    //localRuntime "curse.maven:cloth-config-348521:5729127"
     implementation "curse.maven:jade-324717:6291517"
-    //localRuntime "curse.maven:probejs-585406:5820894"
 
     localRuntime "curse.maven:mekanism-268560:6327955"
 
