@@ -1,0 +1,115 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_dot"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "y": 180
+      },
+      "when": {
+        "south": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "y": 180
+      },
+      "when": {
+        "south": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "y": 270
+      },
+      "when": {
+        "west": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "y": 270
+      },
+      "when": {
+        "west": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "x": 270
+      },
+      "when": {
+        "up": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "x": 270
+      },
+      "when": {
+        "up": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "y": 90
+      },
+      "when": {
+        "east": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "y": 90
+      },
+      "when": {
+        "east": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe"
+      },
+      "when": {
+        "north": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected"
+      },
+      "when": {
+        "north": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "x": 90
+      },
+      "when": {
+        "down": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "x": 90
+      },
+      "when": {
+        "down": "block"
+      }
+    }
+  ]
+}
