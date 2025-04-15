@@ -54,7 +54,7 @@ public class QSBlocks {
             "gas_filler", GasFillerBlock::new
     );
 
-    public static final DeferredBlock<ItemPipe> TEST_PIPE = registerBlock(
+    public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerBlock(
             "item_pipe",
             ItemPipe::new
     );
