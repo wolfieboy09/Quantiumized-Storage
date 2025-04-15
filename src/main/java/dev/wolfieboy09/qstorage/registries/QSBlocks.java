@@ -56,7 +56,7 @@ public class QSBlocks {
 
     public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerBlockWithProperties(
             "item_pipe",
-            () -> new ItemPipe(BlockBehaviour.Properties.of().noOcclusion().dynamicShape())
+            () -> new ItemPipe(BlockBehaviour.Properties.of().noOcclusion())
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
