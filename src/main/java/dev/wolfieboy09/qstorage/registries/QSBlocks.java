@@ -54,9 +54,9 @@ public class QSBlocks {
             "gas_filler", GasFillerBlock::new
     );
 
-    public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerBlock(
+    public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerBlockWithProperties(
             "item_pipe",
-            ItemPipe::new
+            () -> new ItemPipe(BlockBehaviour.Properties.of().noOcclusion().dynamicShape())
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
