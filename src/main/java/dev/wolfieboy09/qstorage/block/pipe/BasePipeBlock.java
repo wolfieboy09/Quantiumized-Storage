@@ -21,8 +21,9 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.Nullable;
 
 @NothingNullByDefault
-public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direction>> extends Block implements SimpleWaterloggedBlock, EntityBlock {
-    private final BlockCapability<?, @Nullable Direction> capability;
+public abstract class BasePipeBlock<C> extends Block implements SimpleWaterloggedBlock, EntityBlock {
+    private final BlockCapability<C, @Nullable Direction> capability;
+    private final Class<?> pipeClass;
 
     public static final EnumProperty<ConnectionType> UP = EnumProperty.create("up", ConnectionType.class);
     public static final EnumProperty<ConnectionType> DOWN = EnumProperty.create("down", ConnectionType.class);
@@ -32,9 +33,10 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
     public static final EnumProperty<ConnectionType> WEST = EnumProperty.create("west", ConnectionType.class);
     public static final BooleanProperty WATER_LOGGED = BlockStateProperties.WATERLOGGED;
 
-    public BasePipeBlock(T blockCap, MapColor mapColor) {
-        super(Properties.of().mapColor(mapColor).strength(0.5F).pushReaction(PushReaction.BLOCK));
+    public BasePipeBlock(BlockCapability<C, @Nullable Direction> blockCap, MapColor mapColor) {
+        super(Properties.of().mapColor(mapColor).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion());
         this.capability = blockCap;
+        this.pipeClass = this.getClass(); // Grabs the higher class
     }
 
     @Override
@@ -111,7 +113,8 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
     }
 
     private boolean isPipe(Level world, BlockPos pos, Direction facing) {
-        return world.getBlockState(pos.relative(facing)).getBlock().equals(this);
+        // Checks if the wanting to connect class is the same class as the pipe class.
+        return this.pipeClass.isInstance(world.getBlockState(pos.relative(facing)).getBlock());
     }
 
 
