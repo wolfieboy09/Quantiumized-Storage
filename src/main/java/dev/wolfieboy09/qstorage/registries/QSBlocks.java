@@ -54,13 +54,19 @@ public class QSBlocks {
             "gas_filler", GasFillerBlock::new
     );
 
-    public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerBlockWithProperties(
+    public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerNoPropertyBlock(
             "item_pipe",
-            () -> new ItemPipe(BlockBehaviour.Properties.of().noOcclusion())
+            ItemPipe::new
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));
+        registerBlockItem(name, toReturn);
+        return toReturn;
+    }
+
+    private static <T extends Block> DeferredBlock<T> registerNoPropertyBlock(String name, Supplier<T> block) {
+        DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
         return toReturn;
     }
