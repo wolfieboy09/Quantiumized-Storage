@@ -3,36 +3,33 @@ package dev.wolfieboy09.qstorage.block.pipe;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.capabilities.BlockCapability;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
 
 @NothingNullByDefault
 public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direction>> extends Block implements SimpleWaterloggedBlock, EntityBlock {
     private final BlockCapability<?, @Nullable Direction> capability;
 
-    public static final BooleanProperty UP = BlockStateProperties.UP;
-    public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
-    public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
-    public static final BooleanProperty EAST = BlockStateProperties.EAST;
-    public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
-    public static final BooleanProperty WEST = BlockStateProperties.WEST;
+    public static final EnumProperty<ConnectionType> UP = EnumProperty.create("up", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> DOWN = EnumProperty.create("down", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> NORTH = EnumProperty.create("north", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> EAST = EnumProperty.create("east", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> SOUTH = EnumProperty.create("south", ConnectionType.class);
+    public static final EnumProperty<ConnectionType> WEST = EnumProperty.create("west", ConnectionType.class);
     public static final BooleanProperty WATER_LOGGED = BlockStateProperties.WATERLOGGED;
 
     public BasePipeBlock(T blockCap, MapColor mapColor) {
@@ -48,12 +45,12 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
-                .setValue(UP, false)
-                .setValue(DOWN, false)
-                .setValue(NORTH, false)
-                .setValue(EAST, false)
-                .setValue(SOUTH, false)
-                .setValue(WEST, false)
+                .setValue(UP, ConnectionType.NONE)
+                .setValue(DOWN, ConnectionType.NONE)
+                .setValue(NORTH, ConnectionType.NONE)
+                .setValue(EAST, ConnectionType.NONE)
+                .setValue(SOUTH, ConnectionType.NONE)
+                .setValue(WEST, ConnectionType.NONE)
                 .setValue(WATER_LOGGED, false);
     }
 
@@ -62,7 +59,47 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
         if (state.getValue(WATER_LOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(facing), this.canConnectTo((Level) level, pos, facing));
+
+        if (isPipe((Level) level, pos, facing)) {
+            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.PIPE);
+        } else if (canConnectTo((Level) level, pos, facing)) {
+            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.BLOCK);
+        } else {
+            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.NONE);
+        }
+
+
+        return state;
+    }
+
+    // Is this useless? No idea.
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+        Direction direction = Direction.getNearest(
+                neighborPos.getX() - pos.getX(),
+                neighborPos.getY() - pos.getY(),
+                neighborPos.getZ() - pos.getZ()
+        );
+
+        if (level.getCapability(this.capability, neighborPos, direction) != null) {
+            if (isPipe(level, neighborPos, direction)) {
+                state.setValue(getPropertyFromDirection(direction), ConnectionType.PIPE);
+                return;
+            }
+            state.setValue(getPropertyFromDirection(direction), ConnectionType.BLOCK);
+        }
+    }
+
+    private EnumProperty<ConnectionType> getPropertyFromDirection(Direction direction) {
+        return switch (direction) {
+            case NORTH -> BasePipeBlock.NORTH;
+            case EAST -> BasePipeBlock.EAST;
+            case SOUTH -> BasePipeBlock.SOUTH;
+            case WEST -> BasePipeBlock.WEST;
+            case UP -> BasePipeBlock.UP;
+            case DOWN -> BasePipeBlock.DOWN;
+        };
     }
 
     private boolean canConnectTo(Level world, BlockPos pos, Direction facing) {
@@ -81,5 +118,16 @@ public abstract class BasePipeBlock<T extends BlockCapability<?, @Nullable Direc
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return null;
+    }
+
+    public enum ConnectionType implements StringRepresentable {
+        NONE,
+        PIPE,
+        BLOCK;
+
+        @Override
+        public String getSerializedName() {
+            return name().toLowerCase();
+        }
     }
 }
