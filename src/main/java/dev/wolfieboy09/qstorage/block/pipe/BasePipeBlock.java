@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -14,9 +15,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,10 +39,23 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     public static final EnumProperty<ConnectionType> WEST = EnumProperty.create("west", ConnectionType.class);
     public static final BooleanProperty WATER_LOGGED = BlockStateProperties.WATERLOGGED;
 
+    protected final VoxelShape[] pipeShapes = new VoxelShape[Direction.values().length];
+    protected final VoxelShape[] blockConnectorShapes = new VoxelShape[Direction.values().length];
+
+    protected final VoxelShape[] shapeCache = new VoxelShape[(int) Math.pow(ConnectionType.VALUES.length, 6)];
+
+
     public BasePipeBlock(BlockCapability<C, @Nullable Direction> blockCap, MapColor mapColor) {
         super(Properties.of().mapColor(mapColor).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion());
         this.capability = blockCap;
         this.pipeClass = this.getClass(); // Grabs the higher class
+
+        for (Direction direction : Direction.values()) {
+            this.pipeShapes[direction.ordinal()] = createCableShape(direction, 2);
+            this.blockConnectorShapes[direction.ordinal()] = createBlockConnectorShape(direction);
+        }
+
+        createShapeCache();
     }
 
     @Override
@@ -57,19 +76,100 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
     @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return getCollisionShape(state, level, pos, context);
+    }
+
+    @Override
+    protected FluidState getFluidState(BlockState state) {
+        return state.getValue(WATER_LOGGED) ? Fluids.WATER.defaultFluidState() : Fluids.EMPTY.defaultFluidState();
+    }
+
+    public static VoxelShape calculateShape(Direction to, VoxelShape shape) {
+        final VoxelShape[] buffer = {shape, Shapes.empty()};
+
+        final int times = (to.get2DDataValue() - Direction.NORTH.get2DDataValue() + 4) % 4;
+        for (int i = 0; i < times; i++) {
+            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) ->
+                    buffer[1] = Shapes.or(buffer[1],
+                            Shapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)));
+            buffer[0] = buffer[1];
+            buffer[1] = Shapes.empty();
+        }
+
+        return buffer[0];
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        ConnectionType north = state.getValue(NORTH);
+        ConnectionType south = state.getValue(SOUTH);
+        ConnectionType west = state.getValue(WEST);
+        ConnectionType east = state.getValue(EAST);
+        ConnectionType up = state.getValue(UP);
+        ConnectionType down = state.getValue(DOWN);
+        int index = calculateShapeIndex(north, south, west, east, up, down);
+        return this.shapeCache[index];
+    }
+
+    private static VoxelShape createCableShape(Direction direction, int diameter) {
+        double min = diameter / 16.0;
+        double max = 1 - min;
+
+        return switch (direction) {
+            case NORTH -> Shapes.create(min, min, 0, max, max, min);
+            case SOUTH -> Shapes.create(min, min, max, max, max, 1);
+            case WEST -> Shapes.create(0, min, min, min, max, max);
+            case EAST -> Shapes.create(max, min, min, 1, max, max);
+            case UP -> Shapes.create(min, max, min, max, 1, max);
+            case DOWN -> Shapes.create(min, 0, min, max, min, max);
+        };
+    }
+
+    private static VoxelShape createBlockConnectorShape(Direction direction) {
+        double min = 0.25;
+        double max = 0.75;
+
+        return switch (direction) {
+            case NORTH -> Shapes.create(min, min, 0, max, max, 0.125);
+            case SOUTH -> Shapes.create(min, min, 0.875, max, max, 1);
+            case WEST -> Shapes.create(0, min, min, 0.125, max, max);
+            case EAST -> Shapes.create(0.875, min, min, 1, max, max);
+            case UP -> Shapes.create(min, max, min, max, 1, max);
+            case DOWN -> Shapes.create(min, 0, min, max, 0.125, max);
+        };
+    }
+
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        if (!level.isClientSide) {
+            for (Direction direction : Direction.values()) {
+                state = updateBlockState(state, level, pos, direction);
+            }
+
+            // Update the block in the world with the new state
+            level.setBlock(pos, state, 3);
+        }
+    }
+
+    private BlockState updateBlockState(BlockState state, Level level, BlockPos pos, Direction facing) {
+        if (isPipe(level, pos, facing)) {
+            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.PIPE);
+        } else if (canConnectTo(level, pos, facing)) {
+            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.BLOCK);
+        } else {
+            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.NONE);
+        }
+        return state;
+    }
+
+    @Override
     protected BlockState updateShape(BlockState state, Direction facing, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATER_LOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
-        if (isPipe((Level) level, pos, facing)) {
-            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.PIPE);
-        } else if (canConnectTo((Level) level, pos, facing)) {
-            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.BLOCK);
-        } else {
-            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.NONE);
-        }
-
+        state = updateBlockState(state, (Level) level, pos, facing);
 
         return state;
     }
@@ -78,19 +178,19 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
-        Direction direction = Direction.getNearest(
-                neighborPos.getX() - pos.getX(),
-                neighborPos.getY() - pos.getY(),
-                neighborPos.getZ() - pos.getZ()
-        );
-
-        if (level.getCapability(this.capability, neighborPos, direction) != null) {
-            if (isPipe(level, neighborPos, direction)) {
-                state.setValue(getPropertyFromDirection(direction), ConnectionType.PIPE);
-                return;
-            }
-            state.setValue(getPropertyFromDirection(direction), ConnectionType.BLOCK);
-        }
+//        Direction direction = Direction.getNearest(
+//                neighborPos.getX() - pos.getX(),
+//                neighborPos.getY() - pos.getY(),
+//                neighborPos.getZ() - pos.getZ()
+//        );
+//
+//        if (level.getCapability(this.capability, neighborPos, direction) != null && !level.isClientSide()) {
+//            if (isPipe(level, neighborPos, direction)) {
+//                state.setValue(getPropertyFromDirection(direction), ConnectionType.PIPE);
+//                return;
+//            }
+//            state.setValue(getPropertyFromDirection(direction), ConnectionType.BLOCK);
+//        }
     }
 
     private EnumProperty<ConnectionType> getPropertyFromDirection(Direction direction) {
@@ -123,10 +223,55 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         return null;
     }
 
+    protected void createShapeCache() {
+        for (ConnectionType up : ConnectionType.VALUES) {
+            for (ConnectionType down : ConnectionType.VALUES) {
+                for (ConnectionType north : ConnectionType.VALUES) {
+                    for (ConnectionType south : ConnectionType.VALUES) {
+                        for (ConnectionType east : ConnectionType.VALUES) {
+                            for (ConnectionType west : ConnectionType.VALUES) {
+                                int idx = calculateShapeIndex(north, south, west, east, up, down);
+                                this.shapeCache[idx] = createShape(north, south, west, east, up, down);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    protected static int calculateShapeIndex(ConnectionType north, ConnectionType south, ConnectionType west, ConnectionType east, ConnectionType up, ConnectionType down) {
+        int size = ConnectionType.VALUES.length;
+        return ((((south.ordinal() * size + north.ordinal()) * size + west.ordinal()) * size + east.ordinal()) * size + up.ordinal()) * size + down.ordinal();
+    }
+
+    private VoxelShape createShape(ConnectionType north, ConnectionType south, ConnectionType west, ConnectionType east, ConnectionType up, ConnectionType down) {
+        VoxelShape shape = Shapes.create(.4, .4, .4, .6, .6, .6);
+        shape = combineShape(shape, north, this.pipeShapes[Direction.NORTH.ordinal()], this.blockConnectorShapes[Direction.NORTH.ordinal()]);
+        shape = combineShape(shape, south, this.pipeShapes[Direction.SOUTH.ordinal()], this.blockConnectorShapes[Direction.SOUTH.ordinal()]);
+        shape = combineShape(shape, west, this.pipeShapes[Direction.WEST.ordinal()], this.blockConnectorShapes[Direction.WEST.ordinal()]);
+        shape = combineShape(shape, east, this.pipeShapes[Direction.EAST.ordinal()], this.blockConnectorShapes[Direction.EAST.ordinal()]);
+        shape = combineShape(shape, up, this.pipeShapes[Direction.UP.ordinal()], this.blockConnectorShapes[Direction.UP.ordinal()]);
+        shape = combineShape(shape, down, this.pipeShapes[Direction.DOWN.ordinal()], this.blockConnectorShapes[Direction.DOWN.ordinal()]);
+        return shape;
+    }
+
+    protected static VoxelShape combineShape(VoxelShape shape, ConnectionType connectorType, VoxelShape cableShape, VoxelShape blockShape) {
+        if (connectorType == ConnectionType.PIPE) {
+            return Shapes.join(shape, cableShape, BooleanOp.OR);
+        } else if (connectorType == ConnectionType.BLOCK) {
+            return Shapes.join(shape, Shapes.join(blockShape, cableShape, BooleanOp.OR), BooleanOp.OR);
+        } else {
+            return shape;
+        }
+    }
+
     public enum ConnectionType implements StringRepresentable {
         NONE,
         PIPE,
         BLOCK;
+
+        public static final ConnectionType[] VALUES = values();
 
         @Override
         public String getSerializedName() {
