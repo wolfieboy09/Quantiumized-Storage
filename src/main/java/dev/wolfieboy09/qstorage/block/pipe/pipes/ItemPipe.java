@@ -8,6 +8,6 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 public class ItemPipe extends BasePipeBlock<IItemHandler> {
     public ItemPipe() {
-        super(Capabilities.ItemHandler.BLOCK, MapColor.COLOR_BLUE);
+        super(Capabilities.ItemHandler.BLOCK);
     }
 }

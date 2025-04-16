@@ -46,8 +46,8 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     protected final VoxelShape[] shapeCache = new VoxelShape[(int) Math.pow(ConnectionType.VALUES.length, 6)];
 
 
-    public BasePipeBlock(BlockCapability<C, @Nullable Direction> blockCap, MapColor mapColor) {
-        super(Properties.of().mapColor(mapColor).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion());
+    public BasePipeBlock(BlockCapability<C, @Nullable Direction> blockCap) {
+        super(Properties.of().strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion());
         this.capability = blockCap;
         this.pipeClass = this.getClass(); // Grabs the higher class
 
