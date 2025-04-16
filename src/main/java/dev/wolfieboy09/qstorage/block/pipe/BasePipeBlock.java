@@ -24,6 +24,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.BlockCapability;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @NothingNullByDefault
@@ -65,7 +66,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState()
+        BlockState state = this.defaultBlockState()
                 .setValue(UP, ConnectionType.NONE)
                 .setValue(DOWN, ConnectionType.NONE)
                 .setValue(NORTH, ConnectionType.NONE)
@@ -73,6 +74,8 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 .setValue(SOUTH, ConnectionType.NONE)
                 .setValue(WEST, ConnectionType.NONE)
                 .setValue(WATER_LOGGED, false);
+
+        return calculateState(context.getLevel(), context.getClickedPos(), state);
     }
 
     @Override
@@ -133,7 +136,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 state = updateBlockState(state, level, pos, direction);
             }
 
-            // Update the block in the world with the new state
             level.setBlock(pos, state, 3);
         }
     }
@@ -155,29 +157,41 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
-        state = updateBlockState(state, (Level) level, pos, facing);
+        return calculateState((Level) level, pos, state);
+    }
 
+    private @NotNull BlockState calculateState(Level world, BlockPos pos, BlockState state) {
+        ConnectionType north = getConnectorType(world, pos, Direction.NORTH);
+        ConnectionType south = getConnectorType(world, pos, Direction.SOUTH);
+        ConnectionType west = getConnectorType(world, pos, Direction.WEST);
+        ConnectionType east = getConnectorType(world, pos, Direction.EAST);
+        ConnectionType up = getConnectorType(world, pos, Direction.UP);
+        ConnectionType down = getConnectorType(world, pos, Direction.DOWN);
+        state = state.setValue(NORTH, north)
+                .setValue(SOUTH, south)
+                .setValue(WEST, west)
+                .setValue(EAST, east)
+                .setValue(UP, up)
+                .setValue(DOWN, down);
         return state;
     }
 
-    // Is this useless? No idea.
-    @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
-//        Direction direction = Direction.getNearest(
-//                neighborPos.getX() - pos.getX(),
-//                neighborPos.getY() - pos.getY(),
-//                neighborPos.getZ() - pos.getZ()
-//        );
-//
-//        if (level.getCapability(this.capability, neighborPos, direction) != null && !level.isClientSide()) {
-//            if (isPipe(level, neighborPos, direction)) {
-//                state.setValue(getPropertyFromDirection(direction), ConnectionType.PIPE);
-//                return;
-//            }
-//            state.setValue(getPropertyFromDirection(direction), ConnectionType.BLOCK);
-//        }
+    protected ConnectionType getConnectorType(Level world, BlockPos connectorPos, Direction facing) {
+        BlockPos pos = connectorPos.relative(facing);
+        BlockState state = world.getBlockState(pos);
+        if (this.pipeClass.isInstance(state.getBlock())) {
+            return ConnectionType.PIPE;
+        } else if (isAbleToConnect(world, connectorPos, facing)) {
+            return ConnectionType.BLOCK;
+        } else {
+            return ConnectionType.NONE;
+        }
     }
+
+//    @Override
+//    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+//        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+//    }
 
     private EnumProperty<ConnectionType> getPropertyFromDirection(Direction direction) {
         return switch (direction) {
