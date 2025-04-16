@@ -179,7 +179,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     protected ConnectionType getConnectorType(Level world, BlockPos connectorPos, Direction facing) {
         BlockPos pos = connectorPos.relative(facing);
         BlockState state = world.getBlockState(pos);
-        if (this.pipeClass.isInstance(state.getBlock())) {
+        if (state.is(this)) {
             return ConnectionType.PIPE;
         } else if (isAbleToConnect(world, connectorPos, facing)) {
             return ConnectionType.BLOCK;
@@ -246,7 +246,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
     private VoxelShape createShape(ConnectionType north, ConnectionType south, ConnectionType west, ConnectionType east, ConnectionType up, ConnectionType down) {
-        VoxelShape shape = Shapes.create(.4, .4, .4, .6, .6, .6);
+        VoxelShape shape = Block.box(7, 7, 7, 9, 9, 9);
         shape = combineShape(shape, north, this.pipeShapes[Direction.NORTH.ordinal()], this.blockConnectorShapes[Direction.NORTH.ordinal()]);
         shape = combineShape(shape, south, this.pipeShapes[Direction.SOUTH.ordinal()], this.blockConnectorShapes[Direction.SOUTH.ordinal()]);
         shape = combineShape(shape, west, this.pipeShapes[Direction.WEST.ordinal()], this.blockConnectorShapes[Direction.WEST.ordinal()]);
