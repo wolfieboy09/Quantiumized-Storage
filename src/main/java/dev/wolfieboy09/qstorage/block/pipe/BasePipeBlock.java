@@ -101,32 +101,33 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
     private static VoxelShape createCableShape(Direction direction, int diameter) {
-        double min = diameter / 16.0;
-        double max = 1 - min;
+        double min = (16 - diameter) / 2.0;
+        double max = min + 2;
 
         return switch (direction) {
-            case NORTH -> Shapes.create(min, min, 0, max, max, min);
-            case SOUTH -> Shapes.create(min, min, max, max, max, 1);
-            case WEST -> Shapes.create(0, min, min, min, max, max);
-            case EAST -> Shapes.create(max, min, min, 1, max, max);
-            case UP -> Shapes.create(min, max, min, max, 1, max);
-            case DOWN -> Shapes.create(min, 0, min, max, min, max);
+            case NORTH -> Block.box(min, min, 0, max, max, min);
+            case SOUTH -> Block.box(min, min, max, max, max, 16);
+            case WEST -> Block.box(0, min, min, min, max, max);
+            case EAST -> Block.box(max, min, min, 16, max, max);
+            case UP -> Block.box(min, max, min, max, 16, max);
+            case DOWN -> Block.box(min, 0, min, max, min, max);
         };
     }
 
     private static VoxelShape createBlockConnectorShape(Direction direction) {
-        double min = 0.25;
-        double max = 0.75;
+        double min = 4.0;
+        double max = 12.0;
 
         return switch (direction) {
-            case NORTH -> Shapes.create(min, min, 0, max, max, 0.125);
-            case SOUTH -> Shapes.create(min, min, 0.875, max, max, 1);
-            case WEST -> Shapes.create(0, min, min, 0.125, max, max);
-            case EAST -> Shapes.create(0.875, min, min, 1, max, max);
-            case UP -> Shapes.create(min, max, min, max, 1, max);
-            case DOWN -> Shapes.create(min, 0, min, max, 0.125, max);
+            case NORTH -> Block.box(min, min, 0,    max, max, 2);
+            case SOUTH -> Block.box(min, min, 14,   max, max, 16);
+            case WEST -> Block.box(0,   min, min,  2,   max, max);
+            case EAST -> Block.box(14,  min, min,  16,  max, max);
+            case UP -> Block.box(min, 14,  min,  max, 16,  max);
+            case DOWN -> Block.box(min, 0,   min,  max, 2,   max);
         };
     }
+
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
