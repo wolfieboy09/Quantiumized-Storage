@@ -179,7 +179,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         BlockState state = world.getBlockState(pos);
         if (state.is(this)) {
             return ConnectionType.PIPE;
-        } else if (isAbleToConnect(world, connectorPos, facing)) {
+        } else if (canConnectTo(world, connectorPos, facing)) {
             return ConnectionType.BLOCK;
         } else {
             return ConnectionType.NONE;
