@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -43,7 +42,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     protected final VoxelShape[] pipeShapes = new VoxelShape[Direction.values().length];
     protected final VoxelShape[] blockConnectorShapes = new VoxelShape[Direction.values().length];
 
-    protected final VoxelShape[] shapeCache = new VoxelShape[(int) Math.pow(ConnectionType.VALUES.length, 6)];
+    protected final VoxelShape[] shapeCache = new VoxelShape[ConnectionType.VALUES.length * ConnectionType.VALUES.length * ConnectionType.VALUES.length * ConnectionType.VALUES.length * ConnectionType.VALUES.length * ConnectionType.VALUES.length];
 
 
     public BasePipeBlock(BlockCapability<C, @Nullable Direction> blockCap) {
@@ -136,7 +135,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 state = updateBlockState(state, level, pos, direction);
             }
 
-            level.setBlock(pos, state, 3);
+            level.setBlockAndUpdate(pos, state);
         }
     }
 
