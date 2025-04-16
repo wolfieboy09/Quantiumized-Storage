@@ -18,3 +18,5 @@ Ishrit Madaan - Testing the mod, and helping out!
 
 PigTurtle - The disk assembler GUI \
 (I had to edit it for the energy bar to fit because of bugs)
+
+7410 - The pipe voxel shape (the "hitbox" of it) and getting that working
