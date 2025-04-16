@@ -85,30 +85,16 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         return state.getValue(WATER_LOGGED) ? Fluids.WATER.defaultFluidState() : Fluids.EMPTY.defaultFluidState();
     }
 
-    public static VoxelShape calculateShape(Direction to, VoxelShape shape) {
-        final VoxelShape[] buffer = {shape, Shapes.empty()};
-
-        final int times = (to.get2DDataValue() - Direction.NORTH.get2DDataValue() + 4) % 4;
-        for (int i = 0; i < times; i++) {
-            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) ->
-                    buffer[1] = Shapes.or(buffer[1],
-                            Shapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)));
-            buffer[0] = buffer[1];
-            buffer[1] = Shapes.empty();
-        }
-
-        return buffer[0];
-    }
-
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        ConnectionType north = state.getValue(NORTH);
-        ConnectionType south = state.getValue(SOUTH);
-        ConnectionType west = state.getValue(WEST);
-        ConnectionType east = state.getValue(EAST);
-        ConnectionType up = state.getValue(UP);
-        ConnectionType down = state.getValue(DOWN);
-        int index = calculateShapeIndex(north, south, west, east, up, down);
+        int index = calculateShapeIndex(
+                state.getValue(NORTH),
+                state.getValue(SOUTH),
+                state.getValue(WEST),
+                state.getValue(EAST),
+                state.getValue(UP),
+                state.getValue(DOWN)
+        );
         return this.shapeCache[index];
     }
 
