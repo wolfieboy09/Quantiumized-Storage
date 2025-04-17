@@ -102,7 +102,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     private static VoxelShape createCableShape(Direction direction, int diameter) {
         double min = (16 - diameter) / 2.0;
-        double max = min + 2;
+        double max = min + 6;
 
         return switch (direction) {
             case NORTH -> Block.box(min, min, 0, max, max, min);
@@ -119,12 +119,12 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         double max = 12.0;
 
         return switch (direction) {
-            case NORTH -> Block.box(min, min, 0,    max, max, 2);
-            case SOUTH -> Block.box(min, min, 14,   max, max, 16);
-            case WEST -> Block.box(0,   min, min,  2,   max, max);
-            case EAST -> Block.box(14,  min, min,  16,  max, max);
-            case UP -> Block.box(min, 14,  min,  max, 16,  max);
-            case DOWN -> Block.box(min, 0,   min,  max, 2,   max);
+            case NORTH -> Block.box(min, min, 0, max, max, 2);
+            case SOUTH -> Block.box(min, min, 14, max, max, 16);
+            case WEST -> Block.box(0, min, min, 2, max, max);
+            case EAST -> Block.box(14, min, min, 16, max, max);
+            case UP -> Block.box(min, 14,min, max,16, max);
+            case DOWN -> Block.box(min, 0,  min, max, 2, max);
         };
     }
 
