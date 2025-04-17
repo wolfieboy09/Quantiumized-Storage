@@ -5,7 +5,6 @@ import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlockEntity
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlockEntity;
 import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlockEntity;
-import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qstorage.block.pipe.pipes.entities.ItemPipeBlockEntity;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryBlockEntity;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlockEntity;
