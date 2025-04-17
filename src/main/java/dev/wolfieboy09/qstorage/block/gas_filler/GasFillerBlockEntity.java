@@ -90,6 +90,7 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     public void setState(GasFillerState state) {
         this.gasFillerState = state;
         this.setChanged();
+        if (this.level == null) return;
         this.level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(MODE, state));
     }
 
