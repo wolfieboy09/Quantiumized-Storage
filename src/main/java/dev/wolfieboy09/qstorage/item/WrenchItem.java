@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 @NothingNullByDefault
@@ -30,24 +31,20 @@ public class WrenchItem extends Item {
         Level level = context.getLevel();
         Vec3 clickLocation = context.getClickLocation();
         Player player = context.getPlayer();
-//        if (level.isClientSide()) return super.useOn(context);
-        if (player != null && !player.isCrouching()) return InteractionResult.PASS;
+        if ((player != null && !player.isCrouching()) && !level.isClientSide()) return InteractionResult.PASS;
 
-//        Now we know the player is crouching, we can use the wrench
+        //        Now we know the player is crouching, we can use the wrench
 
         double relX = clickLocation.x() - pos.getX();
         double relY = clickLocation.y() - pos.getY();
         double relZ = clickLocation.z() - pos.getZ();
         Direction targetDirection = determineTargetDirection(clickedFace, relX, relY, relZ);
 
-        var state = level.getBlockState(pos);
-        if (!(level.getBlockEntity(pos) instanceof BasePipeBlockEntity blockEntity)) return super.useOn(context);
-        //if (blockEntity.getBlockState().getValue(BasePipeBlock.getPropertyFromDirection(targetDirection)) != ConnectionType.NONE) {
-            blockEntity.disconnect(targetDirection);
-//        } else {
-//            blockEntity.reconnect(targetDirection);
-//        }
-        level.setBlockAndUpdate(pos, state);
+        BlockState state = level.getBlockState(pos);
+        if (!(level.getBlockEntity(pos) instanceof BasePipeBlockEntity blockEntity)) return InteractionResult.PASS;
+        blockEntity.disconnect(targetDirection);
+        level.setBlockAndUpdate(blockEntity.getBlockPos(),
+                state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), ConnectionType.NONE));
         return InteractionResult.SUCCESS;
     }
 
