@@ -51,7 +51,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         this.capability = blockCap;
 
         for (Direction direction : Direction.values()) {
-            this.pipeShapes[direction.ordinal()] = createCableShape(direction, 2);
+            this.pipeShapes[direction.ordinal()] = createCableShape(direction, 5);
             this.blockConnectorShapes[direction.ordinal()] = createBlockConnectorShape(direction);
         }
 
@@ -101,16 +101,15 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
     private static VoxelShape createCableShape(Direction direction, int diameter) {
-        double min = (16 - diameter) / 2.0;
-        double max = min + 6;
+        double max = (double) diameter + 6;
 
         return switch (direction) {
-            case NORTH -> Block.box(min, min, 0, max, max, min);
-            case SOUTH -> Block.box(min, min, max, max, max, 16);
-            case WEST -> Block.box(0, min, min, min, max, max);
-            case EAST -> Block.box(max, min, min, 16, max, max);
-            case UP -> Block.box(min, max, min, max, 16, max);
-            case DOWN -> Block.box(min, 0, min, max, min, max);
+            case NORTH -> Block.box(diameter, diameter, 0, max, max, diameter);
+            case SOUTH -> Block.box(diameter, diameter, max, max, max, 16);
+            case WEST -> Block.box(0, diameter, diameter, diameter, max, max);
+            case EAST -> Block.box(max, diameter, diameter, 16, max, max);
+            case UP -> Block.box(diameter, max, diameter, max, 16, max);
+            case DOWN -> Block.box(diameter, 0, diameter, max, diameter, max);
         };
     }
 
@@ -120,7 +119,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
         return switch (direction) {
             case NORTH -> Block.box(min, min, 0, max, max, 1);
-            case SOUTH -> Block.box(min, min, 15, max, max, 16);
+            case SOUTH -> Block.box(min, min, 16, max, max, 16);
             case WEST -> Block.box(0, min, min, 1, max, max);
             case EAST -> Block.box(15, min, min, 16, max, max);
             case UP -> Block.box(min, 15, min, max, 16, max);
@@ -194,11 +193,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         }
     }
 
-//    @Override
-//    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-//        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
-//    }
-
     public static EnumProperty<ConnectionType> getPropertyFromDirection(Direction direction) {
         return switch (direction) {
             case NORTH -> BasePipeBlock.NORTH;
@@ -248,7 +242,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
     private VoxelShape createShape(ConnectionType north, ConnectionType south, ConnectionType west, ConnectionType east, ConnectionType up, ConnectionType down) {
-        VoxelShape shape = Block.box(7, 7, 7, 9, 9, 9);
+        VoxelShape shape = Block.box(5, 5, 5, 11, 11, 11);
         shape = combineShape(shape, north, this.pipeShapes[Direction.NORTH.ordinal()], this.blockConnectorShapes[Direction.NORTH.ordinal()]);
         shape = combineShape(shape, south, this.pipeShapes[Direction.SOUTH.ordinal()], this.blockConnectorShapes[Direction.SOUTH.ordinal()]);
         shape = combineShape(shape, west, this.pipeShapes[Direction.WEST.ordinal()], this.blockConnectorShapes[Direction.WEST.ordinal()]);
