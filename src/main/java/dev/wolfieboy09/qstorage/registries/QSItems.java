@@ -5,6 +5,7 @@ import dev.wolfieboy09.qstorage.api.storage.ItemStorageType;
 import dev.wolfieboy09.qstorage.item.GasCanisterItem;
 import dev.wolfieboy09.qstorage.item.ItemStorageDisk;
 import dev.wolfieboy09.qstorage.item.UpgradeItem;
+import dev.wolfieboy09.qstorage.item.WrenchItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -41,6 +42,8 @@ public class QSItems {
     public static final DeferredItem<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
 
     public static final DeferredItem<GasCanisterItem> GAS_CANISTER = ITEMS.register("gas_canister", () -> new GasCanisterItem(new Item.Properties().stacksTo(1)));
+
+    public static final DeferredItem<WrenchItem> WRENCH = ITEMS.register("wrench", WrenchItem::new);
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
