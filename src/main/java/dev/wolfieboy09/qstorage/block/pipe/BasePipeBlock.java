@@ -8,6 +8,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -140,6 +141,17 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         }
     }
 
+    @Override
+    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState) {
+        super.onBlockStateChange(level, pos, oldState, newState);
+        for (Direction direction : Direction.values()) {
+            this.pipeShapes[direction.ordinal()] = createCableShape(direction, 2);
+            this.blockConnectorShapes[direction.ordinal()] = createBlockConnectorShape(direction);
+        }
+
+        createShapeCache();
+    }
+
     private BlockState updateBlockState(BlockState state, Level level, BlockPos pos, Direction facing) {
         if (isPipe(level, pos, facing)) {
             state = state.setValue(getPropertyFromDirection(facing), ConnectionType.PIPE);
@@ -179,6 +191,11 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     protected ConnectionType getConnectorType(Level world, BlockPos connectorPos, Direction facing) {
         BlockPos pos = connectorPos.relative(facing);
         BlockState state = world.getBlockState(pos);
+        if (world.getBlockEntity(connectorPos) instanceof BasePipeBlockEntity blockEntity) {
+            if (blockEntity.disconnectedSides.contains(facing)) {
+                return ConnectionType.NONE;
+            }
+        }
         if (state.is(this)) {
             return ConnectionType.PIPE;
         } else if (canConnectTo(world, connectorPos, facing)) {
@@ -193,7 +210,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 //        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
 //    }
 
-    private EnumProperty<ConnectionType> getPropertyFromDirection(Direction direction) {
+    public static EnumProperty<ConnectionType> getPropertyFromDirection(Direction direction) {
         return switch (direction) {
             case NORTH -> BasePipeBlock.NORTH;
             case EAST -> BasePipeBlock.EAST;
