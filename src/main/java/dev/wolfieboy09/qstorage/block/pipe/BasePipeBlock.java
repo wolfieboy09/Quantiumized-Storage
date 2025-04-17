@@ -214,11 +214,8 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         return world.getBlockState(pos.relative(facing)).is(this);
     }
 
-
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return null;
-    }
+    public abstract @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
     protected void createShapeCache() {
         for (ConnectionType up : ConnectionType.VALUES) {
@@ -262,6 +259,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
             return shape;
         }
     }
+
 
     public enum ConnectionType implements StringRepresentable {
         NONE,
