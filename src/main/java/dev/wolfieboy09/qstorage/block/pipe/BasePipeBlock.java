@@ -140,9 +140,9 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
     private BlockState updateBlockState(BlockState state, Level level, BlockPos pos, Direction facing) {
-        if (isPipe(level, pos, facing)) {
+        if (canConnectToPipe(level, pos, facing)) {
             state = state.setValue(getPropertyFromDirection(facing), ConnectionType.PIPE);
-        } else if (canConnectTo(level, pos, facing)) {
+        } else if (canConnectToBlock(level, pos, facing)) {
             state = state.setValue(getPropertyFromDirection(facing), ConnectionType.BLOCK);
         } else {
             state = state.setValue(getPropertyFromDirection(facing), ConnectionType.NONE);
@@ -179,13 +179,13 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         BlockPos pos = connectorPos.relative(facing);
         BlockState state = world.getBlockState(pos);
         if (world.getBlockEntity(connectorPos) instanceof BasePipeBlockEntity blockEntity) {
-            if (blockEntity.disconnectedSides.contains(facing)) {
+            if (blockEntity.getDisconnectedSides().contains(facing)) {
                 return ConnectionType.NONE;
             }
         }
         if (state.is(this)) {
             return ConnectionType.PIPE;
-        } else if (canConnectTo(world, connectorPos, facing)) {
+        } else if (canConnectToBlock(world, connectorPos, facing)) {
             return ConnectionType.BLOCK;
         } else {
             return ConnectionType.NONE;
@@ -203,16 +203,26 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         };
     }
 
-    private boolean canConnectTo(Level world, BlockPos pos, Direction facing) {
-        return world.getCapability(this.capability, pos.relative(facing), facing.getOpposite()) != null;
+    private boolean canConnectToBlock(Level world, BlockPos pos, Direction facing) {
+        // Gets the block entity of itself, so I can get the stuff for this method
+        if (world.getBlockEntity(pos) instanceof BasePipeBlockEntity pipe) {
+            return world.getCapability(this.capability, pos.relative(facing), facing.getOpposite()) != null && pipe.allowConnectionFromDirection(facing);
+        }
+        return false;
     }
 
     public boolean isAbleToConnect(Level world, BlockPos pos, Direction facing) {
-        return isPipe(world, pos, facing) || canConnectTo(world, pos, facing);
+        return canConnectToPipe(world, pos, facing) || canConnectToBlock(world, pos, facing);
     }
 
-    private boolean isPipe(Level world, BlockPos pos, Direction facing) {
-        return world.getBlockState(pos.relative(facing)).is(this);
+    private boolean canConnectToPipe(Level world, BlockPos pos, Direction facing) {
+        BlockState state = world.getBlockState(pos.relative(facing));
+        BlockEntity blockEntity = world.getBlockEntity(pos.relative(facing));
+        if (state.is(this) && blockEntity != null) {
+            BasePipeBlockEntity pipeBlock = (BasePipeBlockEntity) blockEntity;
+            return pipeBlock.allowConnectionFromDirection(facing);
+        }
+        return false;
     }
 
     @Override

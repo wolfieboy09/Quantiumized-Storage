@@ -17,17 +17,24 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class BasePipeBlockEntity extends GlobalBlockEntity {
-    List<Direction> disconnectedSides = new ArrayList<>(6);
+    private List<Direction> disconnectedSides = new ArrayList<>(6);
 
     public BasePipeBlockEntity(BlockEntityType<?> blockEntityTypeFor, BlockPos pos, BlockState blockState) {
         super(blockEntityTypeFor, pos, blockState);
     }
 
     public void disconnect(Direction direction) {
-        if (this.disconnectedSides.contains(direction) || this.level == null || !this.level.isClientSide()) return;
-        BlockState newState = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(direction), ConnectionType.NONE);
-        this.level.setBlockAndUpdate(getBlockPos(), newState);
+        if (this.disconnectedSides.contains(direction) || this.level == null || this.level.isClientSide()) return;
+        this.disconnectedSides.add(direction);
         setChanged();
+    }
+
+    public List<Direction> getDisconnectedSides() {
+        return this.disconnectedSides;
+    }
+
+    public boolean allowConnectionFromDirection(Direction direction) {
+        return !this.disconnectedSides.contains(direction);
     }
 
     public void reconnect(Direction direction) {
@@ -46,6 +53,6 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.disconnectedSides = Direction.CODEC.listOf().parse(NbtOps.INSTANCE, tag.get("DisconnectedSides")).getOrThrow();
+        this.disconnectedSides = new ArrayList<>(Direction.CODEC.listOf().parse(NbtOps.INSTANCE, tag.get("DisconnectedSides")).getOrThrow());
     }
 }
