@@ -11,6 +11,7 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class QSDataMapEvent implements KubeEvent {
     @HideFromJS
     public static final Pair<Map<Item, SmelteryFuelMapper>, Map<Fluid, SmelteryFuelMapper>> SMELTERY_DATA_MAP = new Pair<>(

@@ -29,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 @NothingNullByDefault
 public abstract class BasePipeBlock<C> extends Block implements SimpleWaterloggedBlock, EntityBlock {
     private final BlockCapability<C, @Nullable Direction> capability;
-    private final Class<?> pipeClass;
 
     public static final EnumProperty<ConnectionType> UP = EnumProperty.create("up", ConnectionType.class);
     public static final EnumProperty<ConnectionType> DOWN = EnumProperty.create("down", ConnectionType.class);
@@ -48,7 +47,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     public BasePipeBlock(BlockCapability<C, @Nullable Direction> blockCap) {
         super(Properties.of().strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion());
         this.capability = blockCap;
-        this.pipeClass = this.getClass(); // Grabs the higher class
 
         for (Direction direction : Direction.values()) {
             this.pipeShapes[direction.ordinal()] = createCableShape(direction, 2);
@@ -181,7 +179,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         BlockState state = world.getBlockState(pos);
         if (state.is(this)) {
             return ConnectionType.PIPE;
-        } else if (isAbleToConnect(world, connectorPos, facing)) {
+        } else if (canConnectTo(world, connectorPos, facing)) {
             return ConnectionType.BLOCK;
         } else {
             return ConnectionType.NONE;
@@ -213,8 +211,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
     private boolean isPipe(Level world, BlockPos pos, Direction facing) {
-        // Checks if the wanting to connect class is the same class as the pipe class.
-        return this.pipeClass.isInstance(world.getBlockState(pos.relative(facing)).getBlock());
+        return world.getBlockState(pos.relative(facing)).is(this);
     }
 
 
