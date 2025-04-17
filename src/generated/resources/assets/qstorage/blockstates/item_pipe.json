@@ -8,19 +8,19 @@
     {
       "apply": {
         "model": "qstorage:block/pipe",
-        "y": 180
+        "y": 90
       },
       "when": {
-        "south": "pipe"
+        "east": "pipe"
       }
     },
     {
       "apply": {
         "model": "qstorage:block/pipe_connected",
-        "y": 180
+        "y": 90
       },
       "when": {
-        "south": "block"
+        "east": "block"
       }
     },
     {
@@ -44,37 +44,37 @@
     {
       "apply": {
         "model": "qstorage:block/pipe",
-        "x": 270
+        "y": 180
       },
       "when": {
-        "up": "pipe"
+        "south": "pipe"
       }
     },
     {
       "apply": {
         "model": "qstorage:block/pipe_connected",
-        "x": 270
+        "y": 180
       },
       "when": {
-        "up": "block"
+        "south": "block"
       }
     },
     {
       "apply": {
         "model": "qstorage:block/pipe",
-        "y": 90
+        "x": 90
       },
       "when": {
-        "east": "pipe"
+        "down": "pipe"
       }
     },
     {
       "apply": {
         "model": "qstorage:block/pipe_connected",
-        "y": 90
+        "x": 90
       },
       "when": {
-        "east": "block"
+        "down": "block"
       }
     },
     {
@@ -96,19 +96,19 @@
     {
       "apply": {
         "model": "qstorage:block/pipe",
-        "x": 90
+        "x": 270
       },
       "when": {
-        "down": "pipe"
+        "up": "pipe"
       }
     },
     {
       "apply": {
         "model": "qstorage:block/pipe_connected",
-        "x": 90
+        "x": 270
       },
       "when": {
-        "down": "block"
+        "up": "block"
       }
     }
   ]
