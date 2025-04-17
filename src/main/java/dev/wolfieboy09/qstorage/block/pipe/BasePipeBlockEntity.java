@@ -1,11 +1,13 @@
 package dev.wolfieboy09.qstorage.block.pipe;
 
+import com.mojang.serialization.DataResult;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -22,13 +24,14 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
     }
 
     public void disconnect(Direction direction) {
-        if (this.disconnectedSides.contains(direction) || this.level == null || this.level.isClientSide()) return;
+        if (this.disconnectedSides.contains(direction) || this.level == null || !this.level.isClientSide()) return;
         BlockState newState = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(direction), ConnectionType.NONE);
         this.level.setBlockAndUpdate(getBlockPos(), newState);
         setChanged();
     }
 
     public void reconnect(Direction direction) {
+        if (this.level == null || !this.level.isClientSide()) return;
         this.disconnectedSides.remove(direction);
         setChanged();
     }
@@ -36,7 +39,7 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        var listTag = Direction.CODEC.listOf().encodeStart(NbtOps.INSTANCE, this.disconnectedSides);
+        DataResult<Tag> listTag = Direction.CODEC.listOf().encodeStart(NbtOps.INSTANCE, this.disconnectedSides);
         tag.put("DisconnectedSides", listTag.getOrThrow());
     }
 
