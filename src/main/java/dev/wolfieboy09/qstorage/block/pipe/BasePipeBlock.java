@@ -8,7 +8,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -140,17 +139,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
             level.setBlockAndUpdate(pos, state);
         }
-    }
-
-    @Override
-    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState) {
-        super.onBlockStateChange(level, pos, oldState, newState);
-        for (Direction direction : Direction.values()) {
-            this.pipeShapes[direction.ordinal()] = createCableShape(direction, 2);
-            this.blockConnectorShapes[direction.ordinal()] = createBlockConnectorShape(direction);
-        }
-
-        createShapeCache();
     }
 
     private BlockState updateBlockState(BlockState state, Level level, BlockPos pos, Direction facing) {
