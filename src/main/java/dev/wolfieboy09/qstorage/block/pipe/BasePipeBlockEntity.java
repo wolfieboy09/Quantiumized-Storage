@@ -12,41 +12,40 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.world.level.block.Block.UPDATE_ALL;
-
+@ParametersAreNonnullByDefault
 public class BasePipeBlockEntity extends GlobalBlockEntity {
-    List<Direction> disconnectedSides = new ArrayList<>(6) {
-    };
+    List<Direction> disconnectedSides = new ArrayList<>(6);
 
     public BasePipeBlockEntity(BlockEntityType<?> blockEntityTypeFor, BlockPos pos, BlockState blockState) {
         super(blockEntityTypeFor, pos, blockState);
     }
 
     public void disconnect(Direction direction) {
-        if (disconnectedSides.contains(direction)) return;
-        var newState = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(direction), BasePipeBlock.ConnectionType.NONE);
-        level.setBlock(getBlockPos(),newState,UPDATE_ALL);
+        if (this.disconnectedSides.contains(direction) || this.level == null) return;
+        BlockState newState = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(direction), BasePipeBlock.ConnectionType.NONE);
+        this.level.setBlockAndUpdate(getBlockPos(), newState);
         setChanged();
     }
 
     public void reconnect(Direction direction) {
-        disconnectedSides.remove(direction);
+        this.disconnectedSides.remove(direction);
         setChanged();
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        var listTag = Direction.CODEC.listOf().encodeStart(NbtOps.INSTANCE,disconnectedSides);
+        var listTag = Direction.CODEC.listOf().encodeStart(NbtOps.INSTANCE, this.disconnectedSides);
         tag.put("DisconnectedSides", listTag.getOrThrow());
     }
 
     @Override
-    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        disconnectedSides = Direction.CODEC.listOf().parse(NbtOps.INSTANCE, tag.get("DisconnectedSides")).getOrThrow();
+        this.disconnectedSides = Direction.CODEC.listOf().parse(NbtOps.INSTANCE, tag.get("DisconnectedSides")).getOrThrow();
     }
 }
