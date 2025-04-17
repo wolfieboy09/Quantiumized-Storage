@@ -23,7 +23,7 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
 
     public void disconnect(Direction direction) {
         if (this.disconnectedSides.contains(direction) || this.level == null) return;
-        BlockState newState = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(direction), BasePipeBlock.ConnectionType.NONE);
+        BlockState newState = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(direction), ConnectionType.NONE);
         this.level.setBlockAndUpdate(getBlockPos(), newState);
         setChanged();
     }

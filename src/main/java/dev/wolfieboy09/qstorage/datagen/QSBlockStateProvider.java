@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.util.ResourceHelper;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
+import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryBlock;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlock;
 import dev.wolfieboy09.qstorage.registries.QSBlocks;
@@ -91,14 +92,14 @@ public class QSBlockStateProvider extends BlockStateProvider {
                     .rotationX(rotations.getA())
                     .rotationY(rotations.getB())
                     .addModel()
-                    .condition(property, BasePipeBlock.ConnectionType.PIPE)
+                    .condition(property, ConnectionType.PIPE)
                     .end()
                     .part()
                     .modelFile(existingModelFile("block/pipe_connected"))
                     .rotationX(rotations.getA())
                     .rotationY(rotations.getB())
                     .addModel()
-                    .condition(property, BasePipeBlock.ConnectionType.BLOCK)
+                    .condition(property, ConnectionType.BLOCK)
                     .end();
         });
     }

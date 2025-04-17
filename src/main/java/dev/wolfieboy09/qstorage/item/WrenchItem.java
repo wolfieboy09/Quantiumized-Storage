@@ -1,8 +1,9 @@
 package dev.wolfieboy09.qstorage.item;
 
-import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlockEntity;
+import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +31,7 @@ public class WrenchItem extends Item {
         Vec3 clickLocation = context.getClickLocation();
         Player player = context.getPlayer();
 //        if (level.isClientSide()) return super.useOn(context);
-        if (player != null && !(player.isCrouching())) return super.useOn(context);
+        if (player != null && !player.isCrouching()) return InteractionResult.PASS;
 
 //        Now we know the player is crouching, we can use the wrench
 
@@ -39,12 +40,15 @@ public class WrenchItem extends Item {
         double relZ = clickLocation.z() - pos.getZ();
         Direction targetDirection = determineTargetDirection(clickedFace, relX, relY, relZ);
 
-        QuantiumizedStorage.LOGGER.debug("Wrench used on {}", targetDirection);
         var state = level.getBlockState(pos);
         if (!(level.getBlockEntity(pos) instanceof BasePipeBlockEntity blockEntity)) return super.useOn(context);
-        blockEntity.disconnect(targetDirection);
+        if (blockEntity.getBlockState().getValue(BasePipeBlock.getPropertyFromDirection(targetDirection)) != ConnectionType.NONE) {
+            blockEntity.disconnect(targetDirection);
+        } else {
+            blockEntity.reconnect(targetDirection);
+        }
         level.setBlockAndUpdate(pos, state);
-        return super.useOn(context);
+        return InteractionResult.SUCCESS;
     }
 
     private Direction determineTargetDirection(Direction clickedFace, double relX, double relY, double relZ) {
