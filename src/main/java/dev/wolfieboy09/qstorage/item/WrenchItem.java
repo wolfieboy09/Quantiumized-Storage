@@ -42,11 +42,11 @@ public class WrenchItem extends Item {
 
         var state = level.getBlockState(pos);
         if (!(level.getBlockEntity(pos) instanceof BasePipeBlockEntity blockEntity)) return super.useOn(context);
-        if (blockEntity.getBlockState().getValue(BasePipeBlock.getPropertyFromDirection(targetDirection)) != ConnectionType.NONE) {
+        //if (blockEntity.getBlockState().getValue(BasePipeBlock.getPropertyFromDirection(targetDirection)) != ConnectionType.NONE) {
             blockEntity.disconnect(targetDirection);
-        } else {
-            blockEntity.reconnect(targetDirection);
-        }
+//        } else {
+//            blockEntity.reconnect(targetDirection);
+//        }
         level.setBlockAndUpdate(pos, state);
         return InteractionResult.SUCCESS;
     }
