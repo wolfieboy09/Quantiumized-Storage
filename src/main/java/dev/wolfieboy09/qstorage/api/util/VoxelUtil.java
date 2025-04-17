@@ -16,7 +16,7 @@ public final class VoxelUtil {
                 ))).toArray(VoxelShape[]::new));
     }
 
-    private static @NotNull Vec3 rotatePointAroundCenter(double x, double y, double z, @NotNull Direction direction) {
+    public static @NotNull Vec3 rotatePointAroundCenter(double x, double y, double z, @NotNull Direction direction) {
         return switch (direction) {
             case NORTH -> new Vec3(x, y, z);
             case SOUTH -> new Vec3(1 - x, y, 1 - z);
