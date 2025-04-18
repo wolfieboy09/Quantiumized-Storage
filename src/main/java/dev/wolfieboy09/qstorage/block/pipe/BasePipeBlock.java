@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qstorage.block.pipe;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qstorage.api.block.QSBlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -38,6 +39,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     public static final EnumProperty<ConnectionType> SOUTH = EnumProperty.create("south", ConnectionType.class);
     public static final EnumProperty<ConnectionType> WEST = EnumProperty.create("west", ConnectionType.class);
     public static final BooleanProperty WATER_LOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty LAVA_LOGGED = QSBlockStateProperties.LAVALOGGED;
 
     protected final VoxelShape[] pipeShapes = new VoxelShape[Direction.values().length];
     protected final VoxelShape[] blockConnectorShapes = new VoxelShape[Direction.values().length];
@@ -71,7 +73,8 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 .setValue(EAST, ConnectionType.NONE)
                 .setValue(SOUTH, ConnectionType.NONE)
                 .setValue(WEST, ConnectionType.NONE)
-                .setValue(WATER_LOGGED, false);
+                .setValue(WATER_LOGGED, false)
+                .setValue(LAVA_LOGGED, false);
 
         return calculateState(context.getLevel(), context.getClickedPos(), state);
     }
@@ -83,7 +86,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     protected FluidState getFluidState(BlockState state) {
-        return state.getValue(WATER_LOGGED) ? Fluids.WATER.defaultFluidState() : Fluids.EMPTY.defaultFluidState();
+        return state.getValue(WATER_LOGGED) ? Fluids.WATER.defaultFluidState() : state.getValue(LAVA_LOGGED) ? Fluids.LAVA.defaultFluidState() : Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
@@ -154,6 +157,10 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     protected BlockState updateShape(BlockState state, Direction facing, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATER_LOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+
+        if (state.getValue(LAVA_LOGGED)) {
+            level.scheduleTick(pos, Fluids.LAVA, Fluids.LAVA.getTickDelay(level));
         }
 
         return calculateState((Level) level, pos, state);
