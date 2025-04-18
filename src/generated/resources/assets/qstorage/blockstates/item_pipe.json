@@ -8,6 +8,24 @@
     {
       "apply": {
         "model": "qstorage:block/pipe",
+        "x": 270
+      },
+      "when": {
+        "up": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "x": 270
+      },
+      "when": {
+        "up": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
         "y": 90
       },
       "when": {
@@ -25,20 +43,36 @@
     },
     {
       "apply": {
-        "model": "qstorage:block/pipe",
-        "y": 270
+        "model": "qstorage:block/pipe"
       },
       "when": {
-        "west": "pipe"
+        "north": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected"
+      },
+      "when": {
+        "north": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "x": 90
+      },
+      "when": {
+        "down": "pipe"
       }
     },
     {
       "apply": {
         "model": "qstorage:block/pipe_connected",
-        "y": 270
+        "x": 90
       },
       "when": {
-        "west": "block"
+        "down": "block"
       }
     },
     {
@@ -62,53 +96,19 @@
     {
       "apply": {
         "model": "qstorage:block/pipe",
-        "x": 90
+        "y": 270
       },
       "when": {
-        "down": "pipe"
+        "west": "pipe"
       }
     },
     {
       "apply": {
         "model": "qstorage:block/pipe_connected",
-        "x": 90
+        "y": 270
       },
       "when": {
-        "down": "block"
-      }
-    },
-    {
-      "apply": {
-        "model": "qstorage:block/pipe"
-      },
-      "when": {
-        "north": "pipe"
-      }
-    },
-    {
-      "apply": {
-        "model": "qstorage:block/pipe_connected"
-      },
-      "when": {
-        "north": "block"
-      }
-    },
-    {
-      "apply": {
-        "model": "qstorage:block/pipe",
-        "x": 270
-      },
-      "when": {
-        "up": "pipe"
-      }
-    },
-    {
-      "apply": {
-        "model": "qstorage:block/pipe_connected",
-        "x": 270
-      },
-      "when": {
-        "up": "block"
+        "west": "block"
       }
     }
   ]
