@@ -31,7 +31,7 @@ public class WrenchItem extends Item {
         Level level = context.getLevel();
         Vec3 clickLocation = context.getClickLocation();
         Player player = context.getPlayer();
-        if ((player != null && !player.isCrouching()) && !level.isClientSide()) return InteractionResult.PASS;
+        if (level.isClientSide() || player == null || !player.isCrouching()) return InteractionResult.PASS;
 
         //        Now we know the player is crouching, we can use the wrench
 
