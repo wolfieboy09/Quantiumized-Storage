@@ -1,7 +1,11 @@
 package dev.wolfieboy09.qstorage.block.pipe.network;
 
+import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
+import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -18,6 +22,17 @@ public class PipeNetworkManager {
         if (level.isClientSide) return;
         pipeNetworks.computeIfAbsent(level, l -> new HashMap<>())
                     .computeIfAbsent(pos, PipeConnection::new);
+    }
+
+    public static void sideDisconnected(@NotNull Level level, BlockPos mainPos, Direction disconnectionSide) {
+        if (level.isClientSide) return;
+        BlockPos directionalBlock = mainPos.relative(disconnectionSide);
+        if (level.getBlockState(directionalBlock).getBlock() instanceof BasePipeBlock<?>) {
+            BlockState state = level.getBlockState(directionalBlock);
+
+            // We need to tell the opposing block that it needs to hide that side
+            level.setBlockAndUpdate(directionalBlock, state.setValue(BasePipeBlock.getPropertyFromDirection(disconnectionSide), ConnectionType.NONE));
+        }
     }
 
     public static @NotNull Optional<PipeConnection> getPipe(Level level, BlockPos pos) {

@@ -2,6 +2,7 @@ package dev.wolfieboy09.qstorage.block.pipe;
 
 import com.mojang.serialization.DataResult;
 import dev.wolfieboy09.qstorage.block.GlobalBlockEntity;
+import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -26,6 +27,7 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
     public void disconnect(Direction direction) {
         if (this.disconnectedSides.contains(direction) || this.level == null || this.level.isClientSide()) return;
         this.disconnectedSides.add(direction);
+        PipeNetworkManager.sideDisconnected(this.level, getBlockPos(), direction);
         setChanged();
     }
 
