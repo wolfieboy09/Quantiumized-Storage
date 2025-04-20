@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qstorage.block.pipe;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qstorage.api.block.QSBlockStateProperties;
+import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -136,8 +136,14 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
             for (Direction direction : Direction.values()) {
                 state = updateBlockState(state, level, pos, direction);
             }
+            PipeNetworkManager.addPipe(level, pos);
+        }
+    }
 
-            level.setBlockAndUpdate(pos, state);
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!level.isClientSide) {
+            PipeNetworkManager.removePipe(level, pos);
         }
     }
 
