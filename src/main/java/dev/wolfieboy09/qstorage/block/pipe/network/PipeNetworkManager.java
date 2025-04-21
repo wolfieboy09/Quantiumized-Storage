@@ -43,7 +43,7 @@ public class PipeNetworkManager {
         if (level.isClientSide) return;
         level.setBlockAndUpdate(mainPos, level.getBlockState(mainPos));
         BlockPos relativePos = mainPos.relative(connectedSide, 1);
-        if (level.getBlockState(relativePos).getBlock() instanceof BasePipeBlock<?> pipe) {
+        if (level.getBlockState(relativePos).getBlock() instanceof BasePipeBlock<?>) {
             BasePipeBlockEntity be = (BasePipeBlockEntity) level.getBlockEntity(relativePos);
             if (be == null) return;
             be.reconnect(connectedSide.getOpposite());

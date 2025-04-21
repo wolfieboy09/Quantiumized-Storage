@@ -41,13 +41,16 @@ public class WrenchItem extends Item {
         Direction targetDirection = determineTargetDirection(clickedFace, relX, relY, relZ);
 
         BlockState state = level.getBlockState(pos);
-        if (!(level.getBlockEntity(pos) instanceof BasePipeBlockEntity blockEntity)) return InteractionResult.PASS;
+        if (!(level.getBlockEntity(pos) instanceof BasePipeBlockEntity blockEntity) || blockEntity.getLevel() == null) return InteractionResult.PASS;
         if (state.getValue(BasePipeBlock.getPropertyFromDirection(targetDirection)) != ConnectionType.NONE) {
             blockEntity.disconnect(targetDirection);
             level.setBlockAndUpdate(blockEntity.getBlockPos(),
                     state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), ConnectionType.NONE));
         } else {
-            blockEntity.updateLevelAndReconnect(pos, targetDirection);
+            blockEntity.reconnect(targetDirection);
+            BasePipeBlock<?> pipe = (BasePipeBlock<?>) blockEntity.getBlockState().getBlock();
+            level.setBlockAndUpdate(blockEntity.getBlockPos(),
+                    state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), pipe.getConnectorType(blockEntity.getLevel(), blockEntity.getBlockPos(), targetDirection)));
         }
         return InteractionResult.SUCCESS;
     }
