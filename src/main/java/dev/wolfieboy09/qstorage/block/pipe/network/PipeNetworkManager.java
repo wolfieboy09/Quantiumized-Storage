@@ -39,6 +39,18 @@ public class PipeNetworkManager {
         }
     }
 
+    public static void sideConnected(Level level, BlockPos mainPos, Direction connectedSide) {
+        if (level.isClientSide) return;
+        level.setBlockAndUpdate(mainPos, level.getBlockState(mainPos));
+        BlockPos relativePos = mainPos.relative(connectedSide, 1);
+        if (level.getBlockState(relativePos).getBlock() instanceof BasePipeBlock<?> pipe) {
+            BasePipeBlockEntity be = (BasePipeBlockEntity) level.getBlockEntity(relativePos);
+            if (be == null) return;
+            be.reconnect(connectedSide.getOpposite());
+            level.setBlockAndUpdate(relativePos, level.getBlockState(relativePos));
+        }
+    }
+
     public static @NotNull Optional<PipeConnection> getPipe(Level level, BlockPos pos) {
         return Optional.ofNullable(pipeNetworks.getOrDefault(level, Collections.emptyMap()).get(pos));
     }

@@ -40,9 +40,20 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
     }
 
     public void reconnect(Direction direction) {
-        if (this.level == null || !this.level.isClientSide()) return;
+        if (this.level == null || this.level.isClientSide()) return;
         this.disconnectedSides.remove(direction);
+        PipeNetworkManager.sideConnected(this.level, getBlockPos(), direction);
         setChanged();
+    }
+
+    public void updateLevelAndReconnect(BlockPos pos, Direction target) {
+        if (this.level == null || this.level.isClientSide()) return;
+        // Needed for a method
+        if (getBlockState().getBlock() instanceof BasePipeBlock<?> pipe) {
+            reconnect(target);
+            BlockState state = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(target), pipe.getConnectorType(this.level, pos, target));
+            this.level.setBlockAndUpdate(pos, state);
+        }
     }
 
     @Override
