@@ -2,7 +2,6 @@ package dev.wolfieboy09.qstorage;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import dev.wolfieboy09.qstorage.packets.HandlePipePos;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -20,16 +19,16 @@ public class PipeDebugRendering {
     private static final List<BlockPos> debugPipePositions = new ArrayList<>();
 
     public static void removePos(BlockPos pos) {
-        if (Minecraft.getInstance().level != null && !Minecraft.getInstance().level.isClientSide) {
-            PacketDistributor.sendToAllPlayers(new HandlePipePos(pos, true));
-        }
+//        if (Minecraft.getInstance().level != null && !Minecraft.getInstance().level.isClientSide) {
+//            PacketDistributor.sendToAllPlayers(new HandlePipePos(pos, true));
+//        }
         debugPipePositions.remove(pos);
     }
 
     public static void addPos(BlockPos pos) {
-        if (Minecraft.getInstance().level != null && !Minecraft.getInstance().level.isClientSide) {
-            PacketDistributor.sendToAllPlayers(new HandlePipePos(pos, false));
-        }
+//        if (Minecraft.getInstance().level != null && !Minecraft.getInstance().level.isClientSide) {
+//            PacketDistributor.sendToAllPlayers(new HandlePipePos(pos, false));
+//        }
         debugPipePositions.add(pos);
     }
 

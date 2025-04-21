@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qstorage.block.pipe.network;
 
-import dev.wolfieboy09.qstorage.PipeDebugRendering;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
@@ -23,7 +22,7 @@ public class PipeNetworkManager {
 
     public static void addPipe(@NotNull Level level, BlockPos pos) {
         if (level.isClientSide) return;
-        PipeDebugRendering.addPos(pos);
+        //PipeDebugRendering.addPos(pos);
         pipeNetworks.computeIfAbsent(level, l -> new HashMap<>())
                     .computeIfAbsent(pos, PipeConnection::new);
     }
@@ -47,7 +46,7 @@ public class PipeNetworkManager {
     public static void removePipe(@NotNull Level level, BlockPos pos) {
         if (level.isClientSide) return;
         Map<BlockPos, PipeConnection> network = pipeNetworks.get(level);
-        PipeDebugRendering.removePos(pos);
+        //PipeDebugRendering.removePos(pos);
         if (network != null) {
             network.remove(pos);
             if (network.isEmpty()) {

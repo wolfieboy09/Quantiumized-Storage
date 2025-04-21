@@ -34,7 +34,8 @@ public class QuantiumizedStorage {
         modEventBus.addListener(QSEntities::registerRenderers);
         QSEntities.register(modEventBus);
 
-        NeoForge.EVENT_BUS.addListener(PipeDebugRendering::render);
+        //TODO VERY BROKEN
+        //NeoForge.EVENT_BUS.addListener(PipeDebugRendering::render);
 
         // Register before neoforge because wiki says so
         modEventBus.addListener(EventPriority.HIGH, QSEvents::registerRegistries);
