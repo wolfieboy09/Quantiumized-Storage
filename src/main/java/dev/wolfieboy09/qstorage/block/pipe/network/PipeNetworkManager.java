@@ -2,10 +2,12 @@ package dev.wolfieboy09.qstorage.block.pipe.network;
 
 import dev.wolfieboy09.qstorage.PipeDebugRendering;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
+import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,12 +30,13 @@ public class PipeNetworkManager {
 
     public static void sideDisconnected(@NotNull Level level, BlockPos mainPos, Direction disconnectionSide) {
         if (level.isClientSide) return;
-        BlockPos directionalBlock = mainPos.relative(disconnectionSide);
-        if (level.getBlockState(directionalBlock).getBlock() instanceof BasePipeBlock<?>) {
-            BlockState state = level.getBlockState(directionalBlock);
-
-            // We need to tell the opposing block that it needs to hide that side
-            level.setBlockAndUpdate(directionalBlock, state.setValue(BasePipeBlock.getPropertyFromDirection(disconnectionSide), ConnectionType.NONE));
+        level.setBlockAndUpdate(mainPos,level.getBlockState(mainPos));
+        var relativePos = mainPos.relative(disconnectionSide,1);
+        if (level.getBlockState(relativePos).getBlock() instanceof BasePipeBlock<?>) {
+            BasePipeBlockEntity be = (BasePipeBlockEntity) level.getBlockEntity(relativePos);
+            if (be == null) return;
+            be.disconnect(disconnectionSide.getOpposite());
+            level.setBlockAndUpdate(relativePos,level.getBlockState(relativePos));
         }
     }
 

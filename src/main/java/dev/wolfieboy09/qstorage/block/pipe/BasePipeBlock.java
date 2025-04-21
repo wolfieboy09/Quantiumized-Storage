@@ -145,6 +145,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         if (!level.isClientSide) {
             PipeNetworkManager.removePipe(level, pos);
         }
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     private BlockState updateBlockState(BlockState state, Level level, BlockPos pos, Direction facing) {
