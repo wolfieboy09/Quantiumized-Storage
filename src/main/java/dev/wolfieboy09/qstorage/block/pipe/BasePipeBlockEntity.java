@@ -46,16 +46,6 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
         setChanged();
     }
 
-    public void updateLevelAndReconnect(BlockPos pos, Direction target) {
-        if (this.level == null || this.level.isClientSide()) return;
-        // Needed for a method
-        if (getBlockState().getBlock() instanceof BasePipeBlock<?> pipe) {
-            reconnect(target);
-            BlockState state = getBlockState().setValue(BasePipeBlock.getPropertyFromDirection(target), pipe.getConnectorType(this.level, pos, target));
-            this.level.setBlockAndUpdate(pos, state);
-        }
-    }
-
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
@@ -66,6 +56,6 @@ public class BasePipeBlockEntity extends GlobalBlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.disconnectedSides = new ArrayList<>(Direction.CODEC.listOf().parse(NbtOps.INSTANCE, tag.get("DisconnectedSides")).getOrThrow());
+        this.disconnectedSides = Direction.CODEC.listOf().parse(NbtOps.INSTANCE, tag.get("DisconnectedSides")).getOrThrow();
     }
 }
