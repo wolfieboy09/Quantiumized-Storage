@@ -2,8 +2,8 @@ package dev.wolfieboy09.qstorage.item;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
-import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
+import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -41,16 +41,43 @@ public class WrenchItem extends Item {
         Direction targetDirection = determineTargetDirection(clickedFace, relX, relY, relZ);
 
         BlockState state = level.getBlockState(pos);
-        if (!(level.getBlockEntity(pos) instanceof BasePipeBlockEntity blockEntity) || blockEntity.getLevel() == null) return InteractionResult.PASS;
-        if (state.getValue(BasePipeBlock.getPropertyFromDirection(targetDirection)) != ConnectionType.NONE) {
-            blockEntity.disconnect(targetDirection);
-            level.setBlockAndUpdate(blockEntity.getBlockPos(),
-                    state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), ConnectionType.NONE));
+        if (!(state.getBlock() instanceof BasePipeBlock<?>)) return InteractionResult.PASS;
+
+        // Check if the side is currently connected
+        ConnectionType currentType = state.getValue(BasePipeBlock.getPropertyFromDirection(targetDirection));
+
+        if (currentType != ConnectionType.NONE) {
+            // Disconnect the side using PipeNetworkManager directly
+            System.out.println("WrenchItem: Disconnecting side " + targetDirection + " at " + pos);
+            PipeNetworkManager.sideDisconnected(level, pos, targetDirection);
+
+            // Force update the block state
+            level.setBlockAndUpdate(pos, state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), ConnectionType.NONE));
+
+            // Update the connected pipe's block state
+            BlockPos relativePos = pos.relative(targetDirection, 1);
+            BlockState relativeState = level.getBlockState(relativePos);
+            if (relativeState.getBlock() instanceof BasePipeBlock) {
+                level.setBlockAndUpdate(relativePos, relativeState.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection.getOpposite()), ConnectionType.NONE));
+            }
         } else {
-            blockEntity.reconnect(targetDirection);
-            BasePipeBlock<?> pipe = (BasePipeBlock<?>) blockEntity.getBlockState().getBlock();
-            level.setBlockAndUpdate(blockEntity.getBlockPos(),
-                    state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), pipe.getConnectorType(blockEntity.getLevel(), blockEntity.getBlockPos(), targetDirection)));
+            // Reconnect the side using PipeNetworkManager directly
+            System.out.println("WrenchItem: Reconnecting side " + targetDirection + " at " + pos);
+            PipeNetworkManager.sideConnected(level, pos, targetDirection);
+
+            // Force update the block state
+            BasePipeBlock<?> pipe = (BasePipeBlock<?>) state.getBlock();
+            ConnectionType newType = pipe.getConnectorType(level, pos, targetDirection);
+            level.setBlockAndUpdate(pos, state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), newType));
+
+            // Update the connected pipe's block state
+            BlockPos relativePos = pos.relative(targetDirection, 1);
+            BlockState relativeState = level.getBlockState(relativePos);
+            if (relativeState.getBlock() instanceof BasePipeBlock) {
+                BasePipeBlock<?> relativePipe = (BasePipeBlock<?>) relativeState.getBlock();
+                ConnectionType relativeNewType = relativePipe.getConnectorType(level, relativePos, targetDirection.getOpposite());
+                level.setBlockAndUpdate(relativePos, relativeState.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection.getOpposite()), relativeNewType));
+            }
         }
         return InteractionResult.SUCCESS;
     }

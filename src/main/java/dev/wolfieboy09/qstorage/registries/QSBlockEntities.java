@@ -5,7 +5,6 @@ import dev.wolfieboy09.qstorage.block.circut_engraver.CircuitEngraverBlockEntity
 import dev.wolfieboy09.qstorage.block.creative_energy_block.CreativeEnergyBlockEntity;
 import dev.wolfieboy09.qstorage.block.disk_assembler.DiskAssemblerBlockEntity;
 import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlockEntity;
-import dev.wolfieboy09.qstorage.block.pipe.pipes.entities.ItemPipeBlockEntity;
 import dev.wolfieboy09.qstorage.block.smeltery.SmelteryBlockEntity;
 import dev.wolfieboy09.qstorage.block.storage_matrix.StorageMatrixBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -56,14 +55,6 @@ public class QSBlockEntities {
             "gas_filler",
             GasFillerBlockEntity::new,
             QSBlocks.GAS_FILLER
-    );
-
-    //TODO Well, notes really
-    // Either have BlockEntityType<ItemPipeBlockEntity> or have it as the BasePipeBlockEntity
-    public static final Supplier<BlockEntityType<ItemPipeBlockEntity>> ITEM_PIPE_BLOCK = createBlockEntity(
-            "item_pipe_block",
-            ItemPipeBlockEntity::new,
-            QSBlocks.ITEM_PIPE
     );
 
     private static <T extends BlockEntity> @NotNull Supplier<BlockEntityType<T>> createBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier, Supplier<? extends Block> block) {
