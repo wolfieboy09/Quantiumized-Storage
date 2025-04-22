@@ -31,7 +31,6 @@ public class PipeDebugRendering {
         Level level = minecraft.level;
         if (level == null) return;
 
-        // Get the AABB (axis-aligned bounding box) for the block
         BlockState blockState = level.getBlockState(blockPos);
         if (blockState.getBlock() == Blocks.AIR) {
             return;
@@ -39,25 +38,18 @@ public class PipeDebugRendering {
 
         AABB aabb = blockState.getShape(level, blockPos).bounds().move(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
-        // Setup the render context
         matrixStack.pushPose();
         RenderSystem.setShaderColor(1.0F, 0.0F, 0.0F, 0.5F);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        // Set up the vertex consumer for rendering the box lines
         MultiBufferSource.BufferSource bufferSource = minecraft.renderBuffers().bufferSource();
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.LINES);
 
-        // Render the AABB box (using the vertices for the box)
         LevelRenderer.renderLineBox(matrixStack, vertexConsumer, aabb, 1, 0, 0, 0.5f);
-
-        // Finish the rendering
         bufferSource.endBatch();
         matrixStack.popPose();
-
         RenderSystem.setShaderColor(1, 1, 1, 1);
-
         RenderSystem.disableBlend();
     }
 }
