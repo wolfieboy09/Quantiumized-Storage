@@ -8,12 +8,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+
 
 public class PipeNetworkManager {
     private static final String SAVED_DATA_NAME = "qstorage_pipe_networks";
@@ -27,17 +32,14 @@ public class PipeNetworkManager {
             this.pipeConnections = new HashMap<>();
         }
 
-        public PipeNetworkData(Level level, CompoundTag tag, HolderLookup.Provider lookupProvider) {
+        public PipeNetworkData(Level level, @NotNull CompoundTag tag, HolderLookup.Provider lookupProvider) {
             this.level = level;
             this.pipeConnections = new HashMap<>();
 
             ListTag pipesList = tag.getList("Pipes", 10); // 10 is the ID for CompoundTag
             for (int i = 0; i < pipesList.size(); i++) {
                 CompoundTag pipeTag = pipesList.getCompound(i);
-                int x = pipeTag.getInt("X");
-                int y = pipeTag.getInt("Y");
-                int z = pipeTag.getInt("Z");
-                BlockPos pos = new BlockPos(x, y, z);
+                BlockPos pos = BlockPos.CODEC.decode(NbtOps.INSTANCE, pipeTag.get("pos")).getOrThrow().getFirst();
 
                 PipeConnection connection = new PipeConnection(pos);
                 connection.loadFromNbt(pipeTag);
@@ -46,12 +48,14 @@ public class PipeNetworkManager {
         }
 
         // Create new instance of saved data
-        public static PipeNetworkData create(Level level) {
+        @Contract("_ -> new")
+        public static @NotNull PipeNetworkData create(Level level) {
             return new PipeNetworkData(level);
         }
 
         // Load existing instance of saved data
-        public static PipeNetworkData load(Level level, CompoundTag tag, HolderLookup.Provider lookupProvider) {
+        @Contract("_, _, _ -> new")
+        public static @NotNull PipeNetworkData load(Level level, CompoundTag tag, HolderLookup.Provider lookupProvider) {
             return new PipeNetworkData(level, tag, lookupProvider);
         }
 
@@ -64,9 +68,7 @@ public class PipeNetworkManager {
                 PipeConnection connection = entry.getValue();
 
                 CompoundTag pipeTag = new CompoundTag();
-                pipeTag.putInt("X", pos.getX());
-                pipeTag.putInt("Y", pos.getY());
-                pipeTag.putInt("Z", pos.getZ());
+                pipeTag.put("pos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, entry.getKey()).getOrThrow());
 
                 connection.saveToNbt(pipeTag);
                 pipesList.add(pipeTag);
@@ -119,27 +121,23 @@ public class PipeNetworkManager {
     private static final Map<Level, Map<BlockPos, PipeConnection>> pipeNetworks = new HashMap<>();
 
     // Get or create the SavedData for a level
-    private static PipeNetworkData getOrCreateSavedData(Level level) {
+    private static @Nullable PipeNetworkData getOrCreateSavedData(@NotNull Level level) {
         if (level.isClientSide || level.getServer() == null) {
             return null;
         }
 
-        var dataStorage = level.getServer().overworld().getDataStorage();
+        DimensionDataStorage dataStorage = level.getServer().overworld().getDataStorage();
         return dataStorage.computeIfAbsent(
             new SavedData.Factory<>(
-                () -> {
-                    return PipeNetworkData.create(level);
-                },
-                (tag, lookupProvider) -> {
-                    return PipeNetworkData.load(level, tag, lookupProvider);
-                }
+                () -> PipeNetworkData.create(level),
+                (tag, lookupProvider) -> PipeNetworkData.load(level, tag, lookupProvider)
             ),
             SAVED_DATA_NAME
         );
     }
 
     // Sync the in-memory cache with the SavedData
-    private static void syncWithSavedData(Level level) {
+    private static void syncWithSavedData(@NotNull Level level) {
         if (level.isClientSide) return;
 
         PipeNetworkData savedData = getOrCreateSavedData(level);
@@ -235,7 +233,7 @@ public class PipeNetworkManager {
         }
     }
 
-    public static void sideConnected(Level level, BlockPos mainPos, Direction connectedSide) {
+    public static void sideConnected(@NotNull Level level, BlockPos mainPos, Direction connectedSide) {
         if (level.isClientSide) return;
 
         // Update the main pipe's disconnected sides in the in-memory network
