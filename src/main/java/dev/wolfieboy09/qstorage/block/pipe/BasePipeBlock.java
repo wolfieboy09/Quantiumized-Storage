@@ -192,7 +192,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         BlockPos pos = connectorPos.relative(facing);
         BlockState state = world.getBlockState(pos);
         if (world.getBlockEntity(connectorPos) instanceof BasePipeBlockEntity blockEntity) {
-            if (blockEntity.getDisconnectedSides().contains(facing)) {
+            if (blockEntity.getSides().getOrDefault(facing, false)) {
                 return ConnectionType.NONE;
             }
         }
