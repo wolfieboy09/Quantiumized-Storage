@@ -2,15 +2,15 @@ package dev.wolfieboy09.qstorage.block.pipe.network;
 
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlockEntity;
-import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class PipeNetworkManager {
     private static final Map<Level, Map<BlockPos, PipeConnection>> pipeNetworks = new HashMap<>();
