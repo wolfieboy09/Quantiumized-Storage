@@ -7,7 +7,6 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
