@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -28,7 +29,7 @@ public class PipeConnection {
         tag.put("DisconnectedSides", disconnectedTag);
     }
 
-    public void loadFromNbt(CompoundTag tag) {
+    public void loadFromNbt(@NotNull CompoundTag tag) {
         if (tag.contains("DisconnectedSides")) {
             CompoundTag disconnectedTag = tag.getCompound("DisconnectedSides");
             this.disconnectedSides.clear();

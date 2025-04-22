@@ -20,7 +20,7 @@ public record GasFillerModeData(BlockPos blockPos,GasFillerState state) implemen
     );
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

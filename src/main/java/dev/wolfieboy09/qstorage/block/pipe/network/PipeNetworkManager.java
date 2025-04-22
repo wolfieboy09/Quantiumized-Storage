@@ -3,16 +3,19 @@ package dev.wolfieboy09.qstorage.block.pipe.network;
 import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
+import dev.wolfieboy09.qstorage.packets.SyncPipeNetworksPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,20 +23,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 
-public class PipeNetworkManager {
+public final class PipeNetworkManager {
     private static final String SAVED_DATA_NAME = "qstorage_pipe_networks";
 
+    private PipeNetworkManager() {}
+
     public static class PipeNetworkData extends SavedData {
-        private final Level level;
         private final Map<BlockPos, PipeConnection> pipeConnections;
 
         public PipeNetworkData(Level level) {
-            this.level = level;
             this.pipeConnections = new HashMap<>();
         }
 
         public PipeNetworkData(Level level, @NotNull CompoundTag tag, HolderLookup.Provider lookupProvider) {
-            this.level = level;
             this.pipeConnections = new HashMap<>();
 
             ListTag pipesList = tag.getList("Pipes", 10); // 10 is the ID for CompoundTag
@@ -64,7 +66,6 @@ public class PipeNetworkManager {
             ListTag pipesList = new ListTag();
 
             for (Map.Entry<BlockPos, PipeConnection> entry : this.pipeConnections.entrySet()) {
-                BlockPos pos = entry.getKey();
                 PipeConnection connection = entry.getValue();
 
                 CompoundTag pipeTag = new CompoundTag();
@@ -126,15 +127,27 @@ public class PipeNetworkManager {
             return null;
         }
 
-        DimensionDataStorage dataStorage = level.getServer().overworld().getDataStorage();
+        ServerLevel serverLevel = level.getServer().getLevel(level.dimension());
+        if (serverLevel == null) {
+            return null;
+        }
+
+        PipeNetworkData data = getPipeNetworkData(serverLevel);
+        data.setDirty();
+        return data;
+    }
+
+    private static @NotNull PipeNetworkData getPipeNetworkData(@NotNull ServerLevel serverLevel) {
+        DimensionDataStorage dataStorage = serverLevel.getDataStorage();
         return dataStorage.computeIfAbsent(
-            new SavedData.Factory<>(
-                () -> PipeNetworkData.create(level),
-                (tag, lookupProvider) -> PipeNetworkData.load(level, tag, lookupProvider)
-            ),
-            SAVED_DATA_NAME
+                new SavedData.Factory<>(
+                        () -> PipeNetworkData.create(serverLevel),
+                        (tag, lookupProvider) -> PipeNetworkData.load(serverLevel, tag, lookupProvider)
+                ),
+                SAVED_DATA_NAME
         );
     }
+
 
     // Sync the in-memory cache with the SavedData
     private static void syncWithSavedData(@NotNull Level level) {
@@ -193,6 +206,7 @@ public class PipeNetworkManager {
             savedData.getOrCreatePipe(pos);
             QuantiumizedStorage.LOGGER.info("Pipe added at {}", pos);
         }
+        PacketDistributor.sendToAllPlayers(new SyncPipeNetworksPacket(level.dimension(), PipeNetworkManager.getPipesForLevel(level)));
     }
 
     public static void sideDisconnected(@NotNull Level level, BlockPos mainPos, Direction disconnectionSide) {
@@ -272,6 +286,10 @@ public class PipeNetworkManager {
         }
     }
 
+    public static @NotNull List<BlockPos> getPipesForLevel(Level level) {
+        return pipeNetworks.get(level) == null ? List.of() : pipeNetworks.get(level).keySet().stream().toList();
+    }
+
     public static @NotNull Optional<PipeConnection> getPipe(Level level, BlockPos pos) {
         // First check the in-memory cache
         Optional<PipeConnection> result = Optional.ofNullable(pipeNetworks.getOrDefault(level, Collections.emptyMap()).get(pos));
@@ -332,5 +350,6 @@ public class PipeNetworkManager {
             savedData.removePipe(pos);
             QuantiumizedStorage.LOGGER.info("Pipe removed at {}", pos);
         }
+        PacketDistributor.sendToAllPlayers(new SyncPipeNetworksPacket(level.dimension(), PipeNetworkManager.getPipesForLevel(level)));
     }
 }

@@ -2,7 +2,11 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.api.packets.OneWayPacketHandler;
 import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlockEntity;
+import dev.wolfieboy09.qstorage.debug.PipeDebugRendering;
 import dev.wolfieboy09.qstorage.packets.GasFillerModeData;
+import dev.wolfieboy09.qstorage.packets.SyncPipeNetworksPacket;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -18,11 +22,11 @@ public final class QSPackets {
                 new OneWayPacketHandler<>(ServerPayloadHandler::handleGasFillerMode)
         );
 
-//        registrar.playToClient(
-//                HandlePipePos.TYPE,
-//                HandlePipePos.STREAM_CODEC,
-//                new OneWayPacketHandler<>(PipePosHandler::handleServerToClient)
-//        );
+        registrar.playToClient(
+                SyncPipeNetworksPacket.TYPE,
+                SyncPipeNetworksPacket.STREAM_CODEC,
+                new OneWayPacketHandler<>(ClientPayloadHandler::handleSync)
+        );
     }
 
     public static class ServerPayloadHandler {
@@ -34,15 +38,10 @@ public final class QSPackets {
         }
     }
 
-//    public static class PipePosHandler {
-//        @Contract(pure = true)
-//        public static void handleServerToClient(@NotNull HandlePipePos payload, final IPayloadContext context) {
-//            if (!payload.remove()) {
-//                PipeDebugRendering.addPos(payload.pos());
-//            } else {
-//                PipeDebugRendering.removePos(payload.pos());
-//            }
-//        }
-//    }
-
+    public static class ClientPayloadHandler {
+        public static void handleSync(SyncPipeNetworksPacket payload, IPayloadContext context) {
+            PipeDebugRendering.pipes.clear();
+            PipeDebugRendering.pipes.addAll(payload.posList());
+        }
+    }
 }
