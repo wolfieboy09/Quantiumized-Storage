@@ -19,16 +19,13 @@ public class PipeNetworkManager {
     private static final String SAVED_DATA_NAME = "qstorage_pipe_networks";
 
     public static class PipeNetworkData extends SavedData {
-        private final Level level;
         private final Map<BlockPos, PipeConnection> pipeConnections;
 
-        public PipeNetworkData(Level level) {
-            this.level = level;
+        public PipeNetworkData() {
             this.pipeConnections = new HashMap<>();
         }
 
         public PipeNetworkData(Level level, CompoundTag tag, HolderLookup.Provider lookupProvider) {
-            this.level = level;
             this.pipeConnections = new HashMap<>();
 
             ListTag pipesList = tag.getList("Pipes", 10); // 10 is the ID for CompoundTag
@@ -46,8 +43,8 @@ public class PipeNetworkManager {
         }
 
         // Create new instance of saved data
-        public static PipeNetworkData create(Level level) {
-            return new PipeNetworkData(level);
+        public static PipeNetworkData create() {
+            return new PipeNetworkData();
         }
 
         // Load existing instance of saved data
@@ -127,9 +124,7 @@ public class PipeNetworkManager {
         var dataStorage = level.getServer().overworld().getDataStorage();
         return dataStorage.computeIfAbsent(
             new SavedData.Factory<>(
-                () -> {
-                    return PipeNetworkData.create(level);
-                },
+                    PipeNetworkData::create,
                 (tag, lookupProvider) -> {
                     return PipeNetworkData.load(level, tag, lookupProvider);
                 }
