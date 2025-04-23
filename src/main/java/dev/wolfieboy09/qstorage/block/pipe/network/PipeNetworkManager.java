@@ -26,7 +26,7 @@ public class PipeNetworkManager {
      * @param level The level to get the saved data for
      * @return The saved data, or null if on the client side
      */
-    private static @Nullable PipeNetworkData getOrCreateSavedData(@NotNull Level level) {
+    public static @Nullable PipeNetworkData getOrCreateSavedData(@NotNull Level level) {
         if (level.isClientSide || level.getServer() == null) {
             return null;
         }
@@ -58,8 +58,7 @@ public class PipeNetworkManager {
         updatePipeConnections(level, pipePos);
 
         // Phase 2: Determine network membership
-        NetworkService networkService = savedData.getNetworkManager();
-        determineNetworkMembership(level, pipePos, savedData, networkService);
+        determineNetworkMembership(level, pipePos, savedData);
     }
 
     /**
@@ -110,8 +109,7 @@ public class PipeNetworkManager {
 
         // Check if the network needs to be split
         if (networkId != null) {
-            NetworkService networkService = savedData.getNetworkManager();
-            PipeNetwork network = networkService.getNetworkById(networkId);
+            PipeNetwork network = savedData.getNetworkById(networkId);
             if (network != null && network.getMemberCount() > 1) {
                 // The pipe has already been removed from the network, so we need to check
                 // if the remaining pipes are still connected
@@ -119,10 +117,10 @@ public class PipeNetworkManager {
                 if (!members.isEmpty()) {
                     // Start from any pipe in the network
                     BlockPos startPos = members.iterator().next();
-                    Set<BlockPos> connectedPipes = networkService.findConnectedPipes(level, savedData, startPos, members);
+                    Set<BlockPos> connectedPipes = savedData.findConnectedPipes(level, startPos, members);
                     if (connectedPipes.size() < members.size()) {
                         // The network is split, so we need to create new networks
-                        Set<PipeNetwork> resultingNetworks = networkService.splitNetwork(networkId);
+                        Set<PipeNetwork> resultingNetworks = savedData.splitNetwork(networkId);
                         QuantiumizedStorage.LOGGER.info("Split network {} into {} networks after removing pipe",
                                 networkId, resultingNetworks.size());
                     }
@@ -131,7 +129,6 @@ public class PipeNetworkManager {
         }
 
         // Check all neighbors to ensure they're in a network
-        NetworkService networkService = savedData.getNetworkManager();
         for (Map.Entry<Direction, BlockPos> entry : neighbors.entrySet()) {
             BlockPos neighborPos = entry.getValue();
             // Update the neighbor's connections
@@ -141,7 +138,7 @@ public class PipeNetworkManager {
             UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
             if (neighborNetworkId == null) {
                 // Neighbor is not in a network, create a new one
-                PipeNetwork network = networkService.createNetwork(neighborPos, NetworkType.UNIVERSAL);
+                PipeNetwork network = savedData.createNetwork(neighborPos, NetworkType.UNIVERSAL);
                 QuantiumizedStorage.LOGGER.info("Created new network {} for orphaned pipe at {}",
                         network.getNetworkId(), neighborPos);
             }
@@ -154,12 +151,12 @@ public class PipeNetworkManager {
      * @param level The level containing the pipe
      * @param pipePos The position of the pipe
      */
-    private static void determineNetworkMembership(Level level, BlockPos pipePos, PipeNetworkData savedData, NetworkService networkService) {
+    private static void determineNetworkMembership(Level level, BlockPos pipePos, PipeNetworkData savedData) {
         // Check if already in a network
         UUID existingNetworkId = savedData.getNetworkForPipe(pipePos);
         if (existingNetworkId != null) {
             // Already in a network, check if we need to merge with neighbors
-            mergeWithNeighborNetworks(level, pipePos, savedData, networkService, existingNetworkId);
+            mergeWithNeighborNetworks(level, pipePos, savedData, existingNetworkId);
             return;
         }
 
@@ -168,12 +165,12 @@ public class PipeNetworkManager {
 
         if (connectedNetworks.isEmpty()) {
             // No connected networks, create a new one
-            PipeNetwork network = networkService.createNetwork(pipePos, NetworkType.UNIVERSAL);
+            PipeNetwork network = savedData.createNetwork(pipePos, NetworkType.UNIVERSAL);
             QuantiumizedStorage.LOGGER.info("Created new network {} for pipe at {}", network.getNetworkId(), pipePos);
         } else if (connectedNetworks.size() == 1) {
             // One connected network, join it
             UUID networkId = connectedNetworks.iterator().next();
-            networkService.addPipeToNetwork(pipePos, networkId);
+            savedData.addPipeToNetwork(pipePos, networkId);
             QuantiumizedStorage.LOGGER.info("Added pipe at {} to network {}", pipePos, networkId);
         } else {
             // Multiple connected networks, merge them
@@ -182,8 +179,8 @@ public class PipeNetworkManager {
                     .filter(id -> !id.equals(targetNetworkId))
                     .toArray(UUID[]::new);
 
-            networkService.mergeNetworks(targetNetworkId, otherNetworks);
-            networkService.addPipeToNetwork(pipePos, targetNetworkId);
+            savedData.mergeNetworks(targetNetworkId, otherNetworks);
+            savedData.addPipeToNetwork(pipePos, targetNetworkId);
             QuantiumizedStorage.LOGGER.info("Merged networks and added pipe at {} to network {}", pipePos, targetNetworkId);
         }
     }
@@ -216,7 +213,7 @@ public class PipeNetworkManager {
         return connectedNetworks;
     }
 
-    private static void mergeWithNeighborNetworks(Level level, BlockPos pipePos, PipeNetworkData savedData, NetworkService networkService, UUID currentNetworkId) {
+    private static void mergeWithNeighborNetworks(Level level, BlockPos pipePos, PipeNetworkData savedData, UUID currentNetworkId) {
         for (Direction dir : Direction.values()) {
             BlockPos neighborPos = pipePos.relative(dir);
 
@@ -235,7 +232,7 @@ public class PipeNetworkManager {
             // Check if the neighbor is in a different network
             UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
             if (neighborNetworkId != null && !neighborNetworkId.equals(currentNetworkId)) {
-                networkService.mergeNetworks(currentNetworkId, neighborNetworkId);
+                savedData.mergeNetworks(currentNetworkId, neighborNetworkId);
                 QuantiumizedStorage.LOGGER.info("Merged networks {} and {}", currentNetworkId, neighborNetworkId);
             }
         }
@@ -251,8 +248,7 @@ public class PipeNetworkManager {
         updatePipeConnections(level, pipePos);
 
         // Determine network membership
-        NetworkService networkService = savedData.getNetworkManager();
-        determineNetworkMembership(level, pipePos, savedData, networkService);
+        determineNetworkMembership(level, pipePos, savedData);
     }
 
     /**
@@ -292,12 +288,11 @@ public class PipeNetworkManager {
                     neighborConnectionType));
 
             // Check if networks need to be merged
-            NetworkService networkService = savedData.getNetworkManager();
             UUID network1 = savedData.getNetworkForPipe(pipePos);
             UUID network2 = savedData.getNetworkForPipe(neighborPos);
 
             if (network1 != null && network2 != null && !network1.equals(network2)) {
-                networkService.mergeNetworks(network1, network2);
+                savedData.mergeNetworks(network1, network2);
                 QuantiumizedStorage.LOGGER.info("Merged networks {} and {}", network1, network2);
             }
         }
@@ -336,27 +331,26 @@ public class PipeNetworkManager {
                     ConnectionType.NONE));
 
             // Check if network needs to be split
-            NetworkService networkService = savedData.getNetworkManager();
             UUID networkId = savedData.getNetworkForPipe(pipePos);
 
             if (networkId != null) {
-                PipeNetwork network = networkService.getNetworkById(networkId);
+                PipeNetwork network = savedData.getNetworkById(networkId);
                 if (network != null && network.getMemberCount() > 1) {
                     // Check if the network is split
                     // Start from the neighbor pipe that we just disconnected from
                     // This ensures we're checking connectivity from the perspective of the affected pipe
                     if (network.containsMember(neighborPos)) {
                         BlockPos startPos = neighborPos;
-                        Set<BlockPos> connectedPipes = networkService.findConnectedPipes(level, savedData, startPos, network.getAllMembers());
+                        Set<BlockPos> connectedPipes = savedData.findConnectedPipes(level, startPos, network.getAllMembers());
                         if (connectedPipes.size() < network.getMemberCount()) {
-                            Set<PipeNetwork> resultingNetworks = networkService.splitNetwork(networkId);
+                            Set<PipeNetwork> resultingNetworks = savedData.splitNetwork(networkId);
                             QuantiumizedStorage.LOGGER.info("Split network {} into {} networks", networkId, resultingNetworks.size());
 
                             // Check if the neighbor pipe is in a network
                             UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
                             if (neighborNetworkId == null) {
                                 // Neighbor is not in a network, create a new one
-                                PipeNetwork neighborNetwork = networkService.createNetwork(neighborPos, NetworkType.UNIVERSAL);
+                                PipeNetwork neighborNetwork = savedData.createNetwork(neighborPos, NetworkType.UNIVERSAL);
                                 QuantiumizedStorage.LOGGER.info("Created new network {} for orphaned pipe at {}",
                                         neighborNetwork.getNetworkId(), neighborPos);
                             }
@@ -369,16 +363,16 @@ public class PipeNetworkManager {
                                 .orElse(null);
 
                         if (startPos != null) {
-                            Set<BlockPos> connectedPipes = networkService.findConnectedPipes(level, savedData, startPos, network.getAllMembers());
+                            Set<BlockPos> connectedPipes = savedData.findConnectedPipes(level, startPos, network.getAllMembers());
                             if (connectedPipes.size() < network.getMemberCount()) {
-                                Set<PipeNetwork> resultingNetworks = networkService.splitNetwork(networkId);
+                                Set<PipeNetwork> resultingNetworks = savedData.splitNetwork(networkId);
                                 QuantiumizedStorage.LOGGER.info("Split network {} into {} networks", networkId, resultingNetworks.size());
 
                                 // Check if the neighbor pipe is in a network
                                 UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
                                 if (neighborNetworkId == null) {
                                     // Neighbor is not in a network, create a new one
-                                    PipeNetwork neighborNetwork = networkService.createNetwork(neighborPos, NetworkType.UNIVERSAL);
+                                    PipeNetwork neighborNetwork = savedData.createNetwork(neighborPos, NetworkType.UNIVERSAL);
                                     QuantiumizedStorage.LOGGER.info("Created new network {} for orphaned pipe at {}",
                                             neighborNetwork.getNetworkId(), neighborPos);
                                 }
@@ -524,21 +518,6 @@ public class PipeNetworkManager {
             // Update the block state for visual rendering
             ConnectionType connectionType = PipeConnection.toConnectionType(connectionState);
             state = state.setValue(BasePipeBlock.getPropertyFromDirection(dir), connectionType);
-
-            // If this is a pipe-to-pipe connection, also update the other pipe
-            if (connectionState == ConnectionState.CONNECTED_TO_PIPE) {
-                BlockPos neighborPos = pipePos.relative(dir);
-                BlockState neighborState = level.getBlockState(neighborPos);
-                if (neighborState.getBlock() instanceof BasePipeBlock) {
-                    // Save the connection state for the neighbor
-                    savedData.setConnectionState(neighborPos, dir.getOpposite(), ConnectionState.CONNECTED_TO_PIPE);
-
-                    // Update the neighbor's block state
-                    level.setBlockAndUpdate(neighborPos, neighborState.setValue(
-                            BasePipeBlock.getPropertyFromDirection(dir.getOpposite()),
-                            ConnectionType.PIPE));
-                }
-            }
         }
 
         // Finally, update the pipe's block state
@@ -556,22 +535,21 @@ public class PipeNetworkManager {
         PipeNetworkData savedData = getOrCreateSavedData(level);
         if (savedData == null) return;
 
-        NetworkService networkService = savedData.getNetworkManager();
         UUID currentNetworkId = savedData.getNetworkForPipe(pipePos);
 
         // If the pipe isn't in a network, create one
         if (currentNetworkId == null) {
             // First try to find connected networks
-            Set<UUID> connectedNetworks = networkService.findConnectedNetworks(pipePos, level);
+            Set<UUID> connectedNetworks = savedData.findConnectedNetworks(pipePos, level);
             if (!connectedNetworks.isEmpty()) {
                 // Join an existing network
                 UUID targetNetworkId = connectedNetworks.iterator().next();
-                networkService.addPipeToNetwork(pipePos, targetNetworkId);
+                savedData.addPipeToNetwork(pipePos, targetNetworkId);
                 QuantiumizedStorage.LOGGER.info("Added pipe at {} to network {} during verification", pipePos, targetNetworkId);
                 currentNetworkId = targetNetworkId;
             } else {
                 // Create a new network
-                PipeNetwork network = networkService.createNetwork(pipePos, NetworkType.UNIVERSAL);
+                PipeNetwork network = savedData.createNetwork(pipePos, NetworkType.UNIVERSAL);
                 QuantiumizedStorage.LOGGER.info("Created new network {} for pipe at {} during verification", network.getNetworkId(), pipePos);
                 currentNetworkId = network.getNetworkId();
             }
@@ -609,11 +587,11 @@ public class PipeNetworkManager {
             UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
             if (neighborNetworkId == null) {
                 // Add neighbor to this network
-                networkService.addPipeToNetwork(neighborPos, currentNetworkId);
+                savedData.addPipeToNetwork(neighborPos, currentNetworkId);
                 QuantiumizedStorage.LOGGER.info("Added neighbor at {} to network {} during verification", neighborPos, currentNetworkId);
             } else if (!neighborNetworkId.equals(currentNetworkId)) {
                 // Merge networks
-                networkService.mergeNetworks(currentNetworkId, neighborNetworkId);
+                savedData.mergeNetworks(currentNetworkId, neighborNetworkId);
                 QuantiumizedStorage.LOGGER.info("Merged networks {} and {} during verification", currentNetworkId, neighborNetworkId);
             }
         }
@@ -646,7 +624,7 @@ public class PipeNetworkManager {
         PipeNetworkData savedData = getOrCreateSavedData(level);
         if (savedData == null) return Collections.emptySet();
 
-        PipeNetwork network = savedData.getNetworkManager().getNetworkById(networkId);
+        PipeNetwork network = savedData.getNetworkById(networkId);
         if (network == null) return Collections.emptySet();
 
         return network.getAllMembers();
@@ -667,7 +645,7 @@ public class PipeNetworkManager {
         UUID networkId = savedData.getNetworkForPipe(startPos);
         if (networkId == null) return Collections.singleton(startPos);
 
-        PipeNetwork network = savedData.getNetworkManager().getNetworkById(networkId);
+        PipeNetwork network = savedData.getNetworkById(networkId);
         if (network == null) return Collections.singleton(startPos);
 
         return network.getAllMembers();
@@ -765,5 +743,9 @@ public class PipeNetworkManager {
         }
 
         return Optional.empty();
+    }
+
+    public static boolean isPipeRegistered(Level world, BlockPos connectorPos) {
+        return Objects.requireNonNull(getOrCreateSavedData(world)).isPipeRegistered(connectorPos);
     }
 }

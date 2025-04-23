@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.block.pipe.network.ConnectionState;
 import dev.wolfieboy09.qstorage.block.pipe.network.PipeConnection;
 import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -27,6 +28,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager.getOrCreateSavedData;
 
 @NothingNullByDefault
 public abstract class BasePipeBlock<C> extends Block implements SimpleWaterloggedBlock {
@@ -66,6 +69,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+        getOrCreateSavedData(context.getLevel());
         BlockState state = this.defaultBlockState()
                 .setValue(UP, ConnectionType.NONE)
                 .setValue(DOWN, ConnectionType.NONE)
@@ -184,6 +188,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
      * @return The type of connection
      */
     public ConnectionType getConnectorType(Level world, BlockPos connectorPos, Direction facing) {
+//        TODO: Load from saved data first
         ConnectionState connectionState = PipeNetworkManager.determineConnectionState(world, connectorPos, facing);
         return PipeConnection.toConnectionType(connectionState);
     }
