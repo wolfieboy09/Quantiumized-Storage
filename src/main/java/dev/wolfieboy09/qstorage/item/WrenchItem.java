@@ -49,35 +49,17 @@ public class WrenchItem extends Item {
         if (currentType != ConnectionType.NONE) {
             // Disconnect the side using PipeNetworkManager directly
             System.out.println("WrenchItem: Disconnecting side " + targetDirection + " at " + pos);
-            PipeNetworkManager.sideDisconnected(level, pos, targetDirection);
+            // Use the new method name
+            PipeNetworkManager.disableConnection(level, pos, targetDirection);
 
-            // Force update the block state
-            level.setBlockAndUpdate(pos, state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), ConnectionType.NONE));
-
-            // Update the connected pipe's block state
-            BlockPos relativePos = pos.relative(targetDirection, 1);
-            BlockState relativeState = level.getBlockState(relativePos);
-            if (relativeState.getBlock() instanceof BasePipeBlock) {
-                level.setBlockAndUpdate(relativePos, relativeState.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection.getOpposite()), ConnectionType.NONE));
-            }
+            // The block state updates are now handled by the PipeNetworkManager
         } else {
             // Reconnect the side using PipeNetworkManager directly
             System.out.println("WrenchItem: Reconnecting side " + targetDirection + " at " + pos);
-            PipeNetworkManager.sideConnected(level, pos, targetDirection);
+            // Use the new method name
+            PipeNetworkManager.enableConnection(level, pos, targetDirection);
 
-            // Force update the block state
-            BasePipeBlock<?> pipe = (BasePipeBlock<?>) state.getBlock();
-            ConnectionType newType = pipe.getConnectorType(level, pos, targetDirection);
-            level.setBlockAndUpdate(pos, state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), newType));
-
-            // Update the connected pipe's block state
-            BlockPos relativePos = pos.relative(targetDirection, 1);
-            BlockState relativeState = level.getBlockState(relativePos);
-            if (relativeState.getBlock() instanceof BasePipeBlock) {
-                BasePipeBlock<?> relativePipe = (BasePipeBlock<?>) relativeState.getBlock();
-                ConnectionType relativeNewType = relativePipe.getConnectorType(level, relativePos, targetDirection.getOpposite());
-                level.setBlockAndUpdate(relativePos, relativeState.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection.getOpposite()), relativeNewType));
-            }
+            // The block state updates are now handled by the PipeNetworkManager
         }
         return InteractionResult.SUCCESS;
     }
