@@ -208,7 +208,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     protected static VoxelShape combineShape(VoxelShape shape, ConnectionType connectorType, VoxelShape cableShape, VoxelShape blockShape) {
         if (connectorType == ConnectionType.PIPE) {
             return Shapes.join(shape, cableShape, BooleanOp.OR);
-        } else if (connectorType == ConnectionType.BLOCK) {
+        } else if (connectorType == ConnectionType.BLOCK_NORMAL) {
             return Shapes.join(shape, Shapes.join(blockShape, cableShape, BooleanOp.OR), BooleanOp.OR);
         } else {
             return shape;

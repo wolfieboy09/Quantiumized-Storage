@@ -99,7 +99,7 @@ public class QSBlockStateProvider extends BlockStateProvider {
                     .rotationX(rotations.getA())
                     .rotationY(rotations.getB())
                     .addModel()
-                    .condition(property, ConnectionType.BLOCK)
+                    .condition(property, ConnectionType.BLOCK_NORMAL)
                     .end();
         });
     }

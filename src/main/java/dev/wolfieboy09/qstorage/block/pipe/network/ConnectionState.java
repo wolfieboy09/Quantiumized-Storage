@@ -18,6 +18,11 @@ public enum ConnectionState {
      * Connected to a compatible block
      */
     CONNECTED_TO_BLOCK,
+
+    /**
+     * Connected to a compatible block, but extracting from it
+     */
+    CONNECTED_TO_BLOCK_TO_EXTRACT,
     
     /**
      * Manually disabled by player

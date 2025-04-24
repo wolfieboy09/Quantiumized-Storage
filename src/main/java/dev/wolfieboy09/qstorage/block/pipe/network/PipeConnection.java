@@ -170,7 +170,8 @@ public class PipeConnection {
     public static ConnectionType toConnectionType(ConnectionState state) {
         return switch (state) {
             case CONNECTED_TO_PIPE -> ConnectionType.PIPE;
-            case CONNECTED_TO_BLOCK -> ConnectionType.BLOCK;
+            case CONNECTED_TO_BLOCK -> ConnectionType.BLOCK_NORMAL;
+            case CONNECTED_TO_BLOCK_TO_EXTRACT -> ConnectionType.BLOCK_EXTRACT;
             default -> ConnectionType.NONE;
         };
     }

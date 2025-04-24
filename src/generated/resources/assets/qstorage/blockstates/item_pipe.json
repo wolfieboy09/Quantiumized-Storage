@@ -7,42 +7,6 @@
     },
     {
       "apply": {
-        "model": "qstorage:block/pipe",
-        "x": 270
-      },
-      "when": {
-        "up": "pipe"
-      }
-    },
-    {
-      "apply": {
-        "model": "qstorage:block/pipe_connected",
-        "x": 270
-      },
-      "when": {
-        "up": "block"
-      }
-    },
-    {
-      "apply": {
-        "model": "qstorage:block/pipe",
-        "y": 90
-      },
-      "when": {
-        "east": "pipe"
-      }
-    },
-    {
-      "apply": {
-        "model": "qstorage:block/pipe_connected",
-        "y": 90
-      },
-      "when": {
-        "east": "block"
-      }
-    },
-    {
-      "apply": {
         "model": "qstorage:block/pipe"
       },
       "when": {
@@ -54,7 +18,7 @@
         "model": "qstorage:block/pipe_connected"
       },
       "when": {
-        "north": "block"
+        "north": "block_normal"
       }
     },
     {
@@ -72,7 +36,7 @@
         "x": 90
       },
       "when": {
-        "down": "block"
+        "down": "block_normal"
       }
     },
     {
@@ -90,7 +54,7 @@
         "y": 180
       },
       "when": {
-        "south": "block"
+        "south": "block_normal"
       }
     },
     {
@@ -108,7 +72,43 @@
         "y": 270
       },
       "when": {
-        "west": "block"
+        "west": "block_normal"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "y": 90
+      },
+      "when": {
+        "east": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "y": 90
+      },
+      "when": {
+        "east": "block_normal"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe",
+        "x": 270
+      },
+      "when": {
+        "up": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qstorage:block/pipe_connected",
+        "x": 270
+      },
+      "when": {
+        "up": "block_normal"
       }
     }
   ]
