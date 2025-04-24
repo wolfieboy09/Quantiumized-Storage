@@ -5,8 +5,6 @@ import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlockEntity;
 import dev.wolfieboy09.qstorage.debug.PipeDebugRendering;
 import dev.wolfieboy09.qstorage.packets.GasFillerModeData;
 import dev.wolfieboy09.qstorage.packets.SyncPipeNetworksPacket;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;

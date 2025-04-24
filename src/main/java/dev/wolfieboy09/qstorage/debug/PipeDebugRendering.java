@@ -15,9 +15,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PipeDebugRendering {
     public static final List<BlockPos> pipes = new ArrayList<>();

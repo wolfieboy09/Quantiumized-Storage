@@ -1,10 +1,7 @@
 package dev.wolfieboy09.qstorage.block.pipe;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qstorage.block.pipe.network.ConnectionState;
-import dev.wolfieboy09.qstorage.block.pipe.network.PipeConnection;
 import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -26,10 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.BlockCapability;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager.getOrCreateSavedData;
 
 @NothingNullByDefault
 public abstract class BasePipeBlock<C> extends Block implements SimpleWaterloggedBlock {

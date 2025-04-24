@@ -2,7 +2,6 @@ package dev.wolfieboy09.qstorage.item;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
-import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import dev.wolfieboy09.qstorage.block.pipe.network.ConnectionState;
 import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
