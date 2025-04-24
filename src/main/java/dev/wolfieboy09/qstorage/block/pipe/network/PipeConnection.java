@@ -4,6 +4,7 @@ import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -167,7 +168,8 @@ public class PipeConnection {
      * @param state The connection state
      * @return The corresponding connection type
      */
-    public static ConnectionType toConnectionType(ConnectionState state) {
+    @Contract(pure = true)
+    public static ConnectionType toConnectionType(@NotNull ConnectionState state) {
         return switch (state) {
             case CONNECTED_TO_PIPE -> ConnectionType.PIPE;
             case CONNECTED_TO_BLOCK -> ConnectionType.BLOCK_NORMAL;

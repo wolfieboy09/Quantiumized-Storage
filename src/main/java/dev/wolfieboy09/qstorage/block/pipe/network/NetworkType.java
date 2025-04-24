@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qstorage.block.pipe.network;
 
 /**
- * Represents the type of a pipe network.
+ * Represents the type of a {@link PipeNetwork}.
  * Different network types can transport different resources.
  */
 public enum NetworkType {

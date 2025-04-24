@@ -578,17 +578,17 @@ public class PipeNetworkData extends SavedData {
 
     /**
      * Adds a pipe to a network.
-     * @param pipePos The position of the pipe
+     *
+     * @param pipePos   The position of the pipe
      * @param networkId The ID of the network
-     * @return True if the pipe was added, false otherwise
      */
-    public boolean addPipeToNetwork(BlockPos pipePos, UUID networkId) {
+    public void addPipeToNetwork(BlockPos pipePos, UUID networkId) {
         // Check if the pipe is already in a network
         UUID existingNetworkId = this.pipeToNetworkMap.get(pipePos);
         if (existingNetworkId != null) {
             // If it's already in the same network, nothing to do
             if (existingNetworkId.equals(networkId)) {
-                return true;
+                return;
             }
 
             // If it's in a different network, remove it from that network first
@@ -603,7 +603,7 @@ public class PipeNetworkData extends SavedData {
         PipeNetwork network = this.networks.get(networkId);
         if (network == null) {
             QuantiumizedStorage.LOGGER.error("Cannot add pipe at {} to non-existent network {}", pipePos, networkId);
-            return false;
+            return;
         }
 
         // Add the pipe to the network
@@ -612,7 +612,6 @@ public class PipeNetworkData extends SavedData {
         // Map the pipe to the network
         this.pipeToNetworkMap.put(pipePos, networkId);
         this.setDirty();
-        return true;
     }
 
     /**

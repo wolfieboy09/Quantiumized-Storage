@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -143,7 +144,7 @@ public class PipeNetwork {
      * Saves the network to NBT.
      * @param tag The tag to save to
      */
-    public void saveToNbt(CompoundTag tag) {
+    public void saveToNbt(@NotNull CompoundTag tag) {
         tag.putUUID("NetworkId", this.networkId);
         tag.putInt("NetworkType", this.networkType.ordinal());
         
@@ -159,7 +160,7 @@ public class PipeNetwork {
      * @param tag The tag to load from
      * @return The loaded network
      */
-    public static PipeNetwork loadFromNbt(CompoundTag tag) {
+    public static @NotNull PipeNetwork loadFromNbt(@NotNull CompoundTag tag) {
         UUID networkId = tag.getUUID("NetworkId");
         int typeOrdinal = tag.getInt("NetworkType");
         NetworkType type = NetworkType.values()[typeOrdinal % NetworkType.values().length];
@@ -180,11 +181,11 @@ public class PipeNetwork {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PipeNetwork that = (PipeNetwork) o;
-        return Objects.equals(networkId, that.networkId);
+        return Objects.equals(this.networkId, that.networkId);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(networkId);
+        return Objects.hash(this.networkId);
     }
 }
