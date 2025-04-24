@@ -88,14 +88,24 @@ public class QSBlockStateProvider extends BlockStateProvider {
         ).forEach((property, rotations) -> {
             multiPartBuilder
                     .part()
+                    // Normal pipe to pipe
                     .modelFile(existingModelFile("block/pipe"))
                     .rotationX(rotations.getA())
                     .rotationY(rotations.getB())
                     .addModel()
                     .condition(property, ConnectionType.PIPE)
                     .end()
+                    // Pipe to block extract state
                     .part()
                     .modelFile(existingModelFile("block/pipe_connected"))
+                    .rotationX(rotations.getA())
+                    .rotationY(rotations.getB())
+                    .addModel()
+                    .condition(property, ConnectionType.BLOCK_EXTRACT)
+                    .end()
+                    // Pipe to block normal
+                    .part()
+                    .modelFile(existingModelFile("block/pipe"))
                     .rotationX(rotations.getA())
                     .rotationY(rotations.getB())
                     .addModel()

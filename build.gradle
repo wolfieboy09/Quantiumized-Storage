@@ -163,13 +163,14 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.register('countLines') {
     group = "Reporting"
-    description = "line counting and class counting"
 
     def srcDir = layout.projectDirectory.dir("src/main/java").asFile
+    def mainDir = layout.projectDirectory.dir("src/main").asFile
 
     doLast {
         def totalLines = 0
         def totalClasses = 0
+        def totalSize = 0L
 
         if (srcDir.exists()) {
             srcDir.eachFileRecurse { file ->
@@ -181,10 +182,20 @@ tasks.register('countLines') {
             }
         }
 
+        if (mainDir.exists()) {
+            mainDir.eachFileRecurse { file ->
+                if (file.isFile()) {
+                    totalSize += file.length()
+                }
+            }
+        }
+
         println "Total Java classes: $totalClasses"
         println "Total lines of code: $totalLines"
+        println "Total source size ${String.format('%.2f', totalSize / 1024.0)} KB"
     }
 }
+
 
 
 
