@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
@@ -129,7 +130,7 @@ public class PipeConnection {
      * Gets all connection states.
      * @return An unmodifiable map of all connection states
      */
-    public Map<Direction, ConnectionState> getAllConnectionStates() {
+    public @Unmodifiable Map<Direction, ConnectionState> getAllConnectionStates() {
         return Collections.unmodifiableMap(this.connectionStates);
     }
 

@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class PipeNetwork {
      * Gets all pipes in the network.
      * @return An unmodifiable set of all pipe positions
      */
-    public Set<BlockPos> getAllMembers() {
+    public @Unmodifiable Set<BlockPos> getAllMembers() {
         return Collections.unmodifiableSet(this.memberPipes);
     }
     
