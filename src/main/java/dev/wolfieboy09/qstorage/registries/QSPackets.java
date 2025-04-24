@@ -2,9 +2,7 @@ package dev.wolfieboy09.qstorage.registries;
 
 import dev.wolfieboy09.qstorage.api.packets.OneWayPacketHandler;
 import dev.wolfieboy09.qstorage.block.gas_filler.GasFillerBlockEntity;
-import dev.wolfieboy09.qstorage.debug.PipeDebugRendering;
 import dev.wolfieboy09.qstorage.packets.GasFillerModeData;
-import dev.wolfieboy09.qstorage.packets.SyncPipeNetworksPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -19,12 +17,6 @@ public final class QSPackets {
                 GasFillerModeData.STREAM_CODEC,
                 new OneWayPacketHandler<>(ServerPayloadHandler::handleGasFillerMode)
         );
-
-        registrar.playToClient(
-                SyncPipeNetworksPacket.TYPE,
-                SyncPipeNetworksPacket.STREAM_CODEC,
-                new OneWayPacketHandler<>(ClientPayloadHandler::handleSync)
-        );
     }
 
     public static class ServerPayloadHandler {
@@ -33,13 +25,6 @@ public final class QSPackets {
             if (blockEntity instanceof GasFillerBlockEntity gasFiller) {
                 gasFiller.setState(payload.state());
             }
-        }
-    }
-
-    public static class ClientPayloadHandler {
-        public static void handleSync(SyncPipeNetworksPacket payload, IPayloadContext context) {
-            PipeDebugRendering.pipes.clear();
-            PipeDebugRendering.pipes.addAll(payload.posList());
         }
     }
 }
