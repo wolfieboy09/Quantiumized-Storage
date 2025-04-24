@@ -1,7 +1,10 @@
 package dev.wolfieboy09.qstorage.block.pipe;
 
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qstorage.block.pipe.network.ConnectionState;
+import dev.wolfieboy09.qstorage.block.pipe.network.PipeConnection;
 import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -9,9 +12,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -27,6 +28,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager.getOrCreateSavedData;
 
 @NothingNullByDefault
 public abstract class BasePipeBlock<C> extends Block implements SimpleWaterloggedBlock {
@@ -74,8 +77,10 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 .setValue(SOUTH, ConnectionType.NONE)
                 .setValue(WEST, ConnectionType.NONE)
                 .setValue(WATER_LOGGED, false);
-
-        return calculateState(context.getLevel(), context.getClickedPos(), state);
+        for (Direction direction : Direction.values()) {
+            state = PipeNetworkManager.updatePipeBlockState(state, context.getLevel(), context.getClickedPos(), direction);
+        }
+        return state;
     }
 
     @Override
@@ -129,15 +134,11 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
 
-
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         if (!level.isClientSide) {
-            for (Direction direction : Direction.values()) {
-                state = updateBlockState(state, level, pos, direction);
-            }
             if (!state.is(oldState.getBlock())) {
-                PipeNetworkManager.addPipe(level, pos);
+                PipeNetworkManager.onPipePlaced(level, pos);
             }
         }
     }
@@ -145,23 +146,9 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!level.isClientSide && !state.is(newState.getBlock())) {
-            PipeNetworkManager.removePipe(level, pos);
+            PipeNetworkManager.onPipeRemoved(level, pos);
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
-    }
-
-    private BlockState updateBlockState(BlockState state, Level level, BlockPos pos, Direction facing) {
-        // Check if the side is disconnected
-        if (PipeNetworkManager.isSideDisconnected(level, pos, facing)) {
-            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.NONE);
-        } else if (canConnectToPipe(level, pos, facing)) {
-            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.PIPE);
-        } else if (canConnectToBlock(level, pos, facing)) {
-            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.BLOCK);
-        } else {
-            state = state.setValue(getPropertyFromDirection(facing), ConnectionType.NONE);
-        }
-        return state;
     }
 
     @Override
@@ -169,52 +156,14 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         if (state.getValue(WATER_LOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-
-//        if (state.getValue(LAVA_LOGGED)) {
-//            level.scheduleTick(pos, Fluids.LAVA, Fluids.LAVA.getTickDelay(level));
-//        }
-
-        return calculateState((Level) level, pos, state);
-    }
-
-    private @NotNull BlockState calculateState(Level world, BlockPos pos, BlockState state) {
-        ConnectionType north = getConnectorType(world, pos, Direction.NORTH);
-        ConnectionType south = getConnectorType(world, pos, Direction.SOUTH);
-        ConnectionType west = getConnectorType(world, pos, Direction.WEST);
-        ConnectionType east = getConnectorType(world, pos, Direction.EAST);
-        ConnectionType up = getConnectorType(world, pos, Direction.UP);
-        ConnectionType down = getConnectorType(world, pos, Direction.DOWN);
-        state = state.setValue(NORTH, north)
-                .setValue(SOUTH, south)
-                .setValue(WEST, west)
-                .setValue(EAST, east)
-                .setValue(UP, up)
-                .setValue(DOWN, down);
         return state;
     }
 
-    public ConnectionType getConnectorType(Level world, BlockPos connectorPos, Direction facing) {
-//        System.out.println("BasePipeBlock.getConnectorType: " + connectorPos + " facing " + facing);
-        BlockPos pos = connectorPos.relative(facing);
-        BlockState state = world.getBlockState(pos);
-
-        // Check if the side is disconnected in the pipe network
-        boolean isDisconnected = PipeNetworkManager.isSideDisconnected(world, connectorPos, facing);
-//        System.out.println("BasePipeBlock.getConnectorType: Is side disconnected? " + isDisconnected);
-        if (isDisconnected) {
-//            System.out.println("BasePipeBlock.getConnectorType: Returning NONE because side is disconnected");
-            return ConnectionType.NONE;
-        }
-
-        if (state.is(this)) {
-//            System.out.println("BasePipeBlock.getConnectorType: Returning PIPE because target is a pipe");
-            return ConnectionType.PIPE;
-        } else if (canConnectToBlock(world, connectorPos, facing)) {
-//            System.out.println("BasePipeBlock.getConnectorType: Returning BLOCK because can connect to block");
-            return ConnectionType.BLOCK;
-        } else {
-//            System.out.println("BasePipeBlock.getConnectorType: Returning NONE because cannot connect");
-            return ConnectionType.NONE;
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+        if (!level.isClientSide) {
+            PipeNetworkManager.onPipeUpdated(level, pos);
         }
     }
 
@@ -227,35 +176,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
             case UP -> BasePipeBlock.UP;
             case DOWN -> BasePipeBlock.DOWN;
         };
-    }
-
-    private boolean canConnectToBlock(Level world, BlockPos pos, Direction facing) {
-        // Check if the side is disconnected in the pipe network
-        if (PipeNetworkManager.isSideDisconnected(world, pos, facing)) {
-            return false;
-        }
-
-        return world.getCapability(this.capability, pos.relative(facing), facing.getOpposite()) != null;
-    }
-
-    public boolean isAbleToConnect(Level world, BlockPos pos, Direction facing) {
-        return canConnectToPipe(world, pos, facing) || canConnectToBlock(world, pos, facing);
-    }
-
-    private boolean canConnectToPipe(Level world, BlockPos pos, Direction facing) {
-        // Check if the side is disconnected in the pipe network
-        if (PipeNetworkManager.isSideDisconnected(world, pos, facing)) {
-            return false;
-        }
-
-        BlockState state = world.getBlockState(pos.relative(facing));
-        BlockPos relativePos = pos.relative(facing);
-
-        if (state.is(this)) {
-            // Check if the other pipe has disconnected this side
-            return !PipeNetworkManager.isSideDisconnected(world, relativePos, facing.getOpposite());
-        }
-        return false;
     }
 
     protected void createShapeCache() {
@@ -299,5 +219,9 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         } else {
             return shape;
         }
+    }
+
+    public BlockCapability<C, @Nullable Direction> getCapability() {
+        return this.capability;
     }
 }
