@@ -209,7 +209,9 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
         if (connectorType == ConnectionType.PIPE) {
             return Shapes.join(shape, cableShape, BooleanOp.OR);
         } else if (connectorType == ConnectionType.BLOCK_NORMAL) {
-            return Shapes.join(shape, Shapes.join(blockShape, cableShape, BooleanOp.OR), BooleanOp.OR);
+            return Shapes.join(shape, Shapes.join(shape, cableShape, BooleanOp.OR), BooleanOp.OR);
+        } else if (connectorType == ConnectionType.BLOCK_EXTRACT) {
+                return Shapes.join(shape, Shapes.join(blockShape, cableShape, BooleanOp.OR), BooleanOp.OR);
         } else {
             return shape;
         }

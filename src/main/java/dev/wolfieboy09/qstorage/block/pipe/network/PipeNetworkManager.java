@@ -265,6 +265,8 @@ public class PipeNetworkManager {
         ConnectionType connectionType = PipeConnection.toConnectionType(connectionState);
         level.setBlockAndUpdate(pipePos, state.setValue(BasePipeBlock.getPropertyFromDirection(direction), connectionType));
 
+        onPipeUpdated(level, pipePos);
+
         // Update the connected pipe
         BlockPos neighborPos = pipePos.relative(direction);
         if (level.getBlockState(neighborPos).getBlock() instanceof BasePipeBlock) {
@@ -571,5 +573,33 @@ public class PipeNetworkManager {
                 QuantiumizedStorage.LOGGER.info("Merged networks {} and {} during verification", currentNetworkId, neighborNetworkId);
             }
         }
+    }
+
+    public static void disableExtraction(Level level, BlockPos pos, Direction targetDirection) {
+        if (level.isClientSide) return;
+        PipeNetworkData savedData = getOrCreateSavedData(level);
+        if (savedData == null) return;
+
+        savedData.setConnectionState(pos, targetDirection, ConnectionState.CONNECTED_TO_BLOCK);
+        BlockState state = level.getBlockState(pos);
+        level.setBlockAndUpdate(pos, state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), PipeConnection.toConnectionType(ConnectionState.CONNECTED_TO_BLOCK)));
+    }
+
+    public static void enableExtraction(Level level, BlockPos pos, Direction targetDirection) {
+        if (level.isClientSide) return;
+        PipeNetworkData savedData = getOrCreateSavedData(level);
+        if (savedData == null) return;
+
+        savedData.setConnectionState(pos, targetDirection, ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT);
+        BlockState state = level.getBlockState(pos);
+        level.setBlockAndUpdate(pos, state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), PipeConnection.toConnectionType(ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT)));
+    }
+
+    public static ConnectionState getConnectionState(Level level, BlockPos pos, Direction targetDirection) {
+        if (level.isClientSide) return ConnectionState.NONE;
+        PipeNetworkData savedData = getOrCreateSavedData(level);
+        if (savedData == null) return ConnectionState.NONE;
+
+        return savedData.getConnectionState(pos, targetDirection);
     }
 }

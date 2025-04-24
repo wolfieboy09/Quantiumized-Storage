@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qstorage.item;
 
+import dev.wolfieboy09.qstorage.QuantiumizedStorage;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qstorage.block.pipe.network.ConnectionState;
@@ -31,7 +32,7 @@ public class WrenchItem extends Item {
         Level level = context.getLevel();
         Vec3 clickLocation = context.getClickLocation();
         Player player = context.getPlayer();
-        if (level.isClientSide() || player == null || !player.isCrouching()) return InteractionResult.PASS;
+        if (level.isClientSide() || player == null) return InteractionResult.PASS;
 
         // Now we know the player is crouching, we can use the wrench
         double relX = clickLocation.x() - pos.getX();
@@ -43,14 +44,24 @@ public class WrenchItem extends Item {
         if (!(state.getBlock() instanceof BasePipeBlock<?>)) return InteractionResult.PASS;
 
         // Check if the side is currently connected
-        ConnectionState connectionState = PipeNetworkManager.determineConnectionState(level, pos, targetDirection);
-        if (connectionState == ConnectionState.CONNECTED_TO_PIPE || connectionState == ConnectionState.CONNECTED_TO_BLOCK) {
-            // The side is already connected, so we need to disconnect it
-            System.out.println("WrenchItem: Disconnecting side " + targetDirection + " at " + pos);
-            PipeNetworkManager.disableConnection(level, pos, targetDirection);
-        } else {
-            System.out.println("WrenchItem: Reconnecting side " + targetDirection + " at " + pos);
+        ConnectionState connectionState = PipeNetworkManager.getConnectionState(level, pos, targetDirection);
+        boolean isCrouching = player.isCrouching();
+        boolean isConnection = connectionState == ConnectionState.CONNECTED_TO_PIPE || connectionState == ConnectionState.CONNECTED_TO_BLOCK;
+        boolean isDisabled = connectionState == ConnectionState.MANUALLY_DISABLED;
+        boolean isExtraction = connectionState == ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT;
+        boolean isBlockConnection = connectionState == ConnectionState.CONNECTED_TO_BLOCK;
+        if (isCrouching && isConnection) {
+            QuantiumizedStorage.LOGGER.debug("WrenchItem: Disconnecting side {} at {}", targetDirection, pos);
+            PipeNetworkManager.disableConnection(level, pos, targetDirection);}
+        else if (!isExtraction && !isCrouching && isBlockConnection) {
+            QuantiumizedStorage.LOGGER.debug("WrenchItem: Extraction Enable side {} at {}", targetDirection, pos);
+            PipeNetworkManager.enableExtraction(level, pos, targetDirection);
+        } else if (isCrouching && isDisabled){
+            QuantiumizedStorage.LOGGER.debug("WrenchItem: Reconnecting side {} at {}", targetDirection, pos);
             PipeNetworkManager.enableConnection(level, pos, targetDirection);
+        } else if (!isCrouching && isExtraction){
+            QuantiumizedStorage.LOGGER.debug("WrenchItem: Extraction Disable side {} at {}", targetDirection, pos);
+            PipeNetworkManager.disableExtraction(level, pos, targetDirection);
         }
         return InteractionResult.SUCCESS;
     }
