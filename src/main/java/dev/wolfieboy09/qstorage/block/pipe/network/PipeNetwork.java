@@ -165,7 +165,7 @@ public class PipeNetwork {
         
         PipeNetwork network = new PipeNetwork(networkId, type);
         
-        ListTag membersList = tag.getList("Members", 10); // 10 is the ID for CompoundTag
+        ListTag membersList = tag.getList("Members", 11);
         for (net.minecraft.nbt.Tag value : membersList) {
           BlockPos pos = BlockPos.CODEC.decode(NbtOps.INSTANCE, value).getOrThrow().getFirst();
           network.addMember(pos);

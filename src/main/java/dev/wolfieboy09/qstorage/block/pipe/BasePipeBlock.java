@@ -69,7 +69,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        getOrCreateSavedData(context.getLevel());
         BlockState state = this.defaultBlockState()
                 .setValue(UP, ConnectionType.NONE)
                 .setValue(DOWN, ConnectionType.NONE)
@@ -78,8 +77,10 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 .setValue(SOUTH, ConnectionType.NONE)
                 .setValue(WEST, ConnectionType.NONE)
                 .setValue(WATER_LOGGED, false);
-
-        return calculateState(context.getLevel(), context.getClickedPos(), state);
+        for (Direction direction : Direction.values()) {
+            state = PipeNetworkManager.updatePipeBlockState(state, context.getLevel(), context.getClickedPos(), direction);
+        }
+        return state;
     }
 
     @Override
@@ -133,15 +134,9 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     }
 
 
-
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         if (!level.isClientSide) {
-            for (Direction direction : Direction.values()) {
-                state = PipeNetworkManager.updatePipeBlockState(state, level, pos, direction, this.capability);
-            }
-            level.setBlockAndUpdate(pos, state);
-
             if (!state.is(oldState.getBlock())) {
                 PipeNetworkManager.onPipePlaced(level, pos);
             }
@@ -162,35 +157,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         return state;
-    }
-
-    private @NotNull BlockState calculateState(Level world, BlockPos pos, BlockState state) {
-        ConnectionType north = getConnectorType(world, pos, Direction.NORTH);
-        ConnectionType south = getConnectorType(world, pos, Direction.SOUTH);
-        ConnectionType west = getConnectorType(world, pos, Direction.WEST);
-        ConnectionType east = getConnectorType(world, pos, Direction.EAST);
-        ConnectionType up = getConnectorType(world, pos, Direction.UP);
-        ConnectionType down = getConnectorType(world, pos, Direction.DOWN);
-        state = state.setValue(NORTH, north)
-                .setValue(SOUTH, south)
-                .setValue(WEST, west)
-                .setValue(EAST, east)
-                .setValue(UP, up)
-                .setValue(DOWN, down);
-        return state;
-    }
-
-    /**
-     * Determines the type of connection in the specified direction.
-     * @param world The level containing the pipe
-     * @param connectorPos The position of the pipe
-     * @param facing The direction to check
-     * @return The type of connection
-     */
-    public ConnectionType getConnectorType(Level world, BlockPos connectorPos, Direction facing) {
-//        TODO: Load from saved data first
-        ConnectionState connectionState = PipeNetworkManager.determineConnectionState(world, connectorPos, facing);
-        return PipeConnection.toConnectionType(connectionState);
     }
 
     @Override

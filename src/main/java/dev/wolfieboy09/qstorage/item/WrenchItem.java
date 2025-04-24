@@ -3,6 +3,7 @@ package dev.wolfieboy09.qstorage.item;
 import dev.wolfieboy09.qstorage.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qstorage.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qstorage.block.pipe.ConnectionType;
+import dev.wolfieboy09.qstorage.block.pipe.network.ConnectionState;
 import dev.wolfieboy09.qstorage.block.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +21,7 @@ public class WrenchItem extends Item {
         super(new Item.Properties());
     }
 
-    private static final double CONNECTION_THRESHOLD = 0.25;
+    private static final double CONNECTION_THRESHOLD = 0.4;
     private static final double CENTER_THRESHOLD_MIN = CONNECTION_THRESHOLD;
     private static final double CENTER_THRESHOLD_MAX = 1.0 - CONNECTION_THRESHOLD;
 
@@ -33,8 +34,7 @@ public class WrenchItem extends Item {
         Player player = context.getPlayer();
         if (level.isClientSide() || player == null || !player.isCrouching()) return InteractionResult.PASS;
 
-        //        Now we know the player is crouching, we can use the wrench
-
+        // Now we know the player is crouching, we can use the wrench
         double relX = clickLocation.x() - pos.getX();
         double relY = clickLocation.y() - pos.getY();
         double relZ = clickLocation.z() - pos.getZ();
@@ -44,22 +44,14 @@ public class WrenchItem extends Item {
         if (!(state.getBlock() instanceof BasePipeBlock<?>)) return InteractionResult.PASS;
 
         // Check if the side is currently connected
-        ConnectionType currentType = state.getValue(BasePipeBlock.getPropertyFromDirection(targetDirection));
-
-        if (currentType != ConnectionType.NONE) {
-            // Disconnect the side using PipeNetworkManager directly
+        ConnectionState connectionState = PipeNetworkManager.determineConnectionState(level, pos, targetDirection);
+        if (connectionState == ConnectionState.CONNECTED_TO_PIPE || connectionState == ConnectionState.CONNECTED_TO_BLOCK) {
+            // The side is already connected, so we need to disconnect it
             System.out.println("WrenchItem: Disconnecting side " + targetDirection + " at " + pos);
-            // Use the new method name
             PipeNetworkManager.disableConnection(level, pos, targetDirection);
-
-            // The block state updates are now handled by the PipeNetworkManager
         } else {
-            // Reconnect the side using PipeNetworkManager directly
             System.out.println("WrenchItem: Reconnecting side " + targetDirection + " at " + pos);
-            // Use the new method name
             PipeNetworkManager.enableConnection(level, pos, targetDirection);
-
-            // The block state updates are now handled by the PipeNetworkManager
         }
         return InteractionResult.SUCCESS;
     }

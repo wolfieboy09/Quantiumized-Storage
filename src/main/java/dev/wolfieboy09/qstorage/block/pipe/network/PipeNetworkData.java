@@ -67,7 +67,7 @@ public class PipeNetworkData extends SavedData {
                 UUID networkId = network.getNetworkId();
                 this.networks.put(networkId, network);
                 for (BlockPos pos : network.getAllMembers()) {
-                    this.addPipeToNetwork(pos, networkId);
+                    this.pipeToNetworkMap.put(pos, networkId); // Directly map
                 }
             }
         }
@@ -142,15 +142,6 @@ public class PipeNetworkData extends SavedData {
         this.pipeConnections.remove(pipePos);
         this.removePipeFromNetwork(pipePos);
         this.setDirty();
-    }
-
-    /**
-     * Checks if a pipe is registered.
-     * @param pipePos The position of the pipe
-     * @return True if the pipe is registered, false otherwise
-     */
-    public boolean isPipeRegistered(BlockPos pipePos) {
-        return this.pipeConnections.containsKey(pipePos);
     }
 
     /**
@@ -231,16 +222,6 @@ public class PipeNetworkData extends SavedData {
     }
 
     /**
-     * Assigns a pipe to a network.
-     * @param pipePos The position of the pipe
-     * @param networkId The ID of the network
-     */
-    public void assignPipeToNetwork(BlockPos pipePos, UUID networkId) {
-        this.addPipeToNetwork(pipePos, networkId);
-        this.setDirty();
-    }
-
-    /**
      * Removes a pipe from its network.
      * @param pipePos The position of the pipe
      */
@@ -268,17 +249,6 @@ public class PipeNetworkData extends SavedData {
      */
     public UUID getNetworkForPipe(BlockPos pipePos) {
         return this.pipeToNetworkMap.get(pipePos);
-    }
-
-    /**
-     * Gets the network for a pipe.
-     * @param pipePos The position of the pipe
-     * @return The network, or null if not found
-     */
-    public PipeNetwork getNetworkForPipeObj(BlockPos pipePos) {
-        UUID networkId = this.pipeToNetworkMap.get(pipePos);
-        if (networkId == null) return null;
-        return this.networks.get(networkId);
     }
 
     /**
@@ -446,7 +416,7 @@ public class PipeNetworkData extends SavedData {
      * @return An unmodifiable set of all networks
      */
     public Set<PipeNetwork> getAllNetworks() {
-        return Collections.unmodifiableSet(new HashSet<>(this.networks.values()));
+        return Set.copyOf(this.networks.values());
     }
 
     /**
@@ -465,44 +435,12 @@ public class PipeNetworkData extends SavedData {
     }
 
     /**
-     * Finds all pipes connected to a starting pipe based on physical adjacency only.
-     * This method does not check connection states and is used for network splitting
-     * after we've already determined that a split is needed.
+     * Finds all pipes connected to a starting pipe, taking into account connection states.
      * @param startPos The position of the starting pipe
      * @param validPipes The set of valid pipes to consider
      * @return A set of connected pipe positions
      */
     public Set<BlockPos> findConnectedPipes(BlockPos startPos, Set<BlockPos> validPipes) {
-        Set<BlockPos> connectedPipes = new HashSet<>();
-        Queue<BlockPos> queue = new LinkedList<>();
-        queue.add(startPos);
-
-        while (!queue.isEmpty()) {
-            BlockPos current = queue.poll();
-            if (connectedPipes.contains(current)) continue;
-
-            connectedPipes.add(current);
-
-            // Add connected neighbors to queue
-            for (Direction dir : Direction.values()) {
-                BlockPos neighbor = current.relative(dir);
-                if (validPipes.contains(neighbor) && !connectedPipes.contains(neighbor)) {
-                    queue.add(neighbor);
-                }
-            }
-        }
-
-        return connectedPipes;
-    }
-
-    /**
-     * Finds all pipes connected to a starting pipe, taking into account connection states.
-     * @param level The level containing the pipes
-     * @param startPos The position of the starting pipe
-     * @param validPipes The set of valid pipes to consider
-     * @return A set of connected pipe positions
-     */
-    public Set<BlockPos> findConnectedPipes(Level level, BlockPos startPos, Set<BlockPos> validPipes) {
         Set<BlockPos> connectedPipes = new HashSet<>();
         Queue<BlockPos> queue = new LinkedList<>();
         Set<BlockPos> visited = new HashSet<>(); // Track visited positions to avoid cycles
@@ -591,7 +529,7 @@ public class PipeNetworkData extends SavedData {
             for (Direction dir : Direction.values()) {
                 BlockPos neighbor = current.relative(dir);
 
-                // If the neighbor is in the same network and we haven't visited it yet
+                // If the neighbor is in the same network, and we haven't visited it yet
                 if (arePipesConnected(current, neighbor) && !cameFrom.containsKey(neighbor)) {
                     queue.add(neighbor);
                     cameFrom.put(neighbor, current);
@@ -722,63 +660,5 @@ public class PipeNetworkData extends SavedData {
 
         QuantiumizedStorage.LOGGER.debug("Found {} connected networks for pipe at {}", connectedNetworks.size(), pipePos);
         return connectedNetworks;
-    }
-
-    /**
-     * Legacy support: Gets or creates a pipe connection.
-     * @param pos The position of the pipe
-     * @return The pipe connection
-     */
-    public PipeConnection getOrCreatePipe(BlockPos pos) {
-        QuantiumizedStorage.LOGGER.debug("PipeNetworkData.getOrCreatePipe: {}", pos);
-        PipeConnection connection = this.pipeConnections.computeIfAbsent(pos, PipeConnection::new);
-        QuantiumizedStorage.LOGGER.debug("PipeNetworkData.getOrCreatePipe: Created connection, disconnectedSides = {}", connection.getDisconnectedSides());
-        this.setDirty();
-        return connection;
-    }
-
-    /**
-     * Legacy support: Removes a pipe.
-     * @param pos The position of the pipe
-     */
-    public void removePipe(BlockPos pos) {
-        unregisterPipe(pos);
-    }
-
-    /**
-     * Legacy support: Gets a pipe connection.
-     * @param pos The position of the pipe
-     * @return An optional containing the pipe connection
-     */
-    public Optional<PipeConnection> getPipe(BlockPos pos) {
-        return Optional.ofNullable(getPipeConnection(pos));
-    }
-
-    /**
-     * Legacy support: Disconnects a side of a pipe.
-     * @param pos The position of the pipe
-     * @param side The side to disconnect
-     */
-    public void disconnectSide(BlockPos pos, Direction side) {
-        disableConnection(pos, side);
-    }
-
-    /**
-     * Legacy support: Reconnects a side of a pipe.
-     * @param pos The position of the pipe
-     * @param side The side to reconnect
-     */
-    public void reconnectSide(BlockPos pos, Direction side) {
-        enableConnection(pos, side);
-    }
-
-    /**
-     * Legacy support: Checks if a side of a pipe is disconnected.
-     * @param pos The position of the pipe
-     * @param side The side to check
-     * @return True if the side is disconnected, false otherwise
-     */
-    public boolean isSideDisconnected(BlockPos pos, Direction side) {
-        return !isConnectionEnabled(pos, side);
     }
 }

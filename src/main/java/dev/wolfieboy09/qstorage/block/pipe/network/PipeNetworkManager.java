@@ -19,7 +19,7 @@ import java.util.*;
  * This class provides the main API for interacting with pipe networks.
  */
 public class PipeNetworkManager {
-    private static final String SAVED_DATA_NAME = "qstorage_pipe_networks";
+    private static final String SAVED_DATA_NAME = QuantiumizedStorage.MOD_ID + "_pipe_networks";
 
     /**
      * Gets or creates the SavedData for a level.
@@ -91,14 +91,6 @@ public class PipeNetworkManager {
 
                     // Update the neighbor's connection state
                     savedData.setConnectionState(neighborPos, dir.getOpposite(), ConnectionState.NONE);
-
-                    // Update the neighbor's block state
-                    BlockState neighborState = level.getBlockState(neighborPos);
-                    if (neighborState.getBlock() instanceof BasePipeBlock) {
-                        level.setBlockAndUpdate(neighborPos, neighborState.setValue(
-                                BasePipeBlock.getPropertyFromDirection(dir.getOpposite()),
-                                ConnectionType.NONE));
-                    }
                 }
             }
         }
@@ -117,7 +109,7 @@ public class PipeNetworkManager {
                 if (!members.isEmpty()) {
                     // Start from any pipe in the network
                     BlockPos startPos = members.iterator().next();
-                    Set<BlockPos> connectedPipes = savedData.findConnectedPipes(level, startPos, members);
+                    Set<BlockPos> connectedPipes = savedData.findConnectedPipes(startPos, members);
                     if (connectedPipes.size() < members.size()) {
                         // The network is split, so we need to create new networks
                         Set<PipeNetwork> resultingNetworks = savedData.splitNetwork(networkId);
@@ -341,7 +333,7 @@ public class PipeNetworkManager {
                     // This ensures we're checking connectivity from the perspective of the affected pipe
                     if (network.containsMember(neighborPos)) {
                         BlockPos startPos = neighborPos;
-                        Set<BlockPos> connectedPipes = savedData.findConnectedPipes(level, startPos, network.getAllMembers());
+                        Set<BlockPos> connectedPipes = savedData.findConnectedPipes(startPos, network.getAllMembers());
                         if (connectedPipes.size() < network.getMemberCount()) {
                             Set<PipeNetwork> resultingNetworks = savedData.splitNetwork(networkId);
                             QuantiumizedStorage.LOGGER.info("Split network {} into {} networks", networkId, resultingNetworks.size());
@@ -363,7 +355,7 @@ public class PipeNetworkManager {
                                 .orElse(null);
 
                         if (startPos != null) {
-                            Set<BlockPos> connectedPipes = savedData.findConnectedPipes(level, startPos, network.getAllMembers());
+                            Set<BlockPos> connectedPipes = savedData.findConnectedPipes(startPos, network.getAllMembers());
                             if (connectedPipes.size() < network.getMemberCount()) {
                                 Set<PipeNetwork> resultingNetworks = savedData.splitNetwork(networkId);
                                 QuantiumizedStorage.LOGGER.info("Split network {} into {} networks", networkId, resultingNetworks.size());
@@ -442,7 +434,6 @@ public class PipeNetworkManager {
      * @return True if the pipe can connect, false otherwise
      */
     public static boolean canConnectToPipe(Level level, BlockPos pipePos, Direction direction) {
-        // Check if the connection is enabled
         if (!isConnectionEnabled(level, pipePos, direction)) {
             return false;
         }
@@ -451,7 +442,6 @@ public class PipeNetworkManager {
         BlockState neighborState = level.getBlockState(neighborPos);
 
         if (neighborState.getBlock() instanceof BasePipeBlock) {
-            // Check if the neighbor's connection is enabled
             return isConnectionEnabled(level, neighborPos, direction.getOpposite());
         }
         return false;
@@ -466,7 +456,6 @@ public class PipeNetworkManager {
      * @return True if the pipe can connect, false otherwise
      */
     public static <C> boolean canConnectToBlock(Level level, BlockPos pipePos, Direction direction, BlockCapability<C, @Nullable Direction> capability) {
-        // Check if the connection is enabled
         if (!isConnectionEnabled(level, pipePos, direction)) {
             return false;
         }
@@ -480,10 +469,9 @@ public class PipeNetworkManager {
      * @param level The level containing the pipe
      * @param pipePos The position of the pipe
      * @param direction The direction to update
-     * @param capability The capability to check for block connections
      * @return The updated block state
      */
-    public static <C> BlockState updatePipeBlockState(BlockState state, Level level, BlockPos pipePos, Direction direction, BlockCapability<C, @Nullable Direction> capability) {
+    public static BlockState updatePipeBlockState(BlockState state, Level level, BlockPos pipePos, Direction direction) {
         ConnectionState connectionState = determineConnectionState(level, pipePos, direction);
         ConnectionType connectionType = PipeConnection.toConnectionType(connectionState);
         return state.setValue(BasePipeBlock.getPropertyFromDirection(direction), connectionType);
@@ -496,31 +484,26 @@ public class PipeNetworkManager {
      */
     private static void updatePipeConnections(Level level, BlockPos pipePos) {
         BlockState state = level.getBlockState(pipePos);
-        if (!(state.getBlock() instanceof BasePipeBlock<?> pipeBlock)) return;
+        if (!(state.getBlock() instanceof BasePipeBlock<?>)) return;
 
         PipeNetworkData savedData = getOrCreateSavedData(level);
         if (savedData == null) return;
 
-        // First, determine all connection states
         Map<Direction, ConnectionState> connectionStates = new EnumMap<>(Direction.class);
         for (Direction dir : Direction.values()) {
             ConnectionState connectionState = determineConnectionState(level, pipePos, dir);
             connectionStates.put(dir, connectionState);
         }
 
-        // Then, update the pipe and its neighbors
         for (Direction dir : Direction.values()) {
             ConnectionState connectionState = connectionStates.get(dir);
 
-            // Save the connection state to the PipeNetworkData
             savedData.setConnectionState(pipePos, dir, connectionState);
 
-            // Update the block state for visual rendering
             ConnectionType connectionType = PipeConnection.toConnectionType(connectionState);
             state = state.setValue(BasePipeBlock.getPropertyFromDirection(dir), connectionType);
         }
 
-        // Finally, update the pipe's block state
         level.setBlockAndUpdate(pipePos, state);
     }
 
@@ -529,7 +512,7 @@ public class PipeNetworkManager {
      * @param level The level containing the pipe
      * @param pipePos The position of the pipe
      */
-    private static void verifyAndFixNetworks(Level level, BlockPos pipePos) {
+    public static void verifyAndFixNetworks(Level level, BlockPos pipePos) {
         if (level.isClientSide) return;
 
         PipeNetworkData savedData = getOrCreateSavedData(level);
@@ -539,16 +522,13 @@ public class PipeNetworkManager {
 
         // If the pipe isn't in a network, create one
         if (currentNetworkId == null) {
-            // First try to find connected networks
             Set<UUID> connectedNetworks = savedData.findConnectedNetworks(pipePos, level);
             if (!connectedNetworks.isEmpty()) {
-                // Join an existing network
                 UUID targetNetworkId = connectedNetworks.iterator().next();
                 savedData.addPipeToNetwork(pipePos, targetNetworkId);
                 QuantiumizedStorage.LOGGER.info("Added pipe at {} to network {} during verification", pipePos, targetNetworkId);
                 currentNetworkId = targetNetworkId;
             } else {
-                // Create a new network
                 PipeNetwork network = savedData.createNetwork(pipePos, NetworkType.UNIVERSAL);
                 QuantiumizedStorage.LOGGER.info("Created new network {} for pipe at {} during verification", network.getNetworkId(), pipePos);
                 currentNetworkId = network.getNetworkId();
@@ -560,7 +540,6 @@ public class PipeNetworkManager {
             BlockPos neighborPos = pipePos.relative(dir);
             BlockState neighborState = level.getBlockState(neighborPos);
 
-            // Skip if not a pipe or can't connect
             if (!(neighborState.getBlock() instanceof BasePipeBlock)) continue;
 
             ConnectionState connectionState = savedData.getConnectionState(pipePos, dir);
@@ -570,7 +549,6 @@ public class PipeNetworkManager {
                     savedData.setConnectionState(pipePos, dir, ConnectionState.CONNECTED_TO_PIPE);
                     savedData.setConnectionState(neighborPos, dir.getOpposite(), ConnectionState.CONNECTED_TO_PIPE);
 
-                    // Update block states
                     BlockState pipeState = level.getBlockState(pipePos);
                     level.setBlockAndUpdate(pipePos, pipeState.setValue(
                             BasePipeBlock.getPropertyFromDirection(dir), ConnectionType.PIPE));
@@ -586,166 +564,12 @@ public class PipeNetworkManager {
             // Check if neighbor is in a different network
             UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
             if (neighborNetworkId == null) {
-                // Add neighbor to this network
                 savedData.addPipeToNetwork(neighborPos, currentNetworkId);
                 QuantiumizedStorage.LOGGER.info("Added neighbor at {} to network {} during verification", neighborPos, currentNetworkId);
             } else if (!neighborNetworkId.equals(currentNetworkId)) {
-                // Merge networks
                 savedData.mergeNetworks(currentNetworkId, neighborNetworkId);
                 QuantiumizedStorage.LOGGER.info("Merged networks {} and {} during verification", currentNetworkId, neighborNetworkId);
             }
         }
-    }
-
-    /**
-     * Gets the network ID for a pipe.
-     * @param level The level containing the pipe
-     * @param pipePos The position of the pipe
-     * @return The network ID, or null if not found
-     */
-    public static UUID getNetworkForPipe(Level level, BlockPos pipePos) {
-        if (level.isClientSide) return null;
-
-        PipeNetworkData savedData = getOrCreateSavedData(level);
-        if (savedData == null) return null;
-
-        return savedData.getNetworkForPipe(pipePos);
-    }
-
-    /**
-     * Gets all pipes in a network.
-     * @param level The level containing the network
-     * @param networkId The ID of the network
-     * @return A set of pipe positions, or an empty set if not found
-     */
-    public static Set<BlockPos> getNetworkMembers(Level level, UUID networkId) {
-        if (level.isClientSide) return Collections.emptySet();
-
-        PipeNetworkData savedData = getOrCreateSavedData(level);
-        if (savedData == null) return Collections.emptySet();
-
-        PipeNetwork network = savedData.getNetworkById(networkId);
-        if (network == null) return Collections.emptySet();
-
-        return network.getAllMembers();
-    }
-
-    /**
-     * Gets all pipes connected to a starting pipe.
-     * @param level The level containing the pipes
-     * @param startPos The position of the starting pipe
-     * @return A set of connected pipe positions
-     */
-    public static Set<BlockPos> getConnectedPipes(Level level, BlockPos startPos) {
-        if (level.isClientSide) return Collections.emptySet();
-
-        PipeNetworkData savedData = getOrCreateSavedData(level);
-        if (savedData == null) return Collections.emptySet();
-
-        UUID networkId = savedData.getNetworkForPipe(startPos);
-        if (networkId == null) return Collections.singleton(startPos);
-
-        PipeNetwork network = savedData.getNetworkById(networkId);
-        if (network == null) return Collections.singleton(startPos);
-
-        return network.getAllMembers();
-    }
-
-    /**
-     * Legacy support: Gets or creates a pipe connection.
-     * @param level The level containing the pipe
-     * @param pos The position of the pipe
-     * @return The pipe connection
-     */
-    public static PipeConnection getOrCreatePipe(Level level, BlockPos pos) {
-        QuantiumizedStorage.LOGGER.debug("PipeNetworkManager.getOrCreatePipe: {}", pos);
-
-        // If on client side, return a temporary connection
-        if (level.isClientSide) {
-            return new PipeConnection(pos);
-        }
-
-        // On server side, use the SavedData
-        PipeNetworkData savedData = getOrCreateSavedData(level);
-        if (savedData != null) {
-            return savedData.getOrCreatePipe(pos);
-        }
-
-        // Fallback to a temporary connection if SavedData is null
-        return new PipeConnection(pos);
-    }
-
-    /**
-     * Legacy support: Adds a pipe to the network.
-     * @param level The level containing the pipe
-     * @param pos The position of the pipe
-     */
-    public static void addPipe(@NotNull Level level, BlockPos pos) {
-        onPipePlaced(level, pos);
-    }
-
-    /**
-     * Legacy support: Removes a pipe from the network.
-     * @param level The level containing the pipe
-     * @param pos The position of the pipe
-     */
-    public static void removePipe(@NotNull Level level, BlockPos pos) {
-        onPipeRemoved(level, pos);
-    }
-
-    /**
-     * Legacy support: Disconnects a side of a pipe.
-     * @param level The level containing the pipe
-     * @param mainPos The position of the pipe
-     * @param disconnectionSide The side to disconnect
-     */
-    public static void sideDisconnected(@NotNull Level level, BlockPos mainPos, Direction disconnectionSide) {
-        disableConnection(level, mainPos, disconnectionSide);
-    }
-
-    /**
-     * Legacy support: Connects a side of a pipe.
-     * @param level The level containing the pipe
-     * @param mainPos The position of the pipe
-     * @param connectedSide The side to connect
-     */
-    public static void sideConnected(@NotNull Level level, BlockPos mainPos, Direction connectedSide) {
-        enableConnection(level, mainPos, connectedSide);
-    }
-
-    /**
-     * Legacy support: Checks if a side of a pipe is disconnected.
-     * @param level The level containing the pipe
-     * @param pos The position of the pipe
-     * @param side The side to check
-     * @return True if the side is disconnected, false otherwise
-     */
-    public static boolean isSideDisconnected(Level level, BlockPos pos, Direction side) {
-        return !isConnectionEnabled(level, pos, side);
-    }
-
-    /**
-     * Legacy support: Gets a pipe connection.
-     * @param level The level containing the pipe
-     * @param pos The position of the pipe
-     * @return An optional containing the pipe connection
-     */
-    public static @NotNull Optional<PipeConnection> getPipe(Level level, BlockPos pos) {
-        // If on client side, return empty
-        if (level.isClientSide) {
-            return Optional.empty();
-        }
-
-        // On server side, use the SavedData
-        PipeNetworkData savedData = getOrCreateSavedData(level);
-        if (savedData != null) {
-            return savedData.getPipe(pos);
-        }
-
-        return Optional.empty();
-    }
-
-    public static boolean isPipeRegistered(Level world, BlockPos connectorPos) {
-        return Objects.requireNonNull(getOrCreateSavedData(world)).isPipeRegistered(connectorPos);
     }
 }
