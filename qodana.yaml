@@ -1,14 +1,6 @@
 version: "1.0"
-
+linter: jetbrains/qodana-jvm:2024.3
 profile:
-  name: qodana.starter
-
-exclude:
-  - name: donotcheck
-    paths:
-      - src/main/templates/META-INF/neoforge.mods.toml
-
-
-projectJDK: "21" #(Applied in CI/CD pipeline)
-
-linter: jetbrains/qodana-jvm-community:2025.1
+  name: qodana.recommended
+include:
+  - name: CheckDependencyLicenses
