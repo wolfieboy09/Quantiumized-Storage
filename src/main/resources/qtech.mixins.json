@@ -9,6 +9,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "EitherRecipeComponentMixin"
-  ]
+    "kubejs.EitherRecipeComponentMixin"
+  ],
+  "plugin": "dev.wolfieboy09.qtech.mixins.MixinPlugin"
 }

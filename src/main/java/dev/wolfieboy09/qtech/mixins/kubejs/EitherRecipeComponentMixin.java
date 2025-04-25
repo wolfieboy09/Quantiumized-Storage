@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.mixins;
+package dev.wolfieboy09.qtech.mixins.kubejs;
 
 import dev.latvian.mods.kubejs.recipe.component.EitherRecipeComponent;
 import org.spongepowered.asm.mixin.Mixin;
