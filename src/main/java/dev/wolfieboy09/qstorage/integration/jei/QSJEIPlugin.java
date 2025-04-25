@@ -47,8 +47,6 @@ public class QSJEIPlugin implements IModPlugin {
         registration.addRecipes(DiskAssemblerCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.DISK_ASSEMBLER_TYPE.get()).stream()
                 .map(RecipeHolder::value).toList());
 
-        //System.out.println("Recipes: " + recipeManager.getAllRecipesFor(QSRecipes.SMELTERY_RECIPE_TYPE.get()).stream().toList());
-
         registration.addRecipes(SmelteryCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QSRecipes.SMELTERY_RECIPE_TYPE.get()).stream()
                 .map(RecipeHolder::value).toList());
     }

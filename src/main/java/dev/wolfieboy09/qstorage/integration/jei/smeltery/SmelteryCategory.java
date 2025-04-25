@@ -99,10 +99,8 @@ public class SmelteryCategory implements IRecipeCategory<SmelteryRecipe> {
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull SmelteryRecipe recipe, @NotNull IFocusGroup focuses) {
         int itemIndex = 0;
-        System.out.println("showing");
 
         for (Either<Ingredient, SizedFluidIngredient> either : recipe.ingredients()) {
-            System.out.println("Looping for: " + either.toString());
             if (either.left().isPresent()) {
                 Ingredient ingredient = either.left().get();
                 switch (itemIndex) {
