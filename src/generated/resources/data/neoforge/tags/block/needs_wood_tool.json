@@ -1,6 +1,6 @@
 {
   "values": [
-    "qstorage:disk_assembler",
-    "qstorage:storage_matrix"
+    "qtech:disk_assembler",
+    "qtech:storage_matrix"
   ]
 }

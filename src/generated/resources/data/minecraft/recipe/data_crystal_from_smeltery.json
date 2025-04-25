@@ -1,5 +1,5 @@
 {
-  "type": "qstorage:smeltery",
+  "type": "qtech:smeltery",
   "ingredients": [
     {
       "item": "minecraft:nether_star"
@@ -8,7 +8,7 @@
   "result": [
     {
       "count": 1,
-      "id": "qstorage:data_crystal"
+      "id": "qtech:data_crystal"
     }
   ],
   "temperature": 500,

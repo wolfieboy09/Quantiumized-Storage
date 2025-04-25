@@ -1,5 +1,5 @@
--dev.wolfieboy09.qstorage
-+dev.wolfieboy09.qstorage.components
-+dev.wolfieboy09.qstorage.energy
-+dev.wolfieboy09.qstorage.util
-+dev.wolfieboy09.api
+-dev.wolfieboy09.qtech
++dev.wolfieboy09.qtech.components
++dev.wolfieboy09.qtech.energy
++dev.wolfieboy09.qtech.util
++dev.wolfieboy09.qtech.api

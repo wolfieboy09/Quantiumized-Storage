@@ -1,0 +1,28 @@
+{
+  "type": "qtech:disk_assembly",
+  "energy": 2000,
+  "extras": [
+    {
+      "item": "qtech:data_crystal"
+    },
+    {
+      "item": "qtech:basic_circuit"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "qtech:item_port"
+    },
+    {
+      "item": "qtech:steel_casing"
+    },
+    {
+      "item": "qtech:steel_screw"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "qtech:basic_storage_disk"
+  },
+  "ticks": 60
+}

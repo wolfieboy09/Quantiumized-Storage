@@ -1,1 +1,1 @@
-dev.wolfieboy09.qstorage.integration.kubejs.QSKubeJSPlugin qstorage
+dev.wolfieboy09.qtech.integration.kubejs.QSKubeJSPlugin qtech

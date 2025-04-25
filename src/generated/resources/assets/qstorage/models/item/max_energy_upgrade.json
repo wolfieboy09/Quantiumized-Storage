@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "qstorage:item/max_energy_upgrade"
-  }
-}

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "priority": 10000,
+  "package": "dev.wolfieboy09.qtech.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "qstorage.refmap.json",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "EitherRecipeComponentMixin"
+  ]
+}

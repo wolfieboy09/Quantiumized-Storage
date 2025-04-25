@@ -3,46 +3,46 @@ loaderVersion="${loader_version_range}"
 license="${mod_license}"
 issueTrackerURL="https://github.com/wolfieboy09/Quantiumized-Storage/issues"
 [[mods]]
-modId="qstorage"
+modId="qtech"
 version="${mod_version}"
 displayName="${mod_name}"
 
 #updateJSONURL="https://change.me.example.invalid/updates.json"
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
-#logoFile="qstorage.png"
+#logoFile="qtech.png"
 #credits=""
 authors="${mod_authors}"
 
 description='''${mod_description}'''
 
 [[mixins]]
-config="qstorage.mixins.json"
+config="qtech.mixins.json"
 
 #[[accessTransformers]]
 #file="META-INF/accesstransformer.cfg"
 
-[[dependencies.qstorage]]
+[[dependencies.qtech]]
     modId="neoforge"
     type="required"
     versionRange="${neo_version_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.qstorage]]
+[[dependencies.qtech]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.qstorage]]
+[[dependencies.qtech]]
     modId="kubejs"
     type="optional"
     versionRange="[2101.7.1-build.181,2101.7.2-build.227)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.qstorage]]
+[[dependencies.qtech]]
     modId="jei"
     type="optional"
     versionRange="[19.21.0.247,)"

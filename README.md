@@ -1,11 +1,5 @@
-# Quantimized Storage
-A NeoForge storage mod where you can store items, fluids, and energy!
-
-# What I want to do at any point:
-- Custom disk registration
-  - Other storage mods usually have a hardcoded list of disks you must use, but this mod allows custom disks to be made and used!
-*and more*
-
+# Quantimized Tech
+A NeoForge tech mod where you can store items, fluids, and energy!
 
 # Compatibility
 If you want a mod to be compatible with built-in, open an issue up, and I'll see if I can do it!

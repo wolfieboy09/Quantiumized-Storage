@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "qtech:block/disk_assembler",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "qtech:block/disk_assembler"
+    },
+    "facing=south": {
+      "model": "qtech:block/disk_assembler",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "qtech:block/disk_assembler",
+      "y": 270
+    }
+  }
+}
