@@ -435,6 +435,9 @@ public class PipeNetworkManager {
         // Check if the neighbor has a compatible capability
         if (level.getBlockState(pipePos).getBlock() instanceof BasePipeBlock<?> pipeBlock) {
             if (canConnectToBlock(level, pipePos, direction, pipeBlock.getCapability())) {
+                if (level.getBlockState(pipePos).getValue(BasePipeBlock.getPropertyFromDirection(direction)) == ConnectionType.BLOCK_EXTRACT){
+                    return ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT;
+                }
                 return ConnectionState.CONNECTED_TO_BLOCK;
             }
         }
