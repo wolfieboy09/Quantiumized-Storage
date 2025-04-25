@@ -277,8 +277,6 @@ public class PipeNetworkManager {
         ConnectionType connectionType = PipeConnection.toConnectionType(connectionState);
         level.setBlockAndUpdate(pipePos, state.setValue(BasePipeBlock.getPropertyFromDirection(direction), connectionType));
 
-        onPipeUpdated(level, pipePos);
-
         // Update the connected pipe
         BlockPos neighborPos = pipePos.relative(direction);
         if (level.getBlockState(neighborPos).getBlock() instanceof BasePipeBlock) {
@@ -302,6 +300,9 @@ public class PipeNetworkManager {
                 logNetworkMerge(network1, network2);
                 }
         }
+
+        onPipeUpdated(level, pipePos);
+        onPipeUpdated(level, neighborPos);
     }
 
     private static void logNetworkSplit(UUID id, int networksCreated) {
