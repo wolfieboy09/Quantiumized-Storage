@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qtech.block.pipe.network;
 
+import dev.wolfieboy09.qtech.api.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -7,8 +8,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Represents a network of connected pipes.
@@ -81,7 +84,7 @@ public class PipeNetwork {
      * Gets all pipes in the network.
      * @return An unmodifiable set of all pipe positions
      */
-    public @Unmodifiable Set<BlockPos> getAllMembers() {
+    public @UnmodifiableView Set<BlockPos> getAllMembers() {
         return Collections.unmodifiableSet(this.memberPipes);
     }
     
@@ -123,23 +126,47 @@ public class PipeNetwork {
      * @return A set of interface pipe positions
      */
     public Set<BlockPos> findInterfacePipes(Map<BlockPos, PipeConnection> pipeConnections) {
+        return findPipesByConnectionState(pipeConnections, state -> state == ConnectionState.CONNECTED_TO_BLOCK || state == ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT);
+    }
+
+    /**
+     * Finds all pipes in a network that can extract from blocks.
+     * @param pipeConnections A map of pipe positions to connections
+     * @return A set of pipe positions that are in the extracting state
+     */
+    public Set<BlockPos> findExtractingPipes(Map<BlockPos, PipeConnection> pipeConnections) {
+        return findPipesByConnectionState(pipeConnections, state -> state == ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT);
+    }
+
+    /**
+     * Finds all pipes in a network that can insert resources into blocks.
+     * @param pipeConnections A map of pipe positions to connections
+     * @return A set of pipe positions that are in the extracting state
+     */
+    public Set<BlockPos> findNonExtractingPipes(Map<BlockPos, PipeConnection> pipeConnections) {
+        return findPipesByConnectionState(pipeConnections, state -> state == ConnectionState.CONNECTED_TO_BLOCK);
+    }
+
+
+    private @NotNull @UnmodifiableView Set<BlockPos> findPipesByConnectionState(Map<BlockPos, PipeConnection> pipeConnections, Predicate<ConnectionState> condition) {
         Set<BlockPos> interfacePipes = new HashSet<>();
-        
+
         for (BlockPos pipePos : this.memberPipes) {
             PipeConnection connection = pipeConnections.get(pipePos);
             if (connection == null) continue;
-            
-            for (Map.Entry<Direction, ConnectionState> entry : connection.getAllConnectionStates().entrySet()) {
-                if (entry.getValue() == ConnectionState.CONNECTED_TO_BLOCK || entry.getValue() == ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT) {
+
+            for (ConnectionState state : connection.getAllConnectionStates().values()) {
+                if (condition.test(state)) {
                     interfacePipes.add(pipePos);
                     break;
                 }
             }
         }
-        
-        return interfacePipes;
+
+        return Collections.unmodifiableSet(interfacePipes);
     }
-    
+
+
     /**
      * Saves the network to NBT.
      * @param tag The tag to save to
