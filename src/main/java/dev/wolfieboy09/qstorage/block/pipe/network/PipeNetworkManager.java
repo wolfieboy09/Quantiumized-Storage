@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ public class PipeNetworkManager {
 
         DimensionDataStorage dataStorage = level.getServer().overworld().getDataStorage();
         return dataStorage.computeIfAbsent(
-                new net.minecraft.world.level.saveddata.SavedData.Factory<>(
+                new SavedData.Factory<>(
                         PipeNetworkData::create,
                         PipeNetworkData::load
                 ),
@@ -613,5 +614,24 @@ public class PipeNetworkManager {
         if (savedData == null) return ConnectionState.NONE;
 
         return savedData.getConnectionState(pos, targetDirection);
+    }
+
+    /**
+     * Returns a list of {@link Direction}'s where the pipe can extract resources from
+     * @param level The level containing the pipe
+     * @param pos The pos in the level where the pipe is
+     * @return A list of directions the pipe can extract from
+     */
+    public static @NotNull List<Direction> getSidesAbleToExtractFrom(@NotNull Level level, BlockPos pos) {
+        if (level.isClientSide) return List.of();
+        PipeNetworkData savedData = getOrCreateSavedData(level);
+        if (savedData == null) return List.of();
+        List<Direction> directions = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            if (getConnectionState(level, pos, direction) == ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT) {
+                directions.add(direction);
+            }
+        }
+        return directions;
     }
 }
