@@ -130,7 +130,7 @@ public class PipeNetwork {
             if (connection == null) continue;
             
             for (Map.Entry<Direction, ConnectionState> entry : connection.getAllConnectionStates().entrySet()) {
-                if (entry.getValue() == ConnectionState.CONNECTED_TO_BLOCK) {
+                if (entry.getValue() == ConnectionState.CONNECTED_TO_BLOCK || entry.getValue() == ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT) {
                     interfacePipes.add(pipePos);
                     break;
                 }
