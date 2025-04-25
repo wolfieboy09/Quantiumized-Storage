@@ -6,11 +6,13 @@ import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qtech.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -637,5 +639,16 @@ public class PipeNetworkManager {
             }
         }
         return directions;
+    }
+
+    public static void tick(@NotNull ServerTickEvent event) {
+        PipeNetworkData data = getOrCreateSavedData(event.getServer().overworld());
+        if (data == null) return;
+        //data.getAllNetworks().forEach(network -> network.getAllMembers().forEach(pos -> ));
+    }
+
+    @FunctionalInterface
+    public interface HandleResource {
+        void handle(ServerLevel level, BlockCapability<?, @Nullable Direction> capability, BlockPos starPos, BlockPos destinationPos);
     }
 }
