@@ -1,11 +1,10 @@
 package dev.wolfieboy09.qtech.block.pipe.network;
 
-import dev.wolfieboy09.qtech.api.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -145,6 +144,13 @@ public class PipeNetwork {
      */
     public Set<BlockPos> findNonExtractingPipes(Map<BlockPos, PipeConnection> pipeConnections) {
         return findPipesByConnectionState(pipeConnections, state -> state == ConnectionState.CONNECTED_TO_BLOCK);
+    }
+
+    public @Unmodifiable Map<BlockPos, PipeConnection> getNetworkMap(@NotNull Level level) {
+        if (level.isClientSide) return Map.of();
+        PipeNetworkData data =  PipeNetworkManager.getOrCreateSavedData(level);
+        if (data == null) return Map.of();
+        return Collections.unmodifiableMap(data.getAllPipeConnections());
     }
 
 

@@ -129,7 +129,7 @@ public class PipeNetworkData extends SavedData {
      */
     public void registerPipe(BlockPos pipePos) {
         QuantiumizedTech.LOGGER.debug("PipeNetworkData.registerPipe: {}", pipePos);
-        PipeConnection connection = this.pipeConnections.computeIfAbsent(pipePos, PipeConnection::new);
+        this.pipeConnections.computeIfAbsent(pipePos, PipeConnection::new);
         QuantiumizedTech.LOGGER.debug("PipeNetworkData.registerPipe: Created connection at {}", pipePos);
         this.setDirty();
     }
