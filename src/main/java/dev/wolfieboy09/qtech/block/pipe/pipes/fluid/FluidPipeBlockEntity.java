@@ -28,7 +28,7 @@ public class FluidPipeBlockEntity extends BasePipeBlockEntity<IFluidHandler> {
     @Override
     protected boolean tryTransfer(IFluidHandler source, IFluidHandler target) {
         for (int i = 0; i < source.getTanks(); i++) {
-            FluidStack simulatedDrain = source.drain(1, IFluidHandler.FluidAction.SIMULATE);
+            FluidStack simulatedDrain = source.drain(Math.min(source.getFluidInTank(i).getAmount(), 100), IFluidHandler.FluidAction.SIMULATE);
             if (simulatedDrain.isEmpty()) continue;
 
             int accepted = target.fill(simulatedDrain, IFluidHandler.FluidAction.SIMULATE);
