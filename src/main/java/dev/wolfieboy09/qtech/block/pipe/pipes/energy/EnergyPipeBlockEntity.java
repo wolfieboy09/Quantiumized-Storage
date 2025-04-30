@@ -22,7 +22,7 @@ public class EnergyPipeBlockEntity extends BasePipeBlockEntity<IEnergyStorage> {
 
     @Override
     protected boolean tryTransfer(IEnergyStorage source, IEnergyStorage target) {
-        int energyAvailable = source.extractEnergy(Integer.MAX_VALUE, true);
+        int energyAvailable = source.extractEnergy(Math.min(source.getEnergyStored(), 1000), true);
         if (energyAvailable <= 0) {
             // There is nothing to extract
             return false;
