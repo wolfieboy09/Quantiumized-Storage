@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qtech.datagen;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -72,8 +74,13 @@ public class QTBlockStateProvider extends BlockStateProvider {
                             .build();
                 });
 
+            createPipeModel(QTBlocks.ITEM_PIPE);
+            createPipeModel(QTBlocks.FLUID_PIPE);
+    }
 
-        MultiPartBlockStateBuilder multiPartBuilder = getMultipartBuilder(QTBlocks.ITEM_PIPE.get())
+    @CanIgnoreReturnValue
+    private @NotNull MultiPartBlockStateBuilder createPipeModel(@NotNull DeferredBlock<? extends BasePipeBlock<?>> block) {
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block.get())
                 .part()
                 .modelFile(existingModelFile("block/pipe_dot"))
                 .addModel()
@@ -86,7 +93,7 @@ public class QTBlockStateProvider extends BlockStateProvider {
                 BasePipeBlock.UP, new Tuple<>(270, 0),
                 BasePipeBlock.DOWN, new Tuple<>(90, 0)
         ).forEach((property, rotations) -> {
-            multiPartBuilder
+            builder
                     .part()
                     // Normal pipe to pipe
                     .modelFile(existingModelFile("block/pipe"))
@@ -112,7 +119,9 @@ public class QTBlockStateProvider extends BlockStateProvider {
                     .condition(property, ConnectionType.BLOCK_NORMAL)
                     .end();
         });
+        return builder;
     }
+
 
     private ModelFile.@NotNull ExistingModelFile existingModelFile(String path) {
         return models().getExistingFile(ResourceHelper.asResource(path));
