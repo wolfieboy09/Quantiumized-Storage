@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.pipe.pipes;
+package dev.wolfieboy09.qtech.block.pipe.pipes.item;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
