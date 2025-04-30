@@ -12,10 +12,8 @@ import dev.wolfieboy09.qtech.registries.QTBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.util.Tuple;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +27,21 @@ public class QTBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        getVariantBuilder(QTBlocks.DISK_ASSEMBLER.get())
+        fourRotationBlock(QTBlocks.DISK_ASSEMBLER, DiskAssemblerBlock.FACING, "disk_assembler");
+        fourRotationBlock(QTBlocks.STORAGE_MATRIX, StorageMatrixBlock.FACING, "storage_matrix");
+        fourRotationBlock(QTBlocks.SMELTERY, SmelteryBlock.FACING, "smeltery");
+
+        createPipeModel(QTBlocks.ITEM_PIPE);
+        createPipeModel(QTBlocks.FLUID_PIPE);
+        createPipeModel(QTBlocks.ENERGY_PIPE);
+    }
+
+
+    @CanIgnoreReturnValue
+    private @NotNull VariantBlockStateBuilder fourRotationBlock(@NotNull DeferredBlock<?> block, DirectionProperty property, String string) {
+        return getVariantBuilder(block.get())
                 .forAllStates(state -> {
-                    Direction facing = state.getValue(DiskAssemblerBlock.FACING);
+                    Direction facing = state.getValue(property);
                     int rotation = switch (facing) {
                         case EAST -> 90;
                         case SOUTH -> 180;
@@ -39,43 +49,10 @@ public class QTBlockStateProvider extends BlockStateProvider {
                         default -> 0;
                     };
                     return ConfiguredModel.builder()
-                            .modelFile(models().getExistingFile(modLoc("block/disk_assembler")))
+                            .modelFile(existingModelFile("block/" + string))
                             .rotationY(rotation)
                             .build();
                 });
-
-        getVariantBuilder(QTBlocks.STORAGE_MATRIX.get())
-                .forAllStates(state -> {
-                    Direction facing = state.getValue(StorageMatrixBlock.FACING);
-                    int rotation = switch (facing) {
-                        case EAST -> 90;
-                        case SOUTH -> 180;
-                        case WEST -> 270;
-                        default -> 0;
-                    };
-                    return ConfiguredModel.builder()
-                            .modelFile(models().getExistingFile(modLoc("block/storage_matrix")))
-                            .rotationY(rotation)
-                            .build();
-                });
-
-        getVariantBuilder(QTBlocks.SMELTERY.get())
-                .forAllStates(state -> {
-                    Direction facing = state.getValue(SmelteryBlock.FACING);
-                    int rotation = switch (facing) {
-                        case EAST -> 90;
-                        case SOUTH -> 180;
-                        case WEST -> 270;
-                        default -> 0;
-                    };
-                    return ConfiguredModel.builder()
-                            .modelFile(models().getExistingFile(modLoc("block/smeltery")))
-                            .rotationY(rotation)
-                            .build();
-                });
-
-            createPipeModel(QTBlocks.ITEM_PIPE);
-            createPipeModel(QTBlocks.FLUID_PIPE);
     }
 
     @CanIgnoreReturnValue
