@@ -5,6 +5,7 @@ import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlock;
+import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipe;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryBlock;
@@ -63,6 +64,11 @@ public class QTBlocks {
     public static final DeferredBlock<FluidPipe> FLUID_PIPE = registerNoPropertyBlock(
             "fluid_pipe",
             FluidPipe::new
+    );
+
+    public static final DeferredBlock<EnergyPipe> ENERGY_PIPE = registerNoPropertyBlock(
+            "energy_pipe",
+            EnergyPipe::new
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
