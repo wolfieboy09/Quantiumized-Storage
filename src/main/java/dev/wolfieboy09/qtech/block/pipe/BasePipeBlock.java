@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.block.pipe;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qtech.block.pipe.network.PipeNetworkManager;
+import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
