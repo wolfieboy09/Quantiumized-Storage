@@ -132,10 +132,8 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-        if (!level.isClientSide) {
-            if (!state.is(oldState.getBlock())) {
+        if (!level.isClientSide && !state.is(oldState.getBlock())) {
                 PipeNetworkManager.onPipePlaced(level, pos);
-            }
         }
     }
 
