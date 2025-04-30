@@ -5,7 +5,8 @@ import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlockEntity;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlockEntity;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlockEntity;
 import dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlockEntity;
-import dev.wolfieboy09.qtech.block.pipe.pipes.ItemPipeBlockEntity;
+import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipeBlockEntity;
+import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipeBlockEntity;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryBlockEntity;
 import dev.wolfieboy09.qtech.block.storage_matrix.StorageMatrixBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -62,6 +63,12 @@ public class QTBlockEntities {
             "item_pipe",
             ItemPipeBlockEntity::new,
             QTBlocks.ITEM_PIPE
+    );
+
+    public static final Supplier<BlockEntityType<FluidPipeBlockEntity>> FLUID_PIPE = createBlockEntity(
+            "fluid_pipe",
+            FluidPipeBlockEntity::new,
+            QTBlocks.FLUID_PIPE
     );
 
     private static <T extends BlockEntity> @NotNull Supplier<BlockEntityType<T>> createBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier, Supplier<? extends Block> block) {

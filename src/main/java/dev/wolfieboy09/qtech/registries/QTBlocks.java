@@ -5,7 +5,8 @@ import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlock;
-import dev.wolfieboy09.qtech.block.pipe.pipes.ItemPipe;
+import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipe;
+import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipe;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryBlock;
 import dev.wolfieboy09.qtech.block.storage_matrix.StorageMatrixBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -57,6 +58,11 @@ public class QTBlocks {
     public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerNoPropertyBlock(
             "item_pipe",
             ItemPipe::new
+    );
+
+    public static final DeferredBlock<FluidPipe> FLUID_PIPE = registerNoPropertyBlock(
+            "fluid_pipe",
+            FluidPipe::new
     );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
