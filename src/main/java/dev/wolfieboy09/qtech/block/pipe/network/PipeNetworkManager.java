@@ -640,15 +640,4 @@ public class PipeNetworkManager {
         }
         return directions;
     }
-
-    public static void tick(@NotNull ServerTickEvent event) {
-        PipeNetworkData data = getOrCreateSavedData(event.getServer().overworld());
-        if (data == null) return;
-        //data.getAllNetworks().forEach(network -> network.getAllMembers().forEach(pos -> ));
-    }
-
-    @FunctionalInterface
-    public interface HandleResource {
-        void handle(ServerLevel level, BlockCapability<?, @Nullable Direction> capability, BlockPos starPos, BlockPos destinationPos);
-    }
 }

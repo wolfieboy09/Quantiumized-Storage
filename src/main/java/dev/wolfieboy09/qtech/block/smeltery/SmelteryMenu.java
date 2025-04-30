@@ -20,9 +20,11 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
 @NothingNullByDefault
 public class SmelteryMenu extends AbstractContainerMenu {
+    @UnknownNullability
     private SmelteryBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
