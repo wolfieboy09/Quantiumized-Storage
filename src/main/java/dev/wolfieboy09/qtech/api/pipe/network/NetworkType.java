@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.pipe.network;
+package dev.wolfieboy09.qtech.api.pipe.network;
 
 /**
  * Represents the type of a {@link PipeNetwork}.

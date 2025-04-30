@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.pipe.network;
+package dev.wolfieboy09.qtech.api.pipe.network;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;

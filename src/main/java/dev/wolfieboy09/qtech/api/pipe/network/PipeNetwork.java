@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.pipe.network;
+package dev.wolfieboy09.qtech.api.pipe.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

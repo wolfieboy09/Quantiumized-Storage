@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.pipe.network;
+package dev.wolfieboy09.qtech.api.pipe.network;
 
 /**
  * Represents the state of a pipe connection in a specific direction.
