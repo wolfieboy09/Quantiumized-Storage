@@ -2,6 +2,7 @@
   "block.qtech.circuit_engraver": "Circuit Engraver",
   "block.qtech.creative_energy_block": "Creative Energy Block",
   "block.qtech.disk_assembler": "Disk Assembler",
+  "block.qtech.energy_pipe": "Energy Pipe",
   "block.qtech.fluid_pipe": "Fluid Pipe",
   "block.qtech.gas_filler": "Gas Filler",
   "block.qtech.item_pipe": "Item Pipe",

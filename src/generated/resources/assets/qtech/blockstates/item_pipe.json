@@ -8,33 +8,6 @@
     {
       "apply": {
         "model": "qtech:block/pipe",
-        "y": 180
-      },
-      "when": {
-        "south": "pipe"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe_connected",
-        "y": 180
-      },
-      "when": {
-        "south": "block_extract"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe",
-        "y": 180
-      },
-      "when": {
-        "south": "block_normal"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe",
         "x": 90
       },
       "when": {
@@ -86,28 +59,28 @@
     {
       "apply": {
         "model": "qtech:block/pipe",
-        "x": 270
+        "y": 270
       },
       "when": {
-        "up": "pipe"
+        "west": "pipe"
       }
     },
     {
       "apply": {
         "model": "qtech:block/pipe_connected",
-        "x": 270
+        "y": 270
       },
       "when": {
-        "up": "block_extract"
+        "west": "block_extract"
       }
     },
     {
       "apply": {
         "model": "qtech:block/pipe",
-        "x": 270
+        "y": 270
       },
       "when": {
-        "up": "block_normal"
+        "west": "block_normal"
       }
     },
     {
@@ -140,28 +113,55 @@
     {
       "apply": {
         "model": "qtech:block/pipe",
-        "y": 270
+        "y": 180
       },
       "when": {
-        "west": "pipe"
+        "south": "pipe"
       }
     },
     {
       "apply": {
         "model": "qtech:block/pipe_connected",
-        "y": 270
+        "y": 180
       },
       "when": {
-        "west": "block_extract"
+        "south": "block_extract"
       }
     },
     {
       "apply": {
         "model": "qtech:block/pipe",
-        "y": 270
+        "y": 180
       },
       "when": {
-        "west": "block_normal"
+        "south": "block_normal"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe",
+        "x": 270
+      },
+      "when": {
+        "up": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe_connected",
+        "x": 270
+      },
+      "when": {
+        "up": "block_extract"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe",
+        "x": 270
+      },
+      "when": {
+        "up": "block_normal"
       }
     }
   ]
