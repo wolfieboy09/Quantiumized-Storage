@@ -9,14 +9,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
 public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
-    public BasePipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
+    private final BlockCapability<T, @Nullable Direction> blockCapability;
+
+    public BasePipeBlockEntity(BlockEntityType<?> type, BlockCapability<T, @Nullable Direction> blockCapability, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
+        this.blockCapability = blockCapability;
     }
 
     public void tick() {
@@ -63,7 +67,16 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
      *
      * @return A set of directions where extraction is allowed.
      */
-    protected abstract Set<Direction> getExtractableDirections();
+    protected Set<Direction> getExtractableDirections() {
+        Set<Direction> directions = new HashSet<>();
+        for (Direction dir : Direction.values()) {
+            ConnectionType type = getBlockState().getValue(BasePipeBlock.getPropertyFromDirection(dir));
+            if (type == ConnectionType.BLOCK_EXTRACT) {
+                directions.add(dir);
+            }
+        }
+        return directions;
+    }
 
     /**
      * Determines whether a given direction on a pipe is valid for inserting into a target.
@@ -73,7 +86,11 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
      * @param direction  The direction being considered for insertion.
      * @return true if the pipe can insert in this direction, false otherwise.
      */
-    protected abstract boolean isInsertDirectionValid(BlockPos targetPipe, Direction direction);
+    protected boolean isInsertDirectionValid(BlockPos targetPipe, Direction direction) {
+        if (this.level == null || this.level.isClientSide) return false;
+        ConnectionType type = this.level.getBlockState(targetPipe).getValue(BasePipeBlock.getPropertyFromDirection(direction));
+        return type == ConnectionType.BLOCK_NORMAL;
+    }
 
     /**
      * Retrieves the source capability at the given position and direction.
@@ -83,7 +100,9 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
      * @param direction The direction from which the extraction is attempted.
      * @return A capability instance for the source, or null if unavailable.
      */
-    protected abstract T getSourceAt(BlockPos pos, Direction direction);
+    protected T getSourceAt(BlockPos pos, Direction direction) {
+        return this.level == null || this.level.isClientSide ? null : this.level.getCapability(this.blockCapability, pos, direction);
+    }
 
     /**
      * Retrieves the target capability at the given position and direction.
@@ -93,7 +112,9 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
      * @param direction The direction from which the insertion is attempted.
      * @return A capability instance for the target, or null if unavailable.
      */
-    protected abstract T getTargetAt(BlockPos pos, Direction direction);
+    protected T getTargetAt(BlockPos pos, Direction direction) {
+        return this.level == null || this.level.isClientSide ? null : this.level.getCapability(this.blockCapability, pos, direction);
+    }
 
     /**
      * Checks whether the given source capability can be extracted from.
