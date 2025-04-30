@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -93,6 +94,8 @@ public class PipeNetworkData extends SavedData {
 
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        // We don't want to save invalid networks
+        validateAllNetworks();
         // Save pipe connections
         ListTag pipesList = new ListTag();
         for (Map.Entry<BlockPos, PipeConnection> entry : this.pipeConnections.entrySet()) {
@@ -149,8 +152,8 @@ public class PipeNetworkData extends SavedData {
      * @param pipePos The position of the pipe
      * @return The pipe connection, or null if not found
      */
-    public PipeConnection getPipeConnection(BlockPos pipePos) {
-        return this.pipeConnections.get(pipePos);
+    public @Nullable PipeConnection getPipeConnection(BlockPos pipePos) {
+        return this.pipeConnections.getOrDefault(pipePos, null);
     }
 
     /**
@@ -247,8 +250,8 @@ public class PipeNetworkData extends SavedData {
      * @param pipePos The position of the pipe
      * @return The network ID, or null if not found
      */
-    public UUID getNetworkForPipe(BlockPos pipePos) {
-        return this.pipeToNetworkMap.get(pipePos);
+    public @Nullable UUID getNetworkForPipe(BlockPos pipePos) {
+        return this.pipeToNetworkMap.getOrDefault(pipePos, null);
     }
 
     /**
@@ -407,8 +410,17 @@ public class PipeNetworkData extends SavedData {
      * @param networkId The ID of the network
      * @return The network, or null if not found
      */
-    public PipeNetwork getNetworkById(UUID networkId) {
-        return this.networks.get(networkId);
+    public @Nullable PipeNetwork getNetworkById(UUID networkId) {
+        return this.networks.getOrDefault(networkId, null);
+    }
+
+    /**
+     * Gets a network by its {@link BlockPos} by wrapping {@link PipeNetworkData#getNetworkForPipe(BlockPos)} for fetching the network
+     * @param pos The {@link BlockPos} of the pipe
+     * @return The network, otherwise null if not found
+     */
+    public @Nullable PipeNetwork getNetworkByBlockPos(BlockPos pos) {
+        return this.networks.getOrDefault(getNetworkForPipe(pos), null);
     }
 
     /**
