@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 @NothingNullByDefault
 public class WrenchItem extends Item {
     public WrenchItem() {
-        super(new Item.Properties());
+        super(new Item.Properties().stacksTo(1));
     }
 
     private static final double CONNECTION_THRESHOLD = 0.4;
