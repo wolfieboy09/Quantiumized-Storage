@@ -7,6 +7,16 @@ import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkData;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapability;
@@ -17,6 +27,7 @@ import java.util.*;
 
 public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     private final BlockCapability<T, @Nullable Direction> blockCapability;
+    private BlockState coverState;
 
     public BasePipeBlockEntity(BlockEntityType<?> type, BlockCapability<T, @Nullable Direction> blockCapability, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
@@ -151,5 +162,51 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
 
     public BlockCapability<T, @Nullable Direction> getCapability() {
         return this.blockCapability;
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        if (this.coverState != null) {
+            tag.put("CoverState", NbtUtils.writeBlockState(this.coverState));
+        }
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("CoverState", 3)) {
+            this.coverState = NbtUtils.readBlockState(getBlockGetter(), tag.getCompound("CoverState"));
+        }
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = super.getUpdateTag(registries);
+        if (this.coverState != null) {
+            tag.put("CoverState", NbtUtils.writeBlockState(this.coverState));
+        }
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
+        super.handleUpdateTag(tag, lookupProvider);
+        if (tag.contains("CoverState")) {
+            this.coverState = NbtUtils.readBlockState(getBlockGetter(), tag.getCompound("CoverState"));
+        }
+    }
+
+    private HolderGetter<Block> getBlockGetter() {
+        return this.level != null ? this.level.holderLookup(Registries.BLOCK) : BuiltInRegistries.BLOCK.asLookup();
+    }
+
+    public void updateFacadeBlock(BlockState setTo) {
+        this.coverState = setTo;
+    }
+
+
+    public BlockState getFacadeState() {
+        return this.coverState;
     }
 }

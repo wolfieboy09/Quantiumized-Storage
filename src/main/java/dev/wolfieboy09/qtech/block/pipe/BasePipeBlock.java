@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qtech.block.pipe;
 
-import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.pipe.network.NetworkType;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
@@ -40,6 +39,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
     public static final EnumProperty<ConnectionType> SOUTH = EnumProperty.create("south", ConnectionType.class);
     public static final EnumProperty<ConnectionType> WEST = EnumProperty.create("west", ConnectionType.class);
     public static final BooleanProperty WATER_LOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty FACADING = BooleanProperty.create("facading");
     //public static final BooleanProperty LAVA_LOGGED = QTBlockStateProperties.LAVALOGGED;
 
     protected final VoxelShape[] pipeShapes = new VoxelShape[Direction.values().length];
@@ -62,7 +62,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST, WATER_LOGGED);
+        builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST, WATER_LOGGED, FACADING);
     }
 
     @Override
@@ -74,7 +74,8 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 .setValue(EAST, ConnectionType.NONE)
                 .setValue(SOUTH, ConnectionType.NONE)
                 .setValue(WEST, ConnectionType.NONE)
-                .setValue(WATER_LOGGED, false);
+                .setValue(WATER_LOGGED, false)
+                .setValue(FACADING, false);
         for (Direction direction : Direction.values()) {
             state = PipeNetworkManager.updatePipeBlockState(state, context.getLevel(), context.getClickedPos(), direction,this);
         }
@@ -93,6 +94,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if (state.getValue(FACADING)) return Shapes.block();
         int index = calculateShapeIndex(
                 state.getValue(NORTH),
                 state.getValue(SOUTH),

@@ -5,10 +5,12 @@ import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverRecipe;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryRecipe;
+import dev.wolfieboy09.qtech.facade.FacadeCraftingRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -26,6 +28,10 @@ public class QTRecipes {
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<SmelteryRecipe>> SMELTERY_RECIPE_TYPE = registerRecipeType("smeltery");
     public static final DeferredHolder<RecipeSerializer<?>, SmelteryRecipe.Serializer> SMELTERY_SERIALIZER = SERALIZERS.register("smeltery", SmelteryRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FacadeCraftingRecipe>> FACADE_RECIPE_TYPE = registerRecipeType("facade");
+    public static final DeferredHolder<RecipeSerializer<?>, FacadeCraftingRecipe.Serializer> FACADE_SERIALIZER = SERALIZERS.register("facade", FacadeCraftingRecipe.Serializer::new);
+
 
     public static void register(IEventBus bus) {
         SERALIZERS.register(bus);

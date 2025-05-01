@@ -59,5 +59,7 @@ public class QTRecipeProvider extends RecipeProvider {
             500,
             20
         ).save(output, "data_crystal_from_smeltery");
+
+
     }
 }

@@ -2,10 +2,7 @@ package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.storage.ItemStorageType;
-import dev.wolfieboy09.qtech.item.GasCanisterItem;
-import dev.wolfieboy09.qtech.item.ItemStorageDisk;
-import dev.wolfieboy09.qtech.item.UpgradeItem;
-import dev.wolfieboy09.qtech.item.WrenchItem;
+import dev.wolfieboy09.qtech.item.*;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -40,6 +37,8 @@ public class QTItems {
     public static final DeferredItem<ItemStorageDisk> SUPERIOR_ITEM_DISK = registerItemStorageDisk("superior_storage_disk", ItemStorageType.SUPERIOR);
     public static final DeferredItem<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
     public static final DeferredItem<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
+
+    public static final DeferredItem<FacadeItem> FACADE = ITEMS.register("facade", () -> new FacadeItem(new Item.Properties()));
 
     public static final DeferredItem<WrenchItem> WRENCH = ITEMS.register("wrench", WrenchItem::new);
 

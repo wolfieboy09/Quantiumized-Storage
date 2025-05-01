@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.component;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.components.BaseStorageDisk;
+import dev.wolfieboy09.qtech.api.components.FacadeComponent;
 import dev.wolfieboy09.qtech.api.components.GasCanisterComponent;
 import dev.wolfieboy09.qtech.api.components.ItemStorageDiskComponent;
 import net.minecraft.core.component.DataComponentType;
@@ -32,6 +33,11 @@ public final class QTDataComponents {
       builder -> builder
               .persistent(GasCanisterComponent.CODEC)
               .networkSynchronized(GasCanisterComponent.STREAM_CODEC)
+    );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<FacadeComponent>> FACADE_COMPONENT = REGISTRAR.registerComponentType(
+            "facade",
+            builder -> builder.persistent(FacadeComponent.CODEC)
     );
 
     public static void register(IEventBus eventBus) {
