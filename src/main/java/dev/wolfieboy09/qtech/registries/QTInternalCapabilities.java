@@ -35,7 +35,7 @@ public class QTInternalCapabilities {
                     GasCanisterComponent handler = itemStack.get(QTDataComponents.GAS_CANISTER_COMPONENT.get());
                     return handler == null ? null : new GasItemHandlerWrapper(itemStack, handler);
                 },
-                QTItems.GAS_CANISTER
+                QTBlocks.GAS_CANISTER
         );
 
         for (DeferredHolder<Item, ? extends Item> item : QTItems.ITEMS.getEntries()) {

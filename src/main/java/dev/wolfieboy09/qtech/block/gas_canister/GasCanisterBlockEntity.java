@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.gas_filler;
+package dev.wolfieboy09.qtech.block.gas_canister;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.capabilities.gas.GasTank;
@@ -23,17 +23,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
-import static dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlock.MODE;
+import static dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock.MODE;
 
 @NothingNullByDefault
-public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvider {
+public class GasCanisterBlockEntity extends GlobalBlockEntity implements MenuProvider {
     private final Component TITLE = Component.translatable("block.qtech.gas_filler");
     private final GasTank gasTank = new GasTank(5000, this::setChanged);
 
     private final ItemStackHandler inventory = new ExtendedItemStackHandler(1, this::setChanged);
     private final ContainerData containerData = new SimpleContainerData(2);
 
-    private GasFillerState gasFillerState = GasFillerState.FILL;
+    private GasCanisterState gasCanisterState = GasCanisterState.FILL;
 
 
     @Override
@@ -45,8 +45,8 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
         this.containerData.set(1, this.gasTank.getGasAmount());
     }
 
-    public GasFillerBlockEntity(BlockPos pos, BlockState blockState) {
-        super(QTBlockEntities.GAS_FILLER.get(), pos, blockState);
+    public GasCanisterBlockEntity(BlockPos pos, BlockState blockState) {
+        super(QTBlockEntities.GAS_CANISTER.get(), pos, blockState);
     }
 
     @Override
@@ -61,13 +61,13 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
     @Override
     public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
         setChanged();
-        return new GasFillerMenu(i, this.getBlockPos(), inventory, player, this.containerData);
+        return new GasCanisterMenu(i, this.getBlockPos(), inventory, player, this.containerData);
     }
 
     public void tick() {
         GasCanisterComponent data = this.inventory.getStackInSlot(0).get(QTDataComponents.GAS_CANISTER_COMPONENT);
         if (!this.inventory.getStackInSlot(0).isEmpty() && data != null) {
-            if (this.gasFillerState == GasFillerState.FILL) {
+            if (this.gasCanisterState == GasCanisterState.FILL) {
                 // Gas Tank to ITEM
                 if (this.gasTank.getGas() == data.getGas()) {
                     GasTank tank = new GasTank(data.getTankCapacity());
@@ -79,7 +79,7 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
 
                     this.inventory.getStackInSlot(0).set(QTDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent(tank));
                 }
-            } else if (this.gasFillerState == GasFillerState.DRAIN) {
+            } else if (this.gasCanisterState == GasCanisterState.DRAIN) {
                if (this.gasTank.getGas() == data.getGas()) {
                     //TODO Have the ITEM to the block gas tank
                }
@@ -87,8 +87,8 @@ public class GasFillerBlockEntity extends GlobalBlockEntity implements MenuProvi
         }
     }
 
-    public void setState(GasFillerState state) {
-        this.gasFillerState = state;
+    public void setState(GasCanisterState state) {
+        this.gasCanisterState = state;
         this.setChanged();
         if (this.level == null) return;
         this.level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(MODE, state));

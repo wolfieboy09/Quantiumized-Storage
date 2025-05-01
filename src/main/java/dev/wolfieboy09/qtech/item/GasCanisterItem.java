@@ -5,20 +5,23 @@ import dev.wolfieboy09.qtech.api.capabilities.gas.GasTank;
 import dev.wolfieboy09.qtech.api.components.GasCanisterComponent;
 import dev.wolfieboy09.qtech.api.util.ColorUtil;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
+import dev.wolfieboy09.qtech.registries.QTBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 @NothingNullByDefault
-public class GasCanisterItem extends Item {
-    public GasCanisterItem(@NotNull Properties properties) {
-        super(properties.component(QTDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent((new GasTank(5000)))));
+public class GasCanisterItem extends BlockItem {
+    public GasCanisterItem(Properties properties) {
+        super(QTBlocks.GAS_CANISTER.get(), (properties.component(QTDataComponents.GAS_CANISTER_COMPONENT, new GasCanisterComponent((new GasTank(5000))))));
     }
 
     @Override

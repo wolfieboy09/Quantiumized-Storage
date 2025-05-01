@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "mode=0": {
+      "model": "qtech:block/gas_canister"
+    },
+    "mode=1": {
+      "model": "qtech:block/gas_canister"
+    }
+  }
+}

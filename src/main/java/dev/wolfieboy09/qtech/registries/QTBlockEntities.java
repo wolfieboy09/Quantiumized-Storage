@@ -4,7 +4,7 @@ import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlockEntity;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlockEntity;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlockEntity;
-import dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlockEntity;
+import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipeBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipeBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipeBlockEntity;
@@ -54,10 +54,10 @@ public class QTBlockEntities {
             QTBlocks.SMELTERY
     );
 
-    public static final Supplier<BlockEntityType<GasFillerBlockEntity>> GAS_FILLER = createBlockEntity(
-            "gas_filler",
-            GasFillerBlockEntity::new,
-            QTBlocks.GAS_FILLER
+    public static final Supplier<BlockEntityType<GasCanisterBlockEntity>> GAS_CANISTER = createBlockEntity(
+            "gas_canister",
+            GasCanisterBlockEntity::new,
+            QTBlocks.GAS_CANISTER
     );
 
     public static final Supplier<BlockEntityType<ItemPipeBlockEntity>> ITEM_PIPE = createBlockEntity(

@@ -41,8 +41,6 @@ public class QTItems {
     public static final DeferredItem<ItemStorageDisk> QUANTUM_ITEM_DISK = registerItemStorageDisk("quantum_storage_disk", ItemStorageType.QUANTUM);
     public static final DeferredItem<ItemStorageDisk> MULTI_DIMENSIONAL_ITEM_DISK = registerItemStorageDisk("multi_dimensional_storage_disk", ItemStorageType.MULTI_DIMENSIONAL);
 
-    public static final DeferredItem<GasCanisterItem> GAS_CANISTER = ITEMS.register("gas_canister", () -> new GasCanisterItem(new Item.Properties().stacksTo(1)));
-
     public static final DeferredItem<WrenchItem> WRENCH = ITEMS.register("wrench", WrenchItem::new);
 
     public static void register(IEventBus bus) {

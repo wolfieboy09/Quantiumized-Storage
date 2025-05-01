@@ -4,12 +4,13 @@ import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
-import dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlock;
+import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock;
 import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipe;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryBlock;
 import dev.wolfieboy09.qtech.block.storage_matrix.StorageMatrixBlock;
+import dev.wolfieboy09.qtech.item.GasCanisterItem;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Function;
@@ -52,9 +54,7 @@ public class QTBlocks {
             () -> new SmelteryBlock(BlockBehaviour.Properties.of().noOcclusion())
     );
 
-    public static final DeferredBlock<GasFillerBlock> GAS_FILLER = registerBlock(
-            "gas_filler", GasFillerBlock::new
-    );
+    public static final DeferredBlock<GasCanisterBlock> GAS_CANISTER = registerGasCanister();
 
     public static final DeferredBlock<ItemPipe> ITEM_PIPE = registerNoPropertyBlock(
             "item_pipe",
@@ -89,9 +89,17 @@ public class QTBlocks {
         return toReturn;
     }
 
+    private static DeferredBlock<GasCanisterBlock> registerGasCanister() {
+        DeferredBlock<GasCanisterBlock> toReturn = BLOCKS.register("gas_canister", () -> new GasCanisterBlock(BlockBehaviour.Properties.of()));
+        BLOCK_ITEMS.register("gas_canister", () -> new GasCanisterItem(new Item.Properties()));
+        return toReturn;
+    }
+
+
     private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
         BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
+
 
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);

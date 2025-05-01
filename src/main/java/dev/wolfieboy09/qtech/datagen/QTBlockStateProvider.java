@@ -31,11 +31,12 @@ public class QTBlockStateProvider extends BlockStateProvider {
         fourRotationBlock(QTBlocks.STORAGE_MATRIX, StorageMatrixBlock.FACING, "storage_matrix");
         fourRotationBlock(QTBlocks.SMELTERY, SmelteryBlock.FACING, "smeltery");
 
+        getVariantBuilder(QTBlocks.GAS_CANISTER.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(existingModelFile("block/gas_canister")).build());
+
         createPipeModel(QTBlocks.ITEM_PIPE);
         createPipeModel(QTBlocks.FLUID_PIPE);
         createPipeModel(QTBlocks.ENERGY_PIPE);
     }
-
 
     @CanIgnoreReturnValue
     private @NotNull VariantBlockStateBuilder fourRotationBlock(@NotNull DeferredBlock<?> block, DirectionProperty property, String string) {

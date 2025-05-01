@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.gas_filler;
+package dev.wolfieboy09.qtech.block.gas_canister;
 
 import dev.wolfieboy09.qtech.api.QTConstants;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
@@ -17,27 +17,27 @@ import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import static dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlock.MODE;
+import static dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock.MODE;
 
 @NothingNullByDefault
 @SuppressWarnings("SameParameterValue")
-public class GasFillerMenu extends AbstractContainerMenu {
+public class GasCanisterMenu extends AbstractContainerMenu {
     @UnknownNullability
-    private GasFillerBlockEntity blockEntity;
+    private GasCanisterBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
-    public GasFillerMenu(int id, BlockPos pos, Inventory playerInventory, Player player) {
+    public GasCanisterMenu(int id, BlockPos pos, Inventory playerInventory, Player player) {
         this(id, pos, playerInventory, player, new SimpleContainerData(2));
     }
 
-    public GasFillerMenu(int id, BlockPos pos, Inventory playerInventory, @NotNull Player player, ContainerData containerData) {
-        super(QTMenuTypes.GAS_FILLER_MENU.get(), id);
+    public GasCanisterMenu(int id, BlockPos pos, Inventory playerInventory, @NotNull Player player, ContainerData containerData) {
+        super(QTMenuTypes.GAS_CANISTER_MENU.get(), id);
         addDataSlots(containerData);
         this.level = player.level();
         this.data = containerData;
         BlockEntity blockEntity = this.level.getBlockEntity(pos);
-        if (!(blockEntity instanceof GasFillerBlockEntity be)) return;
+        if (!(blockEntity instanceof GasCanisterBlockEntity be)) return;
         this.blockEntity = be;
         addSlot(new GasSlot(be.getInventory(), 0, 129, 36));
 
@@ -64,11 +64,11 @@ public class GasFillerMenu extends AbstractContainerMenu {
         }
     }
 
-    public GasFillerState getFillState() {
+    public GasCanisterState getFillState() {
         return this.blockEntity.getBlockState().getValue(MODE);
     }
 
-    public void updateMode(GasFillerState newState) {
+    public void updateMode(GasCanisterState newState) {
         this.blockEntity.setState(newState);
     }
 
@@ -79,10 +79,10 @@ public class GasFillerMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(level, this.blockEntity.getBlockPos()), player, QTBlocks.GAS_FILLER.get());
+        return stillValid(ContainerLevelAccess.create(level, this.blockEntity.getBlockPos()), player, QTBlocks.GAS_CANISTER.get());
     }
 
-    public GasFillerBlockEntity getBE() {
+    public GasCanisterBlockEntity getBE() {
         return this.blockEntity;
     }
 }

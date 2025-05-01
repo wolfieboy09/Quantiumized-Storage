@@ -1,9 +1,9 @@
-package dev.wolfieboy09.qtech.block.gas_filler;
+package dev.wolfieboy09.qtech.block.gas_canister;
 
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 
-public enum GasFillerState implements StringRepresentable {
+public enum GasCanisterState implements StringRepresentable {
     FILL,
     DRAIN;
 

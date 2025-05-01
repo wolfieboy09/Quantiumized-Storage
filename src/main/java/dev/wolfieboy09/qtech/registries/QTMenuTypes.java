@@ -3,8 +3,8 @@ package dev.wolfieboy09.qtech.registries;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerMenu;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerScreen;
-import dev.wolfieboy09.qtech.block.gas_filler.GasFillerMenu;
-import dev.wolfieboy09.qtech.block.gas_filler.GasFillerScreen;
+import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterMenu;
+import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterScreen;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryMenu;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryScreen;
 import dev.wolfieboy09.qtech.block.storage_matrix.StorageMatrixMenu;
@@ -33,8 +33,8 @@ public class QTMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<SmelteryMenu>> SMELTERY_MENU = MENUS.register("smeltery", () ->
             IMenuTypeExtension.create((id, playerInv, data) -> new SmelteryMenu(id, data.readBlockPos(), playerInv, playerInv.player)));
 
-    public static final DeferredHolder<MenuType<?>, MenuType<GasFillerMenu>> GAS_FILLER_MENU = MENUS.register("gas_filler", () ->
-            IMenuTypeExtension.create((id, playerInv, data) -> new GasFillerMenu(id, data.readBlockPos(), playerInv, playerInv.player)));
+    public static final DeferredHolder<MenuType<?>, MenuType<GasCanisterMenu>> GAS_CANISTER_MENU = MENUS.register("gas_filler", () ->
+            IMenuTypeExtension.create((id, playerInv, data) -> new GasCanisterMenu(id, data.readBlockPos(), playerInv, playerInv.player)));
 
     public static void register(IEventBus bus) {
         MENUS.register(bus);
@@ -45,6 +45,6 @@ public class QTMenuTypes {
         event.register(QTMenuTypes.DISK_ASSEMBLER.get(), DiskAssemblerScreen::new);
         event.register(QTMenuTypes.STORAGE_MATRIX.get(), StorageMatrixScreen::new);
         event.register(QTMenuTypes.SMELTERY_MENU.get(), SmelteryScreen::new);
-        event.register(QTMenuTypes.GAS_FILLER_MENU.get(), GasFillerScreen::new);
+        event.register(QTMenuTypes.GAS_CANISTER_MENU.get(), GasCanisterScreen::new);
     }
 }

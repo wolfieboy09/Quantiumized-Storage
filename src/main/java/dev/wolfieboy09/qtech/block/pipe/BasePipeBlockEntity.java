@@ -148,4 +148,8 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
         }
         return Collections.unmodifiableSet(directions);
     }
+
+    public BlockCapability<T, @Nullable Direction> getCapability() {
+        return this.blockCapability;
+    }
 }

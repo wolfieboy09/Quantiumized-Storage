@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qtech.block.pipe;
 
+import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;

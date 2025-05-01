@@ -1,8 +1,8 @@
 package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.api.packets.OneWayPacketHandler;
-import dev.wolfieboy09.qtech.block.gas_filler.GasFillerBlockEntity;
-import dev.wolfieboy09.qtech.packets.GasFillerModeData;
+import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
+import dev.wolfieboy09.qtech.packets.GasCanisterModeData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -13,17 +13,17 @@ public final class QTPackets {
     public static void register(final @NotNull RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(
-                GasFillerModeData.TYPE,
-                GasFillerModeData.STREAM_CODEC,
-                new OneWayPacketHandler<>(ServerPayloadHandler::handleGasFillerMode)
+                GasCanisterModeData.TYPE,
+                GasCanisterModeData.STREAM_CODEC,
+                new OneWayPacketHandler<>(ServerPayloadHandler::handleGasCanisterMode)
         );
     }
 
     public static class ServerPayloadHandler {
-        public static void handleGasFillerMode(@NotNull GasFillerModeData payload, final @NotNull IPayloadContext context) {
+        public static void handleGasCanisterMode(@NotNull GasCanisterModeData payload, final @NotNull IPayloadContext context) {
             BlockEntity blockEntity = context.player().level().getBlockEntity(payload.blockPos());
-            if (blockEntity instanceof GasFillerBlockEntity gasFiller) {
-                gasFiller.setState(payload.state());
+            if (blockEntity instanceof GasCanisterBlockEntity gasCanister) {
+                gasCanister.setState(payload.state());
             }
         }
     }

@@ -425,7 +425,7 @@ public class PipeNetworkManager {
         BlockState neighborState = level.getBlockState(neighborPos);
 
         // Check if the neighbor is a pipe
-        if (neighborState.getBlock() instanceof BasePipeBlock) {
+        if (neighborState.getBlock() instanceof BasePipeBlock<?>) {
             // Check if the neighbor's connection is enabled
             if (!isConnectionEnabled(level, neighborPos, direction.getOpposite())) {
                 return ConnectionState.AUTO_DISABLED;
