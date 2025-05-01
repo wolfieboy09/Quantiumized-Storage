@@ -336,6 +336,11 @@ public class PipeNetworkData extends SavedData {
                 continue;
             }
 
+            boolean isSameType = PipeNetworkManager.isNetworkSameType(targetNetwork,network);
+            if (!isSameType) {
+                QuantiumizedTech.LOGGER.debug("Skipping merge with incompatible network type {} and {}", targetNetwork.getNetworkType(), network.getNetworkType());
+                continue;
+            }
             // Get all members before modifying the network
             Set<BlockPos> membersToMove = new HashSet<>(network.getAllMembers());
 

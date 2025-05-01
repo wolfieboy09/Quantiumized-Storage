@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.block.pipe.pipes.energy;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qtech.api.pipe.network.NetworkType;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -21,6 +22,11 @@ public class EnergyPipe extends BasePipeBlock<IEnergyStorage> {
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new EnergyPipeBlockEntity(blockPos, blockState);
+    }
+
+    @Override
+    public NetworkType getNetworkType() {
+        return NetworkType.ENERGY;
     }
 
     @Override

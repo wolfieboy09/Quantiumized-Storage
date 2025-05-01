@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.block.pipe.pipes.item;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qtech.api.pipe.network.NetworkType;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -21,6 +22,11 @@ public class ItemPipe extends BasePipeBlock<IItemHandler> {
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new ItemPipeBlockEntity(blockPos, blockState);
+    }
+
+    @Override
+    public NetworkType getNetworkType() {
+        return NetworkType.ITEM;
     }
 
     @Override

@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.block.pipe;
 
 import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qtech.api.pipe.network.NetworkType;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -75,7 +76,7 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
                 .setValue(WEST, ConnectionType.NONE)
                 .setValue(WATER_LOGGED, false);
         for (Direction direction : Direction.values()) {
-            state = PipeNetworkManager.updatePipeBlockState(state, context.getLevel(), context.getClickedPos(), direction);
+            state = PipeNetworkManager.updatePipeBlockState(state, context.getLevel(), context.getClickedPos(), direction,this);
         }
         return state;
     }
@@ -224,4 +225,6 @@ public abstract class BasePipeBlock<C> extends Block implements SimpleWaterlogge
 
     @Override
     public abstract BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState);
+
+    abstract public NetworkType getNetworkType();
 }

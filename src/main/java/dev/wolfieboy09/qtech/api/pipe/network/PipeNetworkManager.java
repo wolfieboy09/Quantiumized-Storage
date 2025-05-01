@@ -7,6 +7,7 @@ import dev.wolfieboy09.qtech.block.pipe.ConnectionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -135,10 +136,26 @@ public class PipeNetworkManager {
             UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
             if (neighborNetworkId == null) {
                 // Neighbor is not in a network, create a new one
-                PipeNetwork network = savedData.createNetwork(neighborPos, NetworkType.UNIVERSAL);
-                logNetworkCreation(network.getNetworkId(), neighborPos);
+                createNetwork(neighborPos,level);
             }
         }
+    }
+
+    public static NetworkType getNetworkType(BlockPos pos,Level level) {
+        Block block = level.getBlockState(pos).getBlock();
+        if (block instanceof BasePipeBlock<?> pipeBlock) {
+            return pipeBlock.getNetworkType();
+        }
+        return NetworkType.UNIVERSAL;
+    }
+
+    public static PipeNetwork createNetwork(BlockPos pos,Level level) {
+        NetworkType type = getNetworkType(pos,level);
+        PipeNetworkData savedData = getOrCreateSavedData(level);
+        if (savedData == null) return null;
+        PipeNetwork network = savedData.createNetwork(pos, type);
+        logNetworkCreation(network.getNetworkId(), pos);
+        return network;
     }
 
     private static void logNetworkCreation(UUID networkId, BlockPos neighborPos) {
@@ -165,8 +182,7 @@ public class PipeNetworkManager {
 
         if (connectedNetworks.isEmpty()) {
             // No connected networks, create a new one
-            PipeNetwork network = savedData.createNetwork(pipePos, NetworkType.UNIVERSAL);
-            LOGGER.debug("Created new network {} for pipe at {}", network.getNetworkId(), pipePos);
+            createNetwork(pipePos,level);
         } else if (connectedNetworks.size() == 1) {
             // One connected network, join it
             UUID networkId = connectedNetworks.iterator().next();
@@ -273,9 +289,10 @@ public class PipeNetworkManager {
 
         // Update the block state
         BlockState state = level.getBlockState(pipePos);
-        ConnectionState connectionState = determineConnectionState(level, pipePos, direction);
-        ConnectionType connectionType = PipeConnection.toConnectionType(connectionState);
-        level.setBlockAndUpdate(pipePos, state.setValue(BasePipeBlock.getPropertyFromDirection(direction), connectionType));
+        if (state.getBlock() instanceof BasePipeBlock<?> block) {
+            state = updatePipeBlockState(state, level, pipePos, direction,block);
+        }
+        level.setBlockAndUpdate(pipePos, state);
 
         // Update the connected pipe
         BlockPos neighborPos = pipePos.relative(direction);
@@ -285,11 +302,10 @@ public class PipeNetworkManager {
 
             // Update the block state
             BlockState neighborState = level.getBlockState(neighborPos);
-            ConnectionState neighborConnectionState = determineConnectionState(level, neighborPos, direction.getOpposite());
-            ConnectionType neighborConnectionType = PipeConnection.toConnectionType(neighborConnectionState);
-            level.setBlockAndUpdate(neighborPos, neighborState.setValue(
-                    BasePipeBlock.getPropertyFromDirection(direction.getOpposite()),
-                    neighborConnectionType));
+            if (neighborState.getBlock() instanceof BasePipeBlock<?> neighborBlock) {
+                neighborState = updatePipeBlockState(neighborState, level, neighborPos, direction.getOpposite(),neighborBlock);
+            }
+            level.setBlockAndUpdate(neighborPos, neighborState);
 
             // Check if networks need to be merged
             UUID network1 = savedData.getNetworkForPipe(pipePos);
@@ -360,8 +376,7 @@ public class PipeNetworkManager {
                             UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
                             if (neighborNetworkId == null) {
                                 // Neighbor is not in a network, create a new one
-                                PipeNetwork neighborNetwork = savedData.createNetwork(neighborPos, NetworkType.UNIVERSAL);
-                                logNetworkCreation(neighborNetwork.getNetworkId(), neighborPos);
+                                createNetwork(neighborPos,level);
                             }
                         }
                     } else {
@@ -381,8 +396,7 @@ public class PipeNetworkManager {
                                 UUID neighborNetworkId = savedData.getNetworkForPipe(neighborPos);
                                 if (neighborNetworkId == null) {
                                     // Neighbor is not in a network, create a new one
-                                    PipeNetwork neighborNetwork = savedData.createNetwork(neighborPos, NetworkType.UNIVERSAL);
-                                    logNetworkCreation(neighborNetwork.getNetworkId(), neighborPos);
+                                    createNetwork(neighborPos,level);
                                 }
                             }
                         }
@@ -415,7 +429,7 @@ public class PipeNetworkManager {
      * @param direction The direction to check
      * @return The connection state
      */
-    public static ConnectionState determineConnectionState(Level level, BlockPos pipePos, Direction direction) {
+    public static <C> ConnectionState determineConnectionState(Level level, BlockPos pipePos, Direction direction,BasePipeBlock<C> block) {
         // Check if the connection is disabled
         if (!isConnectionEnabled(level, pipePos, direction)) {
             return ConnectionState.MANUALLY_DISABLED;
@@ -425,9 +439,12 @@ public class PipeNetworkManager {
         BlockState neighborState = level.getBlockState(neighborPos);
 
         // Check if the neighbor is a pipe
-        if (neighborState.getBlock() instanceof BasePipeBlock<?>) {
+        if (neighborState.getBlock() instanceof BasePipeBlock<?> neighborBlock) {
             // Check if the neighbor's connection is enabled
             if (!isConnectionEnabled(level, neighborPos, direction.getOpposite())) {
+                return ConnectionState.AUTO_DISABLED;
+            }
+            if (!isNetworkSameType(neighborBlock.getNetworkType(),block.getNetworkType())) {
                 return ConnectionState.AUTO_DISABLED;
             }
             return ConnectionState.CONNECTED_TO_PIPE;
@@ -459,8 +476,14 @@ public class PipeNetworkManager {
 
         BlockPos neighborPos = pipePos.relative(direction);
         BlockState neighborState = level.getBlockState(neighborPos);
+        Block block = level.getBlockState(pipePos).getBlock();
 
-        if (neighborState.getBlock() instanceof BasePipeBlock) {
+        if (neighborState.getBlock() instanceof BasePipeBlock<?> neighborBlock && block instanceof BasePipeBlock<?> pipeBlock) {
+            var data = getOrCreateSavedData(level);
+            if (data == null) return false;
+            if (!isNetworkSameType(neighborBlock.getNetworkType(), pipeBlock.getNetworkType())) {
+                return false;
+            }
             return isConnectionEnabled(level, neighborPos, direction.getOpposite());
         }
         return false;
@@ -490,8 +513,8 @@ public class PipeNetworkManager {
      * @param direction The direction to update
      * @return The updated block state
      */
-    public static @NotNull BlockState updatePipeBlockState(@NotNull BlockState state, Level level, BlockPos pipePos, Direction direction) {
-        ConnectionState connectionState = determineConnectionState(level, pipePos, direction);
+    public static @NotNull <C> BlockState updatePipeBlockState(@NotNull BlockState state, Level level, BlockPos pipePos, Direction direction,BasePipeBlock<C> block) {
+        ConnectionState connectionState = determineConnectionState(level, pipePos, direction,block);
         ConnectionType connectionType = PipeConnection.toConnectionType(connectionState);
         return state.setValue(BasePipeBlock.getPropertyFromDirection(direction), connectionType);
     }
@@ -503,14 +526,14 @@ public class PipeNetworkManager {
      */
     private static void updatePipeConnections(@NotNull Level level, BlockPos pipePos) {
         BlockState state = level.getBlockState(pipePos);
-        if (!(state.getBlock() instanceof BasePipeBlock<?>)) return;
+        if (!(state.getBlock() instanceof BasePipeBlock<?> block)) return;
 
         PipeNetworkData savedData = getOrCreateSavedData(level);
         if (savedData == null) return;
 
         Map<Direction, ConnectionState> connectionStates = new EnumMap<>(Direction.class);
         for (Direction dir : Direction.values()) {
-            ConnectionState connectionState = determineConnectionState(level, pipePos, dir);
+            ConnectionState connectionState = determineConnectionState(level, pipePos, dir,block);
             connectionStates.put(dir, connectionState);
         }
 
@@ -548,9 +571,11 @@ public class PipeNetworkManager {
                 LOGGER.debug("Added pipe at {} to network {} during verification", pipePos, targetNetworkId);
                 currentNetworkId = targetNetworkId;
             } else {
-                PipeNetwork network = savedData.createNetwork(pipePos, NetworkType.UNIVERSAL);
-                LOGGER.debug("Created new network {} for pipe at {} during verification", network.getNetworkId(), pipePos);
-                currentNetworkId = network.getNetworkId();
+                PipeNetwork network = createNetwork(pipePos,level);
+                if (network != null) {
+                    LOGGER.debug("Created new network {} for pipe at {} during verification", network.getNetworkId(), pipePos);
+                    currentNetworkId = network.getNetworkId();
+                }
             }
         }
 
@@ -610,6 +635,14 @@ public class PipeNetworkManager {
         savedData.setConnectionState(pos, targetDirection, ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT);
         BlockState state = level.getBlockState(pos);
         level.setBlockAndUpdate(pos, state.setValue(BasePipeBlock.getPropertyFromDirection(targetDirection), PipeConnection.toConnectionType(ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT)));
+    }
+
+    public static boolean isNetworkSameType(PipeNetwork network1,PipeNetwork network2) {
+        return isNetworkSameType(network1.getNetworkType(),network2.getNetworkType());
+    }
+
+    public static boolean isNetworkSameType(NetworkType type1,NetworkType type2) {
+        return type1.isCompatibleWith(type2);
     }
 
     public static ConnectionState getConnectionState(@NotNull Level level, BlockPos pos, Direction targetDirection) {
