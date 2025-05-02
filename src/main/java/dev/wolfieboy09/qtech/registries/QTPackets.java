@@ -2,7 +2,10 @@ package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.api.packets.OneWayPacketHandler;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
+import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
+import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qtech.packets.GasCanisterModeData;
+import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -17,6 +20,12 @@ public final class QTPackets {
                 GasCanisterModeData.STREAM_CODEC,
                 new OneWayPacketHandler<>(ServerPayloadHandler::handleGasCanisterMode)
         );
+
+        registrar.playToClient(
+                PipeFacadeUpdate.TYPE,
+                PipeFacadeUpdate.STREAM_CODEC,
+                new OneWayPacketHandler<>(ClientPayloadHandler::handleFacadeUpdate)
+        );
     }
 
     public static class ServerPayloadHandler {
@@ -24,6 +33,15 @@ public final class QTPackets {
             BlockEntity blockEntity = context.player().level().getBlockEntity(payload.blockPos());
             if (blockEntity instanceof GasCanisterBlockEntity gasCanister) {
                 gasCanister.setState(payload.state());
+            }
+        }
+    }
+
+    public static class ClientPayloadHandler {
+        public static void handleFacadeUpdate(PipeFacadeUpdate payload, IPayloadContext context) {
+            BlockEntity blockEntity = context.player().level().getBlockEntity(payload.blockPos());
+            if (blockEntity instanceof BasePipeBlockEntity<?> pipeBlock) {
+                pipeBlock.updateFacadeBlock(payload.state());
             }
         }
     }

@@ -28,12 +28,11 @@ public class FacadeCraftingRecipe extends CustomRecipe {
             ItemStack stack = craftingInput.getItem(i);
             if (stack.isEmpty()) continue;
             if (stack.getItem() instanceof FacadeItem facade) {
-                if (foundFacade) return false;
+                if (foundFacade || FacadeItem.hasBlock(stack)) return false;
                 foundFacade = true;
             } else if (stack.getItem() instanceof BlockItem blockItem) {
                 Block block = blockItem.getBlock();
-                if (!isCubeLike(block)) return false;
-                if (foundBlock) return false;
+                if (!isCubeLike(block) || foundBlock) return false;
                 foundBlock = true;
             } else {
                 return false;
@@ -41,6 +40,7 @@ public class FacadeCraftingRecipe extends CustomRecipe {
         }
         return foundFacade && foundBlock;
     }
+
 
     @Override
     public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {

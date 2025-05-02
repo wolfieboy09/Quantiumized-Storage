@@ -28,7 +28,8 @@ import java.util.*;
 
 public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     private final BlockCapability<T, @Nullable Direction> blockCapability;
-    private BlockState coverState;
+    // Air would be used to represent no facading
+    private BlockState coverState = Blocks.AIR.defaultBlockState();
 
     public BasePipeBlockEntity(BlockEntityType<?> type, BlockCapability<T, @Nullable Direction> blockCapability, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
@@ -204,8 +205,6 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
 
     public void updateFacadeBlock(BlockState setTo) {
         this.coverState = setTo;
-        this.setChanged();
-        this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
 

@@ -4,6 +4,7 @@ import dev.wolfieboy09.qtech.api.components.FacadeComponent;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
+import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;
 import dev.wolfieboy09.qtech.registries.QTDamageTypes;
 import dev.wolfieboy09.qtech.registries.QTItems;
 import net.minecraft.core.BlockPos;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -74,6 +76,7 @@ public class FacadeItem extends Item {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof BasePipeBlockEntity<?> pipeEntity) {
             pipeEntity.updateFacadeBlock(facadeBlock.defaultBlockState());
+            PacketDistributor.sendToAllPlayers(new PipeFacadeUpdate(pos, facadeBlock.defaultBlockState()));
         }
 
         if (player == null || !player.isCreative()) {
@@ -87,6 +90,10 @@ public class FacadeItem extends Item {
     @Nullable
     public Block getRepresentedBlock(ItemStack stack) {
         return !stack.has(QTDataComponents.FACADE_COMPONENT) ? null : BuiltInRegistries.BLOCK.get(stack.get(QTDataComponents.FACADE_COMPONENT).parsedId());
+    }
+
+    public static boolean hasBlock(ItemStack stack) {
+        return stack.has(QTDataComponents.FACADE_COMPONENT);
     }
 
     @Override
