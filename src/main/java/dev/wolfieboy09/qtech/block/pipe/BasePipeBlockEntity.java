@@ -176,7 +176,7 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        if (tag.contains("CoverState", 3)) {
+        if (tag.contains("CoverState")) {
             this.coverState = NbtUtils.readBlockState(getBlockGetter(), tag.getCompound("CoverState"));
         }
     }
