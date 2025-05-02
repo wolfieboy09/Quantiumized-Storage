@@ -75,6 +75,10 @@ public class FacadeCraftingRecipe extends CustomRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<FacadeCraftingRecipe> {
+        // WARNING TO ANYONE
+        // Do not try to "merge" this varable.
+        // It prevents Minecraft from failing with recipes, aka
+        // it holds together the mod.
         private static final FacadeCraftingRecipe SINGLETON = new FacadeCraftingRecipe();
         public static final MapCodec<FacadeCraftingRecipe> CODEC = MapCodec.unit(() -> SINGLETON);
         public static final StreamCodec<RegistryFriendlyByteBuf, FacadeCraftingRecipe> STREAM_CODEC = StreamCodec.unit(SINGLETON);

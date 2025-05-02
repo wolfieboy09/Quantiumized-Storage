@@ -17,6 +17,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapability;
@@ -193,7 +194,7 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
         super.handleUpdateTag(tag, lookupProvider);
         if (tag.contains("CoverState")) {
-            this.coverState = NbtUtils.readBlockState(getBlockGetter(), tag.getCompound("CoverState"));
+            this.coverState = NbtUtils.readBlockState(lookupProvider.lookupOrThrow(Registries.BLOCK), tag.getCompound("CoverState"));
         }
     }
 
@@ -203,8 +204,10 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
 
     public void updateFacadeBlock(BlockState setTo) {
         this.coverState = setTo;
-        this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
+        this.setChanged();
+        this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
+
 
 
     public BlockState getFacadeState() {
