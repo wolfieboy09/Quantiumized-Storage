@@ -206,8 +206,6 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
         this.coverState = setTo;
     }
 
-
-
     public BlockState getFacadeState() {
         return this.coverState;
     }
