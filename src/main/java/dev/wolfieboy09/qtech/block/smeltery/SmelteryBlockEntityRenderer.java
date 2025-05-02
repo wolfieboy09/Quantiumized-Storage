@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
@@ -36,29 +37,46 @@ public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<Smeltery
 
         if (handler == null || level == null) return;
 
+        // Get the block's facing direction
+        Direction facing = blockEntity.getBlockState().getValue(SmelteryBlock.FACING);
+
         FluidStack inputFluid1 = handler.getFluidInTank(0);
         FluidStack inputFluid2 = handler.getFluidInTank(1);
         FluidStack inputFluid3 = handler.getFluidInTank(2);
         FluidStack resultFluid = handler.getFluidInTank(3);
         FluidStack wasteFluid = handler.getFluidInTank(4);
-        //TODO Get all 4 directions showing the fluid correctly
-//        int[] rotationAngle = switch (blockEntity.getBlockState().getValue(SmelteryBlock.FACING)) {
-//            case SOUTH -> new int[] {180, 90};
-//            default -> new int[] {90, 270};
-//        };
 
         BlockPos pos = blockEntity.getBlockPos();
-//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid1, level, pos, 0.625f, 0.188f, 0.25f, 0.75f, 0.2f, -1.24f, 0.487f, rotationAngle[0], handler.getTankCapacity(0));
-//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid2, level, pos, 0.625f, -0.13f, 0.25f, 0.76f, -0.115f, -1.24f, 0.487f, rotationAngle[0], handler.getTankCapacity(1));
-//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid3, level, pos, 0.625f, -0.44f, 0.25f, 0.75f, -0.43f, -1.24f, 0.487f, rotationAngle[0], handler.getTankCapacity(2));
-//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, resultFluid, level, pos, -0.24f, -0.44f, 0.27f, 0.88f, -0.75f, -0.22f, 0.3f, rotationAngle[1], handler.getTankCapacity(3));
-//        drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, wasteFluid, level, pos, -0.24f, 0.06f, 0.27f, 0.88f, -1.3f, -0.22f, 0.3f, rotationAngle[1], handler.getTankCapacity(4));
 
+        // Save the original state
+        poseStack.pushPose();
+
+        // Center the transformation point
+        poseStack.translate(0.5, 0, 0.5);
+
+        // Apply rotation based on facing direction
+        int rotationAngle = switch (facing) {
+            case NORTH -> 0;
+            case SOUTH -> 180;
+            case WEST -> 90;
+            case EAST -> 270;
+            default -> 0; // Default case, shouldn't happen with horizontal facings
+        };
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotationAngle));
+
+        // Move back to corner
+        poseStack.translate(-0.5, 0, -0.5);
+
+        // Draw all fluid tanks - these coordinates are for NORTH facing
+        // The global rotation will handle the different facings
         drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid1, level, pos, 0.625f, 0.188f, 0.25f, 0.75f, 0.2f, -1.24f, 0.487f, 90, handler.getTankCapacity(0));
         drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid2, level, pos, 0.625f, -0.13f, 0.25f, 0.76f, -0.115f, -1.24f, 0.487f, 90, handler.getTankCapacity(1));
         drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, inputFluid3, level, pos, 0.625f, -0.44f, 0.25f, 0.75f, -0.43f, -1.24f, 0.487f, 90, handler.getTankCapacity(2));
         drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, resultFluid, level, pos, -0.24f, -0.44f, 0.27f, 0.88f, -0.75f, -0.22f, 0.3f, 270, handler.getTankCapacity(3));
         drawFluid(blockEntity, poseStack, multiBufferSource, packedLight, packedOverlay, wasteFluid, level, pos, -0.24f, 0.06f, 0.27f, 0.88f, -1.3f, -0.22f, 0.3f, 270, handler.getTankCapacity(4));
+
+        // Restore original state
+        poseStack.popPose();
     }
 
     private static void drawFluid(SmelteryBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay, FluidStack fluid, BlockAndTintGetter level, BlockPos pos, float x0, float z0, float x1, float z2, float x3, float z3, float x4, int rotationAngle, int tankCapacity) {

@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -427,6 +428,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
                     },
                     fluidIngredient -> {
                         return true;
+//                        TODO: Fix this
 //                        boolean satisfied = false;
 //                        for (int i = 0; i < this.fluidHandler.getTanks(); i++) {
 //                            FluidStack stack = this.fluidHandler.getFluidInTank(i);
@@ -452,6 +454,9 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     public void setChanged() {
         super.setChanged();
         updateContainerData();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     @Override
