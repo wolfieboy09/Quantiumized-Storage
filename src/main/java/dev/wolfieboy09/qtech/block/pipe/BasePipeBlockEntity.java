@@ -203,6 +203,7 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
 
     public void updateFacadeBlock(BlockState setTo) {
         this.coverState = setTo;
+        this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
     }
 
 
