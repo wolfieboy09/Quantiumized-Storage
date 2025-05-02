@@ -28,8 +28,7 @@ import java.util.*;
 
 public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     private final BlockCapability<T, @Nullable Direction> blockCapability;
-    // Air would be used to represent no facading
-    private BlockState coverState = Blocks.AIR.defaultBlockState();
+    private BlockState coverState = null;
 
     public BasePipeBlockEntity(BlockEntityType<?> type, BlockCapability<T, @Nullable Direction> blockCapability, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
@@ -195,7 +194,7 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
         super.handleUpdateTag(tag, lookupProvider);
         if (tag.contains("CoverState")) {
-            this.coverState = NbtUtils.readBlockState(lookupProvider.lookupOrThrow(Registries.BLOCK), tag.getCompound("CoverState"));
+            this.coverState = NbtUtils.readBlockState(getBlockGetter(), tag.getCompound("CoverState"));
         }
     }
 
