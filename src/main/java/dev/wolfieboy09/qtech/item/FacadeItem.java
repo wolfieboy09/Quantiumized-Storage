@@ -21,6 +21,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -66,7 +67,7 @@ public class FacadeItem extends Item {
         }
 
         Block facadeBlock = getRepresentedBlock(stack);
-        if (facadeBlock == null) return InteractionResult.FAIL;
+        if (facadeBlock == Blocks.AIR) return InteractionResult.PASS;
 
         if (state.hasProperty(BasePipeBlock.FACADING)) {
             state = state.setValue(BasePipeBlock.FACADING, true);
@@ -87,7 +88,6 @@ public class FacadeItem extends Item {
     }
 
 
-    @Nullable
     public Block getRepresentedBlock(ItemStack stack) {
         return !stack.has(QTDataComponents.FACADE_COMPONENT) ? null : BuiltInRegistries.BLOCK.get(stack.get(QTDataComponents.FACADE_COMPONENT).parsedId());
     }
