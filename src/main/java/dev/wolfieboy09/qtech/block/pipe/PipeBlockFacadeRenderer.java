@@ -20,7 +20,7 @@ public class PipeBlockFacadeRenderer implements BlockEntityRenderer<BasePipeBloc
     public void render(BasePipeBlockEntity<?> basePipeBlockEntity, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         BlockState state = basePipeBlockEntity.getFacadeState();
-        if (state != Blocks.AIR.defaultBlockState()) {
+        if (state != null) {
             dispatcher.renderSingleBlock(state, poseStack, multiBufferSource, packedLight, packedOverlay);
         }
     }
