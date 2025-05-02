@@ -5,15 +5,21 @@ import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qtech.api.pipe.network.ConnectionState;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
+import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
+import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @NothingNullByDefault
 public class WrenchItem extends Item {
@@ -50,6 +56,12 @@ public class WrenchItem extends Item {
         boolean isDisabled = connectionState == ConnectionState.MANUALLY_DISABLED;
         boolean isExtraction = connectionState == ConnectionState.CONNECTED_TO_BLOCK_TO_EXTRACT;
         boolean isBlockConnection = connectionState == ConnectionState.CONNECTED_TO_BLOCK;
+        if (!isCrouching && state.getValue(BasePipeBlock.FACADING) && level.getBlockEntity(pos) instanceof BasePipeBlockEntity<?> pipe) {
+            level.setBlock(pos, state.setValue(BasePipeBlock.FACADING, false), BasePipeBlock.UPDATE_ALL);
+            pipe.updateFacadeBlock(BasePipeBlockEntity.NO_FACADE_STATE);
+            PacketDistributor.sendToAllPlayers(new PipeFacadeUpdate(pos, state.setValue(BasePipeBlock.FACADING, false)));
+            Containers.dropContents(level, pos, new SimpleContainer(FacadeItem.createFacade(pipe.getFacadeState().getBlock())));
+        }
         if (isCrouching && isConnection) {
             QuantiumizedTech.LOGGER.debug("WrenchItem: Disconnecting side {} at {}", targetDirection, pos);
             PipeNetworkManager.disableConnection(level, pos, targetDirection);}

@@ -28,7 +28,9 @@ import java.util.*;
 
 public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     private final BlockCapability<T, @Nullable Direction> blockCapability;
-    private BlockState coverState = null;
+    public static final BlockState NO_FACADE_STATE = Blocks.AIR.defaultBlockState();
+    // Default to this
+    private BlockState coverState = NO_FACADE_STATE;
 
     public BasePipeBlockEntity(BlockEntityType<?> type, BlockCapability<T, @Nullable Direction> blockCapability, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
@@ -168,7 +170,7 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        if (this.coverState != null) {
+        if (this.coverState != NO_FACADE_STATE) {
             tag.put("CoverState", NbtUtils.writeBlockState(this.coverState));
         }
     }
@@ -184,7 +186,7 @@ public abstract class BasePipeBlockEntity<T> extends GlobalBlockEntity {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
-        if (this.coverState != null) {
+        if (this.coverState != NO_FACADE_STATE) {
             tag.put("CoverState", NbtUtils.writeBlockState(this.coverState));
         }
         return tag;
