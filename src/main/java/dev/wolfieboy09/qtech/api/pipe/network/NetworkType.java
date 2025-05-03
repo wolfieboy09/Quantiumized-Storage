@@ -8,6 +8,7 @@ public enum NetworkType {
     ITEM,
     FLUID,
     ENERGY,
+    GAS,
     UNIVERSAL;
     
     /**
