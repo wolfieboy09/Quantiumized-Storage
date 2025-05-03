@@ -104,4 +104,12 @@ public class GasCanisterBlockEntity extends GlobalBlockEntity implements MenuPro
         super.loadAdditional(tag, registries);
         this.gasTank.readFromNBT(registries, tag.getCompound("GasTank"));
     }
+
+    public GasCanisterState getState() {
+        return this.gasCanisterState;
+    }
+
+    public GasTank getGasTank() {
+        return this.gasTank;
+    }
 }
