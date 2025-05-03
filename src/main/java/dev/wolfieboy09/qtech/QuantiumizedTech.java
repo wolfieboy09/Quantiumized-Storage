@@ -2,11 +2,13 @@ package dev.wolfieboy09.qtech;
 
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
+import dev.wolfieboy09.qtech.integration.cctweaked.CCTweakedPlugin;
 import dev.wolfieboy09.qtech.registries.*;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.LoadingModList;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -29,7 +31,6 @@ public class QuantiumizedTech {
         QTGasses.register(modEventBus);
         QTEffects.register(modEventBus);
         modEventBus.addListener(QTPackets::register);
-        //modEventBus.addListener(QTEntities::registerAttributes);
         modEventBus.addListener(QTEntities::registerRenderers);
         QTEntities.register(modEventBus);
 
@@ -38,12 +39,15 @@ public class QuantiumizedTech {
         modEventBus.addListener(QTEvents::particle);
         modEventBus.register(QTClientEvents.class);
 
+        // Check to see if CC: Tweaked is present when mod loading, and register the peripherals there
+        if (LoadingModList.get().getModFileById("computercraft") != null) {
+            CCTweakedPlugin.register();
+        }
+
         modEventBus.addListener(QTDataMaps::register);
 
-//        modEventBus.register(QTShading.class);
-
-        // modEventBus.addListener(this::addCreative);
-
+        //modEventBus.addListener(QTEntities::registerAttributes);
+        //modEventBus.register(QTShading.class);
         // modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
