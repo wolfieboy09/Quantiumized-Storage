@@ -186,7 +186,7 @@ public class GasTank implements IGasHandler, IGasTank {
         GasStack stack = this.gas.copyWithAmount(drained);
         if (!simulate && drained > 0) {
             this.gas.shrink(drained);
-            this.onContentsChanged();;
+            this.onContentsChanged();
         }
         return stack;
     }
