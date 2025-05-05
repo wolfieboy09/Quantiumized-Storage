@@ -2,7 +2,6 @@ package dev.wolfieboy09.qtech.block.gas_canister;
 
 import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qtech.api.util.VoxelUtil;
 import dev.wolfieboy09.qtech.block.AbstractBaseEntityBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

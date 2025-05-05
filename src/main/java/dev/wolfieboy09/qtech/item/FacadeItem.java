@@ -5,12 +5,9 @@ import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
 import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;
-import dev.wolfieboy09.qtech.registries.QTDamageTypes;
 import dev.wolfieboy09.qtech.registries.QTItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
@@ -25,7 +22,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 

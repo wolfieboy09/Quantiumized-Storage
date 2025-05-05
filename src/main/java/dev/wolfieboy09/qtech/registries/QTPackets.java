@@ -2,7 +2,6 @@ package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.api.packets.OneWayPacketHandler;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
-import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qtech.packets.GasCanisterModeData;
 import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;

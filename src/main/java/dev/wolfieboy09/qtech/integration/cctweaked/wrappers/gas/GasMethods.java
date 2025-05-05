@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qtech.integration.cctweaked.wrappers.gas;
 
-import dan200.computercraft.api.detail.ForgeDetailRegistries;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IComputerAccess;

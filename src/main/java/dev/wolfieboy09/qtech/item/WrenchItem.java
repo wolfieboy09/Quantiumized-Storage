@@ -2,9 +2,9 @@ package dev.wolfieboy09.qtech.item;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qtech.api.pipe.network.ConnectionState;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
+import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;
 import net.minecraft.core.BlockPos;
@@ -14,7 +14,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;

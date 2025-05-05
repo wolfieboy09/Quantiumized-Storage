@@ -2,7 +2,10 @@ package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.storage.ItemStorageType;
-import dev.wolfieboy09.qtech.item.*;
+import dev.wolfieboy09.qtech.item.FacadeItem;
+import dev.wolfieboy09.qtech.item.ItemStorageDisk;
+import dev.wolfieboy09.qtech.item.UpgradeItem;
+import dev.wolfieboy09.qtech.item.WrenchItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;

@@ -2,7 +2,6 @@ package dev.wolfieboy09.qtech.integration.cctweaked;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import dev.wolfieboy09.qtech.block.AbstractEnergyBlockEntity;
-import org.jetbrains.annotations.ApiStatus;
 
 public interface EnergizedPeripheral<T extends AbstractEnergyBlockEntity> {
     @LuaFunction(mainThread = true)

@@ -1,10 +1,10 @@
 package dev.wolfieboy09.qtech.block.pipe;
 
-import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
 import dev.wolfieboy09.qtech.api.pipe.network.ConnectionState;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetwork;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkData;
 import dev.wolfieboy09.qtech.api.pipe.network.PipeNetworkManager;
+import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
@@ -13,9 +13,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
