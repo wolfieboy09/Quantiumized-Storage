@@ -101,7 +101,10 @@ public final class GasMethods extends AbstractGasMethods<IGasHandler> {
         return object instanceof IGasHandler handler ? handler : null;
     }
 
-    private static Map<String, Integer> detailForGas(GasStack stack) {
-        return Map.of(stack.getGas().getDescriptionId(), stack.getAmount());
+    private static Map<String, ?> detailForGas(GasStack stack) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", stack.getGas().getResourceLocation().toString());
+        map.put("amount", stack.getAmount());
+        return map;
     }
 }
