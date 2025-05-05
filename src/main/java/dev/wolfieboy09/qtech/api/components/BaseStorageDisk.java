@@ -18,9 +18,4 @@ public record BaseStorageDisk(StorageType storageType){
             NeoForgeStreamCodecs.enumCodec(StorageType.class), BaseStorageDisk::storageType,
             BaseStorageDisk::new
     );
-
-
-    public BaseStorageDisk(StorageType storageType) {
-        this.storageType = storageType;
-    }
 }

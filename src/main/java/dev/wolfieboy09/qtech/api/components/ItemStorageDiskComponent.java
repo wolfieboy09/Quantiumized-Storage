@@ -28,10 +28,4 @@ public record ItemStorageDiskComponent(BaseStorageDisk base, ItemStorageType ite
             ), ItemStorageDiskComponent::contents,
             ItemStorageDiskComponent::new
     );
-
-    public ItemStorageDiskComponent(BaseStorageDisk base, ItemStorageType itemType, NonNullList<ItemStack> contents) {
-        this.base = base;
-        this.itemType = itemType;
-        this.contents = contents;
-    }
 }
