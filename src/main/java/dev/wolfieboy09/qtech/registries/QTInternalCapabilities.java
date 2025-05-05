@@ -29,6 +29,8 @@ public class QTInternalCapabilities {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, QTBlockEntities.SMELTERY.get(), (block, dir) -> block.getInventory());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, QTBlockEntities.SMELTERY.get(), (block, dir) -> block.getFluidHandler());
 
+        event.registerBlockEntity(QTCapabilities.GasStorage.BLOCK, QTBlockEntities.GAS_CANISTER.get(), (block, dir) -> block.getGasTank());
+
         event.registerItem(
                 QTCapabilities.GasStorage.ITEM,
                 (itemStack, context) -> {
