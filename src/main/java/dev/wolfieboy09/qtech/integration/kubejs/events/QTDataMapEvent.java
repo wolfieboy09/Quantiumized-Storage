@@ -19,31 +19,31 @@ public class QTDataMapEvent implements KubeEvent {
             new IdentityHashMap<>()
     );
 
-    public void registerItem(ResourceLocation item, int burnTime, int temperature) {
-        Item dingleBerry = BuiltInRegistries.ITEM.get(item);
-        if (!SMELTERY_DATA_MAP.left().containsKey(dingleBerry)) {
-            SMELTERY_DATA_MAP.left().put(dingleBerry, new SmelteryFuelMapper(burnTime, temperature, false));
+    public void registerItem(ResourceLocation resourceLocation, int burnTime, int temperature) {
+        Item item = BuiltInRegistries.ITEM.get(resourceLocation);
+        if (!SMELTERY_DATA_MAP.left().containsKey(item)) {
+            SMELTERY_DATA_MAP.left().put(item, new SmelteryFuelMapper(burnTime, temperature, false));
         }
     }
 
-    public void registerFluid(ResourceLocation fluid, int burnTime, int temperature) {
-        Fluid dingleBerry = BuiltInRegistries.FLUID.get(fluid);
-        if (!SMELTERY_DATA_MAP.right().containsKey(dingleBerry)) {
-            SMELTERY_DATA_MAP.right().put(dingleBerry, new SmelteryFuelMapper(burnTime, temperature, false));
+    public void registerFluid(ResourceLocation resourceLocation, int burnTime, int temperature) {
+        Fluid fluid = BuiltInRegistries.FLUID.get(resourceLocation);
+        if (!SMELTERY_DATA_MAP.right().containsKey(fluid)) {
+            SMELTERY_DATA_MAP.right().put(fluid, new SmelteryFuelMapper(burnTime, temperature, false));
         }
     }
 
-    public void registerItem(ResourceLocation item, int burnTime, int temperature, boolean replace) {
-        Item dingleBerry = BuiltInRegistries.ITEM.get(item);
-        if (!SMELTERY_DATA_MAP.left().containsKey(dingleBerry)) {
-            SMELTERY_DATA_MAP.left().put(dingleBerry, new SmelteryFuelMapper(burnTime, temperature, replace));
+    public void registerItem(ResourceLocation resourceLocation, int burnTime, int temperature, boolean replace) {
+        Item item = BuiltInRegistries.ITEM.get(resourceLocation);
+        if (!SMELTERY_DATA_MAP.left().containsKey(item)) {
+            SMELTERY_DATA_MAP.left().put(item, new SmelteryFuelMapper(burnTime, temperature, replace));
         }
     }
 
-    public void registerFluid(ResourceLocation fluid, int burnTime, int temperature, boolean replace) {
-        Fluid dingleBerry = BuiltInRegistries.FLUID.get(fluid);
-        if (!SMELTERY_DATA_MAP.right().containsKey(dingleBerry)) {
-            SMELTERY_DATA_MAP.right().put(dingleBerry, new SmelteryFuelMapper(burnTime, temperature, replace));
+    public void registerFluid(ResourceLocation resourceLocation, int burnTime, int temperature, boolean replace) {
+        Fluid fluid = BuiltInRegistries.FLUID.get(resourceLocation);
+        if (!SMELTERY_DATA_MAP.right().containsKey(fluid)) {
+            SMELTERY_DATA_MAP.right().put(fluid, new SmelteryFuelMapper(burnTime, temperature, replace));
         }
     }
 }
