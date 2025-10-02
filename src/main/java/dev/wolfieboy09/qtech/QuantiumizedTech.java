@@ -51,7 +51,7 @@ public class QuantiumizedTech {
         // modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Lets dive into getting small");
     }
 }
