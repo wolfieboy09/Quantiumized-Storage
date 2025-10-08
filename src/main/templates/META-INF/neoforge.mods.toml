@@ -38,13 +38,13 @@ config="qtech.mixins.json"
 [[dependencies.qtech]]
     modId="kubejs"
     type="optional"
-    versionRange="[2101.7.1-build.181,2101.7.2-build.227)"
+    versionRange="[${kubejs_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.qtech]]
     modId="jei"
     type="optional"
-    versionRange="[19.21.0.247,)"
+    versionRange="[${jei_version},)"
     ordering="NONE"
     side="CLIENT"

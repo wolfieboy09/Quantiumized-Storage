@@ -12,9 +12,9 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import java.util.List;
 
 public interface SmelterySchema {
-    RecipeKey<List<Either<Ingredient, SizedFluidIngredient>>> INGREDIENTS = IngredientComponent.INGREDIENT.or(SizedFluidIngredientComponent.FLAT).asList().key("ingredients", ComponentRole.INPUT);
-    RecipeKey<List<Either<ItemStack, FluidStack>>> RESULTS = ItemStackComponent.ITEM_STACK.or(FluidStackComponent.FLUID_STACK).asList().key("result", ComponentRole.OUTPUT);
-    RecipeKey<List<Either<ItemStack, FluidStack>>> WASTE = ItemStackComponent.ITEM_STACK.or(FluidStackComponent.FLUID_STACK).asList().key("waste", ComponentRole.OUTPUT);
+    RecipeKey<List<Either<Ingredient, SizedFluidIngredient>>> INGREDIENTS = IngredientComponent.INGREDIENT.instance().or(SizedFluidIngredientComponent.FLAT.instance()).asList().key("ingredients", ComponentRole.INPUT);
+    RecipeKey<List<Either<ItemStack, FluidStack>>> RESULTS = ItemStackComponent.ITEM_STACK.instance().or(FluidStackComponent.FLUID_STACK.instance()).asList().key("result", ComponentRole.OUTPUT);
+    RecipeKey<List<Either<ItemStack, FluidStack>>> WASTE = ItemStackComponent.ITEM_STACK.instance().or(FluidStackComponent.FLUID_STACK.instance()).asList().key("waste", ComponentRole.OUTPUT);
     RecipeKey<Integer> TEMPERATURE = NumberComponent.INT.key("temperature", ComponentRole.OTHER);
     RecipeKey<Integer> TICKS = NumberComponent.INT.key("ticks", ComponentRole.OTHER);
 

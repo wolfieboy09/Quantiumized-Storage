@@ -10,8 +10,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.List;
 
 public interface DiskAssemblySchema {
-    RecipeKey<List<Ingredient>> INGREDIENTS = IngredientComponent.INGREDIENT.asList().key("ingredients", ComponentRole.INPUT);
-    RecipeKey<List<Ingredient>> EXTRAS = IngredientComponent.INGREDIENT.asList().key("extras", ComponentRole.OTHER);
+    RecipeKey<List<Ingredient>> INGREDIENTS = IngredientComponent.INGREDIENT.instance().asList().key("ingredients", ComponentRole.INPUT);
+    RecipeKey<List<Ingredient>> EXTRAS = IngredientComponent.INGREDIENT.instance().asList().key("extras", ComponentRole.OTHER);
     RecipeKey<Integer> ENERGY = NumberComponent.INT.key("energy", ComponentRole.INPUT);
     RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.key("ticks", ComponentRole.INPUT);
     RecipeKey<ItemStack> RESULT = ItemStackComponent.ITEM_STACK.key("result", ComponentRole.OUTPUT);
