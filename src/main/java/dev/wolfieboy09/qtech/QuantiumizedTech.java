@@ -1,15 +1,28 @@
 package dev.wolfieboy09.qtech;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
+import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
 import dev.wolfieboy09.qtech.integration.cctweaked.CCTweakedPlugin;
+import dev.wolfieboy09.qtech.quantipedia.QuantiReader;
 import dev.wolfieboy09.qtech.registries.*;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.LoadingModList;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
 @Mod(QuantiumizedTech.MOD_ID)
@@ -19,6 +32,8 @@ public class QuantiumizedTech {
 
     public QuantiumizedTech(@NotNull IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::registerKeys);
+        modEventBus.addListener(this::reload);
 
         QTDataComponents.register(modEventBus);
         QTItems.register(modEventBus);
@@ -53,5 +68,32 @@ public class QuantiumizedTech {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Lets dive into getting small");
+    }
+    public static KeyMapping testKey;
+
+    private void registerKeys(RegisterKeyMappingsEvent event) {
+        testKey = new KeyMapping(
+                "key.mymod.test",             // Translation key
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_G,              // Default key (G)
+                "key.categories.mymod"        // Category
+        );
+
+        event.register(testKey);
+    }
+
+    @NothingNullByDefault
+    private void reload(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(new SimplePreparableReloadListener<Void>() {
+            @Override
+            protected Void prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+                return null;
+            }
+
+            @Override
+            protected void apply(Void o, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+                QuantiReader.loadAllWikiEntries(resourceManager);
+            }
+        });
     }
 }

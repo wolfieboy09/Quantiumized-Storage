@@ -29,9 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+
 public class QTKubeJSPlugin implements KubeJSPlugin {
-
-
     @Override
     public void registerRecipeSchemas(@NotNull RecipeSchemaRegistry registry) {
         registry.namespace(QuantiumizedTech.MOD_ID);
@@ -43,7 +42,7 @@ public class QTKubeJSPlugin implements KubeJSPlugin {
     public void registerBuilderTypes(@NotNull BuilderTypeRegistry registry) {
         registry.of(QTRegistries.GAS_KEY, reg -> {
             reg.addDefault(KubeGasBuilder.class, KubeGasBuilder::new);
-            reg.add(locate("gas").toString(), KubeGasBuilder.class, KubeGasBuilder::new);
+            reg.add(locate("gas"), KubeGasBuilder.class, KubeGasBuilder::new);
         });
     }
 

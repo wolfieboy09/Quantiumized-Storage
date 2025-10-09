@@ -19,7 +19,7 @@ public class QTGasses {
     public static final Supplier<Gas> EMPTY  = GASSES.register("empty", () -> new GasBuilder().build());
 
     public static final Supplier<Gas> HYDROGEN = GASSES.register("hydrogen", () ->
-            new GasBuilder().tint(ColorUtil.fromArgb(128, 256, 256, 256)).flammable(true).effects(
+            new GasBuilder().tint(ColorUtil.newAlpha(128, ColorUtil.WHITE)).flammable(true).effects(
                     new MobEffectInstance(QTEffects.OXYGEN_DEPRIVATION, 120)
             ).build()
     );

@@ -62,6 +62,6 @@ public class GasCanisterItem extends BlockItem {
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return ColorUtil.fromArgb(1, 86, 3, 252);
+        return ColorUtil.fromRgb(86, 3, 252);
     }
 }

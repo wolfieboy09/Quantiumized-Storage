@@ -17,7 +17,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
-@EventBusSubscriber(modid = QuantiumizedTech.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = QuantiumizedTech.MOD_ID)
 public class QTInternalCapabilities {
     @SubscribeEvent
     public static void register(@NotNull RegisterCapabilitiesEvent event) {

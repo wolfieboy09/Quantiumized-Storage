@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = QuantiumizedTech.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = QuantiumizedTech.MOD_ID)
 public class DataGeneration {
     @SubscribeEvent
     public static void gatherData(@NotNull GatherDataEvent event) {

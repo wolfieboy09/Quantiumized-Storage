@@ -20,9 +20,10 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(@NotNull String targetClassName, String mixinClassName) {
-        if (targetClassName.contains("kubejs/")) {
-            return LoadingModList.get().getModFileById("kubejs") != null;
-        }
+        // Old mixin for old version of kube
+//        if (targetClassName.contains("kubejs/")) {
+//            return LoadingModList.get().getModFileById("kubejs") != null;
+//        }
         return true;
     }
 
