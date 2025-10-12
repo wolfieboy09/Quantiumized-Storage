@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.quantipedia.api.widgets;
+package dev.wolfieboy09.qtech.api.widgets;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
@@ -32,6 +32,10 @@ public class CategoryListWidget extends AbstractWidget {
 
     private void toggle() {
         this.expanded = !this.expanded;
+    }
+
+    public boolean isExpanded() {
+        return this.expanded;
     }
 
     @Override

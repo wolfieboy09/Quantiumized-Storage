@@ -1,4 +1,4 @@
-manifest[category=home|title=quantipedia.title.test]
+manifest[category=home|title=quantipedia.title.test|icon=minecraft:dirtblock]
 
 # The Ultimate Title
 

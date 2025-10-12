@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.quantipedia.api.widgets;
+package dev.wolfieboy09.qtech.api.widgets;
 
 import dev.wolfieboy09.qtech.api.util.ColorUtil;
 import net.minecraft.client.Minecraft;
@@ -43,7 +43,7 @@ public class UntexturedButton extends AbstractButton {
 
         guiGraphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, ColorUtil.newAlpha(128, ColorUtil.BLACK));
 
-        int color = this.active ? 0xFFFFFF : 0xA0A0A0;
+        int color = this.active ? ColorUtil.WHITE : ColorUtil.newAlpha(128, ColorUtil.WHITE);
         if (this.isHoveredOrFocused()) {
             color = 0xFFFFA0;
         }

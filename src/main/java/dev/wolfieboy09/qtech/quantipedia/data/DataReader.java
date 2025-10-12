@@ -46,4 +46,8 @@ public class DataReader {
     public String getOrDefault(String key, String defaultValue) {
         return this.data.getOrDefault(key, defaultValue);
     }
+
+    public boolean contains(String key) {
+        return data.containsKey(key);
+    }
 }
