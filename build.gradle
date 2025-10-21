@@ -126,7 +126,7 @@ dependencies {
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [
             minecraft_version      : minecraft_version,
-            minecraft_version_range: minecraft_version_range,
+            minecraft_version_range: "[${minecraft_version}]",
             neo_version            : neo_version,
             neo_version_range      : neo_version_range,
             loader_version_range   : loader_version_range,
@@ -164,8 +164,8 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
-tasks.register('countLines') {
-    group = "Reporting"
+tasks.register('printProjectInfo') {
+    group = "Project Info"
 
     def srcDir = layout.projectDirectory.dir("src/main/java").asFile
     def mainDir = layout.projectDirectory.dir("src/main").asFile
