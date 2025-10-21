@@ -20,7 +20,7 @@ public class QTLangProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        final Map<String, String> toGenerate = getStringStringMap();
+        final Map<String, String> toGenerate = getManuallyWrittenTranslations();
 
         QTItems.ITEMS.getEntries().forEach(
                 item -> addItem(item, NamingUtil.toHumanReadable(item.getRegisteredName().split(":")[1]))
@@ -37,7 +37,7 @@ public class QTLangProvider extends LanguageProvider {
         toGenerate.forEach(this::add);
     }
 
-    private static @NotNull Map<String, String> getStringStringMap() {
+    private static @NotNull Map<String, String> getManuallyWrittenTranslations() {
         final Map<String, String> toGenerate = new HashMap<>();
         toGenerate.put("qtech.oxygen_deprivation", "%s could not breath on land");
         toGenerate.put("effect.qtech.oxygen_deprivation", "Oxygen Deprivation");
