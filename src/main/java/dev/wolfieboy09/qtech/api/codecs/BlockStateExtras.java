@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.api.codecs;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,14 +13,14 @@ import net.minecraft.world.level.block.state.BlockState;
 public final class BlockStateExtras {
 
     // There's no BlockState$STREAM_CODEC so we make our own
-    public static final StreamCodec<FriendlyByteBuf, BlockState> BLOCK_STATE_STREAM_CODEC = new StreamCodec<>() {
+    public static final StreamCodec<ByteBuf, BlockState> BLOCK_STATE_STREAM_CODEC = new StreamCodec<>() {
         @Override
-        public BlockState decode(FriendlyByteBuf buf) {
+        public BlockState decode(ByteBuf buf) {
             return Block.stateById(buf.readInt());
         }
 
         @Override
-        public void encode(FriendlyByteBuf buf, BlockState state) {
+        public void encode(ByteBuf buf, BlockState state) {
             buf.writeInt(Block.getId(state));
         }
     };
