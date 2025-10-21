@@ -1,10 +1,12 @@
 package dev.wolfieboy09.qtech.api.registry.gas;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@CanIgnoreReturnValue
 public class GasBuilder implements GasInfo {
     private boolean isPoisonous = false;
     private int tint = 0xFFFFFF;
