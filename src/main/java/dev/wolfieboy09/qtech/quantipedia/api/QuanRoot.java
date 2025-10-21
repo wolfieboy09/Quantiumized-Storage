@@ -2,7 +2,9 @@ package dev.wolfieboy09.qtech.quantipedia.api;
 
 import dev.wolfieboy09.qtech.quantipedia.api.errors.QuanEntryAlreadyExists;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public record QuanRoot(String modId, Set<QuanEntry> entries) {
     public QuanRoot(String modId) {

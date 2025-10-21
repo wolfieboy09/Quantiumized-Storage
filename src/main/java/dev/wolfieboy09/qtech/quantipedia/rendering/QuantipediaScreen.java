@@ -1,16 +1,19 @@
 package dev.wolfieboy09.qtech.quantipedia.rendering;
 
 import dev.wolfieboy09.qtech.api.util.ColorUtil;
-import dev.wolfieboy09.qtech.quantipedia.api.QuanEntry;
-import dev.wolfieboy09.qtech.quantipedia.api.QuanRoot;
 import dev.wolfieboy09.qtech.api.widgets.CategoryListWidget;
 import dev.wolfieboy09.qtech.api.widgets.SidemenuWidget;
 import dev.wolfieboy09.qtech.api.widgets.UntexturedButton;
+import dev.wolfieboy09.qtech.quantipedia.api.QuanEntry;
+import dev.wolfieboy09.qtech.quantipedia.api.QuanRoot;
+import dev.wolfieboy09.qtech.quantipedia.data.DataReader;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,10 +21,14 @@ public class QuantipediaScreen extends Screen {
     private final QuanRoot root;
     private QuanEntry selectedEntry;
 
-    public QuantipediaScreen(Component title, QuanRoot root) {
+    public QuantipediaScreen(Component title, @NotNull QuanRoot root) {
         super(title);
         this.root = root;
-        this.selectedEntry = root.entries().stream().toList().getFirst();
+        if (root.entries().isEmpty()) {
+            this.selectedEntry = new QuanEntry(new DataReader("manifest[category=none|title=quantipedia.title.unknown_error|icon=minecraft:dirtblock]"), "null", List.of(), Optional.empty());
+        } else {
+            this.selectedEntry = root.entries().stream().toList().getFirst();
+        }
     }
 
     @Override
