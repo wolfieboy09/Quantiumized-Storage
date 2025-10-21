@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qtech.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,16 +23,14 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 @NothingNullByDefault
-public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<SmelteryBlockEntity> {
-    private final BlockEntityRendererProvider.Context context;
-
-    public SmelteryBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
-        this.context = context;
-    }
+public record SmelteryBlockEntityRenderer(
+        BlockEntityRendererProvider.Context context) implements BlockEntityRenderer<SmelteryBlockEntity> {
 
     // Thanks to Random (random832) on the NeoForge server for making this code so much better
     @Override
     public void render(SmelteryBlockEntity blockEntity, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
+        if (!ClientConfig.renderFluidOnSmeltery.getAsBoolean()) return;
+
         IFluidHandler handler = blockEntity.getFluidHandler();
         Level level = blockEntity.getLevel();
 
@@ -89,7 +88,7 @@ public class SmelteryBlockEntityRenderer implements BlockEntityRenderer<Smeltery
             VertexConsumer builder = multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(state));
             float height = (((float) fluid.getAmount() / tankCapacity) * 0.635f) + 0.26f;
 
-            if(fluid.getAmount() < tankCapacity) {
+            if (fluid.getAmount() < tankCapacity) {
                 poseStack.pushPose();
                 poseStack.translate(x0, 0.05f, z0);
                 drawQuad(builder, poseStack, x1, height, 0.5f, 0.365f, height, z2, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), packedLight, packedOverlay, tintColor);

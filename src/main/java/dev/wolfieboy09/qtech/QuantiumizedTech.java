@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
+import dev.wolfieboy09.qtech.config.ClientConfig;
 import dev.wolfieboy09.qtech.integration.cctweaked.CCTweakedPlugin;
 import dev.wolfieboy09.qtech.quantipedia.QuantiReader;
 import dev.wolfieboy09.qtech.registries.*;
@@ -13,12 +14,16 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.LoadingModList;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +35,7 @@ public class QuantiumizedTech {
     public static final String MOD_ID = "qtech";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public QuantiumizedTech(@NotNull IEventBus modEventBus) {
+    public QuantiumizedTech(@NotNull IEventBus modEventBus, ModContainer container) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerKeys);
         modEventBus.addListener(this::reload);
@@ -63,7 +68,9 @@ public class QuantiumizedTech {
 
         //modEventBus.addListener(QTEntities::registerAttributes);
         //modEventBus.register(QTShading.class);
-        // modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

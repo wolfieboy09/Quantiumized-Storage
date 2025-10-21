@@ -48,6 +48,9 @@ public class QTLangProvider extends LanguageProvider {
         toGenerate.put("qtech.tooltip.shift_info", "Press §6SHIFT§r for more info");
         toGenerate.put("qtech.gas_canister.shifted_info", "Supports containing gasses inside the container");
         toGenerate.put("qtech.gas_canister.contains_gas", "Storing §e%s§r");
+
+        toGenerate.put("qtech.configuration.renderFluidOnSmeltery", "Render fluid on Smeltery");
+
         return toGenerate;
     }
 }
