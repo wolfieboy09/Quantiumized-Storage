@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qtech.mixins;
 
-import net.neoforged.fml.loading.LoadingModList;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -20,10 +19,6 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(@NotNull String targetClassName, String mixinClassName) {
-        // Old mixin for old version of kube
-//        if (targetClassName.contains("kubejs/")) {
-//            return LoadingModList.get().getModFileById("kubejs") != null;
-//        }
         return true;
     }
 
