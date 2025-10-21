@@ -19,8 +19,9 @@ import dev.wolfieboy09.qtech.integration.kubejs.builders.KubeGasBuilder;
 import dev.wolfieboy09.qtech.integration.kubejs.events.QTDataMapEvent;
 import dev.wolfieboy09.qtech.integration.kubejs.events.QTKubeEvents;
 import dev.wolfieboy09.qtech.integration.kubejs.events.SmelteryFuelMapper;
-import dev.wolfieboy09.qtech.integration.kubejs.schemas.DiskAssemblySchema;
-import dev.wolfieboy09.qtech.integration.kubejs.schemas.SmelterySchema;
+import dev.wolfieboy09.qtech.integration.kubejs.recipes.QTRecipeSchema;
+import dev.wolfieboy09.qtech.integration.kubejs.recipes.schemas.DiskAssemblySchema;
+import dev.wolfieboy09.qtech.integration.kubejs.recipes.schemas.SmelterySchema;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
@@ -34,7 +35,7 @@ public class QTKubeJSPlugin implements KubeJSPlugin {
     @Override
     public void registerRecipeSchemas(@NotNull RecipeSchemaRegistry registry) {
         registry.namespace(QuantiumizedTech.MOD_ID);
-        registry.register(locate("disk_assembly"), DiskAssemblySchema.SCHEMA);
+        registry.register(locate("disk_assembly"), QTRecipeSchema.DISK_ASSEMBLY);
         registry.register(locate("smeltery"), SmelterySchema.SCHEMA);
     }
 

@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.integration.kubejs.schemas;
+package dev.wolfieboy09.qtech.integration.kubejs.recipes.schemas;
 
 import com.mojang.datafixers.util.Either;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
@@ -17,6 +17,7 @@ public interface SmelterySchema {
     RecipeKey<List<Either<ItemStack, FluidStack>>> WASTE = ItemStackComponent.ITEM_STACK.instance().or(FluidStackComponent.FLUID_STACK.instance()).asList().key("waste", ComponentRole.OUTPUT);
     RecipeKey<Integer> TEMPERATURE = NumberComponent.INT.key("temperature", ComponentRole.OTHER);
     RecipeKey<Integer> TICKS = NumberComponent.INT.key("ticks", ComponentRole.OTHER);
+
 
     RecipeSchema SCHEMA = new RecipeSchema(INGREDIENTS, RESULTS, WASTE, TEMPERATURE, TICKS);
 }
