@@ -9,14 +9,12 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class CombinedRecipeInput implements RecipeInput {
-    protected final IFluidHandler fluidHandler;
-    protected final IItemHandler itemHandler;
-
-    public CombinedRecipeInput(IFluidHandler fluidHandler, IItemHandler itemHandler) {
-        this.fluidHandler = fluidHandler;
-        this.itemHandler = itemHandler;
-    }
+/**
+ * A recipe handler to handle recipes that use a {@link IItemHandler} and {@link IFluidHandler}
+ * @param fluidHandler The {@link IFluidHandler}
+ * @param itemHandler The {@link IItemHandler}
+ */
+public record CombinedRecipeInput(IFluidHandler fluidHandler, IItemHandler itemHandler) implements RecipeInput {
 
     @Override
     public @NotNull ItemStack getItem(int i) {
@@ -32,7 +30,7 @@ public class CombinedRecipeInput implements RecipeInput {
         return this.itemHandler.getSlots();
     }
 
-    public boolean matchItem(Ingredient ingredient){
+    public boolean matchItem(Ingredient ingredient) {
         boolean match = false;
         for (int i = 0; i < this.itemHandler.getSlots(); i++) {
             ItemStack stack = this.itemHandler.getStackInSlot(i);
