@@ -30,6 +30,6 @@ public class DataGeneration {
         //generator.addProvider(event.includeServer(), new QTGasTagsProvider(output, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new QTItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter()));
         generator.addProvider(event.includeServer(), new QTRecipeProvider(output, lookupProvider));
-
+        generator.addProvider(event.includeServer(), new QTMultiblockProvider(output));
     }
 }
