@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import dev.latvian.mods.kubejs.generator.KubeDataGenerator;
 import dev.latvian.mods.kubejs.script.data.GeneratedData;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
-import dev.wolfieboy09.qtech.integration.kubejs.events.QTDataMapEvent;
+import dev.wolfieboy09.qtech.integration.kubejs.events.datamap.QTSmelteryDataMapEvent;
 import dev.wolfieboy09.qtech.integration.kubejs.events.QTKubeEvents;
 import dev.wolfieboy09.qtech.integration.kubejs.events.SmelteryFuelMapper;
 import net.minecraft.resources.ResourceLocation;
@@ -25,9 +25,9 @@ public final class KJSSmelteryFuelDataGeneration {
 
         clearMappings();
 
-        QTKubeEvents.DATA_MAP_EVENT.post(new QTDataMapEvent());
+        QTKubeEvents.DATA_MAP_EVENT.post(new QTSmelteryDataMapEvent());
 
-        for (Map.Entry<Item, SmelteryFuelMapper> entry : QTDataMapEvent.SMELTERY_DATA_MAP.left().entrySet()) {
+        for (Map.Entry<Item, SmelteryFuelMapper> entry : QTSmelteryDataMapEvent.SMELTERY_DATA_MAP.left().entrySet()) {
             JsonObject json = new JsonObject();
             JsonObject data = new JsonObject();
             SmelteryFuelMapper wrapper = entry.getValue();
@@ -43,7 +43,7 @@ public final class KJSSmelteryFuelDataGeneration {
 
         }
 
-        for (Map.Entry<Fluid, SmelteryFuelMapper> entry : QTDataMapEvent.SMELTERY_DATA_MAP.right().entrySet()) {
+        for (Map.Entry<Fluid, SmelteryFuelMapper> entry : QTSmelteryDataMapEvent.SMELTERY_DATA_MAP.right().entrySet()) {
             JsonObject json = new JsonObject();
             JsonObject data = new JsonObject();
             SmelteryFuelMapper wrapper = entry.getValue();
@@ -74,8 +74,8 @@ public final class KJSSmelteryFuelDataGeneration {
     }
 
     private static void clearMappings() {
-        QTDataMapEvent.SMELTERY_DATA_MAP.left().clear();
-        QTDataMapEvent.SMELTERY_DATA_MAP.right().clear();
+        QTSmelteryDataMapEvent.SMELTERY_DATA_MAP.left().clear();
+        QTSmelteryDataMapEvent.SMELTERY_DATA_MAP.right().clear();
     }
 
     private static @NotNull ResourceLocation locate(String id) {

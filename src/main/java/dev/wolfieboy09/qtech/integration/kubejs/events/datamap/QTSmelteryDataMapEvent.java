@@ -1,8 +1,9 @@
-package dev.wolfieboy09.qtech.integration.kubejs.events;
+package dev.wolfieboy09.qtech.integration.kubejs.events.datamap;
 
 import dev.latvian.mods.kubejs.event.KubeEvent;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.wolfieboy09.qtech.api.Pair;
+import dev.wolfieboy09.qtech.integration.kubejs.events.SmelteryFuelMapper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -12,7 +13,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public class QTDataMapEvent implements KubeEvent {
+public class QTSmelteryDataMapEvent implements KubeEvent {
     @HideFromJS
     public static final Pair<Map<Item, SmelteryFuelMapper>, Map<Fluid, SmelteryFuelMapper>> SMELTERY_DATA_MAP = new Pair<>(
             new IdentityHashMap<>(),
