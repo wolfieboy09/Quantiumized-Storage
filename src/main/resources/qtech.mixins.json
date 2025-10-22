@@ -4,7 +4,7 @@
   "priority": 10000,
   "package": "dev.wolfieboy09.qtech.mixins",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "qstorage.refmap.json",
+  "refmap": "qtech.refmap.json",
   "injectors": {
     "defaultRequire": 1
   },
