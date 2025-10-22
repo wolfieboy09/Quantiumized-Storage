@@ -30,7 +30,7 @@ public record SmelteryRecipe(
         List<Either<ItemStack, FluidStack>> result,
         List<Either<ItemStack, FluidStack>> waste,
         int minFuelTemp,
-        int timeInTicks
+        int processingTime
 ) implements Recipe<CombinedRecipeInput> {
     @Override
     public boolean matches(CombinedRecipeInput input, Level level) {
@@ -114,7 +114,7 @@ public record SmelteryRecipe(
                         Codec.either(ItemStack.CODEC, FluidStack.CODEC).listOf(1, 2).fieldOf("result").forGetter(SmelteryRecipe::result),
                         Codec.either(ItemStack.CODEC, FluidStack.CODEC).listOf(0, 2).fieldOf("waste").forGetter(SmelteryRecipe::waste),
                         Codec.INT.fieldOf("temperature").forGetter(SmelteryRecipe::minFuelTemp),
-                        Codec.INT.fieldOf("ticks").forGetter(SmelteryRecipe::timeInTicks)
+                        Codec.INT.fieldOf("processing_time").forGetter(SmelteryRecipe::processingTime)
                 ).apply(builder, SmelteryRecipe::new)
         );
 
@@ -123,7 +123,7 @@ public record SmelteryRecipe(
                 ByteBufCodecs.either(ItemStack.STREAM_CODEC, FluidStack.STREAM_CODEC).apply(ByteBufCodecs.list(2)), SmelteryRecipe::result,
                 ByteBufCodecs.either(ItemStack.STREAM_CODEC, FluidStack.STREAM_CODEC).apply(ByteBufCodecs.list(2)), SmelteryRecipe::waste,
                 ByteBufCodecs.INT, SmelteryRecipe::minFuelTemp,
-                ByteBufCodecs.INT, SmelteryRecipe::timeInTicks,
+                ByteBufCodecs.INT, SmelteryRecipe::processingTime,
                 SmelteryRecipe::new
         );
 

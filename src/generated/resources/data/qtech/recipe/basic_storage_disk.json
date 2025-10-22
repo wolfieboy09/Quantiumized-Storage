@@ -20,9 +20,9 @@
       "item": "qtech:steel_screw"
     }
   ],
+  "processing_time": 60,
   "result": {
     "count": 1,
     "id": "qtech:basic_storage_disk"
-  },
-  "ticks": 60
+  }
 }

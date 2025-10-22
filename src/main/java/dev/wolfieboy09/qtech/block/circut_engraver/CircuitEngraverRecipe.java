@@ -25,7 +25,7 @@ public record CircuitEngraverRecipe(
         List<Ingredient> ingredients,
         ItemStack result,
         int energy,
-        int timeInTicks
+        int processingTime
 ) implements Recipe<RecipeWrapper>, RecipeType<CircuitEngraverRecipe> {
 
     @Override
@@ -62,10 +62,10 @@ public record CircuitEngraverRecipe(
     public static class Serializer implements RecipeSerializer<CircuitEngraverRecipe> {
         private static final MapCodec<CircuitEngraverRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 builder -> builder.group(
-                        Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(CircuitEngraverRecipe::ingredients),
+                        Ingredient.CODEC.listOf(0, 4).fieldOf("ingredients").forGetter(CircuitEngraverRecipe::ingredients),
                         ItemStack.CODEC.fieldOf("result").forGetter(CircuitEngraverRecipe::result),
                         Codec.INT.fieldOf("energy").forGetter(CircuitEngraverRecipe::energy),
-                        Codec.INT.fieldOf("timeInTicks").forGetter(CircuitEngraverRecipe::timeInTicks)
+                        Codec.INT.fieldOf("processing_time").forGetter(CircuitEngraverRecipe::processingTime)
                 ).apply(builder, CircuitEngraverRecipe::new)
         );
 
@@ -73,7 +73,7 @@ public record CircuitEngraverRecipe(
                 Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list(4)), CircuitEngraverRecipe::ingredients,
                 ItemStack.STREAM_CODEC, CircuitEngraverRecipe::result,
                 ByteBufCodecs.INT, CircuitEngraverRecipe::energy,
-                ByteBufCodecs.INT, CircuitEngraverRecipe::timeInTicks,
+                ByteBufCodecs.INT, CircuitEngraverRecipe::processingTime,
                 CircuitEngraverRecipe::new
         );
 

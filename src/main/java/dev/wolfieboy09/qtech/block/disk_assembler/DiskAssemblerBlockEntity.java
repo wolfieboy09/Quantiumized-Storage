@@ -55,7 +55,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private void updateContainer() {
         this.containerData.set(0, this.energyStorage.getEnergyStored());
         this.containerData.set(1, this.getProgress());
-        this.containerData.set(2, this.recipe == null ? 0 : this.recipe.timeInTicks());
+        this.containerData.set(2, this.recipe == null ? 0 : this.recipe.processingTime());
     }
     
     @Override
@@ -104,7 +104,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         
         // Check energy and progress crafting if energy is sufficient
         boolean energySufficient = this.energyStorage.getEnergyStored() >= this.recipe.energyCost();
-        int timeRequired = this.recipe.timeInTicks();
+        int timeRequired = this.recipe.processingTime();
         
         if (energySufficient) {
             if (this.crafting_ticks < timeRequired) {
@@ -134,7 +134,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     
     private int getProgress() {
         if (this.recipe == null) return 0;
-        return (int) (this.crafting_ticks / (float) this.recipe.timeInTicks() * 100);
+        return (int) (this.crafting_ticks / (float) this.recipe.processingTime() * 100);
     }
     
     private void consumeInputItems(DiskAssemblerRecipe recipe) {

@@ -26,7 +26,7 @@ public record DiskAssemblerRecipe(
         List<Ingredient> mainItems,
         List<Ingredient> extras,
         int energyCost,
-        int timeInTicks,
+        int processingTime,
         ItemStack result
 ) implements Recipe<RecipeWrapper>, RecipeType<DiskAssemblerRecipe> {
 
@@ -82,10 +82,10 @@ public record DiskAssemblerRecipe(
     public static class Serializer implements RecipeSerializer<DiskAssemblerRecipe> {
         private static final MapCodec<DiskAssemblerRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 builder -> builder.group(
-                        Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(DiskAssemblerRecipe::mainItems),
-                        Ingredient.CODEC.listOf().fieldOf("extras").forGetter(DiskAssemblerRecipe::extras),
+                        Ingredient.CODEC.listOf(0, 3).fieldOf("ingredients").forGetter(DiskAssemblerRecipe::mainItems),
+                        Ingredient.CODEC.listOf(0, 3).fieldOf("extras").forGetter(DiskAssemblerRecipe::extras),
                         Codec.INT.fieldOf("energy").forGetter(DiskAssemblerRecipe::energyCost),
-                        Codec.INT.fieldOf("ticks").forGetter(DiskAssemblerRecipe::timeInTicks),
+                        Codec.INT.fieldOf("processing_time").forGetter(DiskAssemblerRecipe::processingTime),
                         ItemStack.CODEC.fieldOf("result").forGetter(DiskAssemblerRecipe::result)
                 ).apply(builder, DiskAssemblerRecipe::new)
         );
@@ -94,7 +94,7 @@ public record DiskAssemblerRecipe(
                 Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list(3)), DiskAssemblerRecipe::mainItems,
                 Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list(4)), DiskAssemblerRecipe::extras,
                 ByteBufCodecs.INT, DiskAssemblerRecipe::energyCost,
-                ByteBufCodecs.INT, DiskAssemblerRecipe::timeInTicks,
+                ByteBufCodecs.INT, DiskAssemblerRecipe::processingTime,
                 ItemStack.STREAM_CODEC, DiskAssemblerRecipe::result,
                 DiskAssemblerRecipe::new
         );

@@ -5,6 +5,7 @@
       "item": "minecraft:nether_star"
     }
   ],
+  "processing_time": 20,
   "result": [
     {
       "count": 1,
@@ -12,7 +13,6 @@
     }
   ],
   "temperature": 500,
-  "ticks": 20,
   "waste": [
     {
       "count": 8,

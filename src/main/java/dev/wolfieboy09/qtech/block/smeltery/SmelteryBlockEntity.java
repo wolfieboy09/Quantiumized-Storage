@@ -380,7 +380,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
         // No room? Don't continue
         if (!outputItemHasSpace || !outputFluidHasSpace || !wasteSlotHasSpace) return;
 
-        int timeRequired = this.recipe.timeInTicks();
+        int timeRequired = this.recipe.processingTime();
 
         if (this.crafting_ticks < timeRequired) {
             this.crafting_ticks++;
@@ -409,7 +409,7 @@ public class SmelteryBlockEntity extends GlobalBlockEntity implements MenuProvid
     }
 
     private int getProgress() {
-        return this.recipe == null ? 0 : (int) (this.crafting_ticks / (float) this.recipe.timeInTicks() * 100);
+        return this.recipe == null ? 0 : (int) (this.crafting_ticks / (float) this.recipe.processingTime() * 100);
     }
 
     private void consumeInputItems(SmelteryRecipe recipe) {
