@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
 import dev.latvian.mods.kubejs.recipe.component.*;
 import dev.latvian.mods.kubejs.recipe.schema.KubeRecipeFactory;
-import dev.latvian.mods.kubejs.recipe.schema.RecipeConstructor;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import dev.latvian.mods.kubejs.util.TickDuration;
 import dev.latvian.mods.rhino.type.TypeInfo;

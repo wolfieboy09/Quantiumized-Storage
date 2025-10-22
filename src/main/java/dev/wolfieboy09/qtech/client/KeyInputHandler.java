@@ -2,7 +2,6 @@ package dev.wolfieboy09.qtech.client;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.quantipedia.QuantiReader;
-import dev.wolfieboy09.qtech.quantipedia.api.QuanRoot;
 import dev.wolfieboy09.qtech.quantipedia.rendering.QuantipediaScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
