@@ -7,7 +7,6 @@ import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

@@ -2,8 +2,6 @@ package dev.wolfieboy09.qtech.api.registry.multiblock_type;
 
 import com.mojang.serialization.Codec;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
-import dev.wolfieboy09.qtech.api.registry.gas.Gas;
-import dev.wolfieboy09.qtech.api.registry.gas.GasBuilder;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
