@@ -21,7 +21,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
-import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
 @NothingNullByDefault
@@ -29,18 +28,18 @@ public class QTJEIPlugin implements IModPlugin {
     public static final IIngredientType<Gas> GAS_TYPE = () -> Gas.class;
 
     @Override
-    public @NotNull ResourceLocation getPluginUid() {
+    public ResourceLocation getPluginUid() {
         return ResourceHelper.asResource("jei_plugin");
     }
 
     @Override
-    public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
+    public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new DiskAssemblerCategory(guiHelper), new SmelteryCategory(guiHelper));
     }
 
     @Override
-    public void registerRecipes(@NotNull IRecipeRegistration registration) {
+    public void registerRecipes(IRecipeRegistration registration) {
         if (Minecraft.getInstance().level == null) return;
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
@@ -52,7 +51,7 @@ public class QTJEIPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(QTBlocks.DISK_ASSEMBLER.get()), DiskAssemblerCategory.RECIPE_TYPE);
         registration.addRecipeCatalyst(new ItemStack(QTBlocks.SMELTERY.get()), SmelteryCategory.RECIPE_TYPE);
     }
