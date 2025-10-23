@@ -1,5 +1,11 @@
 package dev.wolfieboy09.qtech.api.multiblock;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,6 +16,15 @@ import java.util.List;
  * @param rows Each row inside a multiblock
  */
 public record Layer(List<String> rows) {
+    public static final Codec<Layer> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+        Codec.STRING.listOf().fieldOf("rows").forGetter(Layer::rows)
+    ).apply(inst, Layer::new));
+
+    public static final StreamCodec<ByteBuf, Layer> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), Layer::rows,
+            Layer::new
+    );
+
     public Layer(List<String> rows) {
         this.rows = List.copyOf(rows); // We need it immutable
     }

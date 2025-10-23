@@ -2,9 +2,17 @@ package dev.wolfieboy09.qtech.api.multiblock;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.wolfieboy09.qtech.api.codecs.QTExtraStreamCodecs;
 import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -209,6 +217,34 @@ public class MultiblockBuilder {
                 this.keyMap = new HashMap<>(keyMap);
                 this.layers = List.copyOf(layers);
             }
+
+            public static final Codec<PatternData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+                    Codec.STRING.fieldOf("name").forGetter(PatternData::name),
+                    MultiblockType.CODEC.fieldOf("multiblock_type").forGetter(PatternData::multiblockType),
+                    ResourceLocation.CODEC.fieldOf("controller").forGetter(PatternData::controller),
+                    BlockPos.CODEC.fieldOf("controller_offset").forGetter(PatternData::controllerPosition),
+                    Codec.unboundedMap(
+                            Codec.STRING.xmap(s -> s.charAt(0), String::valueOf),
+                            BlockMatcher.CODEC
+                    ).fieldOf("key_map").forGetter(PatternData::keyMap),
+                    Layer.CODEC.listOf().fieldOf("layers").forGetter(PatternData::layers)
+            ).apply(inst, PatternData::new));
+
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, PatternData> STREAM_CODEC = StreamCodec.composite(
+                    ByteBufCodecs.STRING_UTF8, PatternData::name,
+                    MultiblockType.STREAM_CODEC, PatternData::multiblockType,
+                    ResourceLocation.STREAM_CODEC, PatternData::getControllerBlock,
+                    BlockPos.STREAM_CODEC, PatternData::controllerPosition,
+                    ByteBufCodecs.map(
+                            HashMap::new,
+                            QTExtraStreamCodecs.CHAR,
+                            BlockMatcher.STREAM_CODEC
+                    ), PatternData::keyMap,
+                    Layer.STREAM_CODEC.apply(ByteBufCodecs.list()), PatternData::layers,
+                    PatternData::new
+            );
+
 
             /**
              * Get the controller offset (relative to pattern origin at 0,0,0)
