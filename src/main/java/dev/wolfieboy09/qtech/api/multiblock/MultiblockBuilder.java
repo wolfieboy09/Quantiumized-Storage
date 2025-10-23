@@ -3,11 +3,14 @@ package dev.wolfieboy09.qtech.api.multiblock;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qtech.api.codecs.QTExtraStreamCodecs;
 import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -224,7 +227,7 @@ public class MultiblockBuilder {
                     Codec.unboundedMap(
                             Codec.STRING.xmap(s -> s.charAt(0), String::valueOf),
                             BlockMatcher.CODEC
-                    ).fieldOf("key_map").forGetter(PatternData::keyMap),
+                    ).fieldOf("pattern").forGetter(PatternData::keyMap),
                     Layer.CODEC.listOf().fieldOf("layers").forGetter(PatternData::layers)
             ).apply(inst, PatternData::new));
 
@@ -272,16 +275,13 @@ public class MultiblockBuilder {
                 root.addProperty("name", this.name);
                 root.addProperty("multiblock_type", this.multiblockType.getMultiblockType().toString());
 
-                JsonObject controllerData = new JsonObject();
-                controllerData.addProperty("controller", this.controller.toString());
+                root.addProperty("controller", this.controller.toString());
 
                 JsonObject controllerOffset = new JsonObject();
                 controllerOffset.addProperty("x", this.controllerPosition.getX());
                 controllerOffset.addProperty("y", this.controllerPosition.getY());
                 controllerOffset.addProperty("z", this.controllerPosition.getZ());
-                controllerData.add("offset", controllerOffset);
-
-                root.add("controller_data", controllerData);
+                root.add("controller_offset", controllerOffset);
 
                 JsonObject keyMapJson = new JsonObject();
                 for (Map.Entry<Character, BlockMatcher> pair : this.keyMap.entrySet()) {
