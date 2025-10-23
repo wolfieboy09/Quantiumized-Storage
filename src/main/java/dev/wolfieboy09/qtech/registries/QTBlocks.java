@@ -1,10 +1,12 @@
 package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock;
+import dev.wolfieboy09.qtech.block.multiblock.CentrifugeController;
 import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipe;
@@ -70,6 +72,8 @@ public class QTBlocks {
             EnergyPipe::new
     );
 
+    public static final DeferredBlock<CentrifugeController> CENTRIFUGE_CONTROLLER = registerController("centrifuge_controller", () -> new CentrifugeController(BlockBehaviour.Properties.of()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));
         registerBlockItem(name, toReturn);
@@ -91,6 +95,12 @@ public class QTBlocks {
     private static DeferredBlock<GasCanisterBlock> registerGasCanister() {
         DeferredBlock<GasCanisterBlock> toReturn = BLOCKS.register("gas_canister", () -> new GasCanisterBlock(BlockBehaviour.Properties.of()));
         BLOCK_ITEMS.register("gas_canister", () -> new GasCanisterItem(new Item.Properties()));
+        return toReturn;
+    }
+
+    private static <T extends BaseMultiblockController> DeferredBlock<T> registerController(String name, Supplier<T> block) {
+        DeferredBlock<T> toReturn = BLOCKS.register(name, block);
+        registerBlockItem(name, toReturn);
         return toReturn;
     }
 

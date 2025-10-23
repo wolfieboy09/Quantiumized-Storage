@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public final class QTMultiblockTypes {
     public static final DeferredRegister<MultiblockType> TYPES = DeferredRegister.create(QTRegistries.MULTIBLOCK_TYPE, QuantiumizedTech.MOD_ID);
 
+    public static final Supplier<MultiblockType> CENTRIFUGE = create("centrifuge");
 
     private static @NotNull Supplier<MultiblockType> create(String id) {
         return TYPES.register(id, MultiblockType::new);

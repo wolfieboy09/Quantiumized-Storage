@@ -135,8 +135,6 @@ public class MultiblockBuilder {
         return this;
     }
 
-
-
     /**
      * Add a pre-constructed layer
      */
@@ -248,13 +246,17 @@ public class MultiblockBuilder {
                 JsonObject root = new JsonObject();
                 root.addProperty("name", this.name);
                 root.addProperty("multiblock_type", this.multiblockType.getMultiblockType().toString());
-                root.addProperty("controller", this.controller.toString());
+
+                JsonObject controllerData = new JsonObject();
+                controllerData.addProperty("controller", this.controller.toString());
 
                 JsonObject controllerOffset = new JsonObject();
                 controllerOffset.addProperty("x", this.controllerPosition.getX());
                 controllerOffset.addProperty("y", this.controllerPosition.getY());
                 controllerOffset.addProperty("z", this.controllerPosition.getZ());
-                root.add("controller_offset", controllerOffset);
+                controllerData.add("offset", controllerOffset);
+
+                root.add("controller_data", controllerData);
 
                 JsonObject keyMapJson = new JsonObject();
                 for (Map.Entry<Character, BlockMatcher> pair : this.keyMap.entrySet()) {
