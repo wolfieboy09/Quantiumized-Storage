@@ -6,6 +6,7 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.shared.peripheral.generic.GenericPeripheral;
 import dan200.computercraft.shared.util.CapabilityUtil;
+import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.capabilities.QTCapabilities;
 import dev.wolfieboy09.qtech.api.capabilities.gas.IGasHandler;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
@@ -23,7 +24,8 @@ import java.util.Map;
 import java.util.Optional;
 
 
-// Thanks to CC: Tweaked code for this code and the abstact one that I modified for gasses
+// Thanks to CC: Tweaked code for this code and the abstract one that I modified for gasses
+@NothingNullByDefault
 public final class GasMethods extends AbstractGasMethods<IGasHandler> {
     @Override
     @LuaFunction(mainThread = true)
@@ -40,7 +42,7 @@ public final class GasMethods extends AbstractGasMethods<IGasHandler> {
     @Override
     @LuaFunction(mainThread = true)
     public int pushGas(IGasHandler from, IComputerAccess computer, String toName, Optional<Integer> limit, Optional<String> gasName) throws LuaException {
-        Gas gas = gasName.isPresent() ? QTRegistries.GAS.get(ResourceLocation.parse(gasName.get())) : null;
+        Gas gas = gasName.map(s -> QTRegistries.GAS.get(ResourceLocation.parse(s))).orElse(null);
         IPeripheral location = computer.getAvailablePeripheral(toName);
         if (location == null) throw new LuaException("Target '" + toName + "' does not exist");
         IGasHandler to = extractHandler(location);
@@ -53,7 +55,7 @@ public final class GasMethods extends AbstractGasMethods<IGasHandler> {
     @Override
     @LuaFunction(mainThread = true)
     public int pullGas(IGasHandler to, IComputerAccess computer, String fromName, Optional<Integer> limit, Optional<String> gasName) throws LuaException {
-        Gas gas = gasName.isPresent() ? QTRegistries.GAS.get(ResourceLocation.parse(gasName.get())) : null;
+        Gas gas = gasName.map(s -> QTRegistries.GAS.get(ResourceLocation.parse(s))).orElse(null);
         IPeripheral location = computer.getAvailablePeripheral(fromName);
         if (location == null) throw new LuaException("Target '" + fromName + "' does not exist");
         IGasHandler from = extractHandler(location);
