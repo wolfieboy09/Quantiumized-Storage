@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qtech.api.Pair;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qtech.api.recipes.CombinedRecipeInput;
+import dev.wolfieboy09.qtech.api.recipes.inputs.CombinedRecipeInput;
 import dev.wolfieboy09.qtech.registries.QTRecipes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;

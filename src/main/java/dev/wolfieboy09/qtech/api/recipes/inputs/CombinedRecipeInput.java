@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.api.recipes;
+package dev.wolfieboy09.qtech.api.recipes.inputs;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;

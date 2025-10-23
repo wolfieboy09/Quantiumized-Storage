@@ -4,7 +4,7 @@ import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.fluids.ExtendedFluidTank;
 import dev.wolfieboy09.qtech.api.items.ExtendedItemStackHandler;
-import dev.wolfieboy09.qtech.api.recipes.CombinedRecipeInput;
+import dev.wolfieboy09.qtech.api.recipes.inputs.CombinedRecipeInput;
 import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
 import dev.wolfieboy09.qtech.registries.QTBlockEntities;
 import dev.wolfieboy09.qtech.registries.QTRecipes;
