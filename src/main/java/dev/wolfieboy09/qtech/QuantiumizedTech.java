@@ -40,6 +40,7 @@ public class QuantiumizedTech {
         QTDataComponents.register(modEventBus);
         QTItems.register(modEventBus);
         QTBlockEntities.register(modEventBus);
+        QTMultiblockTypes.register(modEventBus);
         QTBlocks.register(modEventBus);
         QTRecipes.register(modEventBus);
         QTCreativeTab.register(modEventBus);
@@ -48,7 +49,6 @@ public class QuantiumizedTech {
         QTGasses.register(modEventBus);
         QTEffects.register(modEventBus);
         QTEntities.register(modEventBus);
-        QTMultiblockTypes.register(modEventBus);
 
         modEventBus.addListener(QTPackets::register);
         modEventBus.addListener(QTEntities::registerRenderers);
