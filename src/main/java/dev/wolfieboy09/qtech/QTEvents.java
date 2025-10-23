@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class QTEvents {
     public static void registerRegistries(@NotNull NewRegistryEvent event) {
         event.register(QTRegistries.GAS);
+        event.register(QTRegistries.MULTIBLOCK_TYPE);
     }
 
     public static void particle(@NotNull RegisterParticleProvidersEvent event) {

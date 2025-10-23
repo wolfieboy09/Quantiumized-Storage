@@ -47,9 +47,11 @@ public class QuantiumizedTech {
         QTParticleTypes.register(modEventBus);
         QTGasses.register(modEventBus);
         QTEffects.register(modEventBus);
+        QTEntities.register(modEventBus);
+        QTMultiblockTypes.register(modEventBus);
+
         modEventBus.addListener(QTPackets::register);
         modEventBus.addListener(QTEntities::registerRenderers);
-        QTEntities.register(modEventBus);
 
         // Register before neoforge because wiki says so
         modEventBus.addListener(EventPriority.HIGH, QTEvents::registerRegistries);
@@ -75,12 +77,12 @@ public class QuantiumizedTech {
     }
     public static KeyMapping testKey;
 
-    private void registerKeys(RegisterKeyMappingsEvent event) {
+    private void registerKeys(@NotNull RegisterKeyMappingsEvent event) {
         testKey = new KeyMapping(
-                "key.mymod.test",             // Translation key
+                "key.qtech.test",             // Translation key
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_G,              // Default key (G)
-                "key.categories.mymod"        // Category
+                "key.categories.qtech"        // Category
         );
 
         event.register(testKey);

@@ -3,6 +3,7 @@ package dev.wolfieboy09.qtech.api.multiblock;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
+import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Class to build Multiblocks with
@@ -22,7 +24,7 @@ public class MultiblockBuilder {
     private static final Set<Character> RESERVED_KEYS = Set.of(' ', '*', '+');
 
     private final String name;
-    private String multiblockType;
+    private MultiblockType multiblockType;
     private final Map<Character, BlockMatcher> keyMap = new HashMap<>();
     private BlockPos controllerPosition = BlockPos.ZERO;
     private final List<Layer> layers = new ArrayList<>();
@@ -43,10 +45,19 @@ public class MultiblockBuilder {
 
     /**
      * Set the multiblock type this pattern belongs to
-     * @param type {@link ResourceLocation} of the multiblock type (e.g., "mod_id:furnace")
+     * @param type {@link MultiblockType} of the multiblock
      */
-    public MultiblockBuilder type(ResourceLocation type) {
-        this.multiblockType = type.toString();
+    public MultiblockBuilder type(MultiblockType type) {
+        this.multiblockType = type;
+        return this;
+    }
+
+    /**
+     * Set the multiblock type this pattern belongs to
+     * @param type The {@link Supplier} of the {@link MultiblockType}
+     */
+    public MultiblockBuilder type(Supplier<MultiblockType> type) {
+        this.multiblockType = type.get();
         return this;
     }
 
@@ -197,10 +208,10 @@ public class MultiblockBuilder {
         return new PatternData(this.name, this.multiblockType, this.controller, this.controllerPosition, this.keyMap, this.layers);
     }
 
-    public record PatternData(String name, String multiblockType, ResourceLocation controller, BlockPos controllerPosition,
+    public record PatternData(String name, MultiblockType multiblockType, ResourceLocation controller, BlockPos controllerPosition,
                               Map<Character, BlockMatcher> keyMap, List<Layer> layers) {
 
-            public PatternData(String name, String multiblockType, ResourceLocation controller, BlockPos controllerPosition,
+            public PatternData(String name, MultiblockType multiblockType, ResourceLocation controller, BlockPos controllerPosition,
                                Map<Character, BlockMatcher> keyMap, List<Layer> layers) {
                 this.name = name;
                 this.controllerPosition = controllerPosition;
@@ -236,7 +247,7 @@ public class MultiblockBuilder {
             public @NotNull JsonObject toJson() {
                 JsonObject root = new JsonObject();
                 root.addProperty("name", this.name);
-                root.addProperty("multiblock_type", this.multiblockType);
+                root.addProperty("multiblock_type", this.multiblockType.getMultiblockType().toString());
                 root.addProperty("controller", this.controller.toString());
 
                 JsonObject controllerOffset = new JsonObject();

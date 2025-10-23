@@ -3,6 +3,7 @@ package dev.wolfieboy09.qtech.api.datagen;
 import com.google.gson.JsonObject;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
+import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -12,6 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 /**
  * A data gen class to create multiblock patterns
@@ -37,8 +39,7 @@ public abstract class MultiblockPatternProvider implements DataProvider {
         registerPatterns();
 
         for (MultiblockBuilder.PatternData pattern : this.patterns) {
-            // This is to get the path out from the type
-            Path path = outputFolder.resolve(pattern.multiblockType().split(":")[1] + "/" + pattern.name() + ".json");
+            Path path = outputFolder.resolve(pattern.multiblockType().getMultiblockType().getNamespace() + "/" + pattern.name() + ".json");
             JsonObject json = pattern.toJson();
             futures.add(DataProvider.saveStable(cachedOutput, json, path));
         }
@@ -55,10 +56,10 @@ public abstract class MultiblockPatternProvider implements DataProvider {
      * @param type The type to give
      * @return A created {@link MultiblockBuilder}
      * @implNote This will automatically call {@link MultiblockBuilder#create(String)} with the name given. This will also call
-     * {@link MultiblockBuilder#type(ResourceLocation)}, and provide the mod id in the data gen and the type
+     * {@link MultiblockBuilder#type(MultiblockType)}, and provide it with the given type
      */
-    protected MultiblockBuilder create(String name, String type) {
-        return MultiblockBuilder.create(name).type(ResourceLocation.fromNamespaceAndPath(this.modId, type));
+    protected MultiblockBuilder create(String name, Supplier<MultiblockType> type) {
+        return MultiblockBuilder.create(name).type(type.get());
     }
 
     /**
