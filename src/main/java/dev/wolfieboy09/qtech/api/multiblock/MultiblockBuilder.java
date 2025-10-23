@@ -45,15 +45,6 @@ public class MultiblockBuilder {
 
     /**
      * Set the multiblock type this pattern belongs to
-     * @param type {@link MultiblockType} of the multiblock
-     */
-    public MultiblockBuilder type(MultiblockType type) {
-        this.multiblockType = type;
-        return this;
-    }
-
-    /**
-     * Set the multiblock type this pattern belongs to
      * @param type The {@link Supplier} of the {@link MultiblockType}
      */
     public MultiblockBuilder type(Supplier<MultiblockType> type) {

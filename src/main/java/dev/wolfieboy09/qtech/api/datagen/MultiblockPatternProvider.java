@@ -38,7 +38,7 @@ public abstract class MultiblockPatternProvider implements DataProvider {
         registerPatterns();
 
         for (MultiblockBuilder.PatternData pattern : this.patterns) {
-            Path path = outputFolder.resolve(pattern.multiblockType().getMultiblockType().getNamespace() + "/" + pattern.name() + ".json");
+            Path path = outputFolder.resolve(pattern.multiblockType().getMultiblockType().getPath() + "/" + pattern.name() + ".json");
             JsonObject json = pattern.toJson();
             futures.add(DataProvider.saveStable(cachedOutput, json, path));
         }
@@ -55,10 +55,10 @@ public abstract class MultiblockPatternProvider implements DataProvider {
      * @param type The type to give
      * @return A created {@link MultiblockBuilder}
      * @implNote This will automatically call {@link MultiblockBuilder#create(String)} with the name given. This will also call
-     * {@link MultiblockBuilder#type(MultiblockType)}, and provide it with the given type
+     * {@link MultiblockBuilder#type(Supplier)} )}, and provide it with the given type
      */
     protected MultiblockBuilder create(String name, Supplier<MultiblockType> type) {
-        return MultiblockBuilder.create(name).type(type.get());
+        return MultiblockBuilder.create(name).type(type);
     }
 
     /**

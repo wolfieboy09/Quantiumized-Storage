@@ -8,6 +8,60 @@
     {
       "apply": {
         "model": "qtech:block/pipe",
+        "y": 270
+      },
+      "when": {
+        "west": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe_connected",
+        "y": 270
+      },
+      "when": {
+        "west": "block_extract"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe",
+        "y": 270
+      },
+      "when": {
+        "west": "block_normal"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe",
+        "y": 180
+      },
+      "when": {
+        "south": "pipe"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe_connected",
+        "y": 180
+      },
+      "when": {
+        "south": "block_extract"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe",
+        "y": 180
+      },
+      "when": {
+        "south": "block_normal"
+      }
+    },
+    {
+      "apply": {
+        "model": "qtech:block/pipe",
         "x": 90
       },
       "when": {
@@ -108,60 +162,6 @@
       },
       "when": {
         "east": "block_normal"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe",
-        "y": 270
-      },
-      "when": {
-        "west": "pipe"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe_connected",
-        "y": 270
-      },
-      "when": {
-        "west": "block_extract"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe",
-        "y": 270
-      },
-      "when": {
-        "west": "block_normal"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe",
-        "y": 180
-      },
-      "when": {
-        "south": "pipe"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe_connected",
-        "y": 180
-      },
-      "when": {
-        "south": "block_extract"
-      }
-    },
-    {
-      "apply": {
-        "model": "qtech:block/pipe",
-        "y": 180
-      },
-      "when": {
-        "south": "block_normal"
       }
     }
   ]
