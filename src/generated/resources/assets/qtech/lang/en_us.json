@@ -1,4 +1,5 @@
 {
+  "block.qtech.centrifuge_controller": "Centrifuge Controller",
   "block.qtech.circuit_engraver": "Circuit Engraver",
   "block.qtech.creative_energy_block": "Creative Energy Block",
   "block.qtech.disk_assembler": "Disk Assembler",

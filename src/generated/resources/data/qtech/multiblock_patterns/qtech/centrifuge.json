@@ -1,0 +1,35 @@
+{
+  "controller_data": {
+    "controller": "qtech:centrifuge_controller",
+    "offset": {
+      "x": 2,
+      "y": 1,
+      "z": 0
+    }
+  },
+  "layers": [
+    [
+      "BBBBB",
+      "BBBBB",
+      "BBBBB"
+    ],
+    [
+      "BB+BB",
+      "BBBBB",
+      "BBBBB"
+    ],
+    [
+      "BBBBB",
+      "BBBBB",
+      "BBBBB"
+    ]
+  ],
+  "multiblock_type": "qtech:centrifuge",
+  "name": "centrifuge",
+  "pattern": {
+    "B": {
+      "type": "single",
+      "value": "minecraft:bricks"
+    }
+  }
+}
