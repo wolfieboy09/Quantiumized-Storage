@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.codecs.ByteBufStrings;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -81,7 +82,7 @@ public sealed interface BlockMatcher {
 
     Codec<?> codec();
 
-    StreamCodec<RegistryFriendlyByteBuf, ?> streamCodec();
+    StreamCodec<? super RegistryFriendlyByteBuf, ?> streamCodec();
 
     record SingleBlock(Block block) implements BlockMatcher {
         public static final Codec<SingleBlock> CODEC = BuiltInRegistries.BLOCK.byNameCodec().xmap(SingleBlock::new, SingleBlock::block);
@@ -150,11 +151,9 @@ public sealed interface BlockMatcher {
     record Tag(String tagId) implements BlockMatcher {
         public static final Codec<Tag> CODEC = Codec.STRING.xmap(Tag::new, Tag::tagId);
 
-        // Normal ByteBufCodecs.STRING_UTF8 returns a ByteBuf, and we need to use the registry friendly version
-        // somehow works, no idea how
-        public static final StreamCodec<RegistryFriendlyByteBuf, Tag> STREAM_CODEC = StreamCodec.of(
-                (buf, tag) -> ByteBufStrings.writeString(buf, tag.tagId),
-                buf -> new Tag(ByteBufStrings.readString(buf))
+        public static final StreamCodec<ByteBuf, Tag> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.STRING_UTF8, Tag::tagId,
+                Tag::new
         );
 
         @Override
@@ -171,7 +170,7 @@ public sealed interface BlockMatcher {
         }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ?> streamCodec() {
+        public StreamCodec<ByteBuf, ?> streamCodec() {
             return STREAM_CODEC;
         }
     }
@@ -179,7 +178,7 @@ public sealed interface BlockMatcher {
     final class Air implements BlockMatcher {
         static final Air INSTANCE = new Air();
         public static final Codec<Air> CODEC = Codec.unit(INSTANCE);
-        public static final StreamCodec<RegistryFriendlyByteBuf, Air> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+        public static final StreamCodec<ByteBuf, Air> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
         private Air() {}
 
@@ -196,7 +195,7 @@ public sealed interface BlockMatcher {
         }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ?> streamCodec() {
+        public StreamCodec<ByteBuf, ?> streamCodec() {
             return STREAM_CODEC;
         }
     }
@@ -204,7 +203,7 @@ public sealed interface BlockMatcher {
     final class Solid implements BlockMatcher {
         static final Solid INSTANCE = new Solid();
         public static final Codec<Solid> CODEC = Codec.unit(INSTANCE);
-        public static final StreamCodec<RegistryFriendlyByteBuf, Solid> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+        public static final StreamCodec<ByteBuf, Solid> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
 
         private Solid() {}
@@ -222,7 +221,7 @@ public sealed interface BlockMatcher {
         }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ?> streamCodec() {
+        public StreamCodec<ByteBuf, ?> streamCodec() {
             return STREAM_CODEC;
         }
     }
@@ -277,18 +276,16 @@ public sealed interface BlockMatcher {
                     }
             );
 
-    private static <T> void encodeWith(StreamCodec<RegistryFriendlyByteBuf, T> codec,
+    private static <T> void encodeWith(StreamCodec<? super RegistryFriendlyByteBuf, T> codec,
                                        RegistryFriendlyByteBuf buf,
                                        T value) {
         codec.encode(buf, value);
     }
 
-    private static <T> T decodeWith(StreamCodec<RegistryFriendlyByteBuf, T> codec,
+    private static <T> T decodeWith(StreamCodec<? super RegistryFriendlyByteBuf, T> codec,
                                     RegistryFriendlyByteBuf buf) {
         return codec.decode(buf);
     }
-
-
 
     private static MatchingType matcherType(BlockMatcher matcher) {
         return switch (matcher) {
@@ -297,6 +294,24 @@ public sealed interface BlockMatcher {
             case Tag ignored -> MatchingType.TAG;
             case Air ignored -> MatchingType.AIR;
             case Solid ignored -> MatchingType.SOLID;
+        };
+    }
+
+    static BlockMatcher fromJson(JsonElement json) {
+        return switch (json.getAsJsonObject().get("type").getAsString()) {
+            case "single" -> new SingleBlock(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(json.getAsJsonObject().get("value").getAsString())));
+            case "any_of" -> new AnyOf(
+                    json.getAsJsonObject().getAsJsonArray("value").asList().stream()
+                            .map(JsonElement::getAsString)
+                            .map(ResourceLocation::parse)
+                            .map(BuiltInRegistries.BLOCK::get)
+                            .toList()
+            );
+            case "tag" -> new Tag(json.getAsJsonObject().get("value").getAsString());
+            case "air" -> new Air();
+            case "solid" -> new Solid();
+
+            default -> throw new IllegalArgumentException("Unknown BlockMatcher type: " + json.getAsJsonObject().get("type").toString());
         };
     }
 }
