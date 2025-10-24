@@ -3,6 +3,7 @@ package dev.wolfieboy09.qtech.api.datagen;
 import com.google.gson.JsonObject;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
+import dev.wolfieboy09.qtech.api.multiblock.MultiblockPattern;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 public abstract class MultiblockPatternProvider implements DataProvider {
     private final PackOutput output;
     private final String modId;
-    private final List<MultiblockBuilder.PatternData> patterns = new ArrayList<>();
+    private final List<MultiblockPattern> patterns = new ArrayList<>();
 
     protected MultiblockPatternProvider(PackOutput output, String modId) {
         this.output = output;
@@ -37,7 +38,7 @@ public abstract class MultiblockPatternProvider implements DataProvider {
 
         registerPatterns();
 
-        for (MultiblockBuilder.PatternData pattern : this.patterns) {
+        for (MultiblockPattern pattern : this.patterns) {
             Path path = outputFolder.resolve(pattern.multiblockType().getMultiblockType().getPath() + "/" + pattern.name() + ".json");
             JsonObject json = pattern.toJson();
             futures.add(DataProvider.saveStable(cachedOutput, json, path));
@@ -71,9 +72,9 @@ public abstract class MultiblockPatternProvider implements DataProvider {
 
     /**
      * Adds the pattern data to be generated
-     * @param patternData The built {@link MultiblockBuilder.PatternData} from {@link MultiblockBuilder#build()}
+     * @param patternData The built {@link MultiblockPattern} from {@link MultiblockBuilder#build()}
      */
-    protected void add(MultiblockBuilder.PatternData patternData) {
+    protected void add(MultiblockPattern patternData) {
         this.patterns.add(patternData);
     }
 
