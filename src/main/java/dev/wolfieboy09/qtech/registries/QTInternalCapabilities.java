@@ -17,6 +17,10 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <b>This class is just the normal stuff for capability registration.
+ * Use {@link QTCapabilities} instead as this gives you zero purpose</b>
+ */
 @EventBusSubscriber(modid = QuantiumizedTech.MOD_ID)
 public class QTInternalCapabilities {
     @SubscribeEvent
