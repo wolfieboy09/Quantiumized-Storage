@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
@@ -84,6 +85,8 @@ public sealed interface BlockMatcher {
 
     StreamCodec<? super RegistryFriendlyByteBuf, ?> streamCodec();
 
+    boolean test(BlockState state);
+
     record SingleBlock(Block block) implements BlockMatcher {
         public static final Codec<SingleBlock> CODEC = BuiltInRegistries.BLOCK.byNameCodec().xmap(SingleBlock::new, SingleBlock::block);
 
@@ -110,6 +113,11 @@ public sealed interface BlockMatcher {
 
         public String getBlockId() {
             return BuiltInRegistries.BLOCK.getKey(this.block).toString();
+        }
+
+        @Override
+        public boolean test(BlockState state) {
+            return state.is(this.block);
         }
     }
 
@@ -146,6 +154,11 @@ public sealed interface BlockMatcher {
         public StreamCodec<RegistryFriendlyByteBuf, ?> streamCodec() {
             return STREAM_CODEC;
         }
+
+        @Override
+        public boolean test(BlockState state) {
+            return this.blocks.stream().anyMatch(state::is);
+        }
     }
 
     record Tag(String tagId) implements BlockMatcher {
@@ -173,6 +186,11 @@ public sealed interface BlockMatcher {
         public StreamCodec<ByteBuf, ?> streamCodec() {
             return STREAM_CODEC;
         }
+
+        @Override
+        public boolean test(BlockState state) {
+            return state.is(TagKey.create(Registries.BLOCK, ResourceLocation.parse(this.tagId)));
+        }
     }
 
     final class Air implements BlockMatcher {
@@ -197,6 +215,11 @@ public sealed interface BlockMatcher {
         @Override
         public StreamCodec<ByteBuf, ?> streamCodec() {
             return STREAM_CODEC;
+        }
+
+        @Override
+        public boolean test(BlockState state) {
+            return state.isAir();
         }
     }
 
@@ -223,6 +246,11 @@ public sealed interface BlockMatcher {
         @Override
         public StreamCodec<ByteBuf, ?> streamCodec() {
             return STREAM_CODEC;
+        }
+
+        @Override
+        public boolean test(BlockState state) {
+            return state.isSolid();
         }
     }
 
