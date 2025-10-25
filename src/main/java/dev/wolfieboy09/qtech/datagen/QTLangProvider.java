@@ -51,6 +51,9 @@ public class QTLangProvider extends LanguageProvider {
 
         toGenerate.put("qtech.configuration.renderFluidOnSmeltery", "Render fluid on Smeltery");
 
+        toGenerate.put("multiblock.qtech.formed", "Multiblock Formed");
+        toGenerate.put("multiblock.qtech.unformed", "Multiblock Not Formed");
+
         return toGenerate;
     }
 }

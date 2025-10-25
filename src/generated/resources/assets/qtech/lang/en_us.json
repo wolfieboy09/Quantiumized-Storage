@@ -37,6 +37,8 @@
   "item.qtech.superior_storage_disk": "Superior Storage Disk",
   "item.qtech.ultimate_circuit": "Ultimate Circuit",
   "item.qtech.wrench": "Wrench",
+  "multiblock.qtech.formed": "Multiblock Formed",
+  "multiblock.qtech.unformed": "Multiblock Not Formed",
   "qtech.configuration.renderFluidOnSmeltery": "Render fluid on Smeltery",
   "qtech.gas_canister.contains_gas": "Storing §e%s§r",
   "qtech.gas_canister.shifted_info": "Supports containing gasses inside the container",
