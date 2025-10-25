@@ -13,11 +13,10 @@ import snownee.jade.api.WailaPlugin;
 public class JadePlugin implements IWailaPlugin {
     @Override
     public void register(IWailaCommonRegistration registration) {
-
+        registration.registerBlockDataProvider(MultiblockComponentProvider.INSTANCE, BaseMultiblockController.class);
     }
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        registration.registerBlockComponent(MultiblockComponentProvider.INSTANCE, BaseMultiblockController.class);
     }
 }
