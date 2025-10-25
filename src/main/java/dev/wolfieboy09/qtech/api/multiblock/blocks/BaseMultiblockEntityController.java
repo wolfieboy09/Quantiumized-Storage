@@ -15,7 +15,7 @@ import java.util.Objects;
 
 @NothingNullByDefault
 public class BaseMultiblockEntityController extends GlobalBlockEntity {
-    private boolean assembled = false;
+    private boolean formed = false;
     private MultiblockType multiblockType;
 
     public BaseMultiblockEntityController(BlockEntityType<? extends BaseMultiblockEntityController> type, MultiblockType multiblockType, BlockPos pos, BlockState blockState) {
@@ -25,15 +25,19 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        tag.putBoolean("Assembled", this.assembled);
+        tag.putBoolean("Formed", this.formed);
         tag.putString("MultiblockType", this.multiblockType.toString());
         super.saveAdditional(tag, registries);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        this.assembled = tag.getBoolean("Assembled");
+        this.formed = tag.getBoolean("Formed");
         this.multiblockType = Objects.requireNonNull(QTRegistries.MULTIBLOCK_TYPE.get(ResourceLocation.parse(tag.getString("MultiblockType"))));
         super.loadAdditional(tag, registries);
+    }
+
+    public boolean isFormed() {
+        return this.formed;
     }
 }
