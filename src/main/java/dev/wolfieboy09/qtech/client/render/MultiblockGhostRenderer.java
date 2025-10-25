@@ -5,12 +5,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPattern;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,18 +18,27 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.joml.Matrix4f;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @EventBusSubscriber(value = Dist.CLIENT, modid = QuantiumizedTech.MOD_ID)
 public class MultiblockGhostRenderer {
+
     private static BlockPos controllerPos = null;
     private static MultiblockPattern pattern = null;
     private static long hideTime = 0;
     private static final float GHOST_SCALE = 0.9f;
-    private static final float GHOST_ALPHA = 0.4f;
+    private static final float GHOST_ALPHA = 0.8f;
 
+    /**
+     * Show ghost blocks for a pattern
+     * @param pos Controller position
+     * @param targetPattern Pattern to display
+     * @param durationTicks How long to show (in ticks)
+     */
     public static void show(BlockPos pos, MultiblockPattern targetPattern, int durationTicks) {
         controllerPos = pos;
         pattern = targetPattern;
@@ -56,7 +65,6 @@ public class MultiblockGhostRenderer {
             return;
         }
 
-        // Do * 0.05 to convert it to minecraft time
         if (System.currentTimeMillis() * 0.05 > hideTime) {
             hide();
             return;
@@ -73,33 +81,36 @@ public class MultiblockGhostRenderer {
         poseStack.pushPose();
         poseStack.translate(-camPos.x, -camPos.y, -camPos.z);
 
-        renderGhostBlocks(poseStack, bufferSource, level);
+        renderGhostBlocks(poseStack, bufferSource);
 
         poseStack.popPose();
         bufferSource.endBatch();
     }
 
-    private static void renderGhostBlocks(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, Level level) {
+    private static void renderGhostBlocks(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
         Map<BlockPos, Character> positions = pattern.getAllPositions(controllerPos);
 
-        for (Map.Entry<BlockPos, Character> entry : positions.entrySet()) {
-            BlockPos pos = entry.getKey();
-            char key = entry.getValue();
+        // The pattern's origin in world space
+        BlockPos patternOrigin = controllerPos.subtract(pattern.getControllerOffset());
 
-            if (pos.equals(controllerPos)) {
+        for (Map.Entry<BlockPos, Character> entry : positions.entrySet()) {
+            BlockPos worldPos = entry.getKey();
+
+            if (worldPos.equals(controllerPos)) {
                 continue;
             }
 
-            boolean correct = pattern.isPositionCorrect(level, pos, key);
+            BlockPos relative = worldPos.subtract(patternOrigin);
 
-            renderGhostBlock(poseStack, bufferSource, pos, correct);
+            List<Block> blocks = pattern.getSupportedBlocks(relative);
+
+            renderGhostBlock(poseStack, bufferSource, worldPos, blocks.isEmpty() ? null : blocks.getFirst());
         }
-
-        renderControllerGhost(poseStack, bufferSource, controllerPos);
     }
+
 
     private static void renderGhostBlock(PoseStack poseStack, MultiBufferSource bufferSource,
-                                         BlockPos pos, boolean correct) {
+                                         BlockPos pos,@Nullable Block block) {
         poseStack.pushPose();
 
         poseStack.translate(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -108,36 +119,10 @@ public class MultiblockGhostRenderer {
 
         poseStack.translate(-0.5, -0.5, -0.5);
 
-        float r, g, b, a;
-        if (correct) {
-            r = 0.2f; g = 0.8f; b = 0.2f; a = GHOST_ALPHA;
-        } else {
-            r = 0.8f; g = 0.2f; b = 0.2f; a = GHOST_ALPHA * 1.2f;
+        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+        if (block != null) {
+            dispatcher.renderSingleBlock(block.defaultBlockState(), poseStack, bufferSource, 15728880, 0);
         }
-
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
-        renderTranslucentBox(poseStack, consumer, 0, 0, 0, 1, 1, 1, r, g, b, a);
-
-        VertexConsumer lineConsumer = bufferSource.getBuffer(RenderType.lines());
-        LevelRenderer.renderLineBox(poseStack, lineConsumer, 0, 0, 0, 1, 1, 1, r, g, b, a * 1.5f);
-
-        poseStack.popPose();
-    }
-
-    private static void renderControllerGhost(PoseStack poseStack, MultiBufferSource bufferSource, BlockPos pos) {
-        poseStack.pushPose();
-
-        poseStack.translate(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        poseStack.scale(GHOST_SCALE, GHOST_SCALE, GHOST_SCALE);
-        poseStack.translate(-0.5, -0.5, -0.5);
-
-        float r = 1.0f, g = 0.9f, b = 0.0f, a = GHOST_ALPHA * 1.5f;
-
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
-        renderTranslucentBox(poseStack, consumer, 0, 0, 0, 1, 1, 1, r, g, b, a);
-
-        VertexConsumer lineConsumer = bufferSource.getBuffer(RenderType.lines());
-        LevelRenderer.renderLineBox(poseStack, lineConsumer, 0, 0, 0, 1, 1, 1, r, g, b, 1.0f);
 
         poseStack.popPose();
     }

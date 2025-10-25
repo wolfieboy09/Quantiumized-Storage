@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.api.multiblock.blocks;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
+import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.AbstractBaseEntityBlock;
 import dev.wolfieboy09.qtech.packets.ShowMultiblockPattern;
@@ -33,23 +34,31 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
         return this.type.get();
     }
 
-    // THIS IS TEMPORARY. WILL BE MODIFIED TO BE BETTER
-//    @Override
-//    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-//        if (level.isClientSide()) return InteractionResult.PASS;
-//
-//        PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
-//                MultiblockBuilder.create("centrifuge")
-//                        .type(QTMultiblockTypes.CENTRIFUGE)
-//                        .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
-//                        .key('B', Blocks.BRICKS)
-//                        .layer("BBBBB", "BBBBB", "BBBBB")
-//                        .layer("BB+BB", "BBBBB", "BBBBB")
-//                        .layer("BBBBB", "BBBBB", "BBBBB")
-//                        .build(),
-//                pos,
-//                600
-//        ));
-//        return super.useWithoutItem(state, level, pos, player, hitResult);
-//    }
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (level.isClientSide()) return InteractionResult.PASS;
+
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
+                // TEMPORARY FOR TESTING
+                MultiblockBuilder.create("centrifuge")
+                        .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
+                        .type(QTMultiblockTypes.CENTRIFUGE)
+                        .key('G', Blocks.BRICKS)
+                        .key('R', Blocks.RED_WOOL)
+                        .key('B', Blocks.BLACK_WOOL)
+                        .layer(" G ") // Y = 0
+                        .layer("B+B") // Y = 1
+                        //.layer(" B ") // Y = 2
+                        .layer(" R ") // Y = 3
+                        .build(),
+                pos,
+                600
+        ));
+        return super.useWithoutItem(state, level, pos, player, hitResult);
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
 }

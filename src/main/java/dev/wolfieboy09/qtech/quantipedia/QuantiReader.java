@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 public class QuantiReader {
-    private static final Logger LOGGER = LoggerFactory.getLogger("qtech/Quantipedia");
+    private static final Logger LOGGER = LoggerFactory.getLogger("Quantipedia");
     public static final List<QuanRoot> roots = new ArrayList<>();
 
     public static void loadAllWikiEntries(ResourceManager manager) {
@@ -31,7 +31,6 @@ public class QuantiReader {
             );
 
             if (resources.isEmpty()) {
-                LOGGER.warn("No Markdown resources found under 'quantipedia/'.");
                 return;
             }
 

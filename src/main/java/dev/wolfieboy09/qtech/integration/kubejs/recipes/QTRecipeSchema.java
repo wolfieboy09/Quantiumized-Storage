@@ -11,6 +11,7 @@ import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
@@ -25,11 +26,11 @@ public final class QTRecipeSchema {
     private static final RecipeKey<List<Either<ItemStack, FluidStack>>> WASTE = ItemStackComponent.ITEM_STACK.instance().or(FluidStackComponent.FLUID_STACK.instance()).asList().key("waste", ComponentRole.OUTPUT);
     private static final RecipeKey<Integer> TEMPERATURE = NumberComponent.INT.key("temperature", ComponentRole.OTHER);
 
-    private static RecipeSchema create(String id, QTRecipeFactory factory, RecipeKey<?>... keys) {
-        return new RecipeSchema(keys).factory(new KubeRecipeFactory(ResourceHelper.asResource(id), TypeInfo.of(DiskAssemblerRecipe.class), () -> factory));
+    private static RecipeSchema create(String id, Class<? extends Recipe<?>> recipeClass, QTRecipeFactory factory, RecipeKey<?>... keys) {
+        return new RecipeSchema(keys).factory(new KubeRecipeFactory(ResourceHelper.asResource(id), TypeInfo.of(recipeClass), () -> factory));
     }
 
-    public static final RecipeSchema DISK_ASSEMBLY = create("disk_assembly",
+    public static final RecipeSchema DISK_ASSEMBLY = create("disk_assembly", DiskAssemblerRecipe.class,
             new QTRecipeFactory()
                     .ingredients(INGREDIENTS, 3)
                     .extraIngredients(EXTRA_INGREDIENTS, 4)

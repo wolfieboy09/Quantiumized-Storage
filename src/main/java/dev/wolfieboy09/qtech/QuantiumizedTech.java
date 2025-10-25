@@ -3,15 +3,13 @@ package dev.wolfieboy09.qtech;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
+import dev.wolfieboy09.qtech.client.ClientReloadListener;
+import dev.wolfieboy09.qtech.client.KeyInputHandler;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
 import dev.wolfieboy09.qtech.config.ClientConfig;
 import dev.wolfieboy09.qtech.integration.cctweaked.CCTweakedPlugin;
-import dev.wolfieboy09.qtech.quantipedia.QuantiReader;
 import dev.wolfieboy09.qtech.registries.*;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -23,19 +21,21 @@ import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.slf4j.Logger;
 
+@NothingNullByDefault
 @Mod(QuantiumizedTech.MOD_ID)
 public class QuantiumizedTech {
     public static final String MOD_ID = "qtech";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public QuantiumizedTech(@NotNull IEventBus modEventBus, ModContainer container) {
+    public QuantiumizedTech(IEventBus modEventBus, ModContainer container) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerKeys);
-        modEventBus.addListener(this::reload);
+        modEventBus.addListener(this::onClientReload);
+        NeoForge.EVENT_BUS.addListener(this::onServerReload);
 
         QTDataComponents.register(modEventBus);
         QTItems.register(modEventBus);
@@ -75,31 +75,16 @@ public class QuantiumizedTech {
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Lets dive into getting small");
     }
-    public static KeyMapping testKey;
 
-    private void registerKeys(@NotNull RegisterKeyMappingsEvent event) {
-        testKey = new KeyMapping(
-                "key.qtech.test",             // Translation key
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_G,              // Default key (G)
-                "key.categories.qtech"        // Category
-        );
-
-        event.register(testKey);
+    private void registerKeys(RegisterKeyMappingsEvent event) {
+        KeyInputHandler.register(event);
     }
 
-    @NothingNullByDefault
-    private void reload(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener(new SimplePreparableReloadListener<Void>() {
-            @Override
-            protected Void prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-                return null;
-            }
+    private void onClientReload(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(new ClientReloadListener());
+    }
 
-            @Override
-            protected void apply(Void o, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-                QuantiReader.loadAllWikiEntries(resourceManager);
-            }
-        });
+    private void onServerReload(AddReloadListenerEvent event) {
+        event.addListener(new MultiblockPatternManager());
     }
 }

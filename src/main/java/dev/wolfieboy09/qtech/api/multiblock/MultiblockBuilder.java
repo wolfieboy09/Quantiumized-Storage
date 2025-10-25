@@ -155,8 +155,8 @@ public class MultiblockBuilder {
 
     @Contract(" -> new")
     private @NotNull BlockPos findControllerPosition() {
-        for (int y = 0; y < layers.size(); y++) {
-            Layer layer = layers.get(y);
+        for (int y = 0; y < this.layers.size(); y++) {
+            Layer layer = this.layers.get(y);
             for (int z = 0; z < layer.getDepth(); z++) {
                 String row = layer.getRow(z);
                 for (int x = 0; x < row.length(); x++) {
