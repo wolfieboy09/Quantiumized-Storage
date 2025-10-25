@@ -57,8 +57,9 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
+//    @Override
+//    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+//        if (level.isClientSide()) return;
+//        super.onRemove(state, level, pos, newState, movedByPiston);
+//    }
 }
