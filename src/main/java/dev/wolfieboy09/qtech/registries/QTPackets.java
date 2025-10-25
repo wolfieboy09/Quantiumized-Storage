@@ -1,18 +1,21 @@
 package dev.wolfieboy09.qtech.registries;
 
+import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.packets.OneWayPacketHandler;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
+import dev.wolfieboy09.qtech.client.render.MultiblockGhostRenderer;
 import dev.wolfieboy09.qtech.packets.GasCanisterModeData;
 import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;
+import dev.wolfieboy09.qtech.packets.ShowMultiblockPattern;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import org.jetbrains.annotations.NotNull;
 
+@NothingNullByDefault
 public final class QTPackets {
-    public static void register(final @NotNull RegisterPayloadHandlersEvent event) {
+    public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(
                 GasCanisterModeData.TYPE,
@@ -25,10 +28,16 @@ public final class QTPackets {
                 PipeFacadeUpdate.STREAM_CODEC,
                 new OneWayPacketHandler<>(ClientPayloadHandler::handleFacadeUpdate)
         );
+
+        registrar.playToClient(
+                ShowMultiblockPattern.TYPE,
+                ShowMultiblockPattern.STREAM_CODEC,
+                new OneWayPacketHandler<>(ClientPayloadHandler::handleShowMultiblockPattern)
+        );
     }
 
     public static class ServerPayloadHandler {
-        public static void handleGasCanisterMode(@NotNull GasCanisterModeData payload, final @NotNull IPayloadContext context) {
+        public static void handleGasCanisterMode(GasCanisterModeData payload, final IPayloadContext context) {
             BlockEntity blockEntity = context.player().level().getBlockEntity(payload.blockPos());
             if (blockEntity instanceof GasCanisterBlockEntity gasCanister) {
                 gasCanister.setState(payload.state());
@@ -42,6 +51,14 @@ public final class QTPackets {
             if (blockEntity instanceof BasePipeBlockEntity<?> pipeBlock) {
                 pipeBlock.updateFacadeBlock(payload.state());
             }
+        }
+
+        public static void handleShowMultiblockPattern(ShowMultiblockPattern payload, IPayloadContext context) {
+            context.enqueueWork(() -> MultiblockGhostRenderer.show(
+                    payload.controllerPos(),
+                    payload.pattern(),
+                    payload.duration()
+            ));
         }
     }
 }
