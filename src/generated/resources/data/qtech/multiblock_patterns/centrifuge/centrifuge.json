@@ -1,11 +1,9 @@
 {
-  "controller_data": {
-    "controller": "qtech:centrifuge_controller",
-    "offset": {
-      "x": 2,
-      "y": 1,
-      "z": 0
-    }
+  "controller": "qtech:centrifuge_controller",
+  "controller_offset": {
+    "x": 2,
+    "y": 1,
+    "z": 0
   },
   "layers": [
     [
