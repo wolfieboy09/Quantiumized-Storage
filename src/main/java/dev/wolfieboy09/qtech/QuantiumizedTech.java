@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qtech;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;

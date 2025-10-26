@@ -13,7 +13,10 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 
 import java.io.Reader;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @NothingNullByDefault
 public final class MultiblockPatternManager extends SimplePreparableReloadListener<Map<ResourceLocation, JsonObject>> {

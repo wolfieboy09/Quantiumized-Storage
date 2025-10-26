@@ -1,7 +1,6 @@
 package dev.wolfieboy09.qtech.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.quantipedia.QuantiReader;
 import dev.wolfieboy09.qtech.quantipedia.rendering.QuantipediaScreen;

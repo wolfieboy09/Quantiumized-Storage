@@ -17,6 +17,7 @@ public class QTGasTagsProvider extends GasTagProvider {
 
     @Override
     protected void addTags(@NotNull HolderLookup.Provider provider) {
+        //TODO: Fix why this wants a ResourceKey<Gas>
 //        tag(QTGasTags.FLAMMABLE)
 //                .add(QTGasses.HYDROGEN.get());
 //

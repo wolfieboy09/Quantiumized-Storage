@@ -2,7 +2,6 @@ package dev.wolfieboy09.qtech.api.multiblock.blocks;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
-import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.AbstractBaseEntityBlock;
 import dev.wolfieboy09.qtech.packets.ShowMultiblockPattern;
