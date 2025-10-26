@@ -18,5 +18,6 @@ public class JadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
+        registration.registerBlockComponent(MultiblockComponentProvider.INSTANCE, BaseMultiblockController.class);
     }
 }
