@@ -1,9 +1,11 @@
 package dev.wolfieboy09.qtech.api.multiblock.tracking;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
 import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockEntityController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -51,6 +53,11 @@ public class MultiblockTracker {
 
         if (level.getBlockEntity(controllerPos) instanceof BaseMultiblockEntityController controller) {
             controller.breakMultiblock();
+            // Update block state
+            BlockState state = controller.getBlockState();
+            if (state.hasProperty(BaseMultiblockController.FORMED)) {
+                level.setBlock(controllerPos, state.setValue(BaseMultiblockController.FORMED, false), 3);
+            }
         }
 
         levelMap.remove(brokenPos);

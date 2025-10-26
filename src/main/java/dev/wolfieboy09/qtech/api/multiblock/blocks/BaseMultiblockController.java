@@ -96,7 +96,7 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller) {
             PacketDistributor.sendToAllPlayers(new HideMultiblockPattern(pos));
-//            controller.breakMultiblock();
+            controller.breakMultiblock();
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }

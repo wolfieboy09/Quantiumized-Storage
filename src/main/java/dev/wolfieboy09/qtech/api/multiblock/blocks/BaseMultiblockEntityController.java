@@ -126,14 +126,6 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         this.trackedPositions.clear();
         this.currentPattern = null;
 
-        // Update block state
-        if (level != null) {
-            BlockState state = getBlockState();
-            if (state.hasProperty(BaseMultiblockController.FORMED)) {
-                level.setBlock(getBlockPos(), state.setValue(BaseMultiblockController.FORMED, false), 3);
-            }
-        }
-
         // Call hook for subclasses
         onBroken();
 
@@ -146,6 +138,11 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         // Check if structure is still valid
         if (!currentPattern.matches(level, getBlockPos(), getBlockState())) {
             breakMultiblock();
+            // Update block state
+            BlockState state = getBlockState();
+            if (state.hasProperty(BaseMultiblockController.FORMED)) {
+                level.setBlock(getBlockPos(), state.setValue(BaseMultiblockController.FORMED, false), 3);
+            }
         }
     }
 
@@ -155,7 +152,7 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         List<MultiblockPattern> possiblePatterns = MultiblockPatternManager.getAllPatternsForType(this.multiblockType);
         for (MultiblockPattern pattern : possiblePatterns) {
             if (pattern.matches(this.level, this.getBlockPos(), this.getBlockState())) {
-                this.formed = true;
+                formMultiblock(pattern);
                 return;
             }
         }
