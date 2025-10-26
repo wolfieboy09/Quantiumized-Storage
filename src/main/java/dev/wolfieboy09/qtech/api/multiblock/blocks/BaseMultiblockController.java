@@ -61,11 +61,14 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
 
-        PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
-                MultiblockPatternManager.getAllPatternsForType(this.getType()).getFirst(),
-                pos,
-                600
-        ));
+        if (level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller && !controller.isFormed()) {
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
+                    MultiblockPatternManager.getAllPatternsForType(this.getType()).getFirst(),
+                    pos,
+                    600
+            ));
+        }
+
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
