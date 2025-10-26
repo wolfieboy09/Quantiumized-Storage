@@ -6,10 +6,11 @@ import org.jetbrains.annotations.NotNull;
 public enum StorageType implements StringRepresentable {
     ITEM,
     FLUID,
-    ENERGY;
+    ENERGY,
+    GAS;
 
     @Override
     public @NotNull String getSerializedName() {
-        return "storage_type";
+        return this.name().toLowerCase();
     }
 }
