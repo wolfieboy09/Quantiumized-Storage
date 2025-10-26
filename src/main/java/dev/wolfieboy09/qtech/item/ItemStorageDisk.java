@@ -38,7 +38,7 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
      *
      * @param storageType The type of storage for the disk from the {@link ItemStorageType} enum.
      */
-    public ItemStorageDisk(@NotNull ItemStorageType storageType) {
+    public ItemStorageDisk(ItemStorageType storageType) {
         super(new Properties().stacksTo(1).component(QTDataComponents.ITEM_STORAGE_DISK_COMPONENT, new ItemStorageDiskComponent(new BaseStorageDisk(StorageType.ITEM), storageType, NonNullList.createWithCapacity(storageType.getCapacity()))));
         this.storageType = storageType;
         this.capacity = storageType.getCapacity();
@@ -64,13 +64,13 @@ public class ItemStorageDisk extends Item implements IItemStorageDisk {
      *
      * @param diskType The custom disk type containing the color and capacity.
      */
-    public ItemStorageDisk(@NotNull CustomDiskType diskType) {
+    public ItemStorageDisk(CustomDiskType diskType) {
         super(new Properties().stacksTo(1));
         ItemStorageType customType = ItemStorageType.CUSTOM;
-        customType.setColor(diskType.getColor());
+        customType.setColor(diskType.color());
         this.storageType = customType;
-        this.capacity = diskType.getCapacity();
-        this.inventory = new CapacityItemStackHandler(diskType.getCapacity());
+        this.capacity = diskType.capacity();
+        this.inventory = new CapacityItemStackHandler(diskType.capacity());
     }
 
     /**
