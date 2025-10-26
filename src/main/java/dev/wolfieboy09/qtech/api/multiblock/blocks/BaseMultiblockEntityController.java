@@ -7,6 +7,7 @@ import dev.wolfieboy09.qtech.api.multiblock.tracking.MultiblockTracker;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
+import dev.wolfieboy09.qtech.packets.HideMultiblockPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +19,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -96,6 +98,7 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
     }
 
     protected void formMultiblock(MultiblockPattern pattern) {
+        PacketDistributor.sendToAllPlayers(new HideMultiblockPattern(getBlockPos()));
         this.formed = true;
         this.currentPattern = pattern;
 
