@@ -14,11 +14,15 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NothingNullByDefault
 public class BaseMultiblockEntityController extends GlobalBlockEntity {
@@ -26,6 +30,10 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
     private MultiblockType multiblockType;
     protected @Nullable MultiblockPattern currentPattern = null;
     protected Set<BlockPos> trackedPositions = new HashSet<>();
+
+    private final Map<Block, Set<BlockPos>> blockCache = new HashMap<>();
+    private final Map<TagKey<Block>, Set<BlockPos>> tagCache = new HashMap<>();
+
 
     public BaseMultiblockEntityController(BlockEntityType<? extends BaseMultiblockEntityController> type, MultiblockType multiblockType, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
@@ -65,6 +73,7 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         }
 
         this.trackedPositions.clear();
+        invalidateCaches();
         if (tag.contains("TrackedPositions")) {
             ListTag positionsList = tag.getList("TrackedPositions", CompoundTag.TAG_LONG);
             for (Tag posTag : positionsList) {
@@ -95,6 +104,8 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         this.trackedPositions.clear();
         this.trackedPositions.addAll(positions.keySet());
 
+        invalidateCaches();
+
         // Register this controller with the multiblock tracker
         MultiblockTracker.registerMultiblock(level, this.getBlockPos(), this.trackedPositions);
 
@@ -123,7 +134,7 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         // Clear tracked positions
         this.trackedPositions.clear();
         this.currentPattern = null;
-
+        invalidateCaches();
         // Call hook for subclasses
         onBroken();
 
@@ -163,6 +174,30 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         if (formed && level.getGameTime() % 20 == 0) { // Check every second
             validateStructure();
         }
+    }
+
+    public Set<BlockPos> getBlocksOf(Block block) {
+        if (this.level == null || this.level.isClientSide()) return Set.of();
+        return this.blockCache.computeIfAbsent(block, b ->
+                this.trackedPositions.stream()
+                        .filter(pos -> this.level.getBlockState(pos).is(b))
+                        .collect(Collectors.toUnmodifiableSet())
+        );
+    }
+
+    public Set<BlockPos> getBlocksOf(TagKey<Block> tag) {
+        if (this.level == null || this.level.isClientSide()) return Set.of();
+        return this.tagCache.computeIfAbsent(tag, t ->
+                this.trackedPositions.stream()
+                        .filter(pos -> this.level.getBlockState(pos).is(t))
+                        .collect(Collectors.toUnmodifiableSet())
+        );
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    public void invalidateCaches() {
+        this.blockCache.clear();
+        this.tagCache.clear();
     }
 
     protected void onFormed(MultiblockPattern pattern) {
