@@ -1,15 +1,12 @@
 package dev.wolfieboy09.qtech.api.multiblock.blocks;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.AbstractBaseEntityBlock;
 import dev.wolfieboy09.qtech.packets.HideMultiblockPattern;
 import dev.wolfieboy09.qtech.packets.ShowMultiblockPattern;
-import dev.wolfieboy09.qtech.registries.QTBlocks;
 import dev.wolfieboy09.qtech.registries.QTItems;
-import dev.wolfieboy09.qtech.registries.QTMultiblockTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -20,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -63,18 +59,6 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
         if (level.isClientSide()) return InteractionResult.PASS;
 
         PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
-                // TEMPORARY FOR TESTING
-//                MultiblockBuilder.create("centrifuge")
-//                        .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
-//                        .type(QTMultiblockTypes.CENTRIFUGE)
-//                        .key('B', Blocks.BRICKS)
-//                        .layer(" B ") // Y = 0
-//                        .layer("B+B") // Y = 1
-//                        .layer(" B ") // Y = 2
-//                        .build(),
-//                pos,
-//                600
-//        ));
                 MultiblockPatternManager.getAllPatternsForType(this.getType()).getFirst(),
                 pos,
                 600
@@ -106,5 +90,12 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? null : ((level1, pos, state1, blockEntity) -> ((BaseMultiblockEntityController) blockEntity).tick());
+    }
+
+    public abstract BaseMultiblockEntityController newMultiblockController(BlockPos blockPos, BlockState blockState);
+
+    @Override
+    public final BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return newMultiblockController(blockPos, blockState);
     }
 }
