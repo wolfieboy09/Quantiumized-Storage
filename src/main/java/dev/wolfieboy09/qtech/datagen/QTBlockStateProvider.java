@@ -14,11 +14,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class QTBlockStateProvider extends BlockStateProvider {
@@ -71,14 +73,17 @@ public class QTBlockStateProvider extends BlockStateProvider {
                 .modelFile(existingModelFile("block/pipe_dot"))
                 .addModel()
                 .end();
-        Map.of(
-                BasePipeBlock.NORTH, new Tuple<>(0, 0),
-                BasePipeBlock.EAST, new Tuple<>(0, 90),
-                BasePipeBlock.SOUTH, new Tuple<>(0, 180),
-                BasePipeBlock.WEST, new Tuple<>(0, 270),
-                BasePipeBlock.UP, new Tuple<>(270, 0),
-                BasePipeBlock.DOWN, new Tuple<>(90, 0)
-        ).forEach((property, rotations) -> {
+
+        // This is done so it stops generating different JSONS even when nothing has changed at all
+        Map<EnumProperty<ConnectionType>, Tuple<Integer, Integer>> propertyMap = new LinkedHashMap<>();
+        propertyMap.put(BasePipeBlock.NORTH, new Tuple<>(0, 0));
+        propertyMap.put(BasePipeBlock.EAST, new Tuple<>(0, 90));
+        propertyMap.put(BasePipeBlock.SOUTH, new Tuple<>(0, 180));
+        propertyMap.put(BasePipeBlock.WEST, new Tuple<>(0, 270));
+        propertyMap.put(BasePipeBlock.UP, new Tuple<>(270, 0));
+        propertyMap.put(BasePipeBlock.DOWN, new Tuple<>(90, 0));
+
+        propertyMap.forEach((property, rotations) -> {
             builder
                     .part()
                     // Normal pipe to pipe
