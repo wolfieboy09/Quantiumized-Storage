@@ -53,6 +53,7 @@ public class QTLangProvider extends LanguageProvider {
 
         toGenerate.put("multiblock.qtech.formed", "Multiblock Formed");
         toGenerate.put("multiblock.qtech.unformed", "Multiblock Not Formed");
+        toGenerate.put("config.jade.plugin_qtech.multiblock_controller", "Multiblock Controller");
 
         return toGenerate;
     }

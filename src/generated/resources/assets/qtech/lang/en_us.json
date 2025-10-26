@@ -9,6 +9,7 @@
   "block.qtech.item_pipe": "Item Pipe",
   "block.qtech.smeltery": "Smeltery",
   "block.qtech.storage_matrix": "Storage Matrix",
+  "config.jade.plugin_qtech.multiblock_controller": "Multiblock Controller",
   "creative_tab.qtech.block_group": "QT Blocks",
   "creative_tab.qtech.item_group": "QT Items",
   "effect.qtech.oxygen_deprivation": "Oxygen Deprivation",
