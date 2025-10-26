@@ -79,17 +79,6 @@ public final class MultiblockPatternManager extends SimplePreparableReloadListen
     }
 
     public static List<MultiblockPattern> getAllPatternsForType(MultiblockType type) {
-
-//        return List.of(
-//                MultiblockBuilder.create("centrifuge")
-//                        .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
-//                        .type(QTMultiblockTypes.CENTRIFUGE)
-//                        .key('B', Blocks.BRICKS)
-//                        .layer(" B ") // Y = 0
-//                        .layer("B+B") // Y = 1
-//                        .layer(" B ") // Y = 2
-//                        .build()
-//        );
         return PATTERNS.get(type);
     }
 }
