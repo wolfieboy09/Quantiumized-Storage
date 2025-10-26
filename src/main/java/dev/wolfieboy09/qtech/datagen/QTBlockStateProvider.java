@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.datagen;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;
@@ -31,6 +32,8 @@ public class QTBlockStateProvider extends BlockStateProvider {
         fourRotationBlock(QTBlocks.STORAGE_MATRIX, StorageMatrixBlock.FACING, "storage_matrix");
         fourRotationBlock(QTBlocks.SMELTERY, SmelteryBlock.FACING, "smeltery");
 
+        createMultiblockController(QTBlocks.CENTRIFUGE_CONTROLLER,"centrifuge_controller");
+
         getVariantBuilder(QTBlocks.GAS_CANISTER.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(existingModelFile("block/gas_canister")).build());
 
         createPipeModel(QTBlocks.ITEM_PIPE);
@@ -39,7 +42,12 @@ public class QTBlockStateProvider extends BlockStateProvider {
     }
 
     @CanIgnoreReturnValue
-    private @NotNull VariantBlockStateBuilder fourRotationBlock(@NotNull DeferredBlock<?> block, DirectionProperty property, String string) {
+    private @NotNull VariantBlockStateBuilder createMultiblockController(DeferredBlock<? extends BaseMultiblockController> block, String name) {
+        return fourRotationBlock(block, BaseMultiblockController.FACING, name);
+    }
+
+    @CanIgnoreReturnValue
+    private @NotNull VariantBlockStateBuilder fourRotationBlock(@NotNull DeferredBlock<?> block, DirectionProperty property, String name) {
         return getVariantBuilder(block.get())
                 .forAllStates(state -> {
                     Direction facing = state.getValue(property);
@@ -50,7 +58,7 @@ public class QTBlockStateProvider extends BlockStateProvider {
                         default -> 0;
                     };
                     return ConfiguredModel.builder()
-                            .modelFile(existingModelFile("block/" + string))
+                            .modelFile(existingModelFile("block/" + name))
                             .rotationY(rotation)
                             .build();
                 });

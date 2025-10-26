@@ -1,9 +1,10 @@
 {
-	"format_version": "1.9.0",
-	"texture_size": [64, 64],
+  "parent": "minecraft:block/cube_all",
+  "texture_size": [64, 64],
 	"textures": {
-		"1": "qtech:block/centrifuge_controller"
-	},
+		"1": "qtech:block/centrifuge_controller",
+    "particle": "qtech:block/centrifuge_controller"
+  },
 	"elements": [
 		{
 			"from": [0, 0, 0],
