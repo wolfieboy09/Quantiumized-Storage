@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 import static dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock.MODE;
@@ -31,7 +30,7 @@ public class GasCanisterMenu extends AbstractContainerMenu {
         this(id, pos, playerInventory, player, new SimpleContainerData(2));
     }
 
-    public GasCanisterMenu(int id, BlockPos pos, Inventory playerInventory, @NotNull Player player, ContainerData containerData) {
+    public GasCanisterMenu(int id, BlockPos pos, Inventory playerInventory, Player player, ContainerData containerData) {
         super(QTMenuTypes.GAS_CANISTER_MENU.get(), id);
         addDataSlots(containerData);
         this.level = player.level();
@@ -45,7 +44,7 @@ public class GasCanisterMenu extends AbstractContainerMenu {
         createPlayerHotbar(playerInventory, 8, 145);
     }
 
-    private void createPlayerInventory(@NotNull Inventory playerInventory, int inventoryXPos, int inventoryYPos) {
+    private void createPlayerInventory(Inventory playerInventory, int inventoryXPos, int inventoryYPos) {
         PlayerInvWrapper playerInvWrapper = new PlayerInvWrapper(playerInventory);
 
         for (int y = 0; y < QTConstants.PLAYER_INVENTORY_ROW_COUNT; y++) {
@@ -58,7 +57,7 @@ public class GasCanisterMenu extends AbstractContainerMenu {
         }
     }
 
-    private void createPlayerHotbar(@NotNull Inventory playerInv, int hotbarXPos, int hotbarYPos) {
+    private void createPlayerHotbar(Inventory playerInv, int hotbarXPos, int hotbarYPos) {
         for (int col = 0; col < QTConstants.HOTBAR_SLOT_COUNT; ++col) {
             this.addSlot(new Slot(playerInv, col, hotbarXPos + col * QTConstants.SLOT_X_SPACING, hotbarYPos));
         }

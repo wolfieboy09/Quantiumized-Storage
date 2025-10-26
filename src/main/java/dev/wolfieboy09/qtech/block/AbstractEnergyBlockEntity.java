@@ -119,7 +119,7 @@ public abstract class AbstractEnergyBlockEntity extends GlobalBlockEntity implem
     }
     
     @Override
-    public void handleUpdateTag(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider lookupProvider) {
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
         Tag energyTag = tag.get("Energy");
         if (energyTag == null) return;
         this.energyStorage.deserializeNBT(lookupProvider, energyTag);

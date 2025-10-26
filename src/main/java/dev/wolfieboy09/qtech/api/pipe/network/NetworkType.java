@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.api.pipe.network;
 
 /**
- * Represents the type of a {@link PipeNetwork}.
+ * Represents the type of {@link PipeNetwork}.
  * Different network types can transport different resources.
  */
 public enum NetworkType {

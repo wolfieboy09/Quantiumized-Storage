@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class MultiblockTracker {
     }
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+    public static void onBlockBreak(BlockEvent.@NotNull BreakEvent event) {
         Level level = (Level) event.getLevel();
         BlockPos brokenPos = event.getPos();
 

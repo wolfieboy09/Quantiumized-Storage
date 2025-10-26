@@ -10,7 +10,6 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 @NothingNullByDefault
@@ -89,7 +88,7 @@ public class FluidStackHandler implements IFluidHandler, IFluidHandlerModifiable
     }
 
     @Override
-    public @NotNull FluidStack getFluidInTank(int i) {
+    public FluidStack getFluidInTank(int i) {
         return this.stacks.get(i).getFluidInTank(i);
     }
 
