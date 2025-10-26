@@ -1,26 +1,32 @@
 {
   "controller": "qtech:centrifuge_controller",
-  "controller_offset": {
-    "x": 2,
-    "y": 1,
-    "z": 0
-  },
+  "controller_offset": [
+    2,
+    1,
+    0
+  ],
   "layers": [
-    [
-      "BBBBB",
-      "BBBBB",
-      "BBBBB"
-    ],
-    [
-      "BB+BB",
-      "BBBBB",
-      "BBBBB"
-    ],
-    [
-      "BBBBB",
-      "BBBBB",
-      "BBBBB"
-    ]
+    {
+      "rows": [
+        "BBBBB",
+        "BBBBB",
+        "BBBBB"
+      ]
+    },
+    {
+      "rows": [
+        "BB+BB",
+        "BBBBB",
+        "BBBBB"
+      ]
+    },
+    {
+      "rows": [
+        "BBBBB",
+        "BBBBB",
+        "BBBBB"
+      ]
+    }
   ],
   "multiblock_type": "qtech:centrifuge",
   "name": "centrifuge",
