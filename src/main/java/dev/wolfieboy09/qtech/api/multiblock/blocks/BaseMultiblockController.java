@@ -75,11 +75,9 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (!level.isClientSide()) {
-            if (stack.is(QTItems.WRENCH)) {
-                if (level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller && !controller.isFormed()) {
-                    controller.attemptFormation();
-                }
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller) {
+            if (stack.is(QTItems.WRENCH) && !controller.isFormed()) {
+                controller.attemptFormation();
             }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
@@ -88,14 +86,14 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller) {
-            PacketDistributor.sendToAllPlayers(new HideMultiblockPattern(pos));
+            PacketDistributor.sendToAllPlayers(new HideMultiblockPattern());
             controller.breakMultiblock();
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override
-    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+    public final @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? null : ((level1, pos, state1, blockEntity) -> ((BaseMultiblockEntityController) blockEntity).tick());
     }
 
