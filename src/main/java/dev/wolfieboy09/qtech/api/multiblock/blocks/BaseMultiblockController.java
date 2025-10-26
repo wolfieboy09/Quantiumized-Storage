@@ -22,7 +22,9 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +34,7 @@ import java.util.function.Supplier;
 @NothingNullByDefault
 public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private final Supplier<MultiblockType> type;
 
@@ -42,12 +45,12 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FORMED);
+        builder.add(FORMED, FACING);
     }
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FORMED, false);
+        return this.defaultBlockState().setValue(FORMED, false).setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     public MultiblockType getType() {
@@ -70,7 +73,7 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide()) {
             if (stack.is(QTItems.WRENCH)) {
-                if (level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller) {
+                if (level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller && !controller.isFormed()) {
                     controller.attemptFormation();
                 }
             }
