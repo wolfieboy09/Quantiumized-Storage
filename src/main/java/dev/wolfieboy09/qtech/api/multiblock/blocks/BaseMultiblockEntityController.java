@@ -37,7 +37,7 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putBoolean("Formed", this.formed);
-        tag.putString("MultiblockType", this.multiblockType.toString());
+        tag.putString("MultiblockType", this.multiblockType.getLocation().toString());
         if (this.currentPattern != null) {
             tag.putString("PatternName", this.currentPattern.name());
         }
