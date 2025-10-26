@@ -99,7 +99,7 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
 
     protected void formMultiblock(MultiblockPattern pattern) {
         if (this.level == null || this.level.isClientSide()) return;
-        PacketDistributor.sendToAllPlayers(new HideMultiblockPattern(getBlockPos()));
+        PacketDistributor.sendToAllPlayers(new HideMultiblockPattern());
         this.formed = true;
         this.currentPattern = pattern;
 
