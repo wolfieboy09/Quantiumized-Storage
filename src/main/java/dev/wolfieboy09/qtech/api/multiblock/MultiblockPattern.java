@@ -143,6 +143,29 @@ public record MultiblockPattern(String name, MultiblockType multiblockType, Reso
         return List.of();
     }
 
+    public boolean matches(Level level, BlockPos controllerPos, BlockState controllerState) {
+        // Check if controller block is correct
+        ResourceLocation controllerBlockId = BuiltInRegistries.BLOCK.getKey(controllerState.getBlock());
+
+        if (!controllerBlockId.equals(this.controller)) {
+            return false;
+        }
+
+        // Check all other positions
+        Map<BlockPos, Character> positions = getAllPositions(controllerPos);
+
+        for (Map.Entry<BlockPos, Character> entry : positions.entrySet()) {
+            BlockPos pos = entry.getKey();
+            char key = entry.getValue();
+
+            if (!isPositionCorrect(level, pos, key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     public Map<BlockPos, Character> getAllPositions(BlockPos controllerPos) {
         Map<BlockPos, Character> positions = new HashMap<>();

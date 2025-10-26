@@ -3,6 +3,7 @@ package dev.wolfieboy09.qtech;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
+import dev.wolfieboy09.qtech.api.multiblock.tracking.MultiblockTracker;
 import dev.wolfieboy09.qtech.client.ClientReloadListener;
 import dev.wolfieboy09.qtech.client.KeyInputHandler;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
@@ -48,6 +49,8 @@ public class QuantiumizedTech {
         QTGasses.register(modEventBus);
         QTEffects.register(modEventBus);
         QTEntities.register(modEventBus);
+
+        NeoForge.EVENT_BUS.addListener(MultiblockTracker::onBlockBreak);
 
         modEventBus.addListener(QTPackets::register);
         modEventBus.addListener(QTEntities::registerRenderers);

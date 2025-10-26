@@ -1,0 +1,62 @@
+package dev.wolfieboy09.qtech.api.multiblock.tracking;
+
+import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockEntityController;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+@EventBusSubscriber(modid = QuantiumizedTech.MOD_ID)
+public class MultiblockTracker {
+
+    // Level -> (Block Position -> Controller Position)
+    private static final Map<Level, Map<BlockPos, BlockPos>> TRACKED_BLOCKS = new ConcurrentHashMap<>();
+
+    public static void registerMultiblock(Level level, BlockPos controllerPos, Set<BlockPos> positions) {
+        if (level == null) return;
+
+        Map<BlockPos, BlockPos> levelMap = TRACKED_BLOCKS.computeIfAbsent(level, k -> new ConcurrentHashMap<>());
+
+        for (BlockPos pos : positions) {
+            levelMap.put(pos, controllerPos);
+        }
+    }
+
+    public static void unregisterMultiblock(Level level, BlockPos controllerPos) {
+        if (level == null) return;
+
+        Map<BlockPos, BlockPos> levelMap = TRACKED_BLOCKS.get(level);
+        if (levelMap == null) return;
+
+        levelMap.entrySet().removeIf(entry -> entry.getValue().equals(controllerPos));
+    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        Level level = (Level) event.getLevel();
+        BlockPos brokenPos = event.getPos();
+
+        Map<BlockPos, BlockPos> levelMap = TRACKED_BLOCKS.get(level);
+        if (levelMap == null) return;
+
+        BlockPos controllerPos = levelMap.get(brokenPos);
+        if (controllerPos == null) return;
+
+        if (level.getBlockEntity(controllerPos) instanceof BaseMultiblockEntityController controller) {
+            controller.breakMultiblock();
+        }
+
+        levelMap.remove(brokenPos);
+    }
+
+    public static void clearLevel(Level level) {
+        TRACKED_BLOCKS.remove(level);
+    }
+}

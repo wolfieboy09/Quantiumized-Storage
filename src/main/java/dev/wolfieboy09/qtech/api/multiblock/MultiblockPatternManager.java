@@ -5,10 +5,13 @@ import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
+import dev.wolfieboy09.qtech.registries.QTBlocks;
+import dev.wolfieboy09.qtech.registries.QTMultiblockTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 
@@ -78,6 +81,17 @@ public final class MultiblockPatternManager extends SimplePreparableReloadListen
     }
 
     public static List<MultiblockPattern> getAllPatternsForType(MultiblockType type) {
-        return PATTERNS.get(type);
+
+        return List.of(
+                MultiblockBuilder.create("centrifuge")
+                        .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
+                        .type(QTMultiblockTypes.CENTRIFUGE)
+                        .key('B', Blocks.BRICKS)
+                        .layer(" B ") // Y = 0
+                        .layer("B+B") // Y = 1
+                        .layer(" B ") // Y = 2
+                        .build()
+        );
+        //return PATTERNS.get(type);
     }
 }
