@@ -22,9 +22,9 @@ public enum MultiblockComponentProvider implements IBlockComponentProvider, ISer
         if (accessor.getServerData().contains("Formed")) {
             boolean isFormed = accessor.getServerData().getBoolean("Formed");
             if (isFormed) {
-                tooltip.append(Component.translatable("multiblock.qtech.formed").withStyle(ChatFormatting.GREEN));
+                tooltip.add(Component.translatable("multiblock.qtech.formed").withStyle(ChatFormatting.GREEN));
             } else {
-                tooltip.append(Component.translatable("multiblock.qtech.unformed").withStyle(ChatFormatting.RED));
+                tooltip.add(Component.translatable("multiblock.qtech.unformed").withStyle(ChatFormatting.RED));
             }
         }
     }
