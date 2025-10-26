@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.api.multiblock.blocks;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
+import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.AbstractBaseEntityBlock;
 import dev.wolfieboy09.qtech.packets.HideMultiblockPattern;
@@ -63,17 +64,18 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
 
         PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
                 // TEMPORARY FOR TESTING
-                MultiblockBuilder.create("centrifuge")
-                        .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
-                        .type(QTMultiblockTypes.CENTRIFUGE)
-                        .key('G', Blocks.BRICKS)
-                        .key('R', Blocks.RED_WOOL)
-                        .key('B', Blocks.BLACK_WOOL)
-                        .layer(" G ") // Y = 0
-                        .layer("B+B") // Y = 1
-                        //.layer(" B ") // Y = 2
-                        .layer(" R ") // Y = 3
-                        .build(),
+//                MultiblockBuilder.create("centrifuge")
+//                        .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
+//                        .type(QTMultiblockTypes.CENTRIFUGE)
+//                        .key('B', Blocks.BRICKS)
+//                        .layer(" B ") // Y = 0
+//                        .layer("B+B") // Y = 1
+//                        .layer(" B ") // Y = 2
+//                        .build(),
+//                pos,
+//                600
+//        ));
+                MultiblockPatternManager.getAllPatternsForType(this.getType()).getFirst(),
                 pos,
                 600
         ));
