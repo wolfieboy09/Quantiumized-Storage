@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPattern;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -120,8 +121,12 @@ public class MultiblockGhostRenderer {
         poseStack.translate(-0.5, -0.5, -0.5);
 
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-        if (block != null) {
-            dispatcher.renderSingleBlock(block.defaultBlockState(), poseStack, bufferSource, 15728880, 0);
+        if (block != null && Minecraft.getInstance().level != null) {
+            int light = LevelRenderer.getLightColor(
+                    Minecraft.getInstance().level,
+                    pos
+            );
+            dispatcher.renderSingleBlock(block.defaultBlockState(), poseStack, bufferSource, light, 0);
         }
 
         poseStack.popPose();
