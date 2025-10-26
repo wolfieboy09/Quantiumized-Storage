@@ -183,7 +183,7 @@ public record MultiblockPattern(String name, MultiblockType multiblockType, Reso
                     char key = row.charAt(x);
                     BlockPos pos = startPos.offset(x, y, z);
 
-                    if (pos.equals(controllerPos) || key == ' ') {
+                    if (pos.equals(controllerPos)) {
                         continue;
                     }
 
