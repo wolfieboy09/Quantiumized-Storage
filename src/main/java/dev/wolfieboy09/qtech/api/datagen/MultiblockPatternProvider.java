@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qtech.api.datagen;
 
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPattern;
@@ -40,7 +40,7 @@ public abstract class MultiblockPatternProvider implements DataProvider {
 
         for (MultiblockPattern pattern : this.patterns) {
             Path path = outputFolder.resolve(pattern.multiblockType().getMultiblockType().getPath() + "/" + pattern.name() + ".json");
-            JsonObject json = pattern.toJson();
+            JsonElement json = pattern.toJson();
             futures.add(DataProvider.saveStable(cachedOutput, json, path));
         }
 

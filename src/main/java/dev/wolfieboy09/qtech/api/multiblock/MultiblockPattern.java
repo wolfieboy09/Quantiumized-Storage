@@ -1,9 +1,9 @@
 package dev.wolfieboy09.qtech.api.multiblock;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.codecs.QTExtraStreamCodecs;
@@ -205,42 +205,8 @@ public record MultiblockPattern(String name, MultiblockType multiblockType, Reso
         };
     }
 
-    public JsonObject toJson() {
-        JsonObject root = new JsonObject();
-        root.addProperty("name", this.name);
-        root.addProperty("multiblock_type", this.multiblockType.getMultiblockType().toString());
-
-        root.addProperty("controller", this.controller.toString());
-
-        JsonObject controllerOffset = new JsonObject();
-        controllerOffset.addProperty("x", this.controllerPosition.getX());
-        controllerOffset.addProperty("y", this.controllerPosition.getY());
-        controllerOffset.addProperty("z", this.controllerPosition.getZ());
-        root.add("controller_offset", controllerOffset);
-
-        JsonObject keyMapJson = new JsonObject();
-        for (Map.Entry<Character, BlockMatcher> pair : this.keyMap.entrySet()) {
-            // Skip the reserved keys due to it being handled automatically and not needed to be added to JSON
-            if (RESERVED_KEYS.contains(pair.getKey())) {
-                continue;
-            }
-            keyMapJson.add(pair.getKey().toString(), pair.getValue().toJson());
-        }
-
-        root.add("pattern", keyMapJson);
-
-        JsonArray rootLayerJson = new JsonArray();
-        for (Layer layer : this.layers) {
-            JsonArray layerJson = new JsonArray();
-            for (int i = 0; i < layer.getDepth(); i++) {
-                layerJson.add(layer.getRow(i));
-            }
-            rootLayerJson.add(layerJson);
-        }
-
-        root.add("layers", rootLayerJson);
-
-        return root;
+    public JsonElement toJson() {
+        return CODEC.encodeStart(JsonOps.INSTANCE,this).getOrThrow();
     }
 
     @Contract("_ -> new")
