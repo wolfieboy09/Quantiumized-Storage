@@ -98,12 +98,13 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
     }
 
     protected void formMultiblock(MultiblockPattern pattern) {
+        if (this.level == null || this.level.isClientSide()) return;
         PacketDistributor.sendToAllPlayers(new HideMultiblockPattern(getBlockPos()));
         this.formed = true;
         this.currentPattern = pattern;
 
         // Get all positions that are part of this multiblock
-        Map<BlockPos, Character> positions = pattern.getAllPositions(this.getBlockPos());
+        Map<BlockPos, Character> positions = pattern.getAllPositions(this.getBlockPos(), this.level.getBlockState(getBlockPos()).getValue(BaseMultiblockController.FACING));
         this.trackedPositions.clear();
         this.trackedPositions.addAll(positions.keySet());
 

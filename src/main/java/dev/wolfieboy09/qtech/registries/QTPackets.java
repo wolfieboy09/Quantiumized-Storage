@@ -63,6 +63,7 @@ public final class QTPackets {
             context.enqueueWork(() -> MultiblockGhostRenderer.show(
                     payload.controllerPos(),
                     payload.pattern(),
+                    payload.facing(),
                     payload.duration()
             ));
         }

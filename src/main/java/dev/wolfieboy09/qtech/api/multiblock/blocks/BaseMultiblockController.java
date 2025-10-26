@@ -65,6 +65,7 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
             PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
                     MultiblockPatternManager.getAllPatternsForType(this.getType()).getFirst(),
                     pos,
+                    level.getBlockState(pos).getValue(FACING),
                     600
             ));
         }

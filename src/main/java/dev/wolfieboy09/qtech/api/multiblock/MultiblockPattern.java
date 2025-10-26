@@ -1,15 +1,14 @@
 package dev.wolfieboy09.qtech.api.multiblock;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.codecs.QTExtraStreamCodecs;
-import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -22,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -151,8 +152,12 @@ public record MultiblockPattern(String name, MultiblockType multiblockType, Reso
             return false;
         }
 
-        // Check all other positions
-        Map<BlockPos, Character> positions = getAllPositions(controllerPos);
+        Direction facing = Direction.NORTH; // Default
+        if (controllerState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            facing = controllerState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        }
+
+        Map<BlockPos, Character> positions = getAllPositions(controllerPos, facing);
 
         for (Map.Entry<BlockPos, Character> entry : positions.entrySet()) {
             BlockPos pos = entry.getKey();
@@ -167,11 +172,14 @@ public record MultiblockPattern(String name, MultiblockType multiblockType, Reso
     }
 
 
-    public Map<BlockPos, Character> getAllPositions(BlockPos controllerPos) {
+    public Map<BlockPos, Character> getAllPositions(BlockPos controllerPos, Direction facing) {
         Map<BlockPos, Character> positions = new HashMap<>();
 
-        // Calculate start position (subtract controller offset to get origin)
-        BlockPos startPos = controllerPos.subtract(this.controllerPosition);
+        // Rotate the controller offset first
+        BlockPos rotatedOffset = rotatePosition(this.controllerPosition, facing);
+
+        // Calculate start position (subtract rotated controller offset to get origin)
+        BlockPos startPos = controllerPos.subtract(rotatedOffset);
 
         for (int y = 0; y < layers.size(); y++) {
             Layer layer = layers.get(y);
@@ -181,18 +189,65 @@ public record MultiblockPattern(String name, MultiblockType multiblockType, Reso
 
                 for (int x = 0; x < row.length(); x++) {
                     char key = row.charAt(x);
-                    BlockPos pos = startPos.offset(x, y, z);
 
-                    if (pos.equals(controllerPos)) {
+                    // Create relative position in pattern space
+                    BlockPos relativePos = new BlockPos(x, y, z);
+
+                    // Rotate the relative position based on facing
+                    BlockPos rotatedRelative = rotatePosition(relativePos, facing);
+
+                    BlockPos worldPos = startPos.offset(rotatedRelative);
+
+                    if (worldPos.equals(controllerPos)) {
                         continue;
                     }
 
-                    positions.put(pos.immutable(), key);
+                    positions.put(worldPos.immutable(), key);
                 }
             }
         }
 
         return positions;
+    }
+
+    private BlockPos rotatePosition(BlockPos pos, Direction facing) {
+        return switch (facing) {
+            case EAST -> new BlockPos(-pos.getZ(), pos.getY(), pos.getX()); // 90* CW
+            case SOUTH -> new BlockPos(-pos.getX(), pos.getY(), -pos.getZ()); // 180*
+            case WEST -> new BlockPos(pos.getZ(), pos.getY(), -pos.getX()); // 270* CW
+            default -> pos; // Includes north
+        };
+    }
+
+    /**
+     * Reverse rotation - from facing back to NORTH orientation
+     * Used when you need to convert world positions back to pattern space
+     */
+    private BlockPos unrotatePosition(BlockPos pos, Direction facing) {
+        return switch (facing) {
+            case NORTH -> pos; // No rotation
+            case EAST -> new BlockPos(pos.getZ(), pos.getY(), -pos.getX()); // 90* CCW
+            case SOUTH -> new BlockPos(-pos.getX(), pos.getY(), -pos.getZ()); // 180*
+            case WEST -> new BlockPos(-pos.getZ(), pos.getY(), pos.getX()); // 270* CCW
+            default -> pos;
+        };
+    }
+
+    /**
+     * Get supported blocks at a world position, accounting for rotation
+     * @param controllerPos The controller's world position
+     * @param facing The direction the controller is facing
+     * @param worldPos The world position to check
+     * @return List of blocks that can be at this position
+     */
+    public List<Block> getSupportedBlocksAtWorld(BlockPos controllerPos, Direction facing, BlockPos worldPos) {
+        // Convert world position back to pattern space
+        BlockPos rotatedOffset = rotatePosition(this.controllerPosition, facing);
+        BlockPos startPos = controllerPos.subtract(rotatedOffset);
+        BlockPos rotatedRelative = worldPos.subtract(startPos);
+        BlockPos patternPos = unrotatePosition(rotatedRelative, facing);
+
+        return getSupportedBlocks(patternPos);
     }
 
     public boolean isPositionCorrect(Level level, BlockPos pos, char expectedKey) {
@@ -207,47 +262,5 @@ public record MultiblockPattern(String name, MultiblockType multiblockType, Reso
 
     public JsonElement toJson() {
         return CODEC.encodeStart(JsonOps.INSTANCE,this).getOrThrow();
-    }
-
-    @Contract("_ -> new")
-    public static MultiblockPattern fromJson(JsonObject root) {
-        String name = Objects.requireNonNull(root.get("name").getAsString(), "Missing name");
-        MultiblockType type = Objects.requireNonNull(QTRegistries.MULTIBLOCK_TYPE.get(ResourceLocation.parse(root.get("multiblock_type").getAsString())), "Missing multiblock_type");
-        ResourceLocation controller = Objects.requireNonNull(ResourceLocation.parse(root.get("controller").getAsString()), "Missing controller");
-
-        BlockPos controllerOffset;
-
-        if (root.has("controller_offset")) {
-            JsonObject offset = root.getAsJsonObject("controller_offset");
-            if (!(offset.has("x") || offset.has("y") || offset.has("z"))) {
-                throw new NullPointerException("Invalid controller_offset");
-            }
-            controllerOffset = new BlockPos(offset.get("x").getAsInt(), offset.get("y").getAsInt(), offset.get("z").getAsInt());
-        } else {
-            throw new NullPointerException("Missing controller_offset");
-        }
-
-        Map<Character, BlockMatcher> keyMap = new HashMap<>();
-
-        if (root.has("pattern")) {
-            JsonObject patternData = root.getAsJsonObject("pattern");
-            Set<String> set = patternData.keySet();
-            for (String key : set) {
-                keyMap.put(key.charAt(0), BlockMatcher.fromJson(patternData.get(key)));
-            }
-        } else {
-            throw new NullPointerException("Missing pattern");
-        }
-
-        if (!root.has("layers")) throw new NullPointerException("Missing layers");
-
-
-        List<Layer> layers = root.getAsJsonArray("layers").asList().stream()
-                .map(JsonElement::getAsJsonArray)
-                .map(JsonElement::getAsString)
-                .map(Layer::of)
-                .toList();
-
-        return new MultiblockPattern(name, type, controller, controllerOffset, keyMap, layers);
     }
 }
