@@ -4,6 +4,7 @@ import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockBuilder;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.AbstractBaseEntityBlock;
+import dev.wolfieboy09.qtech.packets.HideMultiblockPattern;
 import dev.wolfieboy09.qtech.packets.ShowMultiblockPattern;
 import dev.wolfieboy09.qtech.registries.QTBlocks;
 import dev.wolfieboy09.qtech.registries.QTItems;
@@ -94,7 +95,8 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller) {
-            controller.breakMultiblock();
+            PacketDistributor.sendToAllPlayers(new HideMultiblockPattern(pos));
+//            controller.breakMultiblock();
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }

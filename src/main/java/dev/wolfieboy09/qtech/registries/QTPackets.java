@@ -6,6 +6,7 @@ import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlockEntity;
 import dev.wolfieboy09.qtech.client.render.MultiblockGhostRenderer;
 import dev.wolfieboy09.qtech.packets.GasCanisterModeData;
+import dev.wolfieboy09.qtech.packets.HideMultiblockPattern;
 import dev.wolfieboy09.qtech.packets.PipeFacadeUpdate;
 import dev.wolfieboy09.qtech.packets.ShowMultiblockPattern;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -34,6 +35,11 @@ public final class QTPackets {
                 ShowMultiblockPattern.STREAM_CODEC,
                 new OneWayPacketHandler<>(ClientPayloadHandler::handleShowMultiblockPattern)
         );
+        registrar.playToClient(
+                HideMultiblockPattern.TYPE,
+                HideMultiblockPattern.STREAM_CODEC,
+                new OneWayPacketHandler<>(ClientPayloadHandler::handleHideMultiblockPattern)
+        );
     }
 
     public static class ServerPayloadHandler {
@@ -59,6 +65,10 @@ public final class QTPackets {
                     payload.pattern(),
                     payload.duration()
             ));
+        }
+
+        public static void handleHideMultiblockPattern(HideMultiblockPattern payload, IPayloadContext context) {
+            context.enqueueWork(MultiblockGhostRenderer::hide);
         }
     }
 }
