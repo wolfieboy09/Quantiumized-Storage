@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @NothingNullByDefault
 public final class MultiblockPatternManager extends SimplePreparableReloadListener<Map<ResourceLocation, JsonObject>> {
@@ -28,6 +29,7 @@ public final class MultiblockPatternManager extends SimplePreparableReloadListen
     @Override
     protected Map<ResourceLocation, JsonObject> prepare(ResourceManager resourceManager, ProfilerFiller profiler) {
         Map<ResourceLocation, JsonObject> jsons = new HashMap<>();
+        AtomicInteger failed = new AtomicInteger();
 
         resourceManager.listResources("multiblock_patterns", path -> path.getPath().endsWith(".json"))
                 .forEach((fileId, resource) -> {
@@ -46,11 +48,12 @@ public final class MultiblockPatternManager extends SimplePreparableReloadListen
                         JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
                         jsons.put(id, json);
                     } catch (Exception e) {
+                        failed.getAndIncrement();
                         LOGGER.error("Failed to read multiblock pattern {} from {}", id, fileId, e);
                     }
                 });
 
-        LOGGER.info("Discovered {} multiblock pattern JSON(s)", jsons.size());
+        LOGGER.info("Discovered {} multiblock pattern JSON(s), with {} failed", jsons.size(), failed.get());
         return jsons;
     }
 
