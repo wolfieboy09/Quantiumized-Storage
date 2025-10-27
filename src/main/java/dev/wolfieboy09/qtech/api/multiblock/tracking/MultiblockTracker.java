@@ -1,17 +1,19 @@
 package dev.wolfieboy09.qtech.api.multiblock.tracking;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
-import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
-import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockEntityController;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockController;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockControllerEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,6 +22,11 @@ public class MultiblockTracker {
 
     // Level -> (Block Position -> Controller Position)
     private static final Map<Level, Map<BlockPos, BlockPos>> TRACKED_BLOCKS = new ConcurrentHashMap<>();
+
+    @Contract("_, _ -> new")
+    public static Optional<BlockPos> getControllerPos(Level level, BlockPos pos) {
+        return level == null ? Optional.empty() : Optional.ofNullable(TRACKED_BLOCKS.get(level).get(pos));
+    }
 
     public static void registerMultiblock(Level level, BlockPos controllerPos, Set<BlockPos> positions) {
         if (level == null) return;
@@ -51,7 +58,7 @@ public class MultiblockTracker {
         BlockPos controllerPos = levelMap.get(brokenPos);
         if (controllerPos == null) return;
 
-        if (level.getBlockEntity(controllerPos) instanceof BaseMultiblockEntityController controller) {
+        if (level.getBlockEntity(controllerPos) instanceof BaseMultiblockControllerEntity controller) {
             controller.breakMultiblock();
             // Update block state
             BlockState state = controller.getBlockState();
