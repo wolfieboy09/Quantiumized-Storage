@@ -20,7 +20,7 @@ public final class QTRecipeSchema {
     private static final RecipeKey<List<Ingredient>> INGREDIENTS = IngredientComponent.INGREDIENT.instance().asList().key("ingredients", ComponentRole.INPUT);
     private static final RecipeKey<List<Ingredient>> EXTRA_INGREDIENTS = IngredientComponent.INGREDIENT.instance().asList().key("extras", ComponentRole.INPUT);
     private static final RecipeKey<Integer> ENERGY = NumberComponent.INT.key("energy", ComponentRole.OTHER);
-    private static final RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.key("ticks", ComponentRole.OTHER);
+    private static final RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.key("processing_time", ComponentRole.OTHER);
     private static final RecipeKey<ItemStack> RESULT = ItemStackComponent.ITEM_STACK.key("result", ComponentRole.OUTPUT);
 
     private static final RecipeKey<List<Either<ItemStack, FluidStack>>> WASTE = ItemStackComponent.ITEM_STACK.instance().or(FluidStackComponent.FLUID_STACK.instance()).asList().key("waste", ComponentRole.OUTPUT);
