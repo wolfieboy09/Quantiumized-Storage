@@ -16,7 +16,7 @@
     {
       "rows": [
         "BB+BB",
-        "BBBBB",
+        "BHBHB",
         "BBBBB"
       ]
     },
@@ -34,6 +34,13 @@
     "B": {
       "type": "single",
       "value": "minecraft:bricks"
+    },
+    "H": {
+      "type": "any_of",
+      "value": [
+        "minecraft:bricks",
+        "qtech:item_input_hatch"
+      ]
     }
   }
 }

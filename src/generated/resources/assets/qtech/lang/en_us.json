@@ -6,6 +6,7 @@
   "block.qtech.energy_pipe": "Energy Pipe",
   "block.qtech.fluid_pipe": "Fluid Pipe",
   "block.qtech.gas_canister": "Gas Canister",
+  "block.qtech.item_input_hatch": "Item Input Hatch",
   "block.qtech.item_pipe": "Item Pipe",
   "block.qtech.smeltery": "Smeltery",
   "block.qtech.storage_matrix": "Storage Matrix",

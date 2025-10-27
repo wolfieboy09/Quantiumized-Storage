@@ -18,8 +18,9 @@ public class QTMultiblockProvider extends MultiblockPatternProvider {
         add(create("centrifuge", QTMultiblockTypes.CENTRIFUGE)
                 .controller(QTBlocks.CENTRIFUGE_CONTROLLER)
                 .key('B', Blocks.BRICKS)
+                .key('H', Blocks.BRICKS, QTBlocks.ITEM_INPUT_HATCH.get())
                 .layer("BBBBB", "BBBBB", "BBBBB")
-                .layer("BB+BB", "BBBBB", "BBBBB")
+                .layer("BB+BB", "BHBHB", "BBBBB")
                 .layer("BBBBB", "BBBBB", "BBBBB"));
     }
 }

@@ -7,6 +7,7 @@ import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock;
 import dev.wolfieboy09.qtech.block.multiblock.centrifuge.CentrifugeController;
+import dev.wolfieboy09.qtech.block.multiblock.hatches.item.MultiblockItemInputHatchBlock;
 import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipe;
@@ -73,6 +74,8 @@ public class QTBlocks {
     );
 
     public static final DeferredBlock<CentrifugeController> CENTRIFUGE_CONTROLLER = registerController("centrifuge_controller", () -> new CentrifugeController(BlockBehaviour.Properties.of()));
+
+    public static final DeferredBlock<MultiblockItemInputHatchBlock> ITEM_INPUT_HATCH = registerBlock("item_input_hatch", MultiblockItemInputHatchBlock::new);
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));

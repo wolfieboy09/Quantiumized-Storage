@@ -3,12 +3,16 @@ package dev.wolfieboy09.qtech.api.multiblock.blocks.controller;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPattern;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.hatch.BaseMultiblockHatch;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.hatch.BaseMultiblockHatchEntity;
 import dev.wolfieboy09.qtech.api.multiblock.tracking.MultiblockTracker;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
 import dev.wolfieboy09.qtech.packets.HideMultiblockPattern;
+import it.unimi.dsi.fastutil.booleans.BooleanPredicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -17,13 +21,17 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NothingNullByDefault
@@ -169,13 +177,7 @@ public class BaseMultiblockControllerEntity extends GlobalBlockEntity {
         this.formed = false;
     }
 
-    public void tick() {
-        if (level == null || level.isClientSide) return;
-
-        if (formed && level.getGameTime() % 20 == 0) { // Check every second
-            validateStructure();
-        }
-    }
+    public void tick() {}
 
     public Set<BlockPos> getBlocksOf(Block block) {
         if (this.level == null || this.level.isClientSide()) return Set.of();
@@ -211,5 +213,19 @@ public class BaseMultiblockControllerEntity extends GlobalBlockEntity {
 
     public Set<BlockPos> getTrackedPositions() {
         return Collections.unmodifiableSet(this.trackedPositions);
+    }
+
+    public Set<BlockPos> getHatchesOfType(Predicate<BaseMultiblockHatchEntity<?>> filter) {
+        if (this.level == null || this.level.isClientSide) return Set.of();
+
+        Set<BlockPos> found = new HashSet<>();
+        for (BlockPos pos : getTrackedPositions()) {
+            BlockEntity blockEntity = this.level.getBlockEntity(pos);
+            if (blockEntity instanceof BaseMultiblockHatchEntity<?> hatch
+                    && filter.test(hatch)) {
+                found.add(pos);
+            }
+        }
+        return found;
     }
 }
