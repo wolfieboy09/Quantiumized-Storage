@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
-import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockController;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;

@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.api.multiblock.blocks;
+package dev.wolfieboy09.qtech.api.multiblock.blocks.controller;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPatternManager;
@@ -61,7 +61,7 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.PASS;
 
-        if (level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller && !controller.isFormed()) {
+        if (level.getBlockEntity(pos) instanceof BaseMultiblockControllerEntity controller && !controller.isFormed()) {
             PacketDistributor.sendToPlayer((ServerPlayer) player, new ShowMultiblockPattern(
                     MultiblockPatternManager.getAllPatternsForType(this.getType()).getFirst(),
                     pos,
@@ -75,7 +75,7 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof BaseMultiblockControllerEntity controller) {
             if (stack.is(QTItems.WRENCH) && !controller.isFormed()) {
                 controller.attemptFormation();
             }
@@ -85,7 +85,7 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof BaseMultiblockEntityController controller) {
+        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof BaseMultiblockControllerEntity controller) {
             PacketDistributor.sendToAllPlayers(new HideMultiblockPattern());
             controller.breakMultiblock();
         }
@@ -94,10 +94,10 @@ public abstract class BaseMultiblockController extends AbstractBaseEntityBlock {
 
     @Override
     public final @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : ((level1, pos, state1, blockEntity) -> ((BaseMultiblockEntityController) blockEntity).tick());
+        return level.isClientSide ? null : ((level1, pos, state1, blockEntity) -> ((BaseMultiblockControllerEntity) blockEntity).tick());
     }
 
-    public abstract BaseMultiblockEntityController newMultiblockController(BlockPos blockPos, BlockState blockState);
+    public abstract BaseMultiblockControllerEntity newMultiblockController(BlockPos blockPos, BlockState blockState);
 
     @Override
     public final BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

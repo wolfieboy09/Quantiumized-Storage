@@ -2,7 +2,7 @@ package dev.wolfieboy09.qtech.datagen;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
-import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockController;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.pipe.BasePipeBlock;

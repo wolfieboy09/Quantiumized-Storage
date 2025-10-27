@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qtech.api.multiblock;
 
-import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockController;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

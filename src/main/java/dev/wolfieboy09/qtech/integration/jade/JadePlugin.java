@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.integration.jade;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockController;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockController;
 import dev.wolfieboy09.qtech.integration.jade.multiblocks.MultiblockComponentProvider;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;

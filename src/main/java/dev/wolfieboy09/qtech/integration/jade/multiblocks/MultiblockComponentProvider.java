@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.integration.jade.multiblocks;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
-import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockEntityController;
+import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockControllerEntity;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +31,7 @@ public enum MultiblockComponentProvider implements IBlockComponentProvider, ISer
 
     @Override
     public void appendServerData(CompoundTag compoundTag, BlockAccessor blockAccessor) {
-        BaseMultiblockEntityController controller = (BaseMultiblockEntityController) blockAccessor.getBlockEntity();
+        BaseMultiblockControllerEntity controller = (BaseMultiblockControllerEntity) blockAccessor.getBlockEntity();
         compoundTag.putBoolean("Formed", controller.isFormed());
     }
 

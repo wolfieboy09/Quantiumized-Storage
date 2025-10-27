@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.api.multiblock.blocks;
+package dev.wolfieboy09.qtech.api.multiblock.blocks.controller;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.MultiblockPattern;
@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @NothingNullByDefault
-public class BaseMultiblockEntityController extends GlobalBlockEntity {
+public class BaseMultiblockControllerEntity extends GlobalBlockEntity {
     private boolean formed = false;
     private MultiblockType multiblockType;
     protected @Nullable MultiblockPattern currentPattern = null;
@@ -37,7 +37,7 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
     private final Map<TagKey<Block>, Set<BlockPos>> tagCache = new HashMap<>();
 
 
-    public BaseMultiblockEntityController(BlockEntityType<? extends BaseMultiblockEntityController> type, MultiblockType multiblockType, BlockPos pos, BlockState blockState) {
+    public BaseMultiblockControllerEntity(BlockEntityType<? extends BaseMultiblockControllerEntity> type, MultiblockType multiblockType, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
         this.multiblockType = multiblockType;
     }
@@ -135,9 +135,6 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
         // Unregister from tracker
         MultiblockTracker.unregisterMultiblock(level, this.getBlockPos());
 
-        // Clear tracked positions
-        this.trackedPositions.clear();
-        this.currentPattern = null;
         invalidateCaches();
         // Call hook for subclasses
         onBroken();
@@ -202,6 +199,8 @@ public class BaseMultiblockEntityController extends GlobalBlockEntity {
     public void invalidateCaches() {
         this.blockCache.clear();
         this.tagCache.clear();
+        this.trackedPositions.clear();
+        this.currentPattern = null;
     }
 
     protected void onFormed(MultiblockPattern pattern) {
