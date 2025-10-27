@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.multiblock;
+package dev.wolfieboy09.qtech.block.multiblock.centrifuge;
 
 import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;

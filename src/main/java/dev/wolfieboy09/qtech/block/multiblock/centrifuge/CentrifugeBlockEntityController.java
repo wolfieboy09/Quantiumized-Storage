@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.multiblock;
+package dev.wolfieboy09.qtech.block.multiblock.centrifuge;
 
 import dev.wolfieboy09.qtech.api.multiblock.blocks.BaseMultiblockEntityController;
 import dev.wolfieboy09.qtech.registries.QTBlockEntities;

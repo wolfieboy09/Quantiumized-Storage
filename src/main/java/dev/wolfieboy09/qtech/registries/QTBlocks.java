@@ -6,7 +6,7 @@ import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlock;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock;
-import dev.wolfieboy09.qtech.block.multiblock.CentrifugeController;
+import dev.wolfieboy09.qtech.block.multiblock.centrifuge.CentrifugeController;
 import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipe;
 import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipe;
