@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapability;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseMultiblockHatchEntity<C> extends GlobalBlockEntity {
@@ -21,6 +22,8 @@ public abstract class BaseMultiblockHatchEntity<C> extends GlobalBlockEntity {
         return this.blockCapability;
     }
 
-    public abstract MultiblockHatchRule getHatchRules();
+    protected abstract void tick();
+
+    public abstract @NotNull MultiblockHatchRule getHatchRules();
 
 }
