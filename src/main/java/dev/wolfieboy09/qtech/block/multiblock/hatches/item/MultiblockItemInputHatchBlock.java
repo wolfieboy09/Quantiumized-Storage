@@ -20,7 +20,7 @@ public class MultiblockItemInputHatchBlock extends BaseMultiblockHatch<IItemHand
 
     @Override
     public BaseMultiblockHatchEntity<IItemHandler> newMultiblockHatch(BlockPos blockPos, BlockState blockState) {
-        return null;
+        return new MultiblockItemInputHatchBlockEntity(blockPos, blockState);
     }
 
     @Override
