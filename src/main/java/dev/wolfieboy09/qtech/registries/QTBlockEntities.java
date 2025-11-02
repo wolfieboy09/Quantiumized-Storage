@@ -6,7 +6,7 @@ import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlockEnti
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlockEntity;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
 import dev.wolfieboy09.qtech.block.multiblock.centrifuge.CentrifugeBlockEntityController;
-import dev.wolfieboy09.qtech.block.multiblock.hatches.item.MultiblockItemInputHatchBlockEntity;
+import dev.wolfieboy09.qtech.block.multiblock.hatches.item.ItemInputHatchBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipeBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipeBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.item.ItemPipeBlockEntity;
@@ -86,9 +86,9 @@ public class QTBlockEntities {
             QTBlocks.CENTRIFUGE_CONTROLLER
     );
 
-    public static final Supplier<BlockEntityType<MultiblockItemInputHatchBlockEntity>> ITEM_INPUT_HATCH = createBlockEntity(
+    public static final Supplier<BlockEntityType<ItemInputHatchBlockEntity>> ITEM_INPUT_HATCH = createBlockEntity(
             "item_input_hatch",
-            MultiblockItemInputHatchBlockEntity::new,
+            ItemInputHatchBlockEntity::new,
             QTBlocks.ITEM_INPUT_HATCH
     );
 

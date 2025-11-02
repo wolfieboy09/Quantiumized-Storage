@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class MultiblockItemInputHatchBlockEntity extends BaseMultiblockHatchEntity<IItemHandler> {
+public class ItemInputHatchBlockEntity extends BaseMultiblockHatchEntity<IItemHandler> {
     private final ExtendedItemStackHandler inventory = new ExtendedItemStackHandler(1, (a) -> {});
 
-    public MultiblockItemInputHatchBlockEntity(BlockPos pos, BlockState blockState) {
+    public ItemInputHatchBlockEntity(BlockPos pos, BlockState blockState) {
         super(QTBlockEntities.ITEM_INPUT_HATCH.get(), Capabilities.ItemHandler.BLOCK, pos, blockState);
     }
 

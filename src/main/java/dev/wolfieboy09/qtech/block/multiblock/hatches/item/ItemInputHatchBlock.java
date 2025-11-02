@@ -11,16 +11,16 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 
 @NothingNullByDefault
-public class MultiblockItemInputHatchBlock extends BaseMultiblockHatch<IItemHandler> {
-    public MapCodec<MultiblockItemInputHatchBlock> CODEC = simpleCodec(MultiblockItemInputHatchBlock::new);
+public class ItemInputHatchBlock extends BaseMultiblockHatch<IItemHandler> {
+    public MapCodec<ItemInputHatchBlock> CODEC = simpleCodec(ItemInputHatchBlock::new);
 
-    public MultiblockItemInputHatchBlock(Properties properties) {
+    public ItemInputHatchBlock(Properties properties) {
         super(Capabilities.ItemHandler.BLOCK, properties);
     }
 
     @Override
     public BaseMultiblockHatchEntity<IItemHandler> newMultiblockHatch(BlockPos blockPos, BlockState blockState) {
-        return new MultiblockItemInputHatchBlockEntity(blockPos, blockState);
+        return new ItemInputHatchBlockEntity(blockPos, blockState);
     }
 
     @Override
