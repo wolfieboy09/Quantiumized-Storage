@@ -12,14 +12,12 @@ import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.gas.Gas;
 import dev.wolfieboy09.qtech.api.util.ColorUtil;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
-import dev.wolfieboy09.qtech.integration.kubejs.bindings.MobEffectInstanceBinding;
 import dev.wolfieboy09.qtech.integration.kubejs.builders.KubeGasBuilder;
 import dev.wolfieboy09.qtech.integration.kubejs.datagen.KJSSmelteryFuelDataGeneration;
 import dev.wolfieboy09.qtech.integration.kubejs.events.QTKubeEvents;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.QTRecipeSchema;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.schemas.SmelterySchema;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffects;
 import org.jetbrains.annotations.NotNull;
 
 
