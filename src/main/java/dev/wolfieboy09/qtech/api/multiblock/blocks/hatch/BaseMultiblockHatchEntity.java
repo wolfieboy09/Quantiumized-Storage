@@ -10,6 +10,8 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public abstract class BaseMultiblockHatchEntity<C> extends GlobalBlockEntity {
     private final BlockCapability<C, @Nullable Direction> blockCapability;
 
@@ -25,5 +27,7 @@ public abstract class BaseMultiblockHatchEntity<C> extends GlobalBlockEntity {
     protected abstract void tick();
 
     public abstract @NotNull MultiblockHatchRule getHatchRules();
+
+    public abstract List<C> getCapabilities();
 
 }
