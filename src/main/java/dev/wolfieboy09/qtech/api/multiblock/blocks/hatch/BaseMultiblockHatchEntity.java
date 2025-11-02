@@ -1,5 +1,6 @@
 package dev.wolfieboy09.qtech.api.multiblock.blocks.hatch;
 
+import dev.wolfieboy09.qtech.api.multiblock.MultiblockHatchRule;
 import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,4 +20,7 @@ public abstract class BaseMultiblockHatchEntity<C> extends GlobalBlockEntity {
     public BlockCapability<C, @Nullable Direction> getBlockCapability() {
         return this.blockCapability;
     }
+
+    public abstract MultiblockHatchRule getHatchRules();
+
 }
