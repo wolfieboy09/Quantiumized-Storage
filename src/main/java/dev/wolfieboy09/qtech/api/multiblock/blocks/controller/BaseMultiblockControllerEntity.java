@@ -11,6 +11,7 @@ import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
 import dev.wolfieboy09.qtech.packets.HideMultiblockPattern;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,18 +23,20 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.*;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NothingNullByDefault
 public class BaseMultiblockControllerEntity extends GlobalBlockEntity {
+    private static final Logger log = LoggerFactory.getLogger(BaseMultiblockControllerEntity.class);
     private boolean formed = false;
     private MultiblockType multiblockType;
     protected @Nullable MultiblockPattern currentPattern = null;
@@ -225,5 +228,55 @@ public class BaseMultiblockControllerEntity extends GlobalBlockEntity {
             }
         }
         return found;
+    }
+
+    /**
+     * Gets all capability handlers of a specific {@link BlockCapability} exposed by {@link BaseMultiblockHatchEntity}
+     * @param <C> The capability handler type (e.g. {@code IItemHandler}, {@code IFluidHandler})
+     * @param capability The {@link BlockCapability} to search for
+     * @return A set of all the found handler instances
+     */
+    @SuppressWarnings("unchecked")
+    public <C> Set<C> getHandlersOfType(BlockCapability<C, @Nullable Direction> capability) {
+        if (this.level == null || this.level.isClientSide()) return Set.of();
+
+        Set<C> handlers = new HashSet<>();
+
+        for (BlockPos pos : getTrackedPositions()) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (!(be instanceof BaseMultiblockHatchEntity<?> hatch)) continue;
+
+            if (hatch.getBlockCapability() == capability) {
+                for (Object cap : hatch.getCapabilities()) {
+                    try {
+                        C handler = (C) cap;
+                        handlers.add(handler);
+                    } catch (ClassCastException ignored) {
+                    }
+                }
+            }
+        }
+
+        return handlers;
+    }
+
+
+    /**
+     * Collects every capability instance exposed by any {@link BaseMultiblockHatchEntity}
+     * @return An immutable {@link Set} containing all instances of any capability
+     */
+    public Set<Object> getAllHandlers() {
+        if (this.level == null || this.level.isClientSide()) return Set.of();
+
+        Set<Object> all = new HashSet<>();
+
+        for (BlockPos pos : getTrackedPositions()) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof BaseMultiblockHatchEntity<?> hatch) {
+                all.addAll(hatch.getCapabilities());
+            }
+        }
+
+        return all;
     }
 }
