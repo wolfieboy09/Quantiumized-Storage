@@ -29,10 +29,7 @@ public class QTGasses {
                     new MobEffectInstance(QTEffects.OXYGEN_DEPRIVATION, 120)
             ).build());
 
-    public static final Supplier<Gas> NITROGEN_SULFIDE = GASSES.register("nitrogen_sulfide", () ->
-            new GasBuilder()
-                    .effects(new MobEffectInstance(MobEffects.CONFUSION, 120))
-                    .build());
+    public static final Supplier<Gas> AIR = GASSES.register("air", () -> new GasBuilder().build());
 
     public static void register(IEventBus bus) {
         GASSES.register(bus);
