@@ -6,6 +6,7 @@ import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlockEnti
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlockEntity;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
 import dev.wolfieboy09.qtech.block.multiblock.centrifuge.CentrifugeBlockEntityController;
+import dev.wolfieboy09.qtech.block.multiblock.hatches.energy.EnergyInputHatchBlockEntity;
 import dev.wolfieboy09.qtech.block.multiblock.hatches.item.ItemInputHatchBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.energy.EnergyPipeBlockEntity;
 import dev.wolfieboy09.qtech.block.pipe.pipes.fluid.FluidPipeBlockEntity;
@@ -90,6 +91,12 @@ public class QTBlockEntities {
             "item_input_hatch",
             ItemInputHatchBlockEntity::new,
             QTBlocks.ITEM_INPUT_HATCH
+    );
+
+    public static final Supplier<BlockEntityType<EnergyInputHatchBlockEntity>> ENERGY_INPUT_HATCH = createBlockEntity(
+            "energy_input_hatch",
+            EnergyInputHatchBlockEntity::new,
+            QTBlocks.ENERGY_INPUT_HATCH
     );
 
     private static <T extends BlockEntity> @NotNull Supplier<BlockEntityType<T>> createBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier, Supplier<? extends Block> block) {

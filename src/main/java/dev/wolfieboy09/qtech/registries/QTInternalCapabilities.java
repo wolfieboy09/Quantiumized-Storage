@@ -35,6 +35,10 @@ public class QTInternalCapabilities {
 
         event.registerBlockEntity(QTCapabilities.GasStorage.BLOCK, QTBlockEntities.GAS_CANISTER.get(), (block, dir) -> block.getGasTank());
 
+       event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, QTBlockEntities.ITEM_INPUT_HATCH.get(), (block, dir) -> block.getCapabilities().getFirst());
+
+       event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, QTBlockEntities.ENERGY_INPUT_HATCH.get(), (block, dir) -> block.getCapabilities().getFirst());
+
         event.registerItem(
                 QTCapabilities.GasStorage.ITEM,
                 (itemStack, context) -> {
