@@ -55,6 +55,12 @@
   "qtech.oxygen_deprivation": "%s could not breath on land",
   "qtech.screen.fluid": "%s: %s/%s",
   "qtech.tooltip.shift_info": "Press §6SHIFT§r for more info",
+  "recipe.cleanroom_condition.clean": "Clean",
+  "recipe.cleanroom_condition.controlled": "Controlled",
+  "recipe.cleanroom_condition.none": "None",
+  "recipe.cleanroom_condition.sterilized": "Sterilized",
+  "recipe.cleanroom_condition.ultra_clean": "Ultra Clean",
+  "recipe.cleanroom_condition.vacuum": "Vacuum",
   "tooltip.qtech.max_energy_upgrade": "Adds more energy capacity",
   "tooltip.qtech.speed_upgrade": "Makes the process faster"
 }
