@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.datagen;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
 import dev.wolfieboy09.qtech.api.util.NamingUtil;
 import dev.wolfieboy09.qtech.registries.QTBlocks;
 import dev.wolfieboy09.qtech.registries.QTCreativeTab;
@@ -54,6 +55,10 @@ public class QTLangProvider extends LanguageProvider {
         toGenerate.put("multiblock.qtech.formed", "Multiblock Formed");
         toGenerate.put("multiblock.qtech.unformed", "Multiblock Not Formed");
         toGenerate.put("config.jade.plugin_qtech.multiblock_controller", "Multiblock Controller");
+
+        for (CleanRoomCondition condition : CleanRoomCondition.values()) {
+            toGenerate.put(condition.getTranslationKey(), NamingUtil.toHumanReadable(condition.getSerializedName()));
+        }
 
         return toGenerate;
     }
