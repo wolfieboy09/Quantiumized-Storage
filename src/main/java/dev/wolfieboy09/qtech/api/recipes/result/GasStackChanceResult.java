@@ -33,7 +33,7 @@ public class GasStackChanceResult extends ChanceResult<GasStack> {
                     GasStackChanceResult::new
             );
 
-    protected GasStackChanceResult(GasStack result, float chance) {
+    public GasStackChanceResult(GasStack result, float chance) {
         super(result, chance);
     }
 
