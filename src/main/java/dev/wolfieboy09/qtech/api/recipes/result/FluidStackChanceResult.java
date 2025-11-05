@@ -15,7 +15,7 @@ public class FluidStackChanceResult extends ChanceResult<FluidStack> {
                     BuiltInRegistries.FLUID.getKey(r.getResult().getFluid())
             ),
             Codec.INT.optionalFieldOf("amount", 1000).forGetter(r -> r.getResult().getAmount()),
-            Codec.FLOAT.fieldOf("chance").forGetter(FluidStackChanceResult::getChance)
+            Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(FluidStackChanceResult::getChance)
     ).apply(instance, (fluidId, amount, chance) ->
             new FluidStackChanceResult(new FluidStack(
                     BuiltInRegistries.FLUID.getOptional(fluidId).orElseThrow(

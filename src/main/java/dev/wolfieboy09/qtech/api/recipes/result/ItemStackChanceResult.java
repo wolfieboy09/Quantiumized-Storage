@@ -15,7 +15,7 @@ public class ItemStackChanceResult extends ChanceResult<ItemStack> {
                     BuiltInRegistries.ITEM.getKey(r.getResult().getItem())
             ),
             Codec.INT.optionalFieldOf("count", 1).forGetter(r -> r.getResult().getCount()),
-            Codec.FLOAT.fieldOf("chance").forGetter(ItemStackChanceResult::getChance)
+            Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(ItemStackChanceResult::getChance)
     ).apply(instance, (id, count, chance) ->
             new ItemStackChanceResult(new ItemStack(
                     BuiltInRegistries.ITEM.getOptional(id).orElseThrow(
