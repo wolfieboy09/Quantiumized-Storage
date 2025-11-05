@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.api.registry;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.api.gas.crafting.GasIngredientType;
 import dev.wolfieboy09.qtech.api.registry.gas.Gas;
 import dev.wolfieboy09.qtech.api.registry.multiblock_type.MultiblockType;
 import net.minecraft.core.Registry;
@@ -16,6 +17,11 @@ public class QTRegistries {
 
     public static final ResourceKey<Registry<MultiblockType>> MULTIBLOCK_TYPE_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(QuantiumizedTech.MOD_ID, "multiblock_type"));
     public static final Registry<MultiblockType> MULTIBLOCK_TYPE = new RegistryBuilder<>(MULTIBLOCK_TYPE_KEY)
+            .sync(true)
+            .create();
+
+    public static final ResourceKey<Registry<GasIngredientType<?>>> GAS_INGREDIENT_TYPES_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(QuantiumizedTech.MOD_ID, "gas_ingredient_type"));
+    public static final Registry<GasIngredientType<?>> GAS_INGREDIENT_TYPES = new RegistryBuilder<>(GAS_INGREDIENT_TYPES_KEY)
             .sync(true)
             .create();
 }

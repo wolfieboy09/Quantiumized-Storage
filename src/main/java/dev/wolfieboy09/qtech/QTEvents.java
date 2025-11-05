@@ -11,6 +11,7 @@ public class QTEvents {
     public static void registerRegistries(@NotNull NewRegistryEvent event) {
         event.register(QTRegistries.GAS);
         event.register(QTRegistries.MULTIBLOCK_TYPE);
+        event.register(QTRegistries.GAS_INGREDIENT_TYPES);
     }
 
     public static void particle(@NotNull RegisterParticleProvidersEvent event) {

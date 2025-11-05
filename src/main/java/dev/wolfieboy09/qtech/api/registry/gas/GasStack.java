@@ -19,6 +19,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
 import net.neoforged.neoforge.common.util.DataComponentUtil;
 import org.jetbrains.annotations.Nullable;
@@ -80,6 +81,10 @@ public class GasStack implements MutableDataComponentHolder {
 
     public GasStack(Holder<Gas> gas) {
         this(gas.value(), 1);
+    }
+
+    public GasStack(Holder<Gas> gas, int amount, DataComponentPatch patch) {
+        this(gas.value(), amount, PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, patch));
     }
 
     public int getAmount() {
@@ -167,6 +172,14 @@ public class GasStack implements MutableDataComponentHolder {
         return this.getGas() == gas;
     }
 
+    public boolean is(Holder<Gas> holder) {
+        return is(holder.value());
+    }
+
+    public boolean is(TagKey<Gas> tag) {
+        return this.getGas().builtInRegistryHolder().is(tag);
+    }
+
     public static boolean isSameGasSameComponents(GasStack first, GasStack second) {
         if (!first.is(second.getGas())) {
             return false;
@@ -190,6 +203,15 @@ public class GasStack implements MutableDataComponentHolder {
             GasStack gasStack = this.copy();
             gasStack.setAmount(amount);
             return gasStack;
+        }
+    }
+
+    public static int hashGasAndComponents(@Nullable GasStack stack) {
+        if (stack != null) {
+            int i = 31 + stack.getGas().hashCode();
+            return 31 * i + stack.getComponents().hashCode();
+        } else {
+            return 0;
         }
     }
 }

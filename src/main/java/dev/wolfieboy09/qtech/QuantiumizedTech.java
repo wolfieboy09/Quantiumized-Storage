@@ -49,6 +49,7 @@ public class QuantiumizedTech {
         QTGasses.register(modEventBus);
         QTEffects.register(modEventBus);
         QTEntities.register(modEventBus);
+        QTGasIngredientTypes.register(modEventBus);
 
         NeoForge.EVENT_BUS.addListener(MultiblockTracker::onBlockBreak);
 
