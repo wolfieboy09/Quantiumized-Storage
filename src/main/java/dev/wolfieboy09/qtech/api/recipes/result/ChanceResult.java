@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Chance based recipe results
@@ -40,12 +41,12 @@ public abstract class ChanceResult<T> {
         return random.nextFloat() < this.chance;
     }
 
-    public @Nullable T getIfRolled(RandomSource random) {
-        return roll(random) ? copyResult() : null;
+    public @Nullable Optional<T> getIfRolled(RandomSource random) {
+        return roll(random) ? Optional.of(copyResult()) : Optional.empty();
     }
 
-    public @Nullable T getIfRolled() {
-        return roll(RandomSource.create()) ? copyResult() : null;
+    public @Nullable Optional<T> getIfRolled() {
+        return roll(RandomSource.create()) ? Optional.of(copyResult()) : Optional.empty();
     }
 
     protected abstract T copyResult();

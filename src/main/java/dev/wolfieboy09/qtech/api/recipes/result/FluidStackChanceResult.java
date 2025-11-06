@@ -36,6 +36,10 @@ public class FluidStackChanceResult extends ChanceResult<FluidStack> {
         super(result, chance);
     }
 
+    public FluidStackChanceResult(FluidStack result) {
+        super(result, 1f);
+    }
+
     @Override
     protected FluidStack copyResult() {
         return this.result.copy();
