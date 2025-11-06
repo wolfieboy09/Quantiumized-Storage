@@ -9,12 +9,30 @@ import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 @NothingNullByDefault
 public enum CleanRoomCondition implements StringRepresentable {
-    NONE(0xFFFFFF),          // Any condition, does not matter
-    CONTROLLED(0xA0A0A0),    // Basic filtered air. Prevents major contamination
-    CLEAN(0x00FF00),         // ISO Class 8–7 equivalent, used for micro-assembly
-    ULTRA_CLEAN(0x0000FF),   // ISO Class 6–5, required for precision electronics
-    STERILIZED(0xFF00FF),    // ISO Class 4–1, almost particle free environment
-    VACUUM(0x2B0033);        // Environment with no air or even particles. Used for recipes that require absolute isolation
+    /**
+     * Any condition/environment. Does not matter
+     */
+    NONE(0xFFFFFF),
+    /**
+     * Basic filtered air. Prevents major forms of contamination
+     */
+    CONTROLLED(0xA0A0A0),
+    /**
+     * ISO Class 8-7 equivalent. Used for micro-assembly
+     */
+    CLEAN(0x00FF00),
+    /**
+     * ISO Class 6-5 equivalent. Used for precision electronics
+     */
+    ULTRA_CLEAN(0x0000FF),
+    /**
+     * ISO Class 4-1 equivalent. Almost particle-free environment
+     */
+    STERILIZED(0xFF00FF),
+    /**
+     * Environment with no air or even particles. Used for recipes that require absolute isolation
+     */
+    VACUUM(0x2B0033);
 
     private final int color;
 
