@@ -1,7 +1,11 @@
 package dev.wolfieboy09.qtech.api.recipes;
 
+import com.mojang.serialization.Codec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 @NothingNullByDefault
 public enum CleanRoomCondition implements StringRepresentable {
@@ -13,6 +17,9 @@ public enum CleanRoomCondition implements StringRepresentable {
     VACUUM(0x2B0033);        // Environment with no air or even particles. Used for recipes that require absolute isolation
 
     private final int color;
+
+    public static final Codec<CleanRoomCondition> CODEC = StringRepresentable.fromEnum(CleanRoomCondition::values);
+    public static final StreamCodec<FriendlyByteBuf, CleanRoomCondition> STREAM_CODEC = NeoForgeStreamCodecs.enumCodec(CleanRoomCondition.class);
 
     CleanRoomCondition(int color) {
         this.color = color;
