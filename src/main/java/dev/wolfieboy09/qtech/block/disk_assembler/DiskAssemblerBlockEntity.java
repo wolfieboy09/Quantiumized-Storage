@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implements MenuProvider {
@@ -160,9 +161,9 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
             inputHandler.setStackInSlot(i, this.inventory.getStackInSlot(i));
         }
         RecipeWrapper input = new RecipeWrapper(inputHandler);
-        RecipeHolder<Recipe<RecipeWrapper>> recipeFound = QTRecipeTypes.DISK_ASSEMBLY.find(input, this.level).orElse(null);
-        if (recipeFound == null) return false;
-        NewDiskAssemblerRecipe recipe = (NewDiskAssemblerRecipe) recipeFound.value();
+        Optional<RecipeHolder<NewDiskAssemblerRecipe>> recipeFound = QTRecipeTypes.DISK_ASSEMBLY.find(input, this.level);
+        if (recipeFound.orElse(null) == null) return false;
+        NewDiskAssemblerRecipe recipe = recipeFound.get().value();
         boolean matches = recipe.matches(input, this.level);
         if (!matches) return false;
         ItemStack result = recipe.assemble(input, this.level.registryAccess());
