@@ -10,7 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 public class GasStackChanceResult extends ChanceResult<GasStack> {
-    public static final GasStackChanceResult EMPTY = new GasStackChanceResult(GasStack.EMPTY, 1000);
+    public static final GasStackChanceResult EMPTY = new GasStackChanceResult(GasStack.EMPTY, 1);
 
     public static final Codec<GasStackChanceResult> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("gas").forGetter(r ->
