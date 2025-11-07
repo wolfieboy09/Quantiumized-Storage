@@ -9,6 +9,7 @@ import dev.wolfieboy09.qtech.client.KeyInputHandler;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
 import dev.wolfieboy09.qtech.config.ClientConfig;
 import dev.wolfieboy09.qtech.integration.cctweaked.CCTweakedPlugin;
+import dev.wolfieboy09.qtech.integration.kubejs.gas.KubeJSGasIngredients;
 import dev.wolfieboy09.qtech.registries.*;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -65,6 +66,10 @@ public class QuantiumizedTech {
         // Check to see if CC: Tweaked is present when mod loading, and register the peripherals there
         if (LoadingModList.get().getModFileById("computercraft") != null) {
             CCTweakedPlugin.register();
+        }
+
+        if (LoadingModList.get().getModFileById("kubejs") != null) {
+            KubeJSGasIngredients.register(modEventBus);
         }
 
         modEventBus.addListener(QTDataMaps::register);

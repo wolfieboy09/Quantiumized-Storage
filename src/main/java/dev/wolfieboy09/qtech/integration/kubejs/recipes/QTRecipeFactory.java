@@ -8,14 +8,17 @@ import dev.latvian.mods.kubejs.recipe.component.RecipeValidationContext;
 import dev.latvian.mods.kubejs.script.SourceLine;
 import dev.latvian.mods.kubejs.util.ErrorStack;
 import dev.latvian.mods.kubejs.util.TickDuration;
+import dev.wolfieboy09.qtech.api.gas.crafting.SizedGasIngredient;
+import dev.wolfieboy09.qtech.api.util.TriEither;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public final class QTRecipeFactory extends KubeRecipe {
-    RecipeKey<List<Ingredient>> INGREDIENTS = null;
+    RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> INGREDIENTS = null;
     RecipeKey<List<Ingredient>> EXTRAS = null;
     RecipeKey<Integer> ENERGY = null;
     RecipeKey<TickDuration> TICKS = null;
@@ -29,7 +32,7 @@ public final class QTRecipeFactory extends KubeRecipe {
     private int maxIngredientInputs = 1;
     private int maxExtraIngredientInputs = 1;
 
-    public QTRecipeFactory ingredients(RecipeKey<List<Ingredient>> key, int maxIngredientInputs) {
+    public QTRecipeFactory ingredients(RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> key, int maxIngredientInputs) {
         this.INGREDIENTS = key;
         this.maxIngredientInputs = maxIngredientInputs;
         return this;
