@@ -2,8 +2,8 @@ package dev.wolfieboy09.qtech.block.disk_assembler;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeConstrains;
-import dev.wolfieboy09.qtech.block.disk_assembler.recipe.DiskAssemblerRecipeParams;
-import dev.wolfieboy09.qtech.block.disk_assembler.recipe.DiskAssemblerStandardRecipe;
+import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipeParams;
+import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;

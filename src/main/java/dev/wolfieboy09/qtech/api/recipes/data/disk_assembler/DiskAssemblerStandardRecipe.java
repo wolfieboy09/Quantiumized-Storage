@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.block.disk_assembler.recipe;
+package dev.wolfieboy09.qtech.api.recipes.data.disk_assembler;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeConstrains;
