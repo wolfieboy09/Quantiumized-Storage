@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
@@ -16,6 +17,23 @@ public abstract class StandardProcessingRecipe<T extends RecipeInput> extends Pr
     @FunctionalInterface
     public interface Factory<R extends StandardProcessingRecipe<?>> extends ProcessingRecipe.Factory<ProcessingRecipeParams, R> {
         R create(ProcessingRecipeParams params);
+    }
+
+    public static class Builder<R extends StandardProcessingRecipe<?>> extends ProcessingRecipeBuilder<ProcessingRecipeParams, R, Builder<R>> {
+        public Builder(Factory<R> factory, ResourceLocation recipeId) {
+            super(factory, recipeId);
+        }
+
+        @Override
+        protected
+        ProcessingRecipeParams createParams() {
+            return new ProcessingRecipeParams();
+        }
+
+        @Override
+        public Builder<R> self() {
+            return this;
+        }
     }
 
     public static class Serializer<R extends StandardProcessingRecipe<?>> implements RecipeSerializer<R> {
