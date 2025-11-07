@@ -1,16 +1,22 @@
 package dev.wolfieboy09.qtech.registries;
 
+import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.recipes.IRecipeTypeInfo;
 import dev.wolfieboy09.qtech.api.recipes.StandardProcessingRecipe;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.block.disk_assembler.recipe.DiskAssemblerRecipeParams;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -29,12 +35,12 @@ public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
     private final Supplier<RecipeType<?>> type;
 
     QTRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
-        String name = ResourceHelper.asResource(name()).toString();
+        String name = ResourceHelper.asResource(name()).toString().toLowerCase();
         id = ResourceHelper.asResource(name);
         this.serializerSupplier = serializerSupplier;
-        this.serializerObject = QTRecipes.SERALIZERS.register(name, serializerSupplier);
+        this.serializerObject = Registers.SERIALIZER.register(name, serializerSupplier);
         if (registerType) {
-            typeObject = QTRecipes.TYPES.register(name, typeSupplier);
+            typeObject = Registers.TYPE.register(name, typeSupplier);
             type = typeObject;
         } else {
             this.typeObject = null;
@@ -43,16 +49,22 @@ public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
     }
 
     QTRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
-        String name = ResourceHelper.asResource(name()).toString();
-        this.id = ResourceHelper.asResource(name);
+        String name = ResourceHelper.asResource(name().toLowerCase()).toString();
+        this.id = ResourceLocation.parse(name);
         this.serializerSupplier = serializerSupplier;
-        this.serializerObject = QTRecipes.SERALIZERS.register(name, serializerSupplier);
-        this.typeObject = QTRecipes.TYPES.register(name, () -> RecipeType.simple(id));
+        this.serializerObject = Registers.SERIALIZER.register(id.getPath(), serializerSupplier);
+        this.typeObject = Registers.TYPE.register(id.getPath(), () -> RecipeType.simple(id));
         this.type = typeObject;
     }
 
     QTRecipeTypes(StandardProcessingRecipe.Factory<?> processingFactory) {
         this(() -> new StandardProcessingRecipe.Serializer<>(processingFactory));
+    }
+
+    @ApiStatus.Internal
+    public static void register(IEventBus modEventBus) {
+        Registers.SERIALIZER.register(modEventBus);
+        Registers.TYPE.register(modEventBus);
     }
 
     @Override
@@ -71,12 +83,16 @@ public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
     }
 
     public <I extends RecipeInput, R extends Recipe<I>> Optional<RecipeHolder<R>> find(I inv, Level world) {
-        return world.getRecipeManager()
-                .getRecipeFor(getType(), inv, world);
+        return world.getRecipeManager().getRecipeFor(getType(), inv, world);
     }
 
     @Override
     public String getSerializedName() {
-        return id.toString();
+        return id.getNamespace() + id.getPath().toLowerCase();
+    }
+
+    private static class Registers {
+        private static final DeferredRegister<RecipeSerializer<?>> SERIALIZER = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, QuantiumizedTech.MOD_ID);
+        private static final DeferredRegister<RecipeType<?>> TYPE = DeferredRegister.create(Registries.RECIPE_TYPE, QuantiumizedTech.MOD_ID);
     }
 }

@@ -42,7 +42,8 @@ public class QuantiumizedTech {
         QTBlockEntities.register(modEventBus);
         QTMultiblockTypes.register(modEventBus);
         QTBlocks.register(modEventBus);
-        QTRecipes.register(modEventBus);
+        QTRecipes.register(modEventBus); //TODO: Start migrating to the new recipe system
+        QTRecipeTypes.register(modEventBus);
         QTCreativeTab.register(modEventBus);
         QTMenuTypes.register(modEventBus);
         QTParticleTypes.register(modEventBus);

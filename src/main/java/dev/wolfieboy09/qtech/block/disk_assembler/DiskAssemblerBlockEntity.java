@@ -4,7 +4,7 @@ import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.items.ExtendedItemStackHandler;
 import dev.wolfieboy09.qtech.block.AbstractEnergyBlockEntity;
 import dev.wolfieboy09.qtech.registries.QTBlockEntities;
-import dev.wolfieboy09.qtech.registries.QTRecipes;
+import dev.wolfieboy09.qtech.registries.QTRecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -21,7 +21,6 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.EnergyStorage;
@@ -39,7 +38,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private int progress = 0;
     private int crafting_ticks = 0;
     private int energy_required = 0;
-    private DiskAssemblerRecipe recipe = null;
+    private NewDiskAssemblerRecipe recipe = null;
     private boolean isValidRecipe = false;
     private final ContainerData containerData = new SimpleContainerData(3);
 
@@ -55,7 +54,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private void updateContainer() {
         this.containerData.set(0, this.energyStorage.getEnergyStored());
         this.containerData.set(1, this.getProgress());
-        this.containerData.set(2, this.recipe == null ? 0 : this.recipe.processingTime());
+        this.containerData.set(2, this.recipe == null ? 0 : this.recipe.getProcessingDuration());
     }
     
     @Override
@@ -103,14 +102,14 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         if (!outputHasSpace) return; // Exit if output slot lacks space
         
         // Check energy and progress crafting if energy is sufficient
-        boolean energySufficient = this.energyStorage.getEnergyStored() >= this.recipe.energyCost();
-        int timeRequired = this.recipe.processingTime();
+        boolean energySufficient = this.energyStorage.getEnergyStored() >= this.recipe.getEnergyCost();
+        int timeRequired = this.recipe.getProcessingDuration();
         
         if (energySufficient) {
             if (this.crafting_ticks < timeRequired) {
                 this.crafting_ticks++;
                 this.progress = getProgress();
-                this.energyStorage.removeEnergy(this.recipe.energyCost() / 100);
+                this.energyStorage.removeEnergy(this.recipe.getEnergyCost() / 100);
                 setChanged();
             }
             
@@ -134,10 +133,10 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     
     private int getProgress() {
         if (this.recipe == null) return 0;
-        return (int) (this.crafting_ticks / (float) this.recipe.processingTime() * 100);
+        return (int) (this.crafting_ticks / (float) this.recipe.getProcessingDuration() * 100);
     }
     
-    private void consumeInputItems(DiskAssemblerRecipe recipe) {
+    private void consumeInputItems(NewDiskAssemblerRecipe recipe) {
         // TODO Have it shrink by recipe amount
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_1).shrink(1);
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_2).shrink(1);
@@ -161,14 +160,9 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
             inputHandler.setStackInSlot(i, this.inventory.getStackInSlot(i));
         }
         RecipeWrapper input = new RecipeWrapper(inputHandler);
-        RecipeManager recipes = this.level.getRecipeManager();
-        RecipeHolder<DiskAssemblerRecipe> recipeFound = recipes.getRecipeFor(
-            QTRecipes.DISK_ASSEMBLER_TYPE.get(),
-                        input,
-                        this.level
-            ).orElse(null);
+        RecipeHolder<Recipe<RecipeWrapper>> recipeFound = QTRecipeTypes.DISK_ASSEMBLY.find(input, this.level).orElse(null);
         if (recipeFound == null) return false;
-        DiskAssemblerRecipe recipe = recipeFound.value();
+        NewDiskAssemblerRecipe recipe = (NewDiskAssemblerRecipe) recipeFound.value();
         boolean matches = recipe.matches(input, this.level);
         if (!matches) return false;
         ItemStack result = recipe.assemble(input, this.level.registryAccess());
@@ -253,7 +247,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     
     private void saveRecipeToNBT(CompoundTag modData, HolderLookup.Provider registries) {
         try {
-            if (this.recipe instanceof DiskAssemblerRecipe t) {
+            if (this.recipe instanceof NewDiskAssemblerRecipe t) {
                 modData.put("recipe", DiskAssemblerRecipe.CODEC.encodeStart(NbtOps.INSTANCE, t).getOrThrow());
             }
         } catch (Exception e) {
@@ -263,7 +257,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     
     private void loadRecipeFromNBT(CompoundTag recipeTag) {
         Recipe<?> recipe = Recipe.CODEC.parse(NbtOps.INSTANCE, recipeTag).getOrThrow();
-        if (recipe instanceof DiskAssemblerRecipe diskAssemblerRecipe) {
+        if (recipe instanceof NewDiskAssemblerRecipe diskAssemblerRecipe) {
             this.recipe = diskAssemblerRecipe;
         }
     }
