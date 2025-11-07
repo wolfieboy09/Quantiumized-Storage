@@ -121,6 +121,10 @@ public abstract class GasIngredient implements Predicate<GasStack> {
         return of(Arrays.stream(gases));
     }
 
+    public static GasIngredient of(GasStack... gasses) {
+        return of(Arrays.stream(gasses).map(GasStack::getGas));
+    }
+
     private static GasIngredient of(Stream<Gas> gasses) {
         return CompoundGasIngredient.of(gasses.map(GasIngredient::single));
     }
