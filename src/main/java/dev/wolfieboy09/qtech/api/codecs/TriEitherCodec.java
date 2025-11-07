@@ -48,4 +48,8 @@ public record TriEitherCodec<F, S, L>(Codec<F> first, Codec<S> second, Codec<L> 
             return DataResult.error(() -> "Unknown TriEither variant");
         }
     }
+
+    public static <F, S, L> TriEitherCodec<F, S, L> triEither(Codec<F> first, Codec<S> second, Codec<L> third) {
+        return new TriEitherCodec<>(first, second, third);
+    }
 }

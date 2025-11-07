@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.api.util;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -35,6 +36,9 @@ public abstract class TriEither<L, M, R> {
     public abstract TriEither<L, M, R> ifMiddle(Consumer<? super M> action);
     public abstract TriEither<L, M, R> ifRight(Consumer<? super R> action);
 
+    public abstract Optional<L> left();
+    public abstract Optional<M> middle();
+    public abstract Optional<R> right();
 
     public static final class Left<L, M, R> extends TriEither<L, M, R> {
         private final L value;
@@ -67,6 +71,21 @@ public abstract class TriEither<L, M, R> {
         @Override
         public TriEither<L, M, R> ifRight(Consumer<? super R> action) {
             return this;
+        }
+
+        @Override
+        public Optional<L> left() {
+            return Optional.of(value);
+        }
+
+        @Override
+        public Optional<M> middle() {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<R> right() {
+            return Optional.empty();
         }
 
         public L get() { return value; }
@@ -105,6 +124,21 @@ public abstract class TriEither<L, M, R> {
             return this;
         }
 
+        @Override
+        public Optional<L> left() {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<M> middle() {
+            return Optional.of(value);
+        }
+
+        @Override
+        public Optional<R> right() {
+            return Optional.empty();
+        }
+
         public M get() { return value; }
     }
 
@@ -139,6 +173,21 @@ public abstract class TriEither<L, M, R> {
         public TriEither<L, M, R> ifRight(Consumer<? super R> action) {
             action.accept(value);
             return this;
+        }
+
+        @Override
+        public Optional<L> left() {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<M> middle() {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<R> right() {
+            return Optional.of(value);
         }
 
         public R get() { return value; }
