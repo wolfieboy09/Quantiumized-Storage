@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemStackChanceResult extends ChanceResult<ItemStack> {
+    public static final ItemStackChanceResult EMPTY = new ItemStackChanceResult(ItemStack.EMPTY, 1);
+
     public static final Codec<ItemStackChanceResult> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("id").forGetter(r ->
                     BuiltInRegistries.ITEM.getKey(r.getResult().getItem())
@@ -34,6 +36,10 @@ public class ItemStackChanceResult extends ChanceResult<ItemStack> {
 
     public ItemStackChanceResult(ItemStack result, float chance) {
         super(result, chance);
+    }
+
+    public ItemStackChanceResult(ItemStack result) {
+        this(result, 1);
     }
 
     @Override

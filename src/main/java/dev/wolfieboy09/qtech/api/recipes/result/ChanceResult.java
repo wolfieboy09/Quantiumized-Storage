@@ -25,6 +25,10 @@ public abstract class ChanceResult<T> {
         this.chance = chance;
     }
 
+    protected ChanceResult(T result) {
+        this(result, 1);
+    }
+
     public T getResult() {
         return this.result;
     }

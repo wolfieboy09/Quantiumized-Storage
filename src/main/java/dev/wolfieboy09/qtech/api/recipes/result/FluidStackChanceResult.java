@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 public class FluidStackChanceResult extends ChanceResult<FluidStack> {
+    public static final FluidStackChanceResult EMPTY = new FluidStackChanceResult(FluidStack.EMPTY, 1);
+
     public static final Codec<FluidStackChanceResult> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("fluid").forGetter(r ->
                     BuiltInRegistries.FLUID.getKey(r.getResult().getFluid())
