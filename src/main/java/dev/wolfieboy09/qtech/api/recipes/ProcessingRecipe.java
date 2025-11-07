@@ -34,12 +34,13 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
     protected NonNullList<FluidStackChanceResult> fluidResults;
     protected NonNullList<GasStackChanceResult> gasResults;
 
+    protected int energyCost;
     protected int processingDuration;
     protected CleanRoomCondition requiredCleanRoom;
 
-    private RecipeType<?> type;
-    private RecipeSerializer<?> serializer;
-    private IRecipeTypeInfo typeInfo;
+    private final RecipeType<?> type;
+    private final RecipeSerializer<?> serializer;
+    private final IRecipeTypeInfo typeInfo;
 
     public ProcessingRecipe(IRecipeTypeInfo typeInfo, P params) {
         this.params = params;
@@ -51,6 +52,7 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
         this.fluidResults = params.fluidResults;
         this.gasResults = params.gasResults;
 
+        this.energyCost = params.energyCost;
         this.processingDuration = params.processingDuration;
         this.requiredCleanRoom = params.requiredCleanRoom;
         this.type = typeInfo.getType();
@@ -75,6 +77,10 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
 
     public NonNullList<SizedGasIngredient> getGasIngredients() {
         return gasIngredients;
+    }
+
+    public int getEnergyCost() {
+        return energyCost;
     }
 
     public int getProcessingDuration() {

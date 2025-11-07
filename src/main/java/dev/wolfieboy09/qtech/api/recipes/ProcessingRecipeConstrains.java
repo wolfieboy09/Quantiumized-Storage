@@ -47,6 +47,24 @@ public record ProcessingRecipeConstrains(int maxItemInputs, int maxFluidInputs, 
             return this;
         }
 
+        public Builder maxItemIO(int maxItemInputs, int maxItemOutputs) {
+            this.maxItemInputs = maxItemInputs;
+            this.maxItemOutputs = maxItemOutputs;
+            return this;
+        }
+
+        public Builder maxFluidIO(int maxFluidInputs, int maxFluidOutputs) {
+            this.maxFluidInputs = maxFluidInputs;
+            this.maxFluidOutputs = maxFluidOutputs;
+            return this;
+        }
+
+        public Builder maxGasIO(int maxGasInputs, int maxGasOutputs) {
+            this.maxGasInputs = maxGasInputs;
+            this.maxGasOutputs = maxGasOutputs;
+            return this;
+        }
+
         public ProcessingRecipeConstrains build() {
             return new ProcessingRecipeConstrains(maxItemInputs, maxFluidInputs, maxGasInputs, maxItemOutputs, maxFluidOutputs, maxGasOutputs);
         }
