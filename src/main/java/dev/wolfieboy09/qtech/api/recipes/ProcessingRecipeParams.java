@@ -15,9 +15,11 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class ProcessingRecipeParams {
     protected NonNullList<GasStackChanceResult> gasResults;
 
     protected int processingDuration;
+    protected int energyCost;
     protected CleanRoomCondition requiredCleanRoom;
 
     public ProcessingRecipeParams() {
@@ -48,6 +51,7 @@ public class ProcessingRecipeParams {
         this.fluidResults = NonNullList.create();
         this.gasResults = NonNullList.create();
         this.processingDuration = 0;
+        this.energyCost = 0;
         this.requiredCleanRoom = CleanRoomCondition.NONE;
     }
 
@@ -56,9 +60,10 @@ public class ProcessingRecipeParams {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
                 TriEitherCodecs.either(Ingredient.CODEC, SizedFluidIngredient.FLAT_CODEC, SizedGasIngredient.FLAT_CODEC).listOf().fieldOf("ingredients").forGetter(ProcessingRecipeParams::ingredients),
                 TriEitherCodecs.either(ItemStackChanceResult.CODEC, FluidStackChanceResult.CODEC, GasStackChanceResult.CODEC).listOf().fieldOf("results").forGetter(ProcessingRecipeParams::results),
-                Codec.INT.fieldOf("processing_time").forGetter(ProcessingRecipeParams::processingDuration),
+                ExtraCodecs.POSITIVE_INT.optionalFieldOf("energy", 0).forGetter(ProcessingRecipeParams::energyCost),
+                ExtraCodecs.POSITIVE_INT.fieldOf("processing_time").forGetter(ProcessingRecipeParams::processingDuration),
                 CleanRoomCondition.CODEC.optionalFieldOf("cleanroom_condition", CleanRoomCondition.NONE).forGetter(ProcessingRecipeParams::requiredCleanRoom)
-        ).apply(instance, (ingredients, results, processingDuration, cleanroomCondition) -> {
+        ).apply(instance, (ingredients, results, energyCost, processingDuration, cleanroomCondition) -> {
             P params = factory.get();
             ingredients.forEach(either -> either
                     .ifLeft(params.ingredients::add)
@@ -72,6 +77,7 @@ public class ProcessingRecipeParams {
 
             params.processingDuration = processingDuration;
             params.requiredCleanRoom = cleanroomCondition;
+            params.energyCost = energyCost;
             return params;
         }));
     }
@@ -88,6 +94,7 @@ public class ProcessingRecipeParams {
         );
     }
 
+    @MustBeInvokedByOverriders
     protected void encode(RegistryFriendlyByteBuf buffer) {
         NonNullListStreamCodec.nonNullList(Ingredient.CONTENTS_STREAM_CODEC).encode(buffer, ingredients);
         NonNullListStreamCodec.nonNullList(SizedFluidIngredient.STREAM_CODEC).encode(buffer, fluidIngredients);
@@ -100,6 +107,7 @@ public class ProcessingRecipeParams {
         CleanRoomCondition.STREAM_CODEC.encode(buffer, requiredCleanRoom);
     }
 
+    @MustBeInvokedByOverriders
     protected void decode(RegistryFriendlyByteBuf buffer) {
         this.ingredients = NonNullListStreamCodec.nonNullList(Ingredient.CONTENTS_STREAM_CODEC).decode(buffer);
         this.fluidIngredients = NonNullListStreamCodec.nonNullList(SizedFluidIngredient.STREAM_CODEC).decode(buffer);
@@ -132,6 +140,10 @@ public class ProcessingRecipeParams {
 
     protected final int processingDuration() {
         return this.processingDuration;
+    }
+
+    protected final int energyCost() {
+        return this.energyCost;
     }
 
     protected final CleanRoomCondition requiredCleanRoom() {
