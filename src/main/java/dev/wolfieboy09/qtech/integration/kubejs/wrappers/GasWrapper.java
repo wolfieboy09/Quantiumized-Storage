@@ -33,7 +33,7 @@ public interface GasWrapper {
     TypeInfo TYPE_INFO = TypeInfo.of(GasStack.class);
     TypeInfo GAS_TYPE_INFO = TypeInfo.of(Gas.class);
     TypeInfo INGREDIENT_TYPE_INFO = TypeInfo.of(GasIngredient.class);
-    TypeInfo SIZED_INGREDIENT_TYPE_INGO = TypeInfo.of(SizedGasIngredient.class);
+    TypeInfo SIZED_INGREDIENT_TYPE_INFO = TypeInfo.of(SizedGasIngredient.class);
 
     SizedGasIngredient EMPTY_SIZED = new SizedGasIngredient(GasIngredient.empty(), 1000);
 
