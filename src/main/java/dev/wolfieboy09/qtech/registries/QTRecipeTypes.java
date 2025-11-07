@@ -25,7 +25,8 @@ import java.util.function.Supplier;
 @NothingNullByDefault
 @SuppressWarnings("unchecked")
 public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
-    DISK_ASSEMBLY(params -> new NewDiskAssemblerRecipe((DiskAssemblerRecipeParams) params));
+    //TODO fix. Should be able to just do NewDiskAssemblerRecipe::new
+    DISK_ASSEMBLY(p -> new NewDiskAssemblerRecipe((DiskAssemblerRecipeParams) p));
 
     public final ResourceLocation id;
     public final Supplier<RecipeSerializer<?>> serializerSupplier;
