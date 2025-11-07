@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.block.disk_assembler;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeConstrains;
+import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeParams;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipeParams;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -12,6 +13,10 @@ import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 public class NewDiskAssemblerRecipe extends DiskAssemblerStandardRecipe {
     public NewDiskAssemblerRecipe(DiskAssemblerRecipeParams params) {
         super(params);
+    }
+
+    public static NewDiskAssemblerRecipe create(ProcessingRecipeParams params) {
+        return new NewDiskAssemblerRecipe((DiskAssemblerRecipeParams) params);
     }
 
     @Override
