@@ -43,6 +43,10 @@ public record TriEitherComponent<L, M, R>(
         this(left, middle, right, TriEitherCodec.triEither(left.codec(), middle.codec(), right.codec()), left.typeInfo().or(middle.typeInfo().or(right.typeInfo())));
     }
 
+    public static <L, M, R> TriEitherComponent<L, M, R> of(RecipeComponent<L> left, RecipeComponent<M> middle, RecipeComponent<R> right) {
+        return new TriEitherComponent<>(left, middle, right);
+    }
+
     @Override
     public RecipeComponentType<?> type() {
         return TYPE;
