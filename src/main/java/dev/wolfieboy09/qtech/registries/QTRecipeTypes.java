@@ -5,18 +5,21 @@ import dev.wolfieboy09.qtech.api.recipes.IRecipeTypeInfo;
 import dev.wolfieboy09.qtech.api.recipes.StandardProcessingRecipe;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.block.disk_assembler.recipe.DiskAssemblerRecipeParams;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @NothingNullByDefault
 @SuppressWarnings("unchecked")
 public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
-    DISK_ASSEMBLY(NewDiskAssemblerRecipe::new);
+    DISK_ASSEMBLY(params -> new NewDiskAssemblerRecipe((DiskAssemblerRecipeParams) params));
 
     public final ResourceLocation id;
     public final Supplier<RecipeSerializer<?>> serializerSupplier;
@@ -65,6 +68,11 @@ public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
     @Override
     public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType() {
         return (RecipeType<R>) this.type.get();
+    }
+
+    public <I extends RecipeInput, R extends Recipe<I>> Optional<RecipeHolder<R>> find(I inv, Level world) {
+        return world.getRecipeManager()
+                .getRecipeFor(getType(), inv, world);
     }
 
     @Override
