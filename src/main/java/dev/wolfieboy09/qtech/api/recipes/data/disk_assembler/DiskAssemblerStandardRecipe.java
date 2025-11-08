@@ -1,26 +1,32 @@
 package dev.wolfieboy09.qtech.api.recipes.data.disk_assembler;
 
+import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipe;
+import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeBuilder;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeConstrains;
-import dev.wolfieboy09.qtech.api.recipes.StandardProcessingRecipe;
+import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlockEntity;
 import dev.wolfieboy09.qtech.registries.QTRecipeTypes;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 @NothingNullByDefault
-public class DiskAssemblerStandardRecipe extends StandardProcessingRecipe<RecipeWrapper> {
-    protected NonNullList<Ingredient> extras;
+public class DiskAssemblerStandardRecipe extends ProcessingRecipe<RecipeWrapper, DiskAssemblerRecipeParams> {
 
     public DiskAssemblerStandardRecipe(DiskAssemblerRecipeParams params) {
         super(QTRecipeTypes.DISK_ASSEMBLY, params);
-        this.extras = params.extras;
     }
 
     public NonNullList<Ingredient> getExtras() {
-        return extras;
+        return params.extras;
     }
 
     @Override
@@ -32,11 +38,86 @@ public class DiskAssemblerStandardRecipe extends StandardProcessingRecipe<Recipe
 
     @Override
     public boolean matches(RecipeWrapper input, Level level) {
-        return false;
+        boolean extrasMatch = !getExtras().isEmpty();
+        boolean ingredientsMatch = !getIngredients().isEmpty();
+        for (Ingredient extra : getExtras()) {
+            if (!extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_1))
+                    && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_2))
+                    && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_3))
+                    && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_4))) {
+                extrasMatch = false;
+            }
+        }
+
+        for (Ingredient main : getIngredients()) {
+            if (!main.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_1))
+                    && !main.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_2))
+                    && !main.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_3))) {
+                ingredientsMatch = false;
+            }
+        }
+
+        return extrasMatch && ingredientsMatch;
     }
 
     @Override
     public RecipeType<?> getType() {
         return QTRecipeTypes.DISK_ASSEMBLY.getType();
+    }
+
+    @FunctionalInterface
+    public interface Factory<R extends DiskAssemblerStandardRecipe>
+            extends ProcessingRecipe.Factory<DiskAssemblerRecipeParams, R> {
+        R create(DiskAssemblerRecipeParams params);
+    }
+
+    public static class Builder<R extends DiskAssemblerStandardRecipe>
+            extends ProcessingRecipeBuilder<DiskAssemblerRecipeParams, R, Builder<R>> {
+
+        public Builder(Factory<R> factory, ResourceLocation recipeId) {
+            super(factory, recipeId);
+        }
+
+        @Override
+        protected DiskAssemblerRecipeParams createParams() {
+            return new DiskAssemblerRecipeParams();
+        }
+
+        @Override
+        public Builder<R> self() {
+            return this;
+        }
+
+        public Builder<R> withExtras(Ingredient... extras) {
+            params.extras = NonNullList.of(Ingredient.EMPTY, extras);
+            return self();
+        }
+
+        public Builder<R> requireExtra(ItemLike itemLike) {
+            params.extras.add(Ingredient.of(itemLike));
+            return self();
+        }
+    }
+
+    public static class Serializer<R extends DiskAssemblerStandardRecipe>
+            implements RecipeSerializer<R> {
+
+        private final MapCodec<R> codec;
+        private final StreamCodec<RegistryFriendlyByteBuf, R> streamCodec;
+
+        public Serializer(ProcessingRecipe.Factory<DiskAssemblerRecipeParams, R> factory) {
+            this.codec = ProcessingRecipe.codec(factory, DiskAssemblerRecipeParams.CODEC);
+            this.streamCodec = ProcessingRecipe.streamCodec(factory, DiskAssemblerRecipeParams.STREAM_CODEC);
+        }
+
+        @Override
+        public MapCodec<R> codec() {
+            return codec;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
+            return streamCodec;
+        }
     }
 }

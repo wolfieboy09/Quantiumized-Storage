@@ -3,8 +3,10 @@ package dev.wolfieboy09.qtech.registries;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.recipes.IRecipeTypeInfo;
+import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipe;
 import dev.wolfieboy09.qtech.api.recipes.StandardProcessingRecipe;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipeParams;
+import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,8 +27,7 @@ import java.util.function.Supplier;
 @NothingNullByDefault
 @SuppressWarnings("unchecked")
 public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
-    //TODO fix. Should be able to just do NewDiskAssemblerRecipe::new
-    DISK_ASSEMBLY(NewDiskAssemblerRecipe::create);
+    DISK_ASSEMBLY(NewDiskAssemblerRecipe::new);
 
     public final ResourceLocation id;
     public final Supplier<RecipeSerializer<?>> serializerSupplier;
@@ -60,6 +61,10 @@ public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
 
     QTRecipeTypes(StandardProcessingRecipe.Factory<?> processingFactory) {
         this(() -> new StandardProcessingRecipe.Serializer<>(processingFactory));
+    }
+
+    QTRecipeTypes(ProcessingRecipe.Factory<DiskAssemblerRecipeParams, ? extends DiskAssemblerStandardRecipe> processingFactory) {
+        this(() -> new DiskAssemblerStandardRecipe.Serializer<>(processingFactory));
     }
 
     @ApiStatus.Internal

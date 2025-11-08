@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.datagen;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.datagen.recipes.QTDiskAssemblyProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -29,7 +30,9 @@ public class DataGeneration {
         generator.addProvider(event.includeServer(), new QTDataMapProvider(output, lookupProvider));
         //generator.addProvider(event.includeServer(), new QTGasTagsProvider(output, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new QTItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter()));
-        generator.addProvider(event.includeServer(), new QTRecipeProvider(output, lookupProvider));
+        //generator.addProvider(event.includeServer(), new QTRecipeProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new QTMultiblockProvider(output));
+
+        generator.addProvider(event.includeServer(), new QTDiskAssemblyProvider(output, lookupProvider));
     }
 }

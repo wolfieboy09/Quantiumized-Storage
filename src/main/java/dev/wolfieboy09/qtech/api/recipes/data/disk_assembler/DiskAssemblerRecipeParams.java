@@ -6,6 +6,7 @@ import dev.wolfieboy09.qtech.api.codecs.NonNullListStreamCodec;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeParams;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -21,7 +22,14 @@ public class DiskAssemblerRecipeParams extends ProcessingRecipeParams {
         return params;
     }));
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, DiskAssemblerRecipeParams> STREAM_CODEC = streamCodec(DiskAssemblerRecipeParams::new);
+
     protected NonNullList<Ingredient> extras;
+
+    public DiskAssemblerRecipeParams() {
+        super();
+        this.extras = NonNullList.create();
+    }
 
     protected final NonNullList<Ingredient> extras() {
         return this.extras;

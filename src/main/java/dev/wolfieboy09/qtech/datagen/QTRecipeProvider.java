@@ -41,14 +41,6 @@ public class QTRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes(@NotNull RecipeOutput output) {
-        DiskAssemblerBuilder.create(
-                listedIngredients(QTItems.ITEM_PORT, QTItems.STEEL_CASING, QTItems.STEEL_SCREW),
-                listedIngredients(QTItems.DATA_CRYSTAL, QTItems.BASIC_CIRCUIT),
-                2000,
-                60,
-                new ItemStack(QTItems.BASIC_ITEM_DISK.get())
-        ).save(output);
-
         SmelteryBuilder.create(
             List.of(
                     Either.left(Ingredient.of(new ItemStack(Items.NETHER_STAR)))),
