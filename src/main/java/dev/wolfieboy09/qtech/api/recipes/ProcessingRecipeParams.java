@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qtech.api.recipes;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;

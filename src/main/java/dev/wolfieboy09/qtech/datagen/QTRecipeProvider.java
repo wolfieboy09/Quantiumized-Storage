@@ -1,7 +1,6 @@
 package dev.wolfieboy09.qtech.datagen;
 
 import com.mojang.datafixers.util.Either;
-import dev.wolfieboy09.qtech.api.datagen.DiskAssemblerBuilder;
 import dev.wolfieboy09.qtech.api.datagen.SmelteryBuilder;
 import dev.wolfieboy09.qtech.registries.QTItems;
 import net.minecraft.core.HolderLookup;

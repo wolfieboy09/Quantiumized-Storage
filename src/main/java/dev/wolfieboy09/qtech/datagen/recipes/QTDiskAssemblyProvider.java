@@ -2,7 +2,6 @@ package dev.wolfieboy09.qtech.datagen.recipes;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.datagen.builder.DiskAssemblyRecipeGen;
-import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipeParams;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;

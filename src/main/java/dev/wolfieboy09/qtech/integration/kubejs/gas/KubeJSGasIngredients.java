@@ -1,7 +1,6 @@
 package dev.wolfieboy09.qtech.integration.kubejs.gas;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
-import dev.wolfieboy09.qtech.api.gas.crafting.GasIngredient;
 import dev.wolfieboy09.qtech.api.gas.crafting.GasIngredientType;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import net.neoforged.bus.api.IEventBus;
