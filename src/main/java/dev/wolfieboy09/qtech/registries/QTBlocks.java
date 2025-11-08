@@ -3,6 +3,7 @@ package dev.wolfieboy09.qtech.registries;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockController;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlock;
+import dev.wolfieboy09.qtech.block.cleanroom.controller.CleanroomControllerBlock;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlock;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlock;
@@ -79,6 +80,8 @@ public class QTBlocks {
     public static final DeferredBlock<ItemInputHatchBlock> ITEM_INPUT_HATCH = registerBlock("item_input_hatch", ItemInputHatchBlock::new);
 
     public static final DeferredBlock<EnergyInputHatchBlock> ENERGY_INPUT_HATCH = registerBlock("energy_input_hatch", EnergyInputHatchBlock::new);
+
+    public static final DeferredBlock<CleanroomControllerBlock> CLEANROOM_CONTROLLER = registerBlock("cleanroom_controller", CleanroomControllerBlock::new);
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));

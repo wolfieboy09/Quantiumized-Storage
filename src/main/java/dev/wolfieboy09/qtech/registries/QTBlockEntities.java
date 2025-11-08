@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.registries;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverBlockEntity;
+import dev.wolfieboy09.qtech.block.cleanroom.controller.CleanroomControllerBlockEntity;
 import dev.wolfieboy09.qtech.block.creative_energy_block.CreativeEnergyBlockEntity;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlockEntity;
 import dev.wolfieboy09.qtech.block.gas_canister.GasCanisterBlockEntity;
@@ -97,6 +98,12 @@ public class QTBlockEntities {
             "energy_input_hatch",
             EnergyInputHatchBlockEntity::new,
             QTBlocks.ENERGY_INPUT_HATCH
+    );
+
+    public static final Supplier<BlockEntityType<CleanroomControllerBlockEntity>> CLEANROOM_CONTROLLER = createBlockEntity(
+            "cleanroom_controller",
+            CleanroomControllerBlockEntity::new,
+            QTBlocks.CLEANROOM_CONTROLLER
     );
 
     private static <T extends BlockEntity> @NotNull Supplier<BlockEntityType<T>> createBlockEntity(String name, BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier, Supplier<? extends Block> block) {
