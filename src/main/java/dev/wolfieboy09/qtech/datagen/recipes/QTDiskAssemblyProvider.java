@@ -23,7 +23,7 @@ public class QTDiskAssemblyProvider extends DiskAssemblyRecipeGen<DiskAssemblerR
                     .require(QTItems.STEEL_CASING.asItem())
                     .require(QTItems.STEEL_SCREW)
                     .requireExtra(QTItems.DATA_CRYSTAL.asItem())
-                    .require(QTItems.BASIC_CIRCUIT.asItem())
+                    .requireExtra(QTItems.BASIC_CIRCUIT.asItem())
                     .energyCost(2000)
                     .duration(120)
                     .output(QTItems.BASIC_ITEM_DISK)
