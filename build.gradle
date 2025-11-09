@@ -169,6 +169,7 @@ tasks.register('printProjectInfo') {
 
     def srcDir = layout.projectDirectory.dir("src/main/java").asFile
     def mainDir = layout.projectDirectory.dir("src/main").asFile
+    def genDir = layout.projectDirectory.dir("src/generated").asFile
 
     doLast {
         def totalLines = 0
@@ -188,6 +189,14 @@ tasks.register('printProjectInfo') {
         if (mainDir.exists()) {
             mainDir.eachFileRecurse { file ->
                 if (file.isFile()) {
+                    totalSize += file.length()
+                }
+            }
+        }
+
+        if (genDir.exists()) {
+            genDir.eachFileRecurse { file ->
+                if (!file.path.contains(".cache") && file.isFile()) {
                     totalSize += file.length()
                 }
             }
