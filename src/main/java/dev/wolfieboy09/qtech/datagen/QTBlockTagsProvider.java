@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.datagen;
 
 import dev.wolfieboy09.qtech.registries.QTBlocks;
+import dev.wolfieboy09.qtech.registries.tags.QTBlockTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.Tags;
@@ -21,5 +22,13 @@ public class QTBlockTagsProvider extends BlockTagsProvider {
         tag(Tags.Blocks.NEEDS_WOOD_TOOL)
                 .add(QTBlocks.DISK_ASSEMBLER.get())
                 .add(QTBlocks.STORAGE_MATRIX.get());
+
+        tag(QTBlockTags.CLEANROOM_TILE)
+                .add(QTBlocks.CLEANROOM_CONTROLLER.get())
+                .add(QTBlocks.CLEANROOM_TILE.get())
+                .add(QTBlocks.CLEANROOM_GLASS.get());
+
+        tag(QTBlockTags.CLEANROOM_GLASS)
+                .add(QTBlocks.CLEANROOM_GLASS.get());
     }
 }
