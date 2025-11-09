@@ -55,6 +55,9 @@ public class QTLangProvider extends LanguageProvider {
         toGenerate.put("multiblock.qtech.formed", "Multiblock Formed");
         toGenerate.put("multiblock.qtech.unformed", "Multiblock Not Formed");
         toGenerate.put("config.jade.plugin_qtech.multiblock_controller", "Multiblock Controller");
+        toGenerate.put("config.jade.plugin_qtech.cleanroom_controller", "Cleanroom Controller");
+
+        toGenerate.put("cleanroom.qtech.condition", "Condition: %s");
 
         for (CleanRoomCondition condition : CleanRoomCondition.values()) {
             toGenerate.put(condition.getTranslationKey(), NamingUtil.toHumanReadable(condition.getSerializedName()));
