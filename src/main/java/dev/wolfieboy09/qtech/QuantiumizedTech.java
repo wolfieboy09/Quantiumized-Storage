@@ -75,7 +75,6 @@ public class QuantiumizedTech {
         modEventBus.addListener(QTDataMaps::register);
 
         //modEventBus.addListener(QTEntities::registerAttributes);
-        modEventBus.register(QTShading.class);
 
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
