@@ -55,4 +55,17 @@ public enum CleanRoomCondition implements StringRepresentable {
     public int getColor() {
         return this.color;
     }
+
+    public static CleanRoomCondition fromString(String string) {
+        String upper = string.toUpperCase();
+        return switch (upper) {
+            case "NONE" -> CleanRoomCondition.NONE;
+            case "CONTROLLED" -> CleanRoomCondition.CONTROLLED;
+            case "CLEAN" -> CleanRoomCondition.CLEAN;
+            case "ULTRA_CLEAN" -> CleanRoomCondition.ULTRA_CLEAN;
+            case "STERILIZED" -> CleanRoomCondition.STERILIZED;
+            case "VACUUM" -> CleanRoomCondition.VACUUM;
+            default -> throw new IllegalArgumentException("Unknown cleanroom condition: " + string);
+        };
+    }
 }
