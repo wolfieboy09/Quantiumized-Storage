@@ -3,12 +3,12 @@
     "swap"
   ],
   "vertex": "minecraft:blit_screen",
-  "fragment": "qstorage:oxygen_deprivation",
+  "fragment": "qtech:oxygen_deprivation",
   "passes": [
     {
       "name": "color_convolve",
       "vertex": "minecraft:blit_screen",
-      "fragment": "qstorage:oxygen_deprivation",
+      "fragment": "qtech:oxygen_deprivation",
       "intarget": "minecraft:main",
       "outtarget": "swap",
       "use_linear_filter": true,
