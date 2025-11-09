@@ -38,6 +38,8 @@ public class QTBlockStateProvider extends BlockStateProvider {
 
         getVariantBuilder(QTBlocks.GAS_CANISTER.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(existingModelFile("block/gas_canister")).build());
 
+        createBasic(QTBlocks.CLEANROOM_TILE);
+
         createPipeModel(QTBlocks.ITEM_PIPE);
         createPipeModel(QTBlocks.FLUID_PIPE);
         createPipeModel(QTBlocks.ENERGY_PIPE);
@@ -64,6 +66,10 @@ public class QTBlockStateProvider extends BlockStateProvider {
                             .rotationY(rotation)
                             .build();
                 });
+    }
+
+    private void createBasic(DeferredBlock<?> block) {
+        simpleBlock(block.get());
     }
 
     @CanIgnoreReturnValue

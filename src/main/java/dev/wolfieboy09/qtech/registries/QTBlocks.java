@@ -83,6 +83,10 @@ public class QTBlocks {
 
     public static final DeferredBlock<CleanroomControllerBlock> CLEANROOM_CONTROLLER = registerBlock("cleanroom_controller", CleanroomControllerBlock::new);
 
+    public static final DeferredBlock<Block> CLEANROOM_TILE = registerBlock("cleanroom_tile", Block::new);
+
+    public static final DeferredBlock<Block> CLEANROOM_GLASS = registerBlock("cleanroom_glass", Block::new);
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));
         registerBlockItem(name, toReturn);
