@@ -19,7 +19,7 @@ public enum CleanroomComponentProvider implements IBlockComponentProvider, IServ
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getServerData().contains("CleanroomCondition")) {
             CleanRoomCondition condition = CleanRoomCondition.fromString(blockAccessor.getServerData().getString("CleanroomCondition"));
-            tooltip.add(Component.translatable(condition.getTranslationKey()));
+            tooltip.add(Component.translatable("cleanroom.qtech.condition", Component.translatable(condition.getTranslationKey()).withColor(condition.getColor())));
         }
     }
 
