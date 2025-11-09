@@ -1,7 +1,7 @@
 #version 150
 
 uniform sampler2D DiffuseSampler;
-//uniform float SpreadFactor;
+uniform float SpreadFactor;
 uniform float Severity;
 
 in vec2 texCoord;
@@ -21,10 +21,8 @@ vec3 desaturate(vec3 color, float factor) {
 void main() {
     vec4 color = texture(DiffuseSampler, texCoord);
 
-    // spreading and desaturation based on severity
-    color.rgb = desaturate(spread(color.rgb, 2 * Severity), 0.3 * Severity);
+    color.rgb = desaturate(spread(color.rgb, SpreadFactor * Severity), 0.3 * Severity);
 
-    // tunnel vision
     float vignette = smoothstep(0.3, 1.0, length(texCoord - 0.5));
     color.rgb *= mix(1.0, 0.4, vignette * Severity);
 

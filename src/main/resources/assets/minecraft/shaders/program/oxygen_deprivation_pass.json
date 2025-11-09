@@ -1,0 +1,9 @@
+{
+  "type": "EffectProgram",
+  "vertex": "minecraft:blit_screen",
+  "fragment": "minecraft:oxygen_deprivation",
+  "uniforms": [
+    { "name": "Severity", "type": "float", "count": 1, "values": [0.0] },
+    { "name": "SpreadFactor", "type": "float", "count": 1, "values": [2.0] }
+  ]
+}

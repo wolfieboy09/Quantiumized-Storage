@@ -61,7 +61,7 @@ public class QuantiumizedTech {
         // Register before neoforge because wiki says so
         modEventBus.addListener(EventPriority.HIGH, QTEvents::registerRegistries);
         modEventBus.addListener(QTEvents::particle);
-        modEventBus.register(QTClientEvents.class);
+        //modEventBus.register(QTClientEvents.class);
 
         // Check to see if CC: Tweaked is present when mod loading, and register the peripherals there
         if (LoadingModList.get().getModFileById("computercraft") != null) {
@@ -75,7 +75,7 @@ public class QuantiumizedTech {
         modEventBus.addListener(QTDataMaps::register);
 
         //modEventBus.addListener(QTEntities::registerAttributes);
-        //modEventBus.register(QTShading.class);
+        modEventBus.register(QTShading.class);
 
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
