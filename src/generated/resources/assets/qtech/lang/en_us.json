@@ -1,6 +1,9 @@
 {
   "block.qtech.centrifuge_controller": "Centrifuge Controller",
   "block.qtech.circuit_engraver": "Circuit Engraver",
+  "block.qtech.cleanroom_controller": "Cleanroom Controller",
+  "block.qtech.cleanroom_glass": "Cleanroom Glass",
+  "block.qtech.cleanroom_tile": "Cleanroom Tile",
   "block.qtech.creative_energy_block": "Creative Energy Block",
   "block.qtech.disk_assembler": "Disk Assembler",
   "block.qtech.energy_input_hatch": "Energy Input Hatch",
