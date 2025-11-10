@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.datagen;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
+import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.multiblock.blocks.controller.BaseMultiblockController;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerBlock;
@@ -11,7 +12,9 @@ import dev.wolfieboy09.qtech.block.smeltery.SmelteryBlock;
 import dev.wolfieboy09.qtech.block.storage_matrix.StorageMatrixBlock;
 import dev.wolfieboy09.qtech.registries.QTBlocks;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -23,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@NothingNullByDefault
 public class QTBlockStateProvider extends BlockStateProvider {
     public QTBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
         super(output, QuantiumizedTech.MOD_ID, exFileHelper);
@@ -39,6 +43,7 @@ public class QTBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(QTBlocks.GAS_CANISTER.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(existingModelFile("block/gas_canister")).build());
 
         createBasic(QTBlocks.CLEANROOM_TILE);
+        createGlass(QTBlocks.CLEANROOM_GLASS);
 
         createPipeModel(QTBlocks.ITEM_PIPE);
         createPipeModel(QTBlocks.FLUID_PIPE);
@@ -46,12 +51,12 @@ public class QTBlockStateProvider extends BlockStateProvider {
     }
 
     @CanIgnoreReturnValue
-    private @NotNull VariantBlockStateBuilder createMultiblockController(DeferredBlock<? extends BaseMultiblockController> block, String name) {
+    private VariantBlockStateBuilder createMultiblockController(DeferredBlock<? extends BaseMultiblockController> block, String name) {
         return fourRotationBlock(block, BaseMultiblockController.FACING, name);
     }
 
     @CanIgnoreReturnValue
-    private @NotNull VariantBlockStateBuilder fourRotationBlock(@NotNull DeferredBlock<?> block, DirectionProperty property, String name) {
+    private VariantBlockStateBuilder fourRotationBlock(DeferredBlock<?> block, DirectionProperty property, String name) {
         return getVariantBuilder(block.get())
                 .forAllStates(state -> {
                     Direction facing = state.getValue(property);
@@ -72,8 +77,22 @@ public class QTBlockStateProvider extends BlockStateProvider {
         simpleBlock(block.get());
     }
 
+    private void createGlass(DeferredBlock<?> block) {
+        simpleBlock(block.get(), models()
+                .cubeAll(name(block), blockTexture(block.get()))
+                .renderType("cutout"));
+    }
+
+    private String name(DeferredBlock<?> block) {
+        return key(block).getPath();
+    }
+
+    private ResourceLocation key(DeferredBlock<?> block) {
+        return BuiltInRegistries.BLOCK.getKey(block.get());
+    }
+
     @CanIgnoreReturnValue
-    private @NotNull MultiPartBlockStateBuilder createPipeModel(@NotNull DeferredBlock<? extends BasePipeBlock<?>> block) {
+    private MultiPartBlockStateBuilder createPipeModel(DeferredBlock<? extends BasePipeBlock<?>> block) {
         MultiPartBlockStateBuilder builder = getMultipartBuilder(block.get())
                 .part()
                 .modelFile(existingModelFile("block/pipe_dot"))
@@ -120,7 +139,7 @@ public class QTBlockStateProvider extends BlockStateProvider {
     }
 
 
-    private ModelFile.@NotNull ExistingModelFile existingModelFile(String path) {
+    private ModelFile.ExistingModelFile existingModelFile(String path) {
         return models().getExistingFile(ResourceHelper.asResource(path));
     }
 }

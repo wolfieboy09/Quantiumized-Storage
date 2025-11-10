@@ -20,6 +20,9 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -85,12 +88,30 @@ public class QTBlocks {
 
     public static final DeferredBlock<Block> CLEANROOM_TILE = registerBlock("cleanroom_tile", Block::new);
 
-    public static final DeferredBlock<Block> CLEANROOM_GLASS = registerBlock("cleanroom_glass", Block::new);
+    public static final DeferredBlock<TransparentBlock> CLEANROOM_GLASS = registerBasicTransparentBlock("cleanroom_glass");
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(BlockBehaviour.Properties.of()));
         registerBlockItem(name, toReturn);
         return toReturn;
+    }
+
+    private static <T extends TransparentBlock> DeferredBlock<T> registerTransparentBlock(String name, Function<BlockBehaviour.Properties, T> block) {
+        DeferredBlock<T> toReturn = BLOCKS.register(name, () -> block.apply(
+                BlockBehaviour.Properties.of()
+                        .sound(SoundType.GLASS)
+                        .noOcclusion()
+                        .isValidSpawn(Blocks::never)
+                        .isRedstoneConductor((a, b, c) -> false)
+                        .isSuffocating((a, b, c) -> false)
+                        .isViewBlocking((a, b, c) -> false)
+        ));
+        registerBlockItem(name, toReturn);
+        return toReturn;
+    }
+
+    private static DeferredBlock<TransparentBlock> registerBasicTransparentBlock(String name) {
+        return registerTransparentBlock(name, TransparentBlock::new);
     }
 
     private static <T extends Block> DeferredBlock<T> registerNoPropertyBlock(String name, Supplier<T> block) {
