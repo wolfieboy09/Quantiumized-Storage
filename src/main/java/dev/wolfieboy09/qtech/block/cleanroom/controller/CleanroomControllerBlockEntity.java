@@ -20,6 +20,8 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
     @Nullable
     private CleanroomInstance currentInstance;
 
+    private boolean fullyClean = false;
+
     public CleanroomControllerBlockEntity(BlockPos pos, BlockState blockState) {
         super(QTBlockEntities.CLEANROOM_CONTROLLER.get(), pos, blockState);
     }
@@ -39,6 +41,10 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
     @Nullable
     public CleanroomInstance getCurrentInstance() {
         return currentInstance;
+    }
+
+    public boolean isFullyClean() {
+        return this.fullyClean;
     }
 
     public CleanRoomCondition getDetectedCondition() {
@@ -61,6 +67,7 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
 
     public void onCleanroomBroken() {
         this.currentInstance = null;
+        this.fullyClean = false;
         setChanged();
         syncToClient();
     }
@@ -69,13 +76,14 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putString("CleanroomCondition", this.selectedCondition.getSerializedName());
+        tag.putBoolean("FullyClean", this.fullyClean);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        String cond = tag.getString("CleanroomCondition");
-        this.selectedCondition = CleanRoomCondition.fromString(cond);
+        this.selectedCondition = CleanRoomCondition.fromString(tag.getString("CleanroomCondition"));
+        this.fullyClean = tag.getBoolean("FullyClean");
     }
 
 
