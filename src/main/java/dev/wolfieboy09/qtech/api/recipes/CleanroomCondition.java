@@ -8,7 +8,7 @@ import net.minecraft.util.StringRepresentable;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 @NothingNullByDefault
-public enum CleanRoomCondition implements StringRepresentable {
+public enum CleanroomCondition implements StringRepresentable {
     /**
      * Any condition/environment. Does not matter
      */
@@ -36,10 +36,10 @@ public enum CleanRoomCondition implements StringRepresentable {
 
     private final int color;
 
-    public static final Codec<CleanRoomCondition> CODEC = StringRepresentable.fromEnum(CleanRoomCondition::values);
-    public static final StreamCodec<FriendlyByteBuf, CleanRoomCondition> STREAM_CODEC = NeoForgeStreamCodecs.enumCodec(CleanRoomCondition.class);
+    public static final Codec<CleanroomCondition> CODEC = StringRepresentable.fromEnum(CleanroomCondition::values);
+    public static final StreamCodec<FriendlyByteBuf, CleanroomCondition> STREAM_CODEC = NeoForgeStreamCodecs.enumCodec(CleanroomCondition.class);
 
-    CleanRoomCondition(int color) {
+    CleanroomCondition(int color) {
         this.color = color;
     }
 
@@ -56,15 +56,15 @@ public enum CleanRoomCondition implements StringRepresentable {
         return this.color;
     }
 
-    public static CleanRoomCondition fromString(String string) {
+    public static CleanroomCondition fromString(String string) {
         String upper = string.toUpperCase();
         return switch (upper) {
-            case "NONE" -> CleanRoomCondition.NONE;
-            case "CONTROLLED" -> CleanRoomCondition.CONTROLLED;
-            case "CLEAN" -> CleanRoomCondition.CLEAN;
-            case "ULTRA_CLEAN" -> CleanRoomCondition.ULTRA_CLEAN;
-            case "STERILIZED" -> CleanRoomCondition.STERILIZED;
-            case "VACUUM" -> CleanRoomCondition.VACUUM;
+            case "NONE" -> CleanroomCondition.NONE;
+            case "CONTROLLED" -> CleanroomCondition.CONTROLLED;
+            case "CLEAN" -> CleanroomCondition.CLEAN;
+            case "ULTRA_CLEAN" -> CleanroomCondition.ULTRA_CLEAN;
+            case "STERILIZED" -> CleanroomCondition.STERILIZED;
+            case "VACUUM" -> CleanroomCondition.VACUUM;
             default -> throw new IllegalArgumentException("Unknown cleanroom condition: " + string);
         };
     }

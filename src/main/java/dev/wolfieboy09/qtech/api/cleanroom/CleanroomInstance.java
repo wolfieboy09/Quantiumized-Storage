@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qtech.api.cleanroom;
 
-import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
+import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 
@@ -10,5 +10,5 @@ public record CleanroomInstance(BlockPos controllerPos,
                                 Set<BlockPos> structureBlocks,
                                 AABB boundingBox,
                                 int airVolume,
-                                CleanRoomCondition condition) {
+                                CleanroomCondition condition) {
 }

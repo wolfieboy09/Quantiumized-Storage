@@ -3,7 +3,7 @@ package dev.wolfieboy09.qtech.block.cleanroom.controller;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.cleanroom.CleanroomInstance;
 import dev.wolfieboy09.qtech.api.cleanroom.CleanroomTracker;
-import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
+import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import dev.wolfieboy09.qtech.block.GlobalBlockEntity;
 import dev.wolfieboy09.qtech.registries.QTBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 @NothingNullByDefault
 public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
 
-    private CleanRoomCondition selectedCondition = CleanRoomCondition.NONE;
+    private CleanroomCondition selectedCondition = CleanroomCondition.NONE;
     @Nullable
     private CleanroomInstance currentInstance;
 
@@ -26,7 +26,7 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
         super(QTBlockEntities.CLEANROOM_CONTROLLER.get(), pos, blockState);
     }
 
-    public void updateCleanroomCondition(CleanRoomCondition newCondition) {
+    public void updateCleanroomCondition(CleanroomCondition newCondition) {
         if (newCondition != this.selectedCondition) {
             this.selectedCondition = newCondition;
             setChanged();
@@ -34,7 +34,7 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
         }
     }
 
-    public CleanRoomCondition getCleanroomCondition() {
+    public CleanroomCondition getCleanroomCondition() {
         return this.selectedCondition;
     }
 
@@ -47,8 +47,8 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
         return this.fullyClean;
     }
 
-    public CleanRoomCondition getDetectedCondition() {
-        return currentInstance != null ? currentInstance.condition() : CleanRoomCondition.NONE;
+    public CleanroomCondition getDetectedCondition() {
+        return currentInstance != null ? currentInstance.condition() : CleanroomCondition.NONE;
     }
 
     public void tryFormCleanroom() {
@@ -82,7 +82,7 @@ public class CleanroomControllerBlockEntity extends GlobalBlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.selectedCondition = CleanRoomCondition.fromString(tag.getString("CleanroomCondition"));
+        this.selectedCondition = CleanroomCondition.fromString(tag.getString("CleanroomCondition"));
         this.fullyClean = tag.getBoolean("FullyClean");
     }
 

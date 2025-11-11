@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qtech.integration.jade.cleanroom;
 
-import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
+import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.cleanroom.controller.CleanroomControllerBlockEntity;
 import net.minecraft.ChatFormatting;
@@ -19,7 +19,7 @@ public enum CleanroomComponentProvider implements IBlockComponentProvider, IServ
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getServerData().contains("CleanroomCondition")) {
-            CleanRoomCondition condition = CleanRoomCondition.fromString(blockAccessor.getServerData().getString("CleanroomCondition"));
+            CleanroomCondition condition = CleanroomCondition.fromString(blockAccessor.getServerData().getString("CleanroomCondition"));
             boolean isSuperDuperClean = blockAccessor.getServerData().getBoolean("IsSuperDuperClean");
             tooltip.add(Component.translatable("cleanroom.qtech.condition", Component.translatable(condition.getTranslationKey()).withColor(condition.getColor())));
             tooltip.add(Component.translatable("cleanroom.qtech.clean_status", isSuperDuperClean ? Component.translatable("cleanroom.qtech.clean").withStyle(ChatFormatting.GREEN) : Component.translatable("cleanroom.qtech.contaminated").withStyle(ChatFormatting.RED)));

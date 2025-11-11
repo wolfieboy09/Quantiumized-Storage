@@ -36,7 +36,7 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
 
     protected int energyCost;
     protected int processingDuration;
-    protected CleanRoomCondition requiredCleanRoom;
+    protected CleanroomCondition requiredCleanRoom;
 
     private final RecipeType<?> type;
     private final RecipeSerializer<?> serializer;
@@ -87,7 +87,7 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
         return processingDuration;
     }
 
-    public CleanRoomCondition getRequiredCleanRoom() {
+    public CleanroomCondition getRequiredCleanRoom() {
         return requiredCleanRoom;
     }
 

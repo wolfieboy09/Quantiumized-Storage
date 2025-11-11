@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qtech.api.cleanroom;
 
-import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
+import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import dev.wolfieboy09.qtech.block.cleanroom.controller.CleanroomControllerBlockEntity;
 import dev.wolfieboy09.qtech.registries.tags.QTBlockTags;
 import net.minecraft.core.BlockPos;
@@ -145,7 +145,7 @@ public class CleanroomTracker {
         unregister(level, instance);
     }
 
-    private static CleanRoomCondition evaluateCondition(Level level, @NotNull Set<BlockPos> structureBlocks) {
+    private static CleanroomCondition evaluateCondition(Level level, @NotNull Set<BlockPos> structureBlocks) {
         boolean hasFilter = false;
         boolean hasSterilizer = false;
         boolean hasVacuumPump = false;
@@ -158,10 +158,10 @@ public class CleanroomTracker {
             if (state.is(QTBlockTags.CLEANROOM_VACUUM)) hasVacuumPump = true;
         }
 
-        if (hasVacuumPump) return CleanRoomCondition.VACUUM;
-        if (hasSterilizer) return CleanRoomCondition.STERILIZED;
-        if (hasFilter) return CleanRoomCondition.ULTRA_CLEAN;
-        return CleanRoomCondition.CONTROLLED;
+        if (hasVacuumPump) return CleanroomCondition.VACUUM;
+        if (hasSterilizer) return CleanroomCondition.STERILIZED;
+        if (hasFilter) return CleanroomCondition.ULTRA_CLEAN;
+        return CleanroomCondition.CONTROLLED;
     }
 
 }

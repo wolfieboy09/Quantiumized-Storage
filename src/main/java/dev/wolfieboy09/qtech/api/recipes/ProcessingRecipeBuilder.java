@@ -117,7 +117,7 @@ public abstract class ProcessingRecipeBuilder<P extends ProcessingRecipeParams, 
         return duration(100);
     }
 
-    public S requiresCleanroom(CleanRoomCondition condition) {
+    public S requiresCleanroom(CleanroomCondition condition) {
         params.requiredCleanRoom = condition;
         return self();
     }

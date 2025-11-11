@@ -40,7 +40,7 @@ public class ProcessingRecipeParams {
 
     protected int processingDuration;
     protected int energyCost;
-    protected CleanRoomCondition requiredCleanRoom;
+    protected CleanroomCondition requiredCleanRoom;
 
     public ProcessingRecipeParams() {
         this.ingredients = NonNullList.create();
@@ -51,7 +51,7 @@ public class ProcessingRecipeParams {
         this.gasResults = NonNullList.create();
         this.processingDuration = 0;
         this.energyCost = 0;
-        this.requiredCleanRoom = CleanRoomCondition.NONE;
+        this.requiredCleanRoom = CleanroomCondition.NONE;
     }
 
     @Contract("_ -> new")
@@ -61,7 +61,7 @@ public class ProcessingRecipeParams {
                 TriEitherCodecs.either(ItemStackChanceResult.CODEC, FluidStackChanceResult.CODEC, GasStackChanceResult.CODEC).listOf().fieldOf("results").forGetter(ProcessingRecipeParams::results),
                 ExtraCodecs.POSITIVE_INT.optionalFieldOf("energy", 0).forGetter(ProcessingRecipeParams::energyCost),
                 ExtraCodecs.POSITIVE_INT.fieldOf("processing_time").forGetter(ProcessingRecipeParams::processingDuration),
-                CleanRoomCondition.CODEC.optionalFieldOf("cleanroom_condition", CleanRoomCondition.NONE).forGetter(ProcessingRecipeParams::requiredCleanRoom)
+                CleanroomCondition.CODEC.optionalFieldOf("cleanroom_condition", CleanroomCondition.NONE).forGetter(ProcessingRecipeParams::requiredCleanRoom)
         ).apply(instance, (ingredients, results, energyCost, processingDuration, cleanroomCondition) -> {
             P params = factory.get();
             ingredients.forEach(either -> either
@@ -103,7 +103,7 @@ public class ProcessingRecipeParams {
         NonNullListStreamCodec.nonNullList(FluidStackChanceResult.STREAM_CODEC).encode(buffer, fluidResults);
         NonNullListStreamCodec.nonNullList(GasStackChanceResult.STREAM_CODEC).encode(buffer, gasResults);
         ByteBufCodecs.VAR_INT.encode(buffer, processingDuration);
-        CleanRoomCondition.STREAM_CODEC.encode(buffer, requiredCleanRoom);
+        CleanroomCondition.STREAM_CODEC.encode(buffer, requiredCleanRoom);
     }
 
     @MustBeInvokedByOverriders
@@ -116,7 +116,7 @@ public class ProcessingRecipeParams {
         this.fluidResults = NonNullListStreamCodec.nonNullList(FluidStackChanceResult.STREAM_CODEC).decode(buffer);
         this.gasResults = NonNullListStreamCodec.nonNullList(GasStackChanceResult.STREAM_CODEC).decode(buffer);
         this.processingDuration = ByteBufCodecs.VAR_INT.decode(buffer);
-        this.requiredCleanRoom = CleanRoomCondition.STREAM_CODEC.decode(buffer);
+        this.requiredCleanRoom = CleanroomCondition.STREAM_CODEC.decode(buffer);
     }
 
     protected final List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>> ingredients() {
@@ -145,7 +145,7 @@ public class ProcessingRecipeParams {
         return this.energyCost;
     }
 
-    protected final CleanRoomCondition requiredCleanRoom() {
+    protected final CleanroomCondition requiredCleanRoom() {
         return this.requiredCleanRoom;
     }
 }

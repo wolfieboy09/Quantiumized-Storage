@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.datagen;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
-import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
+import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import dev.wolfieboy09.qtech.api.util.NamingUtil;
 import dev.wolfieboy09.qtech.registries.QTBlocks;
 import dev.wolfieboy09.qtech.registries.QTCreativeTab;
@@ -63,7 +63,7 @@ public class QTLangProvider extends LanguageProvider {
 
         toGenerate.put("cleanroom.qtech.condition", "Condition: %s");
 
-        for (CleanRoomCondition condition : CleanRoomCondition.values()) {
+        for (CleanroomCondition condition : CleanroomCondition.values()) {
             toGenerate.put(condition.getTranslationKey(), NamingUtil.toHumanReadable(condition.getSerializedName()));
         }
 
