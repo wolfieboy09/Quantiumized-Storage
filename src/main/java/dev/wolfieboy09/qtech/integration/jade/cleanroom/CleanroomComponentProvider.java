@@ -3,6 +3,7 @@ package dev.wolfieboy09.qtech.integration.jade.cleanroom;
 import dev.wolfieboy09.qtech.api.recipes.CleanRoomCondition;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.cleanroom.controller.CleanroomControllerBlockEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +20,9 @@ public enum CleanroomComponentProvider implements IBlockComponentProvider, IServ
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getServerData().contains("CleanroomCondition")) {
             CleanRoomCondition condition = CleanRoomCondition.fromString(blockAccessor.getServerData().getString("CleanroomCondition"));
+            boolean isSuperDuperClean = blockAccessor.getServerData().getBoolean("IsSuperDuperClean");
             tooltip.add(Component.translatable("cleanroom.qtech.condition", Component.translatable(condition.getTranslationKey()).withColor(condition.getColor())));
+            tooltip.add(Component.translatable("cleanroom.qtech.clean_status", isSuperDuperClean ? Component.translatable("cleanroom.qtech.clean").withStyle(ChatFormatting.GREEN) : Component.translatable("cleanroom.qtech.contaminated").withStyle(ChatFormatting.RED)));
         }
     }
 
@@ -27,6 +30,7 @@ public enum CleanroomComponentProvider implements IBlockComponentProvider, IServ
     public void appendServerData(CompoundTag compoundTag, BlockAccessor blockAccessor) {
         CleanroomControllerBlockEntity controller = (CleanroomControllerBlockEntity) blockAccessor.getBlockEntity();
         compoundTag.putString("CleanroomCondition", controller.getCleanroomCondition().getSerializedName());
+        compoundTag.putBoolean("IsSuperDuperClean", controller.isFullyClean());
     }
 
     @Override
