@@ -12,6 +12,7 @@ import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.gas.crafting.GasIngredient;
 import dev.wolfieboy09.qtech.api.gas.crafting.SizedGasIngredient;
+import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.gas.Gas;
 import dev.wolfieboy09.qtech.api.registry.gas.GasStack;
@@ -55,6 +56,7 @@ public class QTKubeJSPlugin implements KubeJSPlugin {
     @Override
     public void registerBindings(BindingRegistry bindings) {
         bindings.add("ColorUtil", ColorUtil.class);
+        bindings.add("CleanroomCondition", CleanroomCondition.class);
     }
 
     @Override
