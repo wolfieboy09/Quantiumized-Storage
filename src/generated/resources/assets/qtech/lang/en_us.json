@@ -61,6 +61,7 @@
   "qtech.gas_canister.contains_gas": "Storing §e%s§r",
   "qtech.gas_canister.shifted_info": "Supports containing gasses inside the container",
   "qtech.oxygen_deprivation": "%s could not breath on land",
+  "qtech.recipe.disk_assembly": "Disk Assembly",
   "qtech.screen.fluid": "%s: %s/%s",
   "qtech.tooltip.shift_info": "Press §6SHIFT§r for more info",
   "recipe.cleanroom_condition.clean": "Clean",

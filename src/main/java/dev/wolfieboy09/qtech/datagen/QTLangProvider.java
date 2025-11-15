@@ -3,14 +3,12 @@ package dev.wolfieboy09.qtech.datagen;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import dev.wolfieboy09.qtech.api.util.NamingUtil;
-import dev.wolfieboy09.qtech.registries.QTBlocks;
-import dev.wolfieboy09.qtech.registries.QTCreativeTab;
-import dev.wolfieboy09.qtech.registries.QTGasses;
-import dev.wolfieboy09.qtech.registries.QTItems;
+import dev.wolfieboy09.qtech.registries.*;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +32,9 @@ public class QTLangProvider extends LanguageProvider {
         );
         QTGasses.GASSES.getEntries().forEach(
                 tab -> add(tab.get().getName().getString(), NamingUtil.toHumanReadable(tab.get().getResourceLocation().getPath()))
+        );
+        Arrays.asList(QTRecipeTypes.values()).forEach(
+                recipe -> add(recipe.getId().getNamespace() + ".recipe." + recipe.getId().getPath(), NamingUtil.toHumanReadable(recipe.getId().getPath()))
         );
         toGenerate.forEach(this::add);
     }
