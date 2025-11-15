@@ -5,27 +5,33 @@ import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.gas.Gas;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
-import dev.wolfieboy09.qtech.integration.jei.disk_assembeler.DiskAssemblerCategory;
+import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.integration.jei.category.QTRecipeCategory;
+import dev.wolfieboy09.qtech.integration.jei.category.recipes.NewDiskAssemblerCategory;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientHelper;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientRenderer;
-import dev.wolfieboy09.qtech.integration.jei.smeltery.SmelteryCategory;
-import dev.wolfieboy09.qtech.registries.QTBlocks;
-import dev.wolfieboy09.qtech.registries.QTRecipes;
+import dev.wolfieboy09.qtech.registries.*;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 @JeiPlugin
 @NothingNullByDefault
 public class QTJEIPlugin implements IModPlugin {
     public static final IIngredientType<Gas> GAS_TYPE = () -> Gas.class;
+    private final List<QTRecipeCategory<?>> allCategories = new ArrayList<>();
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -34,35 +40,94 @@ public class QTJEIPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
-        registration.addRecipeCategories(new DiskAssemblerCategory(guiHelper), new SmelteryCategory(guiHelper));
+        loadCategories();
+        registration.addRecipeCategories(this.allCategories.toArray(IRecipeCategory[]::new));
+
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         if (Minecraft.getInstance().level == null) return;
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-
-        registration.addRecipes(DiskAssemblerCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QTRecipes.DISK_ASSEMBLER_TYPE.get()).stream()
-                .map(RecipeHolder::value).toList());
-
-        registration.addRecipes(SmelteryCategory.RECIPE_TYPE, recipeManager.getAllRecipesFor(QTRecipes.SMELTERY_RECIPE_TYPE.get()).stream()
-                .map(RecipeHolder::value).toList());
+        this.allCategories.forEach(c -> c.registerRecipes(registration));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(QTBlocks.DISK_ASSEMBLER.get()), DiskAssemblerCategory.RECIPE_TYPE);
-        registration.addRecipeCatalyst(new ItemStack(QTBlocks.SMELTERY.get()), SmelteryCategory.RECIPE_TYPE);
+        this.allCategories.forEach(c -> c.registerCatalysts(registration));
     }
 
     @Override
     public void registerModInfo(IModInfoRegistration modAliasRegistration) {
-        modAliasRegistration.addModAliases(QuantiumizedTech.MOD_ID, "qtech");
+        modAliasRegistration.addModAliases(QuantiumizedTech.MOD_ID);
     }
 
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
-        registration.register(GAS_TYPE, QTRegistries.GAS.stream().toList(), new GasIngredientHelper(), new GasIngredientRenderer(16, 16), Gas.CODEC);
+        registration.register(GAS_TYPE, QTRegistries.GAS.stream().filter(g -> g != QTGasses.EMPTY.get()).toList(), new GasIngredientHelper(), new GasIngredientRenderer(16, 16), Gas.CODEC);
     }
+
+    private void loadCategories() {
+        this.allCategories.clear();
+        QTRecipeCategory<?>
+                disk_assembly = builder(NewDiskAssemblerRecipe.class)
+                .addTypedRecipes(QTRecipeTypes.DISK_ASSEMBLY)
+                .background(asDrawable(QTGuiTextures.JEI_DISK_ASSEMBLER))
+                .catalystStack(() -> new ItemStack(QTBlocks.DISK_ASSEMBLER.get()))
+                .build(ResourceHelper.asResource("disk_assembly"), NewDiskAssemblerCategory::new);
+    }
+
+
+    public static void consumeAllRecipes(Consumer<? super RecipeHolder<?>> consumer) {
+        Minecraft.getInstance()
+                .getConnection()
+                .getRecipeManager()
+                .getRecipes()
+                .forEach(consumer);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static <T extends Recipe<?>> void consumeTypedRecipes(Consumer<RecipeHolder<?>> consumer, RecipeType<?> type) {
+        List<? extends RecipeHolder<?>> map = Minecraft.getInstance()
+                .getConnection()
+                .getRecipeManager().getAllRecipesFor((RecipeType) type);
+        if (!map.isEmpty())
+            map.forEach(consumer);
+    }
+
+    protected static IDrawable asDrawable(QTGuiTextures texture) {
+        return new IDrawable() {
+            @Override
+            public int getWidth() {
+                return texture.getWidth();
+            }
+
+            @Override
+            public int getHeight() {
+                return texture.getHeight();
+            }
+
+            @Override
+            public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+                texture.render(guiGraphics, xOffset, yOffset);
+            }
+        };
+    }
+
+    private class CategoryBuilder<T extends Recipe<?>> extends QTRecipeCategory.Builder<T> {
+        public CategoryBuilder(Class<? extends T> recipeClass) {
+            super(recipeClass);
+        }
+
+        @Override
+        public QTRecipeCategory<T> build(ResourceLocation id, QTRecipeCategory.Factory<T> factory) {
+            QTRecipeCategory<T> category = super.build(id, factory);
+            allCategories.add(category);
+            return category;
+        }
+    }
+
+    private <T extends Recipe<? extends RecipeInput>> CategoryBuilder<T> builder(Class<T> recipeClass) {
+        return new CategoryBuilder<>(recipeClass);
+    }
+
 }
