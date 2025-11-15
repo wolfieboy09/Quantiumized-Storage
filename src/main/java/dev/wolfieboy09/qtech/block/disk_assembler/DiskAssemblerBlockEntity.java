@@ -39,7 +39,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private int progress = 0;
     private int crafting_ticks = 0;
     private int energy_required = 0;
-    private NewDiskAssemblerRecipe recipe = null;
+    private DiskAssemblerRecipe recipe = null;
     private boolean isValidRecipe = false;
     private final ContainerData containerData = new SimpleContainerData(3);
 
@@ -137,7 +137,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         return (int) (this.crafting_ticks / (float) this.recipe.getProcessingDuration() * 100);
     }
     
-    private void consumeInputItems(NewDiskAssemblerRecipe recipe) {
+    private void consumeInputItems(DiskAssemblerRecipe recipe) {
         // TODO Have it shrink by recipe amount
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_1).shrink(1);
         this.inventory.getStackInSlot(DiskAssemblerSlot.MAIN_SLOT_2).shrink(1);
@@ -161,9 +161,9 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
             inputHandler.setStackInSlot(i, this.inventory.getStackInSlot(i));
         }
         RecipeWrapper input = new RecipeWrapper(inputHandler);
-        Optional<RecipeHolder<NewDiskAssemblerRecipe>> recipeFound = QTRecipeTypes.DISK_ASSEMBLY.find(input, this.level);
+        Optional<RecipeHolder<DiskAssemblerRecipe>> recipeFound = QTRecipeTypes.DISK_ASSEMBLY.find(input, this.level);
         if (recipeFound.isEmpty()) return false;
-        NewDiskAssemblerRecipe recipe = recipeFound.get().value();
+        DiskAssemblerRecipe recipe = recipeFound.get().value();
         boolean matches = recipe.matches(input, this.level);
         if (!matches) return false;
         ItemStack result = recipe.assemble(input, this.level.registryAccess());
@@ -248,8 +248,8 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     
     private void saveRecipeToNBT(CompoundTag modData, HolderLookup.Provider registries) {
         try {
-            if (this.recipe instanceof NewDiskAssemblerRecipe t) {
-                modData.put("recipe", NewDiskAssemblerRecipe.CODEC.encodeStart(NbtOps.INSTANCE, t).getOrThrow());
+            if (this.recipe instanceof DiskAssemblerRecipe t) {
+                modData.put("recipe", DiskAssemblerRecipe.CODEC.encodeStart(NbtOps.INSTANCE, t).getOrThrow());
             }
         } catch (Exception e) {
             QuantiumizedTech.LOGGER.error("Error saving recipe to NBT: {}", e.getMessage());
@@ -258,7 +258,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     
     private void loadRecipeFromNBT(CompoundTag recipeTag) {
         Recipe<?> recipe = Recipe.CODEC.parse(NbtOps.INSTANCE, recipeTag).getOrThrow();
-        if (recipe instanceof NewDiskAssemblerRecipe diskAssemblerRecipe) {
+        if (recipe instanceof DiskAssemblerRecipe diskAssemblerRecipe) {
             this.recipe = diskAssemblerRecipe;
         }
     }

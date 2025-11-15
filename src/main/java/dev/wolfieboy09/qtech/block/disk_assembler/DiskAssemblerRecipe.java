@@ -6,8 +6,8 @@ import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipe
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 
 @NothingNullByDefault
-public class NewDiskAssemblerRecipe extends DiskAssemblerStandardRecipe {
-    public NewDiskAssemblerRecipe(DiskAssemblerRecipeParams params) {
+public class DiskAssemblerRecipe extends DiskAssemblerStandardRecipe {
+    public DiskAssemblerRecipe(DiskAssemblerRecipeParams params) {
         super(params);
     }
 

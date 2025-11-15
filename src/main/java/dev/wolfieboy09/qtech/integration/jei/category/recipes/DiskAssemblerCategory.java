@@ -1,6 +1,6 @@
 package dev.wolfieboy09.qtech.integration.jei.category.recipes;
 
-import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.integration.jei.category.QTRecipeCategory;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -13,14 +13,14 @@ import net.minecraft.world.item.crafting.Ingredient;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class NewDiskAssemblerCategory extends QTRecipeCategory<NewDiskAssemblerRecipe> {
+public class DiskAssemblerCategory extends QTRecipeCategory<DiskAssemblerRecipe> {
 
-    public NewDiskAssemblerCategory(Info<NewDiskAssemblerRecipe> info) {
+    public DiskAssemblerCategory(Info<DiskAssemblerRecipe> info) {
         super(info);
     }
 
     @Override
-    protected void setRecipe(IRecipeLayoutBuilder builder, NewDiskAssemblerRecipe recipe, IFocusGroup focuses) {
+    protected void setRecipe(IRecipeLayoutBuilder builder, DiskAssemblerRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < recipe.getIngredients().size(); i++) {
             if (i == 0) {
                 builder.addInputSlot(13, 24).addIngredients(recipe.getIngredients().get(i));
@@ -49,7 +49,7 @@ public class NewDiskAssemblerCategory extends QTRecipeCategory<NewDiskAssemblerR
     }
 
     @Override
-    protected void draw(NewDiskAssemblerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics gui, double mouseX, double mouseY) {
+    protected void draw(DiskAssemblerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics gui, double mouseX, double mouseY) {
 
     }
 }

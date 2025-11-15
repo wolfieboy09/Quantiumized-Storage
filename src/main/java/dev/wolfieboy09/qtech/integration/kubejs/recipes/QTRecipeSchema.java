@@ -8,12 +8,8 @@ import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import dev.latvian.mods.kubejs.util.TickDuration;
 import dev.latvian.mods.rhino.type.TypeInfo;
 import dev.wolfieboy09.qtech.api.gas.crafting.SizedGasIngredient;
-import dev.wolfieboy09.qtech.api.recipes.result.FluidStackChanceResult;
-import dev.wolfieboy09.qtech.api.recipes.result.GasStackChanceResult;
-import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.api.util.TriEither;
-import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.components.SizedGasIngredientComponent;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.components.TriEitherComponent;
 import net.minecraft.world.item.ItemStack;
@@ -38,7 +34,7 @@ public final class QTRecipeSchema {
         return new RecipeSchema(keys).factory(new KubeRecipeFactory(ResourceHelper.asResource(id), TypeInfo.of(recipeClass), () -> factory));
     }
 
-//    public static final RecipeSchema DISK_ASSEMBLY = create("disk_assembly", NewDiskAssemblerRecipe.class,
+//    public static final RecipeSchema DISK_ASSEMBLY = create("disk_assembly", DiskAssemblerRecipe.class,
 //            new QTRecipeFactory()
 //                    .ingredients(INGREDIENTS, 3)
 //                    .extraIngredients(EXTRA_INGREDIENTS, 4)

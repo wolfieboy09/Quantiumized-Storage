@@ -4,14 +4,14 @@ import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.datagen.builder.DiskAssemblyRecipeGen;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipeParams;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
-import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.registries.QTItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 
 import java.util.concurrent.CompletableFuture;
 
-public class QTDiskAssemblyProvider extends DiskAssemblyRecipeGen<DiskAssemblerRecipeParams, NewDiskAssemblerRecipe, DiskAssemblerStandardRecipe.Builder<NewDiskAssemblerRecipe>> {
+public class QTDiskAssemblyProvider extends DiskAssemblyRecipeGen<DiskAssemblerRecipeParams, DiskAssemblerRecipe, DiskAssemblerStandardRecipe.Builder<DiskAssemblerRecipe>> {
     public QTDiskAssemblyProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, QuantiumizedTech.MOD_ID);
     }

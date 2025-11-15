@@ -5,9 +5,9 @@ import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.gas.Gas;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
-import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.integration.jei.category.QTRecipeCategory;
-import dev.wolfieboy09.qtech.integration.jei.category.recipes.NewDiskAssemblerCategory;
+import dev.wolfieboy09.qtech.integration.jei.category.recipes.DiskAssemblerCategory;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientHelper;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientRenderer;
 import dev.wolfieboy09.qtech.registries.*;
@@ -69,11 +69,11 @@ public class QTJEIPlugin implements IModPlugin {
     private void loadCategories() {
         this.allCategories.clear();
         QTRecipeCategory<?>
-                disk_assembly = builder(NewDiskAssemblerRecipe.class)
+                disk_assembly = builder(DiskAssemblerRecipe.class)
                 .addTypedRecipes(QTRecipeTypes.DISK_ASSEMBLY)
                 .background(asDrawable(QTGuiTextures.JEI_DISK_ASSEMBLER))
                 .catalystStack(() -> new ItemStack(QTBlocks.DISK_ASSEMBLER.get()))
-                .build(ResourceHelper.asResource("disk_assembly"), NewDiskAssemblerCategory::new);
+                .build(ResourceHelper.asResource("disk_assembly"), DiskAssemblerCategory::new);
     }
 
 

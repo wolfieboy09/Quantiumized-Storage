@@ -8,7 +8,7 @@ import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeBuilder;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeParams;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipeParams;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
-import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.registries.QTRecipeTypes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.concurrent.CompletableFuture;
 
 @NothingNullByDefault
-public abstract class DiskAssemblyRecipeGen<P extends ProcessingRecipeParams, R extends ProcessingRecipe<?, P>, B extends ProcessingRecipeBuilder<P, R, B>> extends ProcessingRecipeGen<DiskAssemblerRecipeParams, NewDiskAssemblerRecipe, DiskAssemblerStandardRecipe.Builder<NewDiskAssemblerRecipe>> {
+public abstract class DiskAssemblyRecipeGen<P extends ProcessingRecipeParams, R extends ProcessingRecipe<?, P>, B extends ProcessingRecipeBuilder<P, R, B>> extends ProcessingRecipeGen<DiskAssemblerRecipeParams, DiskAssemblerRecipe, DiskAssemblerStandardRecipe.Builder<DiskAssemblerRecipe>> {
     public DiskAssemblyRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, String namespace) {
         super(output, registries, namespace);
     }
@@ -28,7 +28,7 @@ public abstract class DiskAssemblyRecipeGen<P extends ProcessingRecipeParams, R 
     }
 
     @Override
-    protected DiskAssemblerStandardRecipe.Builder<NewDiskAssemblerRecipe> getBuilder(ResourceLocation id) {
-        return new DiskAssemblerStandardRecipe.Builder<>(NewDiskAssemblerRecipe::new, id);
+    protected DiskAssemblerStandardRecipe.Builder<DiskAssemblerRecipe> getBuilder(ResourceLocation id) {
+        return new DiskAssemblerStandardRecipe.Builder<>(DiskAssemblerRecipe::new, id);
     }
 }

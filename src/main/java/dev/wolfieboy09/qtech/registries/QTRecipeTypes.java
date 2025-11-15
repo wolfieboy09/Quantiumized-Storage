@@ -8,7 +8,7 @@ import dev.wolfieboy09.qtech.api.recipes.StandardProcessingRecipe;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipeParams;
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
-import dev.wolfieboy09.qtech.block.disk_assembler.NewDiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 @NothingNullByDefault
 @SuppressWarnings("unchecked")
 public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
-    DISK_ASSEMBLY(NewDiskAssemblerRecipe::new);
+    DISK_ASSEMBLY(DiskAssemblerRecipe::new);
 
     public final ResourceLocation id;
     public final Supplier<RecipeSerializer<?>> serializerSupplier;
