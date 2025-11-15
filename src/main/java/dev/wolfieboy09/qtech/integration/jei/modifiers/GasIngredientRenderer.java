@@ -34,7 +34,7 @@ public record GasIngredientRenderer(int width, int height) implements IIngredien
         } catch (Exception ignored) {}
     }
 
-// Marked for removal.
+    // Marked for removal.
     @Contract("_, _ -> new")
     @Override
     public @Unmodifiable List<Component> getTooltip(Gas ingredient, TooltipFlag tooltipFlag) {
@@ -43,7 +43,7 @@ public record GasIngredientRenderer(int width, int height) implements IIngredien
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, Gas ingredient, TooltipFlag tooltipFlag) {
-        tooltip.add(Component.literal(ingredient.getDescriptionId()));
+        tooltip.add(Component.translatable(ingredient.getDescriptionId()));
     }
 }
 
