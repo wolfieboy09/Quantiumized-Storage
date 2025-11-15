@@ -162,7 +162,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
         }
         RecipeWrapper input = new RecipeWrapper(inputHandler);
         Optional<RecipeHolder<NewDiskAssemblerRecipe>> recipeFound = QTRecipeTypes.DISK_ASSEMBLY.find(input, this.level);
-        if (recipeFound.orElse(null) == null) return false;
+        if (recipeFound.isEmpty()) return false;
         NewDiskAssemblerRecipe recipe = recipeFound.get().value();
         boolean matches = recipe.matches(input, this.level);
         if (!matches) return false;
@@ -249,7 +249,7 @@ public class DiskAssemblerBlockEntity extends AbstractEnergyBlockEntity implemen
     private void saveRecipeToNBT(CompoundTag modData, HolderLookup.Provider registries) {
         try {
             if (this.recipe instanceof NewDiskAssemblerRecipe t) {
-                modData.put("recipe", DiskAssemblerRecipe.CODEC.encodeStart(NbtOps.INSTANCE, t).getOrThrow());
+                modData.put("recipe", NewDiskAssemblerRecipe.CODEC.encodeStart(NbtOps.INSTANCE, t).getOrThrow());
             }
         } catch (Exception e) {
             QuantiumizedTech.LOGGER.error("Error saving recipe to NBT: {}", e.getMessage());
