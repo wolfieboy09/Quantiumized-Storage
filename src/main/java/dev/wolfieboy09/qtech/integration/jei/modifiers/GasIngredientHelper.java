@@ -9,6 +9,7 @@ import mezz.jei.api.ingredients.subtypes.UidContext;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("removal")
 @NothingNullByDefault
 public class GasIngredientHelper implements IIngredientHelper<Gas> {
     @Override
