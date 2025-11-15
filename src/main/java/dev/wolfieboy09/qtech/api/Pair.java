@@ -14,6 +14,11 @@ import org.jetbrains.annotations.UnknownNullability;
  * @param <R> The right type
  */
 public record Pair<L, R>(@UnknownNullability L left, @UnknownNullability R right) {
+    @Contract("_, _ -> new")
+    public static <L, R> @NotNull Pair<L, R> of(L left, R right) {
+        return new Pair<>(left, right);
+    }
+
     public boolean isLeftPresent() {
         return this.left != null;
     }
