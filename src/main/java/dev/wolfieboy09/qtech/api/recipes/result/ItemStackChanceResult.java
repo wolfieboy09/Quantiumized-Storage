@@ -7,7 +7,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Optional;
 
 public class ItemStackChanceResult extends ChanceResult<ItemStack> {
     public static final ItemStackChanceResult EMPTY = new ItemStackChanceResult(ItemStack.EMPTY, 1);
@@ -27,6 +30,9 @@ public class ItemStackChanceResult extends ChanceResult<ItemStack> {
             )
     ));
 
+    public static final Codec<ItemStackChanceResult> OPTIONAL_CODEC = ExtraCodecs.optionalEmptyMap(CODEC)
+            .xmap(optional -> optional.orElse(ItemStackChanceResult.EMPTY), stack -> stack.isEmpty() ? Optional.empty() : Optional.of(stack));
+
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackChanceResult> STREAM_CODEC =
             StreamCodec.composite(
                     ItemStack.STREAM_CODEC, ItemStackChanceResult::getResult,
@@ -40,6 +46,11 @@ public class ItemStackChanceResult extends ChanceResult<ItemStack> {
 
     public ItemStackChanceResult(ItemStack result) {
         this(result, 1);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this == EMPTY || this.result.isEmpty() || this.chance <= 0f;
     }
 
     @Override

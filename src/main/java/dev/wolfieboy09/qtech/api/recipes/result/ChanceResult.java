@@ -54,6 +54,7 @@ public abstract class ChanceResult<T> {
     }
 
     protected abstract T copyResult();
+    public abstract boolean isEmpty();
 
     public abstract Codec<? extends ChanceResult<T>> codec();
     public abstract StreamCodec<RegistryFriendlyByteBuf, ? extends ChanceResult<T>> streamCodec();

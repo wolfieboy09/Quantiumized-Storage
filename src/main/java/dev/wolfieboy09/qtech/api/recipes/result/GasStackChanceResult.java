@@ -8,6 +8,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
+
+import java.util.Optional;
 
 public class GasStackChanceResult extends ChanceResult<GasStack> {
     public static final GasStackChanceResult EMPTY = new GasStackChanceResult(GasStack.EMPTY, 1);
@@ -28,6 +31,9 @@ public class GasStackChanceResult extends ChanceResult<GasStack> {
                     chance
             )));
 
+    public static final Codec<GasStackChanceResult> OPTIONAL_CODEC = ExtraCodecs.optionalEmptyMap(CODEC)
+        .xmap(optional -> optional.orElse(GasStackChanceResult.EMPTY), stack -> stack.isEmpty() ? Optional.empty() : Optional.of(stack));
+
     public static final StreamCodec<RegistryFriendlyByteBuf, GasStackChanceResult> STREAM_CODEC =
             StreamCodec.composite(
                     GasStack.STREAM_CODEC, GasStackChanceResult::getResult,
@@ -46,6 +52,11 @@ public class GasStackChanceResult extends ChanceResult<GasStack> {
     @Override
     protected GasStack copyResult() {
         return this.result.copy();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this == EMPTY || this.result.isEmpty() || this.chance <= 0;
     }
 
     @Override
