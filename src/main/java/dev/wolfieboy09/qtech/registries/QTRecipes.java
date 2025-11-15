@@ -3,7 +3,6 @@ package dev.wolfieboy09.qtech.registries;
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.circut_engraver.CircuitEngraverRecipe;
-import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.block.smeltery.SmelteryRecipe;
 import dev.wolfieboy09.qtech.facade.FacadeCraftingRecipe;
 import net.minecraft.core.registries.Registries;
@@ -18,9 +17,6 @@ import org.jetbrains.annotations.NotNull;
 public class QTRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, QuantiumizedTech.MOD_ID);
     public static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, QuantiumizedTech.MOD_ID);
-
-    public static final DeferredHolder<RecipeType<?>, RecipeType<DiskAssemblerRecipe>> DISK_ASSEMBLER_TYPE = registerRecipeType("disk_assembly");
-    public static final DeferredHolder<RecipeSerializer<?>, DiskAssemblerRecipe.Serializer> DISK_ASSEMBLER_SERIALIZER = SERALIZERS.register("disk_assembly", DiskAssemblerRecipe.Serializer::new);
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<CircuitEngraverRecipe>> CIRCUIT_ENGRAVER_TYPE = registerRecipeType("circuit_engraver");
     public static final DeferredHolder<RecipeSerializer<?> , CircuitEngraverRecipe.Serializer> CIRCUIT_ENGRAVER_SERIALIZER = SERALIZERS.register("circuit_engraver", CircuitEngraverRecipe.Serializer::new);
