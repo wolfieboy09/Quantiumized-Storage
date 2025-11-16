@@ -1,24 +1,28 @@
 package dev.wolfieboy09.qtech.integration.kubejs.recipes.components;
 
+import dev.latvian.mods.kubejs.plugin.builtin.wrapper.ItemWrapper;
 import dev.latvian.mods.kubejs.recipe.RecipeScriptContext;
 import dev.latvian.mods.kubejs.recipe.component.RecipeComponentType;
 import dev.latvian.mods.kubejs.recipe.component.UniqueIdBuilder;
 import dev.latvian.mods.kubejs.recipe.filter.RecipeMatchContext;
 import dev.latvian.mods.kubejs.recipe.match.ReplacementMatchInfo;
 import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
+import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.components.framework.ChanceComponent;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.match.results.ItemStackChanceMatch;
 import dev.wolfieboy09.qtech.integration.kubejs.wrappers.ItemStackChanceWrapper;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemStackChanceComponent extends ChanceComponent<ItemStackChanceResult> {
+    public static final RecipeComponentType<ItemStackChanceResult> TYPE = RecipeComponentType.unit(ResourceHelper.asResource("item_stack_chance"), ItemStackChanceComponent::new);
+
     public ItemStackChanceComponent(RecipeComponentType<?> type) {
-        super(type, ItemStackChanceResult.OPTIONAL_CODEC, ItemStackChanceResult.class);
+        super(type, ItemStackChanceResult.CODEC, ItemStackChanceResult.class);
     }
 
     @Override
     public boolean hasPriority(RecipeMatchContext cx, Object from) {
-        return from instanceof ItemStackChanceResult;
+        return from instanceof ItemStackChanceResult || ItemWrapper.isItemStackLike(from);
     }
 
     @Override

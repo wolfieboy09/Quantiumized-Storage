@@ -31,7 +31,7 @@ public class QTKubeJSPlugin implements KubeJSPlugin {
     @Override
     public void registerRecipeSchemas(RecipeSchemaRegistry registry) {
         registry.namespace(QuantiumizedTech.MOD_ID);
-        //registry.register(locate("disk_assembly"), QTRecipeSchema.DISK_ASSEMBLY);
+        registry.register(locate("disk_assembly"), QTRecipeSchema.DISK_ASSEMBLY);
         registry.register(locate("smeltery"), SmelterySchema.SCHEMA);
     }
 

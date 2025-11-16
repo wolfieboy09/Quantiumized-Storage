@@ -9,6 +9,9 @@ import dev.latvian.mods.kubejs.script.SourceLine;
 import dev.latvian.mods.kubejs.util.ErrorStack;
 import dev.latvian.mods.kubejs.util.TickDuration;
 import dev.wolfieboy09.qtech.api.gas.crafting.SizedGasIngredient;
+import dev.wolfieboy09.qtech.api.recipes.result.FluidStackChanceResult;
+import dev.wolfieboy09.qtech.api.recipes.result.GasStackChanceResult;
+import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
 import dev.wolfieboy09.qtech.api.util.TriEither;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -22,7 +25,7 @@ public final class QTRecipeFactory extends KubeRecipe {
     RecipeKey<List<Ingredient>> EXTRAS = null;
     RecipeKey<Integer> ENERGY = null;
     RecipeKey<TickDuration> TICKS = null;
-    RecipeKey<ItemStack> RESULT = null;
+    RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> RESULT = null;
 
     boolean hasProcessingTime = false;
     boolean usesEnergy = false;
@@ -57,7 +60,7 @@ public final class QTRecipeFactory extends KubeRecipe {
         return this;
     }
 
-    public QTRecipeFactory resultItemOutputs(RecipeKey<ItemStack> key, int maxItemOutputs) {
+    public QTRecipeFactory resultItemOutputs(RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> key, int maxItemOutputs) {
         this.maxItemOutputs = maxItemOutputs;
         this.RESULT = key;
         return this;
