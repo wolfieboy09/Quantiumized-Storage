@@ -13,7 +13,6 @@ import dev.wolfieboy09.qtech.api.recipes.result.FluidStackChanceResult;
 import dev.wolfieboy09.qtech.api.recipes.result.GasStackChanceResult;
 import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
 import dev.wolfieboy09.qtech.api.util.TriEither;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;

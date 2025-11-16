@@ -1,6 +1,5 @@
 package dev.wolfieboy09.qtech.integration.kubejs.recipes.components;
 
-import com.mojang.serialization.Codec;
 import dev.latvian.mods.kubejs.recipe.RecipeScriptContext;
 import dev.latvian.mods.kubejs.recipe.component.RecipeComponentType;
 import dev.latvian.mods.kubejs.recipe.component.UniqueIdBuilder;
@@ -13,7 +12,6 @@ import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.components.framework.ChanceComponent;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.match.results.GasStackChanceMatch;
 import dev.wolfieboy09.qtech.integration.kubejs.wrappers.GasStackChanceWrapper;
-import dev.wolfieboy09.qtech.integration.kubejs.wrappers.GasWrapper;
 
 public class GasStackChanceComponent extends ChanceComponent<GasStackChanceResult> {
     public static final RecipeComponentType<GasStackChanceResult> TYPE = RecipeComponentType.unit(ResourceHelper.asResource("gas_stack_chance"), GasStackChanceComponent::new);
