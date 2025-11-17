@@ -10,13 +10,14 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
 public class DiskAssemblerRecipeParams extends ProcessingRecipeParams {
     public static final MapCodec<DiskAssemblerRecipeParams> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             codec(DiskAssemblerRecipeParams::new).forGetter(Function.identity()),
-            Ingredient.CODEC.listOf(0, 3).fieldOf("extras").forGetter(DiskAssemblerRecipeParams::extras)
+            Ingredient.CODEC.listOf(0, 3).optionalFieldOf("extras", List.of()).forGetter(DiskAssemblerRecipeParams::extras)
     ).apply(instance, (params, extras) -> {
         params.extras = NonNullList.copyOf(extras);
         return params;
