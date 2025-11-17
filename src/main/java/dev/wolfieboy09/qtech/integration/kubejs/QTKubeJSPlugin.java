@@ -13,6 +13,9 @@ import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.gas.crafting.GasIngredient;
 import dev.wolfieboy09.qtech.api.gas.crafting.SizedGasIngredient;
 import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
+import dev.wolfieboy09.qtech.api.recipes.result.FluidStackChanceResult;
+import dev.wolfieboy09.qtech.api.recipes.result.GasStackChanceResult;
+import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
 import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.gas.Gas;
 import dev.wolfieboy09.qtech.api.registry.gas.GasStack;
@@ -23,7 +26,10 @@ import dev.wolfieboy09.qtech.integration.kubejs.datagen.KJSSmelteryFuelDataGener
 import dev.wolfieboy09.qtech.integration.kubejs.events.QTKubeEvents;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.QTRecipeSchema;
 import dev.wolfieboy09.qtech.integration.kubejs.recipes.schemas.SmelterySchema;
+import dev.wolfieboy09.qtech.integration.kubejs.wrappers.FluidStackChanceWrapper;
+import dev.wolfieboy09.qtech.integration.kubejs.wrappers.GasStackChanceWrapper;
 import dev.wolfieboy09.qtech.integration.kubejs.wrappers.GasWrapper;
+import dev.wolfieboy09.qtech.integration.kubejs.wrappers.ItemStackChanceWrapper;
 import net.minecraft.resources.ResourceLocation;
 
 @NothingNullByDefault
@@ -69,6 +75,9 @@ public class QTKubeJSPlugin implements KubeJSPlugin {
         registry.register(GasStack.class, GasWrapper::wrap);
         registry.register(GasIngredient.class, GasWrapper::wrapIngredient);
         registry.register(SizedGasIngredient.class, GasWrapper::wrapSizedIngredient);
+        registry.register(ItemStackChanceResult.class, ItemStackChanceWrapper::wrapItemStackChance);
+        registry.register(FluidStackChanceResult.class, FluidStackChanceWrapper::wrapFluidStackChance);
+        registry.register(GasStackChanceResult.class, GasStackChanceWrapper::wrapGasStackChance);
     }
 
     private ResourceLocation locate(String id) {
