@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.api.recipes;
 
 import com.google.common.base.Joiner;
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
@@ -161,6 +162,7 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
         return typeInfo;
     }
 
+    @OverridingMethodsMustInvokeSuper
     public List<String> validate() {
         List<String> errors = new ArrayList<>();
 
