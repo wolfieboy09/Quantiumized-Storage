@@ -3,10 +3,10 @@
   "energy": 2000,
   "extras": [
     {
-      "item": "qtech:data_crystal"
+      "tag": "qtech:crystals/data"
     },
     {
-      "item": "qtech:basic_circuit"
+      "tag": "c:circuits/basic"
     }
   ],
   "ingredients": [
