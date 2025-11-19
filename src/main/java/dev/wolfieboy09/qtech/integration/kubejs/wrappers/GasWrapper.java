@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+//TODO
+// Since KJS build 321, use new way of wrapping (look at FluidWrapper)
 public interface GasWrapper {
     TypeInfo TYPE_INFO = TypeInfo.of(GasStack.class);
     TypeInfo GAS_TYPE_INFO = TypeInfo.of(Gas.class);
