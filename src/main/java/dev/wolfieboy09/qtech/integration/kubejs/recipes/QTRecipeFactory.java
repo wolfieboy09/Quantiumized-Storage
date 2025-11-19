@@ -9,6 +9,7 @@ import dev.latvian.mods.kubejs.script.SourceLine;
 import dev.latvian.mods.kubejs.util.ErrorStack;
 import dev.latvian.mods.kubejs.util.TickDuration;
 import dev.wolfieboy09.qtech.api.gas.crafting.SizedGasIngredient;
+import dev.wolfieboy09.qtech.api.recipes.CleanroomCondition;
 import dev.wolfieboy09.qtech.api.recipes.result.FluidStackChanceResult;
 import dev.wolfieboy09.qtech.api.recipes.result.GasStackChanceResult;
 import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
@@ -25,6 +26,7 @@ public final class QTRecipeFactory extends KubeRecipe {
     RecipeKey<Integer> ENERGY = null;
     RecipeKey<TickDuration> TICKS = null;
     RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> RESULT = null;
+    RecipeKey<CleanroomCondition> CLEANROOM_CONDITION = null;
 
     boolean hasProcessingTime = false;
     boolean usesEnergy = false;
@@ -62,6 +64,11 @@ public final class QTRecipeFactory extends KubeRecipe {
     public QTRecipeFactory resultItemOutputs(RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> key, int maxItemOutputs) {
         this.maxItemOutputs = maxItemOutputs;
         this.RESULT = key;
+        return this;
+    }
+
+    public QTRecipeFactory cleanroom(RecipeKey<CleanroomCondition> cleanroomCondition) {
+        this.CLEANROOM_CONDITION = cleanroomCondition;
         return this;
     }
 
