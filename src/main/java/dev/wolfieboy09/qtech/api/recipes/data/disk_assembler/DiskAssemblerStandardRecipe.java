@@ -11,6 +11,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -95,6 +97,11 @@ public class DiskAssemblerStandardRecipe extends ProcessingRecipe<RecipeWrapper,
 
         public Builder<R> requireExtra(ItemLike itemLike) {
             params.extras.add(Ingredient.of(itemLike));
+            return self();
+        }
+
+        public Builder<R> requireExtra(TagKey<Item> itemTag) {
+            params.extras.add(Ingredient.of(itemTag));
             return self();
         }
     }
