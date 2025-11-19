@@ -31,10 +31,10 @@ public interface FluidStackChanceWrapper {
     private static FluidStackChanceResult fromMapLike(Context cx, Object from, Function<String, Object> getter, boolean nested) {
         var chance = (float) Mth.clamp(StringUtilsWrapper.parseDouble(getter.apply("chance"), 1.0), 0.0, 1.0);
         if (nested) {
-            var output = FluidWrapper.wrap(RegistryAccessContainer.of(cx), getter.apply("output"));
+            var output = FluidWrapper.wrap(cx, getter.apply("output"));
             return new FluidStackChanceResult(output, chance);
         } else {
-            return new FluidStackChanceResult(FluidWrapper.wrap(RegistryAccessContainer.of(cx), from), chance);
+            return new FluidStackChanceResult(FluidWrapper.wrap(cx, from), chance);
         }
     }
 
@@ -48,7 +48,7 @@ public interface FluidStackChanceWrapper {
             case FluidLike i -> new FluidStackChanceResult(new FluidStack(i.kjs$getFluid(), 1000));
             case JsonObject json when json.has("chance") -> fromMapLike(cx, json, json::get, json.has("output"));
             case Map<?, ?> map when map.containsKey("chance") -> fromMapLike(cx, map, map::get, map.containsKey("output"));
-            default -> new FluidStackChanceResult(FluidWrapper.wrap(RegistryAccessContainer.of(cx), from));
+            default -> new FluidStackChanceResult(FluidWrapper.wrap(cx, from));
         };
     }
 }
