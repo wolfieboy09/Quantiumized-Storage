@@ -6,6 +6,7 @@ import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipe
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
 import dev.wolfieboy09.qtech.registries.QTItems;
+import dev.wolfieboy09.qtech.registries.tags.QTItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 
@@ -19,10 +20,10 @@ public class QTDiskAssemblyProvider extends DiskAssemblyRecipeGen<DiskAssemblerR
     GeneratedRecipe
         BASIC_ITEM_DISK = create("basic_item_disk", b ->
             b.require(QTItems.ITEM_PORT.asItem())
-                    .require(QTItems.STEEL_CASING.asItem())
+                    .require(QTItems.STEEL_CASING)
                     .require(QTItems.STEEL_SCREW)
-                    .requireExtra(QTItems.DATA_CRYSTAL.asItem())
-                    .requireExtra(QTItems.BASIC_CIRCUIT.asItem())
+                    .requireExtra(QTItemTags.DATA_CRYSTAL)
+                    .requireExtra(QTItemTags.BASIC_CIRCUIT)
                     .energyCost(2000)
                     .duration(120)
                     .output(QTItems.BASIC_ITEM_DISK)
