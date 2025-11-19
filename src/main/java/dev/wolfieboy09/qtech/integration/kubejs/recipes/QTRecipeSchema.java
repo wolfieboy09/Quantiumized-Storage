@@ -49,9 +49,9 @@ public final class QTRecipeSchema {
 
     public static final RecipeSchema DISK_ASSEMBLY = create("disk_assembly", DiskAssemblerRecipe.class,
             new QTRecipeFactory()
-                    .ingredients(INGREDIENTS, 3)
+                    .ingredients(INGREDIENTS, 3, 0, 0)
                     .extraIngredients(EXTRA_INGREDIENTS, 4)
-                    .resultItemOutputs(RESULT, 1)
+                    .results(RESULT, 1, 0, 0)
                     .energy(ENERGY)
                     .cleanroom(CLEANROOM_CONDITION)
                     .duration(TICKS), RESULT, INGREDIENTS, EXTRA_INGREDIENTS, CLEANROOM_CONDITION, ENERGY, TICKS);

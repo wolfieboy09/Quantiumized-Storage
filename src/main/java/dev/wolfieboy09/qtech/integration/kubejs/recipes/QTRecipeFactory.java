@@ -32,13 +32,22 @@ public final class QTRecipeFactory extends KubeRecipe {
     boolean usesEnergy = false;
     boolean usesExtraIngredients = false;
 
-    private int maxItemOutputs = 1;
-    private int maxIngredientInputs = 1;
-    private int maxExtraIngredientInputs = 1;
+    private int maxIngredientInputs = 0;
+    private int maxFluidInputs = 0;
+    private int maxGasInputs = 0;
 
-    public QTRecipeFactory ingredients(RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> key, int maxIngredientInputs) {
+    private int maxExtraIngredientInputs = 0;
+
+    private int maxItemOutputs = 0;
+    private int maxFluidOutputs = 0;
+    private int maxGasOutputs = 0;
+
+
+    public QTRecipeFactory ingredients(RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> key, int maxIngredientInputs, int maxFluidInputs, int maxGasInputs) {
         this.INGREDIENTS = key;
         this.maxIngredientInputs = maxIngredientInputs;
+        this.maxFluidInputs = maxFluidInputs;
+        this.maxGasInputs = maxGasInputs;
         return this;
     }
 
@@ -61,8 +70,10 @@ public final class QTRecipeFactory extends KubeRecipe {
         return this;
     }
 
-    public QTRecipeFactory resultItemOutputs(RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> key, int maxItemOutputs) {
+    public QTRecipeFactory results(RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> key, int maxItemOutputs, int maxFluidOutputs, int maxGasOutputs) {
         this.maxItemOutputs = maxItemOutputs;
+        this.maxFluidOutputs = maxFluidOutputs;
+        this.maxGasOutputs = maxGasOutputs;
         this.RESULT = key;
         return this;
     }
@@ -73,6 +84,7 @@ public final class QTRecipeFactory extends KubeRecipe {
     }
 
     @Override
+    //TODO validate the max stuff for everything else
     public void validate(@NotNull RecipeValidationContext cx) {
         keyCheck(cx.errors(), sourceLine);
         for (RecipeComponentValue<?> v : getRecipeComponentValues()) {
@@ -84,6 +96,10 @@ public final class QTRecipeFactory extends KubeRecipe {
 
             if (key == EXTRAS && usesExtraIngredients && value instanceof List<?> g && g.size() > maxExtraIngredientInputs) {
                 cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxExtraIngredientInputs + " extra ingredients").source(sourceLine));
+            }
+
+            if (key == RESULT && value instanceof List<?> g && g.size() > maxItemOutputs) {
+                cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxItemOutputs + " results").source(sourceLine));
             }
         }
     }
