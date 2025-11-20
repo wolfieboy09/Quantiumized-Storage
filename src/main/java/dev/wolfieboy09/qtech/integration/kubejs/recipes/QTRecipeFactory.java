@@ -5,7 +5,6 @@ import dev.latvian.mods.kubejs.recipe.KubeRecipe;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
 import dev.latvian.mods.kubejs.recipe.component.RecipeComponentValue;
 import dev.latvian.mods.kubejs.recipe.component.RecipeValidationContext;
-import dev.latvian.mods.kubejs.script.SourceLine;
 import dev.latvian.mods.kubejs.util.ErrorStack;
 import dev.latvian.mods.kubejs.util.TickDuration;
 import dev.wolfieboy09.qtech.api.gas.crafting.SizedGasIngredient;
@@ -19,6 +18,7 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class QTRecipeFactory extends KubeRecipe {
     RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> INGREDIENTS = null;
@@ -84,27 +84,68 @@ public final class QTRecipeFactory extends KubeRecipe {
     }
 
     @Override
-    //TODO validate the max stuff for everything else
+    @SuppressWarnings("unchecked")
     public void validate(@NotNull RecipeValidationContext cx) {
-        keyCheck(cx.errors(), sourceLine);
+        keyCheck(cx.errors());
         for (RecipeComponentValue<?> v : getRecipeComponentValues()) {
             RecipeKey<?> key = v.getKey();
             var value = v.getValue();
-            if (key == INGREDIENTS && value instanceof List<?> g && g.size() > maxIngredientInputs) {
-                cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxIngredientInputs + " ingredients").source(sourceLine));
+            if (key == INGREDIENTS && value instanceof List<?> g) {
+                AtomicInteger itemIngredients = new AtomicInteger();
+                AtomicInteger fluidIngredients =  new AtomicInteger();
+                AtomicInteger gasIngredients =  new AtomicInteger();
+
+                g.forEach(i -> ((TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>) i).map(
+                        ing -> itemIngredients.getAndIncrement(),
+                        ing -> fluidIngredients.getAndIncrement(),
+                        ing -> gasIngredients.getAndIncrement()
+                ));
+
+                if (itemIngredients.get() > maxIngredientInputs) {
+                    cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxIngredientInputs + " ingredients").source(sourceLine));
+                }
+
+                if (fluidIngredients.get() > maxFluidInputs) {
+                    cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxFluidInputs + " fluid ingredients").source(sourceLine));
+                }
+
+                if (gasIngredients.get() > maxGasInputs) {
+                    cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxGasInputs + " gas ingredients").source(sourceLine));
+                }
+
+            }
+
+            if (key == RESULT && value instanceof List<?> g && g.size() > maxItemOutputs) {
+                AtomicInteger itemResults = new AtomicInteger();
+                AtomicInteger fluidResults = new AtomicInteger();
+                AtomicInteger gasResults = new AtomicInteger();
+
+                g.forEach(i -> ((TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>) i).map(
+                        ing -> itemResults.getAndIncrement(),
+                        ing -> fluidResults.getAndIncrement(),
+                        ing -> gasResults.getAndIncrement()
+                ));
+
+                if (itemResults.get() > maxItemOutputs) {
+                    cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxItemOutputs + " results").source(sourceLine));
+                }
+
+                if (fluidResults.get() > maxFluidOutputs) {
+                    cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxItemOutputs + " fluid results").source(sourceLine));
+                }
+
+                if (gasResults.get() > maxGasOutputs) {
+                    cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxItemOutputs + " gas results").source(sourceLine));
+                }
             }
 
             if (key == EXTRAS && usesExtraIngredients && value instanceof List<?> g && g.size() > maxExtraIngredientInputs) {
                 cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxExtraIngredientInputs + " extra ingredients").source(sourceLine));
             }
-
-            if (key == RESULT && value instanceof List<?> g && g.size() > maxItemOutputs) {
-                cx.errors().push(new KubeRuntimeException("Recipe can only have a max of " + maxItemOutputs + " results").source(sourceLine));
-            }
         }
     }
 
-    private void keyCheck(ErrorStack errorStack, SourceLine sourceLine) {
+    private void keyCheck(ErrorStack errorStack) {
         if (INGREDIENTS == null) {
             errorStack.push(new KubeRuntimeException("Recipe must have ingredients defined").source(sourceLine));
         }
