@@ -30,16 +30,16 @@ import java.util.List;
 public final class QTRecipeSchema {
     private static final RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> INGREDIENTS = TriEitherComponent.of(IngredientComponent.OPTIONAL_INGREDIENT.instance(), SizedFluidIngredientComponent.OPTIONAL_FLAT.instance(), SizedGasIngredientComponent.OPTIONAL_FLAT.instance()).asList().inputKey("ingredients");
     private static final RecipeKey<Integer> ENERGY = NumberComponent.INT.otherKey("energy").optional(200);
-    private static final RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.otherKey("processing_time").optional(TickDuration.of(100));
+    private static final RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.otherKey("processing_time").optional(TickDuration.of(100)).functionNames(List.of("processingTime"));
     private static final RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> RESULT = TriEitherComponent.of(ItemStackChanceComponent.TYPE.instance(), FluidStackChanceComponent.TYPE.instance(), GasStackChanceComponent.TYPE.instance()).asList().outputKey("results");
-    private static final RecipeKey<CleanroomCondition> CLEANROOM_CONDITION = EnumComponent.of(location("cleanroom"), CleanroomCondition.class, CleanroomCondition.CODEC).otherKey("cleanroom_condition").optional(CleanroomCondition.NONE);
+    private static final RecipeKey<CleanroomCondition> CLEANROOM_CONDITION = EnumComponent.of(location("cleanroom"), CleanroomCondition.class, CleanroomCondition.CODEC).otherKey("cleanroom_condition").optional(CleanroomCondition.NONE).functionNames(List.of("cleanroom", "cleanroomCondition"));
 
     private static final RecipeKey<List<Ingredient>> EXTRA_INGREDIENTS = IngredientComponent.INGREDIENT.instance().asList().key("extras", ComponentRole.INPUT);
     private static final RecipeKey<List<Either<ItemStack, FluidStack>>> WASTE = ItemStackComponent.ITEM_STACK.instance().or(FluidStackComponent.FLUID_STACK.instance()).asList().key("waste", ComponentRole.OUTPUT);
     private static final RecipeKey<Integer> TEMPERATURE = NumberComponent.INT.key("temperature", ComponentRole.OTHER).optional(200);
 
     private static RecipeSchema create(String id, Class<? extends Recipe<?>> recipeClass, QTRecipeFactory factory, RecipeKey<?>... keys) {
-        return new RecipeSchema(keys).factory(new KubeRecipeFactory(ResourceHelper.asResource(id), TypeInfo.of(recipeClass), () -> factory));
+        return new RecipeSchema(keys).factory(new KubeRecipeFactory(ResourceHelper.asResource(id), TypeInfo.of(recipeClass), () -> factory)).uniqueIds(List.of(INGREDIENTS, RESULT, CLEANROOM_CONDITION));
     }
 
     @Contract("_ -> new")
