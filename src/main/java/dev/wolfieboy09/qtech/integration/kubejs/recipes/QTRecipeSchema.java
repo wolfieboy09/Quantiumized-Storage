@@ -28,10 +28,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public final class QTRecipeSchema {
-    private static final RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> INGREDIENTS = TriEitherComponent.of(IngredientComponent.OPTIONAL_INGREDIENT.instance(), SizedFluidIngredientComponent.OPTIONAL_FLAT.instance(), SizedGasIngredientComponent.OPTIONAL_FLAT.instance()).asList().inputKey("ingredients");
+    private static final RecipeKey<List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>>> INGREDIENTS = TriEitherComponent.of(
+            IngredientComponent.INGREDIENT.instance(),
+            SizedFluidIngredientComponent.FLAT.instance(),
+            SizedGasIngredientComponent.FLAT.instance()).asList().inputKey("ingredients");
+
     private static final RecipeKey<Integer> ENERGY = NumberComponent.INT.otherKey("energy").optional(200);
     private static final RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.otherKey("processing_time").optional(TickDuration.of(100)).functionNames(List.of("processingTime"));
-    private static final RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> RESULT = TriEitherComponent.of(ItemStackChanceComponent.TYPE.instance(), FluidStackChanceComponent.TYPE.instance(), GasStackChanceComponent.TYPE.instance()).asList().outputKey("results");
+    private static final RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> RESULTS = TriEitherComponent.of(
+            ItemStackChanceComponent.TYPE.instance(),
+            FluidStackChanceComponent.TYPE.instance(),
+            GasStackChanceComponent.TYPE.instance()).asList().outputKey("results");
+
     private static final RecipeKey<CleanroomCondition> CLEANROOM_CONDITION = EnumComponent.of(location("cleanroom"), CleanroomCondition.class, CleanroomCondition.CODEC).otherKey("cleanroom_condition").optional(CleanroomCondition.NONE).functionNames(List.of("cleanroom", "cleanroomCondition"));
 
     private static final RecipeKey<List<Ingredient>> EXTRA_INGREDIENTS = IngredientComponent.INGREDIENT.instance().asList().key("extras", ComponentRole.INPUT);
@@ -39,7 +47,7 @@ public final class QTRecipeSchema {
     private static final RecipeKey<Integer> TEMPERATURE = NumberComponent.INT.key("temperature", ComponentRole.OTHER).optional(200);
 
     private static RecipeSchema create(String id, Class<? extends Recipe<?>> recipeClass, QTRecipeFactory factory, RecipeKey<?>... keys) {
-        return new RecipeSchema(keys).factory(new KubeRecipeFactory(ResourceHelper.asResource(id), TypeInfo.of(recipeClass), () -> factory)).uniqueIds(List.of(INGREDIENTS, RESULT, CLEANROOM_CONDITION));
+        return new RecipeSchema(keys).factory(new KubeRecipeFactory(ResourceHelper.asResource(id), TypeInfo.of(recipeClass), () -> factory)).uniqueIds(List.of(INGREDIENTS, RESULTS, CLEANROOM_CONDITION));
     }
 
     @Contract("_ -> new")
@@ -51,8 +59,11 @@ public final class QTRecipeSchema {
             new QTRecipeFactory()
                     .ingredients(INGREDIENTS, 3, 0, 0)
                     .extraIngredients(EXTRA_INGREDIENTS, 4)
-                    .results(RESULT, 1, 0, 0)
+                    .results(RESULTS, 1, 0, 0)
                     .energy(ENERGY)
                     .cleanroom(CLEANROOM_CONDITION)
-                    .duration(TICKS), RESULT, INGREDIENTS, EXTRA_INGREDIENTS, CLEANROOM_CONDITION, ENERGY, TICKS);
+                    .duration(TICKS),
+            RESULTS, INGREDIENTS, EXTRA_INGREDIENTS, CLEANROOM_CONDITION, ENERGY, TICKS)
+            .constructor(RESULTS, INGREDIENTS)
+            .constructor(RESULTS);
 }
