@@ -35,7 +35,7 @@ public final class QTRecipeSchema {
 
     private static final RecipeKey<Integer> ENERGY = NumberComponent.INT.otherKey("energy").optional(200);
 
-    private static final RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.otherKey("processing_time").optional(TickDuration.of(100)).functionNames(List.of("processingTime", "duration")).optional(TickDuration.of(100));
+    private static final RecipeKey<TickDuration> TICKS = TimeComponent.TICKS.otherKey("processing_time").functionNames(List.of("processingTime", "duration")).optional(TickDuration.of(100));
 
     private static final RecipeKey<List<TriEither<ItemStackChanceResult, FluidStackChanceResult, GasStackChanceResult>>> RESULTS = TriEitherComponent.of(
             ItemStackChanceComponent.TYPE.instance(),
