@@ -45,6 +45,8 @@ public class QTItems {
 
     public static final DeferredItem<WrenchItem> WRENCH = ITEMS.register("wrench", WrenchItem::new);
 
+    public static final DeferredItem<Item> BROKEN_ENDER_PEARL = simpleItem("broken_ender_pearl");
+
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
     }
