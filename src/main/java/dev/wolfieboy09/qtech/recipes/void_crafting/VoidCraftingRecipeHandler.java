@@ -4,6 +4,8 @@ import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
 import dev.wolfieboy09.qtech.registries.QTRecipeTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -70,6 +72,8 @@ public class VoidCraftingRecipeHandler {
 
         // If the dimensions are empty, use that as a wildcard, otherise check
         if (craftingRecipe.getDimensions().isEmpty() || craftingRecipe.getDimensions().contains(level.dimension().location())) {
+            spawnParticles(level, item.getX(), item.getY(), item.getZ());
+
             for (ItemStackChanceResult chanceResult : craftingRecipe.getRollableResults()) {
                 Optional<ItemStack> rolledResult = chanceResult.getIfRolled();
                 if (rolledResult.isEmpty()) continue;
@@ -80,6 +84,7 @@ public class VoidCraftingRecipeHandler {
                 resultEntity.getPersistentData().putDouble("TargetY", targetY);
 
                 level.addFreshEntity(resultEntity);
+                consumeIngredient(nearbyItems, craftingRecipe);
             }
 
             item.discard();
@@ -113,6 +118,56 @@ public class VoidCraftingRecipeHandler {
                 center.getBoundingBox().inflate(2),
                 e -> e != center && !e.getPersistentData().getBoolean("IsResult")
         );
+    }
+
+
+    private static void spawnParticles(Level level, double x, double y, double z) {
+        if (level instanceof ServerLevel serverLevel) {
+            for (int i = 0; i < 20; i++) {
+                double angle = (i / 20.0) * Math.PI * 2;
+                double offsetX = Math.cos(angle) * 0.5;
+                double offsetZ = Math.sin(angle) * 0.5;
+
+                serverLevel.sendParticles(
+                        ParticleTypes.PORTAL,
+                        x + offsetX,
+                        y + 0.5,
+                        z + offsetZ,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0.1
+                );
+            }
+
+            for (int i = 0; i < 10; i++) {
+                serverLevel.sendParticles(
+                        ParticleTypes.ENCHANT,
+                        x + (level.random.nextDouble() - 0.5),
+                        y,
+                        z + (level.random.nextDouble() - 0.5),
+                        2,
+                        0.1,
+                        0.1,
+                        0.1,
+                        0.05
+                );
+            }
+        }
+    }
+
+    private static void consumeIngredient(List<ItemEntity> items, VoidCraftingRecipe recipe) {
+        for (ItemEntity itemEntity : items) {
+            ItemStack stack = itemEntity.getItem();
+            stack.shrink(1);
+
+            if (stack.isEmpty()) {
+                itemEntity.discard();
+            } else {
+                itemEntity.setItem(stack);
+            }
+        }
     }
 
     private static RecipeWrapper createRecipeWrapper(List<ItemEntity> items) {
