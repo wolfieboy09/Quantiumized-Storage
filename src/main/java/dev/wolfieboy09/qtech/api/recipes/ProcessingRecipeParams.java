@@ -49,7 +49,7 @@ public class ProcessingRecipeParams {
         this.itemResults = NonNullList.create();
         this.fluidResults = NonNullList.create();
         this.gasResults = NonNullList.create();
-        this.processingDuration = 0;
+        this.processingDuration = 1;
         this.energyCost = 0;
         this.requiredCleanRoom = CleanroomCondition.NONE;
     }
@@ -60,7 +60,7 @@ public class ProcessingRecipeParams {
                 TriEitherCodecs.either(Ingredient.CODEC, SizedFluidIngredient.FLAT_CODEC, SizedGasIngredient.FLAT_CODEC).listOf().fieldOf("ingredients").forGetter(ProcessingRecipeParams::ingredients),
                 TriEitherCodecs.either(ItemStackChanceResult.CODEC, FluidStackChanceResult.CODEC, GasStackChanceResult.CODEC).listOf().fieldOf("results").forGetter(ProcessingRecipeParams::results),
                 ExtraCodecs.POSITIVE_INT.optionalFieldOf("energy", 0).forGetter(ProcessingRecipeParams::energyCost),
-                ExtraCodecs.POSITIVE_INT.fieldOf("processing_time").forGetter(ProcessingRecipeParams::processingDuration),
+                ExtraCodecs.POSITIVE_INT.optionalFieldOf("processing_time", 1).forGetter(ProcessingRecipeParams::processingDuration),
                 CleanroomCondition.CODEC.optionalFieldOf("cleanroom_condition", CleanroomCondition.NONE).forGetter(ProcessingRecipeParams::requiredCleanRoom)
         ).apply(instance, (ingredients, results, energyCost, processingDuration, cleanroomCondition) -> {
             P params = factory.get();
