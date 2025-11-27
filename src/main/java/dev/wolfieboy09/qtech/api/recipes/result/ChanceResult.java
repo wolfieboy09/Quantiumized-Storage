@@ -45,11 +45,11 @@ public abstract class ChanceResult<T> {
         return random.nextFloat() < this.chance;
     }
 
-    public @Nullable Optional<T> getIfRolled(RandomSource random) {
+    public Optional<T> getIfRolled(RandomSource random) {
         return roll(random) ? Optional.of(copyResult()) : Optional.empty();
     }
 
-    public @Nullable Optional<T> getIfRolled() {
+    public Optional<T> getIfRolled() {
         return roll(RandomSource.create()) ? Optional.of(copyResult()) : Optional.empty();
     }
 
