@@ -34,7 +34,7 @@ public class DiskAssemblerStandardRecipe extends ProcessingRecipe<RecipeWrapper,
     @Override
     protected ProcessingRecipeConstrains getRecipeConstrains() {
         return ProcessingRecipeConstrains.builder()
-                .maxItemIO(3, 1)
+                .maxItemIO(4, 1)
                 .build();
     }
 
