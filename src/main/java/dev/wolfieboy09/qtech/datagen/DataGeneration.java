@@ -33,6 +33,8 @@ public class DataGeneration {
         //generator.addProvider(event.includeServer(), new QTRecipeProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new QTMultiblockProvider(output));
 
+        //TODO Get the data generator to not complain about these two recipe generators???
         generator.addProvider(event.includeServer(), new QTDiskAssemblyProvider(output, lookupProvider));
+        //generator.addProvider(event.includeServer(), new QTVoidCraftingProvider(output, lookupProvider));
     }
 }
