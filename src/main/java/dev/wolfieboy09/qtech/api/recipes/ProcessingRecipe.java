@@ -16,6 +16,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
@@ -27,7 +28,7 @@ import java.util.Optional;
 @NothingNullByDefault
 public abstract class ProcessingRecipe<I extends RecipeInput, P extends ProcessingRecipeParams> implements Recipe<I> {
     protected P params;
-    protected NonNullList<Ingredient> ingredients;
+    protected NonNullList<SizedIngredient> ingredients;
     protected NonNullList<SizedFluidIngredient> fluidIngredients;
     protected NonNullList<SizedGasIngredient> gasIngredients;
 
@@ -67,9 +68,19 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
         return this.params;
     }
 
+    /**
+     * Use {@link ProcessingRecipe#getItemIngredients()} to get a {@link NonNullList} of {@link SizedIngredient} instead
+     */
     @Override
+    @Deprecated
     public NonNullList<Ingredient> getIngredients() {
-        return ingredients;
+        NonNullList<Ingredient> stuff = NonNullList.create();
+        this.ingredients.forEach(e -> stuff.add(e.ingredient()));
+        return stuff;
+    }
+
+    public NonNullList<SizedIngredient> getItemIngredients() {
+        return this.ingredients;
     }
 
     public NonNullList<SizedFluidIngredient> getFluidIngredients() {

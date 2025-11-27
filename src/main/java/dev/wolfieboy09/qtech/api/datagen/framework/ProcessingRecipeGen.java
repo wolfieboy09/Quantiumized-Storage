@@ -10,8 +10,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -27,7 +27,7 @@ public abstract class ProcessingRecipeGen<P extends ProcessingRecipeParams, R ex
         GeneratedRecipe generatedRecipe = c -> {
             ItemLike itemLike = singleIngredient.get();
             transform
-                    .apply(getBuilder(ResourceLocation.fromNamespaceAndPath(namespace, getKeyOrThrow(itemLike.asItem()).getPath())).withItemIngredients(Ingredient.of(itemLike)))
+                    .apply(getBuilder(ResourceLocation.fromNamespaceAndPath(namespace, getKeyOrThrow(itemLike.asItem()).getPath())).withItemIngredients(SizedIngredient.of(itemLike, 1)))
                     .build(c);
         };
         all.add(generatedRecipe);

@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 @NothingNullByDefault
@@ -41,7 +42,7 @@ public class DiskAssemblerStandardRecipe extends ProcessingRecipe<RecipeWrapper,
     @Override
     public boolean matches(RecipeWrapper input, Level level) {
         boolean extrasMatch = !getExtras().isEmpty();
-        boolean ingredientsMatch = !getIngredients().isEmpty();
+        boolean ingredientsMatch = !getItemIngredients().isEmpty();
         for (Ingredient extra : getExtras()) {
             if (!extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_1))
                     && !extra.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.EXTRA_SLOT_2))
@@ -51,7 +52,7 @@ public class DiskAssemblerStandardRecipe extends ProcessingRecipe<RecipeWrapper,
             }
         }
 
-        for (Ingredient main : getIngredients()) {
+        for (SizedIngredient main : getItemIngredients()) {
             if (!main.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_1))
                     && !main.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_2))
                     && !main.test(input.getItem(DiskAssemblerBlockEntity.DiskAssemblerSlot.MAIN_SLOT_3))) {

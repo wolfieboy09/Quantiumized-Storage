@@ -16,12 +16,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
@@ -48,11 +49,11 @@ public abstract class ProcessingRecipeBuilder<P extends ProcessingRecipeParams, 
 
     public abstract S self();
 
-    public S withItemIngredients(Ingredient... ingredients) {
-        return withItemIngredients(NonNullList.of(Ingredient.EMPTY, ingredients));
+    public S withItemIngredients(SizedIngredient... ingredients) {
+        return withItemIngredients(NonNullList.of(SizedIngredient.of(Items.AIR, 1), ingredients));
     }
 
-    public S withItemIngredients(NonNullList<Ingredient> ingredients) {
+    public S withItemIngredients(NonNullList<SizedIngredient> ingredients) {
         params.ingredients = ingredients;
         return self();
     }
@@ -140,14 +141,22 @@ public abstract class ProcessingRecipeBuilder<P extends ProcessingRecipeParams, 
     }
 
     public S require(TagKey<Item> tag) {
-        return require(Ingredient.of(tag));
+        return require(SizedIngredient.of(tag, 1));
     }
 
     public S require(ItemLike item) {
-        return require(Ingredient.of(item));
+        return require(SizedIngredient.of(item, 1));
     }
 
-    public S require(Ingredient ingredient) {
+    public S require(TagKey<Item> tag, int count, byte... dummy) {
+        return require(SizedIngredient.of(tag, count));
+    }
+
+    public S require(ItemLike item, int count) {
+        return require(SizedIngredient.of(item, count));
+    }
+
+    public S require(SizedIngredient ingredient) {
         params.ingredients.add(ingredient);
         return self();
     }

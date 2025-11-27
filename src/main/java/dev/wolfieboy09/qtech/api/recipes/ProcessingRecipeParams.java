@@ -15,7 +15,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
@@ -30,7 +30,7 @@ public class ProcessingRecipeParams {
     public static MapCodec<ProcessingRecipeParams> CODEC = codec(ProcessingRecipeParams::new);
     public static StreamCodec<RegistryFriendlyByteBuf, ProcessingRecipeParams> STREAM_CODEC = streamCodec(ProcessingRecipeParams::new);
 
-    protected NonNullList<Ingredient> ingredients;
+    protected NonNullList<SizedIngredient> ingredients;
     protected NonNullList<SizedFluidIngredient> fluidIngredients;
     protected NonNullList<SizedGasIngredient> gasIngredients;
 
@@ -57,7 +57,7 @@ public class ProcessingRecipeParams {
     @Contract("_ -> new")
     protected static <P extends ProcessingRecipeParams> @NotNull MapCodec<P> codec(Supplier<P> factory) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                TriEitherCodecs.either(Ingredient.CODEC, SizedFluidIngredient.FLAT_CODEC, SizedGasIngredient.FLAT_CODEC).listOf().fieldOf("ingredients").forGetter(ProcessingRecipeParams::ingredients),
+                TriEitherCodecs.either(SizedIngredient.FLAT_CODEC, SizedFluidIngredient.FLAT_CODEC, SizedGasIngredient.FLAT_CODEC).listOf().fieldOf("ingredients").forGetter(ProcessingRecipeParams::ingredients),
                 TriEitherCodecs.either(ItemStackChanceResult.CODEC, FluidStackChanceResult.CODEC, GasStackChanceResult.CODEC).listOf().fieldOf("results").forGetter(ProcessingRecipeParams::results),
                 ExtraCodecs.POSITIVE_INT.optionalFieldOf("energy", 0).forGetter(ProcessingRecipeParams::energyCost),
                 ExtraCodecs.POSITIVE_INT.optionalFieldOf("processing_time", 1).forGetter(ProcessingRecipeParams::processingDuration),
@@ -95,7 +95,7 @@ public class ProcessingRecipeParams {
 
     @MustBeInvokedByOverriders
     protected void encode(RegistryFriendlyByteBuf buffer) {
-        NonNullListStreamCodec.nonNullList(Ingredient.CONTENTS_STREAM_CODEC).encode(buffer, ingredients);
+        NonNullListStreamCodec.nonNullList(SizedIngredient.STREAM_CODEC).encode(buffer, ingredients);
         NonNullListStreamCodec.nonNullList(SizedFluidIngredient.STREAM_CODEC).encode(buffer, fluidIngredients);
         NonNullListStreamCodec.nonNullList(SizedGasIngredient.STREAM_CODEC).encode(buffer, gasIngredients);
 
@@ -108,7 +108,7 @@ public class ProcessingRecipeParams {
 
     @MustBeInvokedByOverriders
     protected void decode(RegistryFriendlyByteBuf buffer) {
-        this.ingredients = NonNullListStreamCodec.nonNullList(Ingredient.CONTENTS_STREAM_CODEC).decode(buffer);
+        this.ingredients = NonNullListStreamCodec.nonNullList(SizedIngredient.STREAM_CODEC).decode(buffer);
         this.fluidIngredients = NonNullListStreamCodec.nonNullList(SizedFluidIngredient.STREAM_CODEC).decode(buffer);
         this.gasIngredients = NonNullListStreamCodec.nonNullList(SizedGasIngredient.STREAM_CODEC).decode(buffer);
 
@@ -119,8 +119,8 @@ public class ProcessingRecipeParams {
         this.requiredCleanRoom = CleanroomCondition.STREAM_CODEC.decode(buffer);
     }
 
-    protected final List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>> ingredients() {
-        List<TriEither<Ingredient, SizedFluidIngredient, SizedGasIngredient>> ingredients =
+    protected final List<TriEither<SizedIngredient, SizedFluidIngredient, SizedGasIngredient>> ingredients() {
+        List<TriEither<SizedIngredient, SizedFluidIngredient, SizedGasIngredient>> ingredients =
                 new ArrayList<>(this.ingredients.size() + this.fluidIngredients.size() + this.gasIngredients.size());
         this.ingredients.forEach(ingredient -> ingredients.add(TriEither.left(ingredient)));
         this.fluidIngredients.forEach(ingredient -> ingredients.add(TriEither.middle(ingredient)));

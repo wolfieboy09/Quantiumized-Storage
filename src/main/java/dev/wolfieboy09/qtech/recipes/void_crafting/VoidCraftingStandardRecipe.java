@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class VoidCraftingStandardRecipe extends ProcessingRecipe<RecipeWrapper, 
 
         List<ItemStack> remainingItems = new ArrayList<>(availableItems);
 
-        for (Ingredient ingredient : ingredients) {
+        for (SizedIngredient ingredient : ingredients) {
             boolean found = false;
 
             for (int i = 0; i < remainingItems.size(); i++) {

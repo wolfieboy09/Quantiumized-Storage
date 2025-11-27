@@ -14,6 +14,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
@@ -160,7 +161,8 @@ public class VoidCraftingRecipeHandler {
     private static void consumeIngredient(List<ItemEntity> items, VoidCraftingRecipe recipe) {
         for (ItemEntity itemEntity : items) {
             ItemStack stack = itemEntity.getItem();
-            stack.shrink(1);
+            int idx = recipe.getItemIngredients().indexOf(SizedIngredient.of(stack.getItem(), stack.getCount()));
+            stack.shrink(recipe.getItemIngredients().get(idx).count());
 
             if (stack.isEmpty()) {
                 itemEntity.discard();

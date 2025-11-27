@@ -21,13 +21,13 @@ public class DiskAssemblerCategory extends QTRecipeCategory<DiskAssemblerRecipe>
 
     @Override
     protected void setRecipe(IRecipeLayoutBuilder builder, DiskAssemblerRecipe recipe, IFocusGroup focuses) {
-        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+        for (int i = 0; i < recipe.getItemIngredients().size(); i++) {
             if (i == 0) {
-                builder.addInputSlot(13, 24).addIngredients(recipe.getIngredients().get(i));
+                builder.addInputSlot(13, 24).addIngredients(recipe.getItemIngredients().get(i).ingredient());
             } else if (i == 1) {
-                builder.addInputSlot(13, 42).addIngredients(recipe.getIngredients().get(i));
+                builder.addInputSlot(13, 42).addIngredients(recipe.getItemIngredients().get(i).ingredient());
             } else {
-                builder.addInputSlot(31, 33).addIngredients(recipe.getIngredients().get(i));
+                builder.addInputSlot(31, 33).addIngredients(recipe.getItemIngredients().get(i).ingredient());
             }
         }
 
