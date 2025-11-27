@@ -10,10 +10,15 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NothingNullByDefault
 public class VoidCraftingStandardRecipe extends ProcessingRecipe<RecipeWrapper, VoidCraftingRecipeParams> {
@@ -34,6 +39,34 @@ public class VoidCraftingStandardRecipe extends ProcessingRecipe<RecipeWrapper, 
 
     @Override
     public boolean matches(RecipeWrapper recipeWrapper, Level level) {
+        if (this.ingredients.isEmpty()) return false;
+
+        List<ItemStack> availableItems = new ArrayList<>();
+        for (int i = 0; i < recipeWrapper.size(); i++) {
+            ItemStack stack = recipeWrapper.getItem(i);
+            if (!stack.isEmpty()) {
+                availableItems.add(stack);
+            }
+        }
+
+        if (availableItems.size() != this.ingredients.size()) return false;
+
+        List<ItemStack> remainingItems = new ArrayList<>(availableItems);
+
+        for (Ingredient ingredient : ingredients) {
+            boolean found = false;
+
+            for (int i = 0; i < remainingItems.size(); i++) {
+                if (ingredient.test(remainingItems.get(i))) {
+                    remainingItems.remove(i);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) return false;
+        }
+
         return true;
     }
 
