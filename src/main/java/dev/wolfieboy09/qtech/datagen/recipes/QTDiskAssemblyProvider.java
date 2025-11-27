@@ -12,7 +12,7 @@ import net.minecraft.data.PackOutput;
 
 import java.util.concurrent.CompletableFuture;
 
-public class QTDiskAssemblyProvider extends DiskAssemblyRecipeGen<DiskAssemblerRecipeParams, DiskAssemblerRecipe, DiskAssemblerStandardRecipe.Builder<DiskAssemblerRecipe>> {
+public class QTDiskAssemblyProvider extends DiskAssemblyRecipeGen {
     public QTDiskAssemblyProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, QuantiumizedTech.MOD_ID);
     }

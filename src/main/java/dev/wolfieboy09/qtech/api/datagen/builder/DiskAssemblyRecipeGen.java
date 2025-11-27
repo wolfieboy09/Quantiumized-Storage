@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.concurrent.CompletableFuture;
 
 @NothingNullByDefault
-public abstract class DiskAssemblyRecipeGen<P extends ProcessingRecipeParams, R extends ProcessingRecipe<?, P>, B extends ProcessingRecipeBuilder<P, R, B>> extends ProcessingRecipeGen<DiskAssemblerRecipeParams, DiskAssemblerRecipe, DiskAssemblerStandardRecipe.Builder<DiskAssemblerRecipe>> {
+public abstract class DiskAssemblyRecipeGen extends ProcessingRecipeGen<DiskAssemblerRecipeParams, DiskAssemblerRecipe, DiskAssemblerStandardRecipe.Builder<DiskAssemblerRecipe>> {
     public DiskAssemblyRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, String namespace) {
         super(output, registries, namespace);
     }
