@@ -9,6 +9,9 @@ import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipe
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingRecipe;
+import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingRecipeParams;
+import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingStandardRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +30,8 @@ import java.util.function.Supplier;
 @NothingNullByDefault
 @SuppressWarnings("unchecked")
 public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
-    DISK_ASSEMBLY(DiskAssemblerRecipe::new);
+    DISK_ASSEMBLY(DiskAssemblerRecipe::new),
+    VOID_CRAFTING(VoidCraftingRecipe::new);
 
     public final ResourceLocation id;
     public final Supplier<RecipeSerializer<?>> serializerSupplier;
@@ -65,6 +69,10 @@ public enum QTRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
 
     QTRecipeTypes(ProcessingRecipe.Factory<DiskAssemblerRecipeParams, ? extends DiskAssemblerStandardRecipe> processingFactory) {
         this(() -> new DiskAssemblerStandardRecipe.Serializer<>(processingFactory));
+    }
+
+    QTRecipeTypes(ProcessingRecipe.Factory<VoidCraftingRecipeParams, ? extends VoidCraftingStandardRecipe> processingFactory, byte... dummy) {
+        this(() -> new VoidCraftingStandardRecipe.Serializer<>(processingFactory));
     }
 
     @ApiStatus.Internal
