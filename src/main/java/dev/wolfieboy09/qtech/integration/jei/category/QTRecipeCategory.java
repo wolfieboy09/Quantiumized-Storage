@@ -109,7 +109,7 @@ public abstract class QTRecipeCategory<T extends Recipe<?>> implements IRecipeCa
         return BASIC_SLOT;
     }
 
-    public <C extends ChanceResult<?>> IDrawable getRenderedSlot(ChanceResult<C> output) {
+    public IDrawable getRenderedSlot(ChanceResult<?> output) {
         return getRenderedSlot(output.getChance());
     }
 
