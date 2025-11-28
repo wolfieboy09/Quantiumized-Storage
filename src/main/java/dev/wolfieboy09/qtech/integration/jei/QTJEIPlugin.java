@@ -12,7 +12,7 @@ import dev.wolfieboy09.qtech.integration.jei.category.recipes.DiskAssemblerCateg
 import dev.wolfieboy09.qtech.integration.jei.category.recipes.VoidCraftingCategory;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientHelper;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientRenderer;
-import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingRecipe;
+import dev.wolfieboy09.qtech.api.recipes.data.void_crafting.VoidCraftingRecipe;
 import dev.wolfieboy09.qtech.registries.QTBlocks;
 import dev.wolfieboy09.qtech.registries.QTGasses;
 import dev.wolfieboy09.qtech.registries.QTGuiTextures;

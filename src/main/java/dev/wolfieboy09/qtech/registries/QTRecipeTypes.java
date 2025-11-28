@@ -9,9 +9,9 @@ import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerRecipe
 import dev.wolfieboy09.qtech.api.recipes.data.disk_assembler.DiskAssemblerStandardRecipe;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
-import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingRecipe;
-import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingRecipeParams;
-import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingStandardRecipe;
+import dev.wolfieboy09.qtech.api.recipes.data.void_crafting.VoidCraftingRecipe;
+import dev.wolfieboy09.qtech.api.recipes.data.void_crafting.VoidCraftingRecipeParams;
+import dev.wolfieboy09.qtech.api.recipes.data.void_crafting.VoidCraftingStandardRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;

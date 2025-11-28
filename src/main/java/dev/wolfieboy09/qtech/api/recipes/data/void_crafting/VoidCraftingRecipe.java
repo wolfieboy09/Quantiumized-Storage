@@ -1,4 +1,4 @@
-package dev.wolfieboy09.qtech.recipes.void_crafting;
+package dev.wolfieboy09.qtech.api.recipes.data.void_crafting;
 
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 
