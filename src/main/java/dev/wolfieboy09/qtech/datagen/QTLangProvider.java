@@ -63,6 +63,7 @@ public class QTLangProvider extends LanguageProvider {
         toGenerate.put("cleanroom.qtech.clean_status", "Status: %s");
 
         toGenerate.put("cleanroom.qtech.condition", "Condition: %s");
+        toGenerate.put("qtech.recipe.processing.chance", "%1$s%% Chance");
 
         for (CleanroomCondition condition : CleanroomCondition.values()) {
             toGenerate.put(condition.getTranslationKey(), NamingUtil.toHumanReadable(condition.getSerializedName()));
