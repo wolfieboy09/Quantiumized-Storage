@@ -5,13 +5,15 @@ import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.function.Consumer;
+
 @NothingNullByDefault
 public enum QTGuiTextures {
     DISK_ASSEMBLER_GUI("disk_assembler", 256, 256),
 
     JEI_DISK_ASSEMBLER("jei/disk_assembler", 169, 73),
-    JEI_SLOT("jei/slot", 18, 18),
-    JEI_CHANCE_SLOT("jei/chance_slot", 18, 18);
+    JEI_SLOT("jei/icons", 18, 18),
+    JEI_CHANCE_SLOT("jei/icons", 19, 0, 18, 18);
 
     public final ResourceLocation location;
     private final int width;
