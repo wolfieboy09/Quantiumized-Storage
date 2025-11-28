@@ -7,7 +7,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -29,6 +28,9 @@ public abstract class ChanceResult<T> {
         this(result, 1);
     }
 
+    /**
+     * Gets the result as-is, no rolling at all
+     */
     public T getResult() {
         return this.result;
     }
