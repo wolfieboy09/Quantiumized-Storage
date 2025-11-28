@@ -35,9 +35,9 @@ public class VoidCraftingRecipeHandler {
 
         DimensionType type = level.dimensionType();
 
-        if (item.getPersistentData().getBoolean("IsResult")) {
+        if (item.getPersistentData().getBoolean("qtech_IsResult")) {
 
-            double targetY = item.getPersistentData().getDouble("TargetY");
+            double targetY = item.getPersistentData().getDouble("qtech_TargetY");
 
             if (item.getY() < targetY) {
                 item.setDeltaMovement(0, 0.05, 0);
@@ -48,8 +48,8 @@ public class VoidCraftingRecipeHandler {
             return;
         }
 
-        if (!item.getPersistentData().contains("BaseY")) {
-            item.getPersistentData().putDouble("BaseY", item.getY());
+        if (!item.getPersistentData().contains("qtech_BaseY")) {
+            item.getPersistentData().putDouble("qtech_BaseY", item.getY());
         }
 
         if (item.getY() <= type.minY()) {
@@ -58,11 +58,10 @@ public class VoidCraftingRecipeHandler {
     }
 
     private static void convertItem(ItemEntity item, Level level) {
-        double baseY = item.getPersistentData().getDouble("BaseY");
+        double baseY = item.getPersistentData().getDouble("qtech_BaseY");
         double targetY = baseY + 0.5;
 
         List<ItemEntity> nearbyItems = getNearbyItems(level, item);
-        // Add the current item to the list so the recipe wrapper can get that as an ingredient
         nearbyItems.add(item);
         RecipeWrapper recipeWrapper = createRecipeWrapper(nearbyItems);
 
@@ -73,24 +72,73 @@ public class VoidCraftingRecipeHandler {
 
         // If the dimensions are empty, use that as a wildcard, otherise check
         if (craftingRecipe.getDimensions().isEmpty() || craftingRecipe.getDimensions().contains(level.dimension().location())) {
+            int craftCount = calculateMaxCrafts(nearbyItems, craftingRecipe);
+
+            if (craftCount <= 0) return;
             spawnParticles(level, item.getX(), item.getY(), item.getZ());
 
             for (ItemStackChanceResult chanceResult : craftingRecipe.getRollableResults()) {
                 Optional<ItemStack> rolledResult = chanceResult.getIfRolled();
                 if (rolledResult.isEmpty()) continue;
 
-                ItemEntity resultEntity = getResultEntity(item, level, rolledResult.get());
+                ItemStack resultStack = rolledResult.get().copy();
+                resultStack.setCount(resultStack.getCount() * craftCount);
 
-                resultEntity.getPersistentData().putBoolean("IsResult", true);
-                resultEntity.getPersistentData().putDouble("TargetY", targetY);
+                ItemEntity resultEntity = getResultEntity(item, level, resultStack);
+                resultEntity.getPersistentData().putBoolean("qtech_IsResult", true);
+                resultEntity.getPersistentData().putDouble("qtech_TargetY", targetY);
 
                 level.addFreshEntity(resultEntity);
-                consumeIngredient(nearbyItems, craftingRecipe);
             }
 
-            item.discard();
-            for (ItemEntity nearbyItem : nearbyItems) {
-                nearbyItem.discard();
+            consumeIngredients(nearbyItems, craftingRecipe, craftCount);
+        }
+    }
+
+    private static int calculateMaxCrafts(List<ItemEntity> items, VoidCraftingRecipe recipe) {
+        int maxCrafts = Integer.MAX_VALUE;
+
+        for (SizedIngredient sizedIngredient : recipe.getItemIngredients()) {
+            if (sizedIngredient.ingredient().isEmpty()) continue;
+
+            int requiredCount = sizedIngredient.count();
+
+            int availableCount = 0;
+            for (ItemEntity itemEntity : items) {
+                if (sizedIngredient.test(itemEntity.getItem())) {
+                    availableCount += itemEntity.getItem().getCount();
+                }
+            }
+
+            int possibleCrafts = availableCount / requiredCount;
+            maxCrafts = Math.min(maxCrafts, possibleCrafts);
+        }
+
+        return maxCrafts == Integer.MAX_VALUE ? 0 : maxCrafts;
+    }
+
+    private static void consumeIngredients(List<ItemEntity> items, VoidCraftingRecipe recipe, int craftCount) {
+        for (SizedIngredient sizedIngredient : recipe.getItemIngredients()) {
+            if (sizedIngredient.ingredient().isEmpty()) continue;
+
+            int requiredPerCraft = sizedIngredient.count();
+            int toConsume = requiredPerCraft * craftCount;
+
+            for (ItemEntity itemEntity : items) {
+                if (toConsume <= 0) break;
+
+                ItemStack stack = itemEntity.getItem();
+                if (sizedIngredient.test(stack)) {
+                    int consumed = Math.min(stack.getCount(), toConsume);
+                    stack.shrink(consumed);
+                    toConsume -= consumed;
+
+                    if (stack.isEmpty()) {
+                        itemEntity.discard();
+                    } else {
+                        itemEntity.setItem(stack);
+                    }
+                }
             }
         }
     }
@@ -99,7 +147,7 @@ public class VoidCraftingRecipeHandler {
         ItemEntity resultEntity = new ItemEntity(
                 level,
                 item.getX(),
-                item.getY() + 0.05, // Prevent the void from deleting the result, so raise it up a bit
+                item.getY() + 0.05,
                 item.getZ(),
                 rolledResult,
                 0,
@@ -117,10 +165,9 @@ public class VoidCraftingRecipeHandler {
         return level.getEntitiesOfClass(
                 ItemEntity.class,
                 center.getBoundingBox().inflate(2),
-                e -> e != center && !e.getPersistentData().getBoolean("IsResult")
+                e -> e != center && !e.getPersistentData().getBoolean("qtech_IsResult")
         );
     }
-
 
     private static void spawnParticles(Level level, double x, double y, double z) {
         if (level instanceof ServerLevel serverLevel) {
@@ -154,20 +201,6 @@ public class VoidCraftingRecipeHandler {
                         0.1,
                         0.05
                 );
-            }
-        }
-    }
-
-    private static void consumeIngredient(List<ItemEntity> items, VoidCraftingRecipe recipe) {
-        for (ItemEntity itemEntity : items) {
-            ItemStack stack = itemEntity.getItem();
-            int idx = recipe.getItemIngredients().indexOf(SizedIngredient.of(stack.getItem(), stack.getCount()));
-            stack.shrink(recipe.getItemIngredients().get(idx).count());
-
-            if (stack.isEmpty()) {
-                itemEntity.discard();
-            } else {
-                itemEntity.setItem(stack);
             }
         }
     }
