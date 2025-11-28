@@ -1,7 +1,7 @@
 package dev.wolfieboy09.qtech.integration.jei.category.recipes;
 
-import dev.wolfieboy09.qtech.integration.jei.category.QTRecipeCategory;
 import dev.wolfieboy09.qtech.api.recipes.data.void_crafting.VoidCraftingRecipe;
+import dev.wolfieboy09.qtech.integration.jei.category.QTRecipeCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;

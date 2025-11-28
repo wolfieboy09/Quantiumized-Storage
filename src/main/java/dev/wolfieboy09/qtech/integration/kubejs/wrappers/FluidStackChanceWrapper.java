@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import dev.latvian.mods.kubejs.fluid.FluidLike;
 import dev.latvian.mods.kubejs.fluid.FluidWrapper;
 import dev.latvian.mods.kubejs.plugin.builtin.wrapper.StringUtilsWrapper;
-import dev.latvian.mods.kubejs.util.RegistryAccessContainer;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
