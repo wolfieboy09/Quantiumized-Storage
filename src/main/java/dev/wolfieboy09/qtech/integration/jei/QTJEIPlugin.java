@@ -6,10 +6,13 @@ import dev.wolfieboy09.qtech.api.registry.QTRegistries;
 import dev.wolfieboy09.qtech.api.registry.gas.Gas;
 import dev.wolfieboy09.qtech.api.util.ResourceHelper;
 import dev.wolfieboy09.qtech.block.disk_assembler.DiskAssemblerRecipe;
+import dev.wolfieboy09.qtech.integration.jei.category.EmptyBackground;
 import dev.wolfieboy09.qtech.integration.jei.category.QTRecipeCategory;
 import dev.wolfieboy09.qtech.integration.jei.category.recipes.DiskAssemblerCategory;
+import dev.wolfieboy09.qtech.integration.jei.category.recipes.VoidCraftingCategory;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientHelper;
 import dev.wolfieboy09.qtech.integration.jei.modifiers.GasIngredientRenderer;
+import dev.wolfieboy09.qtech.recipes.void_crafting.VoidCraftingRecipe;
 import dev.wolfieboy09.qtech.registries.QTBlocks;
 import dev.wolfieboy09.qtech.registries.QTGasses;
 import dev.wolfieboy09.qtech.registries.QTGuiTextures;
@@ -24,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
@@ -80,6 +84,13 @@ public class QTJEIPlugin implements IModPlugin {
                 .background(asDrawable(QTGuiTextures.JEI_DISK_ASSEMBLER))
                 .catalystStack(() -> new ItemStack(QTBlocks.DISK_ASSEMBLER.get()))
                 .build(ResourceHelper.asResource("disk_assembly"), DiskAssemblerCategory::new);
+
+        QTRecipeCategory<?>
+                void_crafting = builder(VoidCraftingRecipe.class)
+                .addTypedRecipes(QTRecipeTypes.VOID_CRAFTING)
+                .background(new EmptyBackground(150, 100))
+                .catalystStack(() -> new ItemStack(Items.ECHO_SHARD))
+                .build(ResourceHelper.asResource("void_crafting"), VoidCraftingCategory::new);
     }
 
 
