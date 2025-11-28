@@ -100,12 +100,12 @@ public class VoidCraftingStandardRecipe extends ProcessingRecipe<RecipeWrapper, 
 
         public Builder<R> dimension(ResourceLocation dimensionType) {
             params.dimensions.add(dimensionType);
-            return this;
+            return self();
         }
 
         public Builder<R> dimensions(NonNullList<ResourceLocation> dimensions) {
             params.dimensions = dimensions;
-            return this;
+            return self();
         }
     }
 
