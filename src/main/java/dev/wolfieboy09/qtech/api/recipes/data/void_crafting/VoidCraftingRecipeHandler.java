@@ -70,59 +70,41 @@ public class VoidCraftingRecipeHandler {
         if (recipe.isEmpty()) return;
         VoidCraftingRecipe craftingRecipe = recipe.get().value();
 
-        // If the dimensions are empty, use that as a wildcard, otherise check
+        // If the dimensions are empty, use that as a wildcard, otherwise check
         if (craftingRecipe.getDimensions().isEmpty() || craftingRecipe.getDimensions().contains(level.dimension().location())) {
-            int craftCount = calculateMaxCrafts(nearbyItems, craftingRecipe);
-
-            if (craftCount <= 0) return;
-            spawnParticles(level, item.getX(), item.getY(), item.getZ());
+            boolean anyResultsProduced = false;
 
             for (ItemStackChanceResult chanceResult : craftingRecipe.getRollableResults()) {
-                Optional<ItemStack> rolledResult = chanceResult.getIfRolled();
-                if (rolledResult.isEmpty()) continue;
+                Optional<ItemStack> rolledResult = chanceResult.getIfRolled(level);
 
-                ItemStack resultStack = rolledResult.get().copy();
-                resultStack.setCount(resultStack.getCount() * craftCount);
+                if (rolledResult.isPresent()) {
+                    anyResultsProduced = true;
+                    ItemStack resultStack = rolledResult.get().copy();
 
-                ItemEntity resultEntity = getResultEntity(item, level, resultStack);
-                resultEntity.getPersistentData().putBoolean("qtech_IsResult", true);
-                resultEntity.getPersistentData().putDouble("qtech_TargetY", targetY);
+                    ItemEntity resultEntity = getResultEntity(item, level, resultStack);
+                    resultEntity.getPersistentData().putBoolean("qtech_IsResult", true);
+                    resultEntity.getPersistentData().putDouble("qtech_TargetY", targetY);
 
-                level.addFreshEntity(resultEntity);
-            }
-
-            consumeIngredients(nearbyItems, craftingRecipe, craftCount);
-        }
-    }
-
-    private static int calculateMaxCrafts(List<ItemEntity> items, VoidCraftingRecipe recipe) {
-        int maxCrafts = Integer.MAX_VALUE;
-
-        for (SizedIngredient sizedIngredient : recipe.getItemIngredients()) {
-            if (sizedIngredient.ingredient().isEmpty()) continue;
-
-            int requiredCount = sizedIngredient.count();
-
-            int availableCount = 0;
-            for (ItemEntity itemEntity : items) {
-                if (sizedIngredient.test(itemEntity.getItem())) {
-                    availableCount += itemEntity.getItem().getCount();
+                    level.addFreshEntity(resultEntity);
                 }
             }
 
-            int possibleCrafts = availableCount / requiredCount;
-            maxCrafts = Math.min(maxCrafts, possibleCrafts);
-        }
+            if (anyResultsProduced) {
+                spawnParticles(level, item.getX(), item.getY(), item.getZ());
+            } else {
+                spawnFailedParticles(level, item.getX(), item.getY(), item.getZ());
+            }
 
-        return maxCrafts == Integer.MAX_VALUE ? 0 : maxCrafts;
+            // Always consume ingredients after attempting the craft
+            consumeIngredients(nearbyItems, craftingRecipe);
+        }
     }
 
-    private static void consumeIngredients(List<ItemEntity> items, VoidCraftingRecipe recipe, int craftCount) {
+    private static void consumeIngredients(List<ItemEntity> items, VoidCraftingRecipe recipe) {
         for (SizedIngredient sizedIngredient : recipe.getItemIngredients()) {
             if (sizedIngredient.ingredient().isEmpty()) continue;
 
-            int requiredPerCraft = sizedIngredient.count();
-            int toConsume = requiredPerCraft * craftCount;
+            int toConsume = sizedIngredient.count();
 
             for (ItemEntity itemEntity : items) {
                 if (toConsume <= 0) break;
@@ -167,6 +149,55 @@ public class VoidCraftingRecipeHandler {
                 center.getBoundingBox().inflate(2),
                 e -> e != center && !e.getPersistentData().getBoolean("qtech_IsResult")
         );
+    }
+
+    private static void spawnFailedParticles(Level level, double x, double y, double z) {
+        if (level instanceof ServerLevel serverLevel) {
+            for (int i = 0; i < 25; i++) {
+                double angle = (i / 25.0) * Math.PI * 3;
+                double height = (i / 25.0) * 0.5;
+                double radius = 0.4 - (i / 25.0) * 0.3;
+
+                double offsetX = Math.cos(angle) * radius;
+                double offsetZ = Math.sin(angle) * radius;
+
+                serverLevel.sendParticles(
+                        ParticleTypes.SOUL,
+                        x + offsetX,
+                        y + 0.5 - height,
+                        z + offsetZ,
+                        1,
+                        0,
+                        -0.02,
+                        0,
+                        0.01
+                );
+            }
+
+            serverLevel.sendParticles(
+                    ParticleTypes.WARPED_SPORE,
+                    x,
+                    y + 0.3,
+                    z,
+                    20,
+                    0.3,
+                    0.2,
+                    0.3,
+                    0.02
+            );
+
+            serverLevel.sendParticles(
+                    ParticleTypes.POOF,
+                    x,
+                    y + 0.2,
+                    z,
+                    5,
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.01
+            );
+        }
     }
 
     private static void spawnParticles(Level level, double x, double y, double z) {
