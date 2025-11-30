@@ -21,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
+import java.util.List;
+
 @NothingNullByDefault
 public class DiskAssemblerStandardRecipe extends ProcessingRecipe<RecipeWrapper, DiskAssemblerRecipeParams> {
 
@@ -37,6 +39,18 @@ public class DiskAssemblerStandardRecipe extends ProcessingRecipe<RecipeWrapper,
         return ProcessingRecipeConstrains.builder()
                 .maxItemIO(4, 1)
                 .build();
+    }
+
+    //TODO Be able to extends ProcessingRecipeConstraints
+    @Override
+    public List<String> validate() {
+        List<String> errors = super.validate();
+        int extraIngredients = getExtras().size();
+        if (extraIngredients > 4) {
+            errors.add("Recipe has more extra item inputs (" + extraIngredients + ") than supported (4).");
+        }
+
+        return errors;
     }
 
     @Override
