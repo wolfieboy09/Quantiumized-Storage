@@ -64,6 +64,10 @@ public abstract class ProcessingRecipe<I extends RecipeInput, P extends Processi
 
     protected abstract ProcessingRecipeConstrains getRecipeConstrains();
 
+    protected RecipeIgnorance getRecipeIgnorance() {
+        return RecipeIgnorance.createBlank();
+    }
+
     public P getParams() {
         return this.params;
     }
