@@ -45,7 +45,8 @@ public class DiskAssemblerCategory extends QTRecipeCategory<DiskAssemblerRecipe>
         builder.addOutputSlot(76, 33).addIngredient(
                 VanillaTypes.ITEM_STACK,
                 recipe.getRollableResults().getFirst().getResult()
-        ).setBackground(getRenderedSlot(recipe.getRollableResults().getFirst().getChance()), -1, -1);
+        ).setBackground(getRenderedSlot(recipe.getRollableResults().getFirst().getChance()), -1, -1)
+                .addRichTooltipCallback(addChanceTooltip(recipe.getRollableResults().getFirst()));
     }
 
     @Override
