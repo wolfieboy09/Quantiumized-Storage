@@ -7,12 +7,14 @@ import dev.wolfieboy09.qtech.integration.jei.QTJEIPlugin;
 import dev.wolfieboy09.qtech.registries.QTGuiTextures;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -95,6 +97,15 @@ public abstract class QTRecipeCategory<T extends Recipe<?>> implements IRecipeCa
 
     protected List<Component> getTooltipStrings(T recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         return List.of();
+    }
+
+    public static IRecipeSlotRichTooltipCallback addChanceTooltip(ChanceResult<?> output) {
+        return (view, tooltip) -> {
+            float chance = output.getChance();
+            if (chance != 1) {
+                tooltip.add(Component.translatable("qtech.recipe.processing.chance", chance < 0.01 ? "< 1" : (int) (chance * 100)).withStyle(ChatFormatting.GOLD));
+            }
+        };
     }
 
     public void registerRecipes(IRecipeRegistration registration) {
