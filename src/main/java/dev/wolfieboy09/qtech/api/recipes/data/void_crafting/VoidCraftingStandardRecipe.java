@@ -5,6 +5,7 @@ import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipe;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeBuilder;
 import dev.wolfieboy09.qtech.api.recipes.ProcessingRecipeConstrains;
+import dev.wolfieboy09.qtech.api.recipes.RecipeIgnorance;
 import dev.wolfieboy09.qtech.registries.QTRecipeTypes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -35,6 +36,15 @@ public class VoidCraftingStandardRecipe extends ProcessingRecipe<RecipeWrapper, 
         return ProcessingRecipeConstrains.builder()
                 .maxItemIO(10, 5)
                 .build();
+    }
+
+    @Override
+    protected RecipeIgnorance getRecipeIgnorance() {
+        return RecipeIgnorance.create()
+                .ignoresEnergyCost()
+                .ignoresCleanroom()
+                .ignoresProcessingTime()
+                .set();
     }
 
     @Override
