@@ -1,6 +1,7 @@
 package dev.wolfieboy09.qtech.integration.jei.category.recipes;
 
 import dev.wolfieboy09.qtech.api.recipes.data.void_crafting.VoidCraftingRecipe;
+import dev.wolfieboy09.qtech.api.recipes.result.ChanceResult;
 import dev.wolfieboy09.qtech.integration.jei.category.QTRecipeCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -22,13 +23,15 @@ public class VoidCraftingCategory extends QTRecipeCategory<VoidCraftingRecipe> {
         int y = 25;
 
         for (int i = 0; i < recipe.getItemIngredients().size(); i++) {
-           builder.addInputSlot(x, y).addItemStacks(Arrays.stream(recipe.getItemIngredients().get(i).getItems()).toList());
+           builder.addInputSlot(x, y)
+                   .setBackground(getRenderedSlot(), -1, -1)
+                   .addItemStacks(Arrays.stream(recipe.getItemIngredients().get(i).getItems()).toList());
 
             x += 20;
 
             // Make rows of 5
             if (i == 4) {
-               y = 16 + 25;
+               y = 16 + 27;
                x = 0;
            }
         }
@@ -38,9 +41,11 @@ public class VoidCraftingCategory extends QTRecipeCategory<VoidCraftingRecipe> {
         y = 0;
 
         for (int i = 0; i < recipe.getRollableResults().size(); i++) {
+            ChanceResult<?> result = recipe.getRollableResults().get(i);
             builder.addOutputSlot(x, y)
-                    .setBackground(getRenderedSlot(recipe.getRollableResults().get(i)), -1, -1)
-                    .addItemStack(recipe.getRollableResults().get(i).getResult());
+                    .setBackground(getRenderedSlot(result), -1, -1)
+                    .addItemStack(recipe.getRollableResults().get(i).getResult())
+                    .addRichTooltipCallback(addChanceTooltip(result));
 
             y += 20;
         }
