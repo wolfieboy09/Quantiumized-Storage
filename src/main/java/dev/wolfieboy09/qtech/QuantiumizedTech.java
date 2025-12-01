@@ -9,6 +9,7 @@ import dev.wolfieboy09.qtech.client.KeyInputHandler;
 import dev.wolfieboy09.qtech.component.QTDataComponents;
 import dev.wolfieboy09.qtech.config.ClientConfig;
 import dev.wolfieboy09.qtech.integration.cctweaked.CCTweakedPlugin;
+import dev.wolfieboy09.qtech.integration.kubejs.events.KubeEventHandlers;
 import dev.wolfieboy09.qtech.integration.kubejs.gas.KubeJSGasIngredients;
 import dev.wolfieboy09.qtech.registries.*;
 import net.neoforged.bus.api.EventPriority;
@@ -70,6 +71,7 @@ public class QuantiumizedTech {
 
         if (LoadingModList.get().getModFileById("kubejs") != null) {
             KubeJSGasIngredients.register(modEventBus);
+            modEventBus.register(KubeEventHandlers.class);
         }
 
         modEventBus.addListener(QTDataMaps::register);
