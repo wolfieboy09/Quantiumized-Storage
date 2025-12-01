@@ -2,6 +2,7 @@ package dev.wolfieboy09.qtech.api.recipes.data.void_crafting;
 
 import dev.wolfieboy09.qtech.QuantiumizedTech;
 import dev.wolfieboy09.qtech.api.annotation.NothingNullByDefault;
+import dev.wolfieboy09.qtech.api.events.void_crafting.VoidCraftingEvent;
 import dev.wolfieboy09.qtech.api.recipes.result.ItemStackChanceResult;
 import dev.wolfieboy09.qtech.registries.QTRecipeTypes;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,12 +14,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +51,11 @@ public class VoidCraftingRecipeHandler {
             return;
         }
 
+        // Skip items that have already been processed
+        if (item.getPersistentData().getBoolean("qtech_Processed")) {
+            return;
+        }
+
         if (!item.getPersistentData().contains("qtech_BaseY")) {
             item.getPersistentData().putDouble("qtech_BaseY", item.getY());
         }
@@ -67,19 +75,48 @@ public class VoidCraftingRecipeHandler {
 
         Optional<RecipeHolder<VoidCraftingRecipe>> recipe = QTRecipeTypes.VOID_CRAFTING.find(recipeWrapper, level);
 
-        if (recipe.isEmpty()) return;
+        if (recipe.isEmpty()) {
+            // Mark as processed so it does not keep trying
+            item.getPersistentData().putBoolean("qtech_Processed", true);
+            return;
+        }
+
         VoidCraftingRecipe craftingRecipe = recipe.get().value();
 
         // If the dimensions are empty, use that as a wildcard, otherwise check
         if (craftingRecipe.getDimensions().isEmpty() || craftingRecipe.getDimensions().contains(level.dimension().location())) {
-            boolean anyResultsProduced = false;
+            // Calculate how many times we can craft with available ingredients
+            int maxCrafts = calculateMaxCrafts(nearbyItems, craftingRecipe);
 
-            for (ItemStackChanceResult chanceResult : craftingRecipe.getRollableResults()) {
-                Optional<ItemStack> rolledResult = chanceResult.getIfRolled(level);
+            if (maxCrafts <= 0) {
+                item.getPersistentData().putBoolean("qtech_Processed", true);
+                return;
+            }
 
-                if (rolledResult.isPresent()) {
+            // Mark all items as processed before crafting
+            for (ItemEntity itemEntity : nearbyItems) {
+                itemEntity.getPersistentData().putBoolean("qtech_Processed", true);
+            }
+
+            // Perform each craft attempt
+            for (int craftAttempt = 0; craftAttempt < maxCrafts; craftAttempt++) {
+                List<ItemStack> results = new ArrayList<>();
+                for (ItemStackChanceResult chanceResult : craftingRecipe.getRollableResults()) {
+                    Optional<ItemStack> rolledResult = chanceResult.getIfRolled(level);
+                    rolledResult.ifPresent(results::add);
+                }
+
+                VoidCraftingEvent event = new VoidCraftingEvent(craftingRecipe, item.getOwner(), level, item.position(), nearbyItems, results);
+
+                if (ModLoader.postEventWithReturn(event).isCanceled()) {
+                    continue;
+                }
+
+                boolean anyResultsProduced = false;
+
+                for (ItemStack out : event.getResults()) {
                     anyResultsProduced = true;
-                    ItemStack resultStack = rolledResult.get().copy();
+                    ItemStack resultStack = out.copy();
 
                     ItemEntity resultEntity = getResultEntity(item, level, resultStack);
                     resultEntity.getPersistentData().putBoolean("qtech_IsResult", true);
@@ -87,17 +124,42 @@ public class VoidCraftingRecipeHandler {
 
                     level.addFreshEntity(resultEntity);
                 }
-            }
 
-            if (anyResultsProduced) {
-                spawnParticles(level, item.getX(), item.getY(), item.getZ());
-            } else {
-                spawnFailedParticles(level, item.getX(), item.getY(), item.getZ());
-            }
+                if (anyResultsProduced) {
+                    spawnParticles(level, item.getX(), item.getY(), item.getZ());
+                } else {
+                    spawnFailedParticles(level, item.getX(), item.getY(), item.getZ());
+                }
 
-            // Always consume ingredients after attempting the craft
-            consumeIngredients(nearbyItems, craftingRecipe);
+                // Consume ingredients for this craft attempt
+                consumeIngredients(nearbyItems, craftingRecipe);
+            }
+        } else {
+            // Wrong dimension, mark as processed
+            item.getPersistentData().putBoolean("qtech_Processed", true);
         }
+    }
+
+    private static int calculateMaxCrafts(List<ItemEntity> items, VoidCraftingRecipe recipe) {
+        int maxCrafts = Integer.MAX_VALUE;
+
+        for (SizedIngredient sizedIngredient : recipe.getItemIngredients()) {
+            if (sizedIngredient.ingredient().isEmpty()) continue;
+
+            int requiredCount = sizedIngredient.count();
+
+            int availableCount = 0;
+            for (ItemEntity itemEntity : items) {
+                if (sizedIngredient.test(itemEntity.getItem())) {
+                    availableCount += itemEntity.getItem().getCount();
+                }
+            }
+
+            int possibleCrafts = availableCount / requiredCount;
+            maxCrafts = Math.min(maxCrafts, possibleCrafts);
+        }
+
+        return maxCrafts == Integer.MAX_VALUE ? 0 : maxCrafts;
     }
 
     private static void consumeIngredients(List<ItemEntity> items, VoidCraftingRecipe recipe) {
@@ -146,8 +208,10 @@ public class VoidCraftingRecipeHandler {
     private static List<ItemEntity> getNearbyItems(Level level, ItemEntity center) {
         return level.getEntitiesOfClass(
                 ItemEntity.class,
-                center.getBoundingBox().inflate(2),
-                e -> e != center && !e.getPersistentData().getBoolean("qtech_IsResult")
+                center.getBoundingBox().inflate(1.5),
+                e -> e != center
+                        && !e.getPersistentData().getBoolean("qtech_IsResult")
+                        && !e.getPersistentData().getBoolean("qtech_Processed")
         );
     }
 
