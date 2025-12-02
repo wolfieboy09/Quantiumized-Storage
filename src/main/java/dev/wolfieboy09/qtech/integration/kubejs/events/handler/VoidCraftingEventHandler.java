@@ -31,7 +31,7 @@ public class VoidCraftingEventHandler implements KubeEvent {
     }
 
     @Info("Returns the level this recipe is being produced on")
-    public ServerLevel getLevel() {
+    public ServerLevel level() {
         // The event is posted on the server only... so we may as well
         return (ServerLevel) this.event.getLevel();
     }
